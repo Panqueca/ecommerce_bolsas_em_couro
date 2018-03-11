@@ -1,0 +1,50 @@
+Navegação de links nas páginas
+
+Integração adm - vitrine produtos
+
+Integração adm - departamentos
+
+Criar arquivo integração adm - Grava newsletter
+
+URL Amigaveis
+
+Verificar links do header e rodape
+
+Fazer gerenciamento de menu por departamento
+
+Links das redes sociais
+
+Página interna produto
+
+Página contato
+
+Página politicas entrega e devolução
+
+Página quem somos -> (Utilizar estrutura do departamento)
+
+Página garantia de qualidade
+
+Página Frete grátis
+
+Página dicas - externa e interna (design externa)
+
+Página formas de pagamento
+
+Página segurança
+
+Página finalização de compra -> design
+
+Funcionamento do carrinho de compras
+
+Otimizar menu mobile
+
+Adm relatórios
+
+Integração market place
+
+Integração correios
+
+Carrinho abandonado
+
+Contagem visualizações
+
