@@ -43,6 +43,7 @@
         -webkit-transition: .2s;
         -o-transition: .2s;
         transition: .2s;
+        cursor: pointer;
     }
     .header-principal .nav-header .top-bar .link-padrao:hover{
         color: #111;
@@ -783,7 +784,7 @@
     <nav class="nav-header">
         <div class="top-bar">
             <a href="#" class="link-padrao botao-entrar"><i class="fas fa-sign-in-alt" data-fa-transform="grow-6 left-6"></i> ENTRAR</a> OU
-            <a href="#" class="link-padrao">CRIE SUA CONTA</a>
+            <a class="link-padrao" id="botaoCadastraConta">CRIE SUA CONTA</a>
             <div class="header-cart">
                 <div class="cart-button"><i class="fas fa-shopping-bag"></i></div>
                 <div class="cart-display">
@@ -1021,3 +1022,6 @@
 
     });
 </script>
+<?php
+    require_once "@include-cadastra-conta.php";
+?>
