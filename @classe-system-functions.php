@@ -77,6 +77,14 @@
                 return implode("-",array_reverse(explode("/",$data)));
             }
         }
+        
+        public function validar_email($mail){
+            if(preg_match("/^([[:alnum:]_.-]){3,}@([[:lower:][:digit:]_.-]{3,})(.[[:lower:]]{2,3})(.[[:lower:]]{2})?$/", $mail)) {
+                return true;
+            }else{
+                return false;
+            }
+        }
     }
     $pew_functions = new systemFunctions();
     global $pew_functions;

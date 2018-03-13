@@ -48,7 +48,16 @@
         ?>
         <!--THIS PAGE CONTENT-->
         <div class="main-content">
-
+            <h2 align=center>TESTES MINHA CONTA</h2>
+            <?php
+                require_once "@classe-minha-conta.php";
+                $enderecos = array();
+                $enderecos[0] = array();
+                $enderecos[0]["cep"] = "80230040";
+                $enderecos[0]["rua"] = "Engenheiros Rebouças";
+                $enderecos[0]["numero"] = "2111";
+                $enderecos[0]["complemento"] = "Apto 06";
+            ?>
         </div>
         <!--END THIS PAGE CONTENT-->
         <?php
