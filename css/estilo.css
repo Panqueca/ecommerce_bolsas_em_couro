@@ -50,8 +50,46 @@ input[type=number],input[type=date]{
     appearance: textfield;
     margin: 0; 
 }
+button{
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+}
 @media screen and (max-width: 1100px){
     .navigation-tree{
         width: 95%;
     }
 }
+/*FORMS STYLES*/
+.label-xsmall{
+    width: calc((100%/6) - 30.23px);
+    margin: 5px 15px 5px 15px;
+}
+.label-small{
+    width: calc((100%/4) - 30px);
+    margin: 5px 15px 5px 15px;
+}
+.label-medium{
+    width: calc((100%/3) - 30px);
+    margin: 5px 15px 5px 15px;
+}
+.label-half{
+    width: calc((100%/2) - 30px);
+    margin: 5px 15px 5px 15px;
+}
+.label-large{
+    width: calc((100%/1.5) - 30px);
+    margin: 5px 15px 5px 15px;
+}
+.label-xlarge{
+    width: calc((100%/1.335) - 30px);
+    margin: 5px 15px 5px 15px;
+}
+.label-full{
+    width: calc(100% - 30px);
+    margin: 5px 15px 5px 15px;
+}
+/*END FORM STYLES*/

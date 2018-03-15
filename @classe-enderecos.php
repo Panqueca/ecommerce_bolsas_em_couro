@@ -7,6 +7,9 @@
         private $rua;
         private $numero;
         private $complemento;
+        private $bairro;
+        private $estado;
+        private $cidade;
         private $data_cadastro;
         private $data_controle;
         private $status;
@@ -52,6 +55,9 @@
                 $this->rua = $info["rua"];
                 $this->numero = $info["numero"];
                 $this->complemento = $info["complemento"];
+                $this->bairro = $info["bairro"];
+                $this->estado = $info["estado"];
+                $this->cidade = $info["cidade"];
                 $this->data_cadastro = $info["data_cadastro"];
                 $this->data_controle = $info["data_controle"];
                 $this->status = $info["status"];
@@ -89,6 +95,18 @@
             return $this->complemento;
         }
         
+        public function get_bairro(){
+            return $this->bairro;
+        }
+        
+        public function get_estado(){
+            return $this->estado;
+        }
+        
+        public function get_cidade(){
+            return $this->cidade;
+        }
+        
         public function get_data_cadastro(){
             return $this->data_cadastro;
         }
@@ -111,6 +129,9 @@
                 $infoEndereco["rua"] = $this->get_rua();
                 $infoEndereco["numero"] = $this->get_numero();
                 $infoEndereco["complemento"] = $this->get_complemento();
+                $infoEndereco["bairro"] = $this->get_bairro();
+                $infoEndereco["estado"] = $this->get_estado();
+                $infoEndereco["cidade"] = $this->get_cidade();
                 $infoEndereco["data_cadastro"] = $this->get_data_cadastro();
                 $infoEndereco["data_controle"] = $this->get_data_controle();
                 $infoEndereco["status"] = $this->get_status();
@@ -141,11 +162,11 @@
         
         private function grava_cadastro(){
             $tabela_enderecos = $this->global_vars["tabela_enderecos"];
-            mysqli_query($this->conexao(), "insert into $tabela_enderecos (id_relacionado, ref_relacionado, cep, rua, numero, complemento, data_cadastro, data_controle, status) values ('".$this->id_relacionado."', '".$this->ref_relacionado."', '".$this->cep."', '".$this->rua."', '".$this->numero."', '".$this->complemento."', '".$this->data_cadastro."', '".$this->data_controle."', 1)");
+            mysqli_query($this->conexao(), "insert into $tabela_enderecos (id_relacionado, ref_relacionado, cep, rua, numero, complemento, estado, cidade, data_cadastro, data_controle, status) values ('".$this->id_relacionado."', '".$this->ref_relacionado."', '".$this->cep."', '".$this->rua."', '".$this->numero."', '".$this->complemento."', '".$this->estado."', '".$this->cidade."', '".$this->data_cadastro."', '".$this->data_controle."', 1)");
             return true;
         }
         
-        public function cadastra_endereco($id_relacionado, $ref_relacionado, $cep, $rua, $numero, $complemento){
+        public function cadastra_endereco($id_relacionado, $ref_relacionado, $cep, $rua, $numero, $complemento, $bairro, $estado, $cidade){
             $this->id = null;
             switch($ref_relacionado){
                 case "cliente":
@@ -160,6 +181,9 @@
             $this->rua = $rua;
             $this->numero = $numero;
             $this->complemento = $complemento;
+            $this->bairro = $bairro;
+            $this->estado = $estado;
+            $this->cidade = $cidade;
             $this->data_cadastro = date("Y-m-d h:i:s");
             $this->data_controle = date("Y-m-d h:i:s");
             $this->status = 1;
