@@ -162,7 +162,7 @@
         
         private function grava_cadastro(){
             $tabela_enderecos = $this->global_vars["tabela_enderecos"];
-            mysqli_query($this->conexao(), "insert into $tabela_enderecos (id_relacionado, ref_relacionado, cep, rua, numero, complemento, estado, cidade, data_cadastro, data_controle, status) values ('".$this->id_relacionado."', '".$this->ref_relacionado."', '".$this->cep."', '".$this->rua."', '".$this->numero."', '".$this->complemento."', '".$this->estado."', '".$this->cidade."', '".$this->data_cadastro."', '".$this->data_controle."', 1)");
+            mysqli_query($this->conexao(), "insert into $tabela_enderecos (id_relacionado, ref_relacionado, cep, rua, numero, complemento, bairro, estado, cidade, data_cadastro, data_controle, status) values ('".$this->id_relacionado."', '".$this->ref_relacionado."', '".$this->cep."', '".$this->rua."', '".$this->numero."', '".$this->complemento."', '".$this->bairro."', '".$this->estado."', '".$this->cidade."', '".$this->data_cadastro."', '".$this->data_controle."', 1)");
             return true;
         }
         
