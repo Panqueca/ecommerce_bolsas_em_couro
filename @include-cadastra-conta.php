@@ -400,17 +400,28 @@
         });
         /*BUSCA ENDERECO*/
         
+        /*SET PASSOS*/
+        var displayPassos = [];
+        displayPassos[0] = $(".display-info-contato");
+        displayPassos[0]["botao_passo"] = $("#botaoPasso1");
+        displayPassos[1] = $(".display-info-enderecos");
+        displayPassos[1]["botao_passo"] = $("#botaoPasso2");
+        var totalPassos = displayPassos.length;
+        /*END SET PASSOS*/
+        
+        /*DEFAULT VARS*/
         var botaoCadastraConta = $("#botaoCadastraConta");
         var sectionCadastra = $(".section-cadastra");
         var botaoVoltar = $(".section-cadastra .botao-voltar");
         var backgroundLoading = $(".section-cadastra .background-loading");
         var botaoContinuar = $(".botao-continuar");
-        var botaoPasso1 = $("#botaoPasso1");
-        var botaoPasso2 = $("#botaoPasso2");
         var validandoDados = false;
+        var lastValidationAtiva = false;
         var passoAtivo = 1;
         var cadastreAberto = false;
+        /*END DEFAULT VARS*/
 
+        /*DEFAULT FUNCTIONS*/
         function toggleCadastreConta(){
             if(!cadastreAberto){
                 cadastreAberto = true;
@@ -434,37 +445,35 @@
         
         var mudandoPasso = false;
         function mudarPasso(passo){
-            var displayPasso1 = $(".display-info-contato");
-            var displayPasso2 = $(".display-info-enderecos");
             if(!mudandoPasso && !validandoDados){
                 mudandoPasso = true;
                 switch(passo){
                     case 1:
-                        displayPasso1.css({
+                        displayPassos[0].css({
                             opacity: "1",
                             left: "2.5%"
                         });
-                        displayPasso2.css({
+                        displayPassos[1].css({
                             left: "102.5%",
                         });
-                        if(botaoPasso2.hasClass("selected-button")){
-                            botaoPasso2.removeClass("selected-button");
+                        if(displayPassos[1]["botao_passo"].hasClass("selected-button")){
+                            displayPassos[1]["botao_passo"].removeClass("selected-button");
                         }
-                        botaoPasso1.addClass("selected-button");
+                        displayPassos[0]["botao_passo"].addClass("selected-button");
                         passoAtivo = 1;
                         break;
                     case 2:
-                        displayPasso1.css({
+                        displayPassos[0].css({
                             left: "-100%",
                         });
-                        displayPasso2.css({
+                        displayPassos[1].css({
                             opacity: "1",
                             left: "2.5%"
                         });
-                        if(botaoPasso1.hasClass("selected-button")){
-                            botaoPasso1.removeClass("selected-button");
+                        if(displayPassos[0]["botao_passo"].hasClass("selected-button")){
+                            displayPassos[0]["botao_passo"].removeClass("selected-button");
                         }
-                        botaoPasso2.addClass("selected-button");
+                        displayPassos[1]["botao_passo"].addClass("selected-button");
                         passoAtivo = 2;
                         break;
                 }
@@ -474,13 +483,27 @@
             }
         }
         
-        botaoPasso1.off().on("click", function(){
-             mudarPasso(1);
-        });
-        botaoPasso2.off().on("click", function(){
-             mudarPasso(2);
-        });
+        /*END DEFAULT FUNCTIONS*/
         
+        /*TRIGGERS PASSOS*/
+        displayPassos[0]["botao_passo"].off().on("click", function(){
+            if(!validandoDados && !lastValidationAtiva){
+                mudarPasso(1);
+            }
+        });
+        displayPassos[1]["botao_passo"].off().on("click", function(){
+            if(!validandoDados && !lastValidationAtiva){
+                mudarPasso(2);
+            }
+        });
+        botaoContinuar.off().on("click", function(){
+            if(!validandoDados && !lastValidationAtiva){
+                validarDadosConta();
+            }
+        });
+        /*END TRIGGERS PASSOS*/
+        
+        /*MAIN FUNCTION*/
         function validarDadosConta(){
             /*FORM FIELDS*/
             
@@ -499,6 +522,13 @@
             var objNumero = $("#numero");
             var objTermos = $("#termos");
             
+            // ULTIMO PASSO
+            var validacaoPassos = [];
+            var ctrlLastStep = 0;
+            displayPassos.forEach(function(field){
+                validacaoPassos[ctrlLastStep] = false;
+                ctrlLastStep++;
+            });
             
             /*END FORM FIELDS*/
             
@@ -616,21 +646,39 @@
                 });
             }
             
-            function finishValidation(errors, errorFields, nextStep){
-                toggleLoading();
+            function finishValidation(errors, errorFields, thisStep, nextStep){
                 validandoDados = false;
-                if(errors > 0){
-                    setInputMessages(errorFields);
-                }else{
-                    if(typeof nextStep != "undefined" && nextStep != null && nextStep != false && nextStep != "last"){
-                        mudarPasso(nextStep);
-                    }else if(nextStep == "last"){
-                        
-                    }
+                var closeLoading = true;
+                
+                /*VARS DE VERIFICACAO NO LAST STEP*/
+                var validationStatus = errors == 0 ? true : false;
+                switch(thisStep){
+                    case 1:
+                        validacaoPassos[0] = validationStatus;
+                        break;
+                    case 2:
+                        validacaoPassos[1] = validationStatus;
+                        break;
                 }
+                /*END VARS DE VERIFICACAO NO LAST STEP*/
+                
+                if(errors > 0){
+                    setInputMessages(errorFields); // Se ocorreu erros, mostra as mensagens de erro
+                }else if(typeof nextStep != "undefined" && nextStep != null && nextStep != false && nextStep != "lastStep" && lastValidationAtiva == false){
+                    mudarPasso(nextStep); // Nenhum erro e se houver próximo passo e não for a validação final 
+                }else if(nextStep == "lastStep" && lastValidationAtiva == false){
+                    closeLoading = false;
+                    lastStep(); // Nenhum erro e fazer validação final
+                }
+                
+                if(closeLoading){
+                    toggleLoading();
+                }
+                
             }
             
-            function prepareErrors(ctrlInvalid, allFields, invalidFields, nextStep){
+            function prepareErrors(ctrlInvalid, allFields, invalidFields, thisStep, nextStep){
+                
                 allFields.forEach(function(field){
                     if(field.hasClass("wrong-input")){
                         field.removeClass("wrong-input");
@@ -638,12 +686,20 @@
                             visibility: "hidden",
                             opacity: "0"
                         });
+                        if(field == objTermos){
+                            field.removeClass("wrong-input");
+                            $(".msg-input-checkbox").text("").css({
+                                visibility: "hidden",
+                                opacity: "0"
+                            });
+                        }
                     }
                 });
 
                 setTimeout(function(){
-                    finishValidation(ctrlInvalid, invalidFields, nextStep);
+                    finishValidation(ctrlInvalid, invalidFields, thisStep, nextStep);
                 }, 300);
+                
             }
             
             var loadingAberto = false;
@@ -654,7 +710,7 @@
                         visibility: "visible",
                         opacity: "1"
                     });
-                }else{
+                }else if(!lastValidationAtiva){
                     loadingAberto = false;
                     backgroundLoading.css({
                         visibility: "hidden",
@@ -676,6 +732,7 @@
                 var allFields = [objNome, objEmail, objSenha, objConfirmaSenha, objCelular, objCpf, objDataNascimento];
                 var invalidFields = [];
                 var ctrlInvalid = 0;
+                var thisStep = 1;
                 var nextStep = 2;
                 
                 function standardValidation(){
@@ -713,7 +770,8 @@
                         ctrlInvalid++;
                     }
                     
-                    prepareErrors(ctrlInvalid, allFields, invalidFields, nextStep); // Trigger das mensagens de erro
+                    // Trigger das mensagens de erro
+                    prepareErrors(ctrlInvalid, allFields, invalidFields, thisStep, nextStep);
                 }
                 
                 function ajaxValidation(){
@@ -791,7 +849,8 @@
                 var allFields = [objCep, objRua, objNumero, objTermos];
                 var invalidFields = [];
                 var ctrlInvalid = 0;
-                var nextStep = "last";
+                var thisStep = 2;
+                var nextStep = "lastStep";
                 
                 if(IsCEP(cep) == false){
                     invalidFields[ctrlInvalid] = objCep;
@@ -813,8 +872,65 @@
                     ctrlInvalid++;
                 }
                 
-                prepareErrors(ctrlInvalid, allFields, invalidFields, nextStep); // Trigger das mensagens de erro
+                prepareErrors(ctrlInvalid, allFields, invalidFields, thisStep, nextStep); // Trigger das mensagens de erro
             }
+            
+            function lastStep(){
+                lastValidationAtiva = true;
+                function resetValidationStatus(){
+                    validacaoPassos.forEach(function(val, ctrl){
+                        validacaoPassos[ctrl] = null;
+                    });
+                }
+                
+                resetValidationStatus();
+                
+                var isValidating = 0;
+                var validationRunning = false;
+                var validationHasFinished = false;
+                var ctrlValidation = 0;
+
+                setInterval(function(){
+                    if(!validationHasFinished){
+                        if(validacaoPassos[isValidating] == null){
+                            validacaoPassos[isValidating] = "running";
+                            ctrlValidation++;
+                            switch(isValidating){
+                                case 0:
+                                    validaPasso1();
+                                    break;
+                                case 1:
+                                    validaPasso2();
+                                    break;
+                            }
+                        }else if(validacaoPassos[isValidating] != "running" && ctrlValidation < totalPassos){
+                            isValidating++;
+                        }else if(ctrlValidation == totalPassos){
+                            validationHasFinished = true;
+                            lastValidationAtiva = false;
+                            toggleLoading();
+                            
+                            var errors = 0;
+                            validacaoPassos.forEach(function(val, step){
+                                if(val == false){
+                                    errors++;
+                                    switch(step){
+                                        case 0:
+                                            if(validacaoPassos[1] == true){
+                                                mudarPasso(1);
+                                            }
+                                            break;
+                                    }
+                                }
+                            });
+                            if(errors == 0){
+                                console.log("FINALIZAR CADASTRO");
+                            }
+                        }
+                    }
+                }, 500);
+            }
+            
             /*END VALIDACAO PASSOS*/
             
             /*TRIGGER VALIDA PASSO*/
@@ -832,6 +948,7 @@
             }
             /*END TRIGGER VALIDA PASSO*/
         }
+        /*END MAIN FUNCTION*/
         
         /*DEFAULT TRIGGERS*/
         botaoCadastraConta.off().on("click", function(){
@@ -840,10 +957,6 @@
         
         botaoVoltar.off().on("click", function(){
             toggleCadastreConta();
-        });
-        
-        botaoContinuar.off().on("click", function(){
-            validarDadosConta();
         });
         /*END DEFAULT TRIGGERS*/
     });

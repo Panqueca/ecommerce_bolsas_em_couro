@@ -292,7 +292,6 @@ function inverterData($data){
                 $linksPrincipais[1]["sub_link"][2]["titulo_sub_link"] = "<i class='fa fa-tag' aria-hidden='true'></i> Marcas";
                 $linksPrincipais[1]["sub_link"][2]["url_sub_link"] = "pew-marcas.php";
                 $linksPrincipais[1]["sub_link"][3]["titulo_sub_link"] = "<i class='fa fa-cogs' aria-hidden='true'></i> Especificações técnicas";
-                $linksPrincipais[1]["sub_link"][3]["url_sub_link"] = "pew-especificacoes.php";
                 /*Terceiro Link*/
                 $linksPrincipais[2]["titulo_link"] = "Vitrine";
                 $linksPrincipais[2]["url_link"] = "pew-categorias-vitrine.php";
@@ -319,6 +318,9 @@ function inverterData($data){
                 $linksPrincipais[5]["url_link"] = "pew-categorias.php";
                 $linksPrincipais[5]["sub_link"][0]["titulo_sub_link"] = "<i class='fa fa-tags' aria-hidden='true'></i> Listar Categorias";
                 $linksPrincipais[5]["sub_link"][0]["url_sub_link"] = "pew-categorias.php";
+                $linksPrincipais[5]["sub_link"][1]["url_sub_link"] = "pew-departamentos.php";
+                $linksPrincipais[5]["sub_link"][1]["titulo_sub_link"] = "<i class='fa fa-th-list' aria-hidden='true'></i> Departamentos";
+                $linksPrincipais[5]["sub_link"][1]["url_sub_link"] = "pew-departamentos.php";
                 /*Setimo Link*/
                 $linksPrincipais[6]["titulo_link"] = "Usuários";
                 $linksPrincipais[6]["url_link"] = "pew-usuarios.php";
