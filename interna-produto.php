@@ -52,6 +52,71 @@
             .section-produto .display-miniaturas .box-miniaturas .miniatura:hover{
                 opacity: .8;
             }
+            .section-produto .display-miniaturas .box-play{
+                width: 100px;
+                height: 60px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 12px;
+                flex-direction: column;
+                text-align: center;
+                margin: 10px 0px 10px 0px;
+                cursor: pointer;
+                color: #999;
+            }
+            .section-produto .display-miniaturas .box-play:hover{
+                color: #333;   
+            }
+            .section-produto .display-miniaturas .box-play .icon-play{
+                font-size: 52px;
+                width: 100%;
+                color: #ccc;
+                cursor: pointer;
+            }
+            .section-produto .display-miniaturas .box-play:hover .icon-play{
+                color: #333;
+            }
+            .section-produto .display-miniaturas .display-video{
+                position: fixed;
+                top: 130px;
+                width: 100%;
+                height: 100%;
+                top: 0px;
+                left: 0px;
+                margin: 0 auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 200;
+                background-color: rgba(0, 0, 0, .5);
+                visibility: hidden;
+                opacity: 0;
+                transition: .3s;
+            }
+            .section-produto .display-miniaturas .display-video iframe{
+                width: 800px;
+                height: 500px;
+            }
+            .section-produto .display-miniaturas .display-video .botao-voltar{
+                position: absolute;
+                bottom: 40px;
+                margin: 0 auto;
+                left: 0;
+                right: 0;
+                width: 100px;
+                text-align: center;
+                font-size: 16px;
+                color: #fff;
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                border-bottom: 2px solid transparent;
+                padding: 5px 0px 5px 0px;
+            }
+            .section-produto .display-miniaturas .display-video .botao-voltar:hover{
+                border-color: #fff;   
+            }
             .section-produto .display-imagem-principal{
                 width: 50%;
                 text-align: center;
@@ -267,7 +332,21 @@
                     });
                 });
                 /*END TRIGGERS CHANGE IMAGE*/
-
+                
+                var displayVideo = $(".display-video");
+                var botaoVoltar = displayVideo.children(".botao-voltar");
+                $(".box-play").off().on("click", function(){
+                    displayVideo.css({
+                        visibility: "visible",
+                        opacity: "1"
+                    });
+                })
+                botaoVoltar.off().on("click", function(){
+                    displayVideo.css({
+                        visibility: "hidden",
+                        opacity: "0"
+                    });
+                });
             });
         </script>
         <!--END PAGE JS-->
@@ -314,6 +393,7 @@
             $precoParcelas = $precoFinal / $qtdParcelas;
             $estoqueProduto = $infoProduto["estoque"];
             $imagensProduto = $infoProduto["imagens"];
+            $urlVideo = $infoProduto["url_video"];
             /*INFO PRODUTO*/
 
             /*HTML VIEW*/
@@ -350,6 +430,11 @@
                             $ctrlImagens++;
                             $imagemPrincipal = $ctrlImagens == 1 ? $srcImagem : $imagemPrincipal;
                             echo "<div class='box-miniaturas'><img src='$dirImagensProduto/$srcImagem' alt='$nomeEmpresa - $nomeProduto - Imagem $ctrlImagens' class='miniatura'></div>";
+                        }
+                
+                        if($urlVideo != null){
+                            echo "<div class='box-play'><i class='fas fa-play-circle icon-play'></i>Veja o vídeo</div>";
+                            echo "<div class='display-video'>$urlVideo <button class='botao-voltar'><i class='fas fa-times'></i> VOLTAR</button></div>";
                         }
                     ?>
                 </div>

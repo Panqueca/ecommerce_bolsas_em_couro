@@ -292,6 +292,7 @@ function inverterData($data){
                 $linksPrincipais[1]["sub_link"][2]["titulo_sub_link"] = "<i class='fa fa-tag' aria-hidden='true'></i> Marcas";
                 $linksPrincipais[1]["sub_link"][2]["url_sub_link"] = "pew-marcas.php";
                 $linksPrincipais[1]["sub_link"][3]["titulo_sub_link"] = "<i class='fa fa-cogs' aria-hidden='true'></i> Especificações técnicas";
+                $linksPrincipais[1]["sub_link"][3]["url_sub_link"] = "pew-especificacoes.php";
                 /*Terceiro Link*/
                 $linksPrincipais[2]["titulo_link"] = "Vitrine";
                 $linksPrincipais[2]["url_link"] = "pew-categorias-vitrine.php";

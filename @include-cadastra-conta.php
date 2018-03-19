@@ -27,6 +27,14 @@
     .section-cadastra .descricao-cadastre{
         font-weight: normal;
     }
+    .section-cadastra .display-confirmacao{
+        font-size: 24px;
+        color: #6abd45;
+        margin: 100px 0px 100px 0px;
+        transition: .3s;
+        visibility: hidden;
+        opacity: 0;
+    }
     .section-cadastra .display-formularios{
         position: relative;
         width: 80%;
@@ -36,6 +44,7 @@
         -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.1);
         -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.1);
         box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.1);
+        transition: .2s;
     }
     .section-cadastra .display-formularios .display-buttons{
         position: sticky;
@@ -269,6 +278,7 @@
                 Existem muitas variações disponíveis de passagens de Lorem Ipsum, mas a maioria sofreu algum tipo de alteração.
             </p>
         </h5>
+        <div class="display-confirmacao"></div>
         <div class="display-formularios">
             <div class="display-buttons">
                 <button class="top-buttons selected-button" id="botaoPasso1">INFORMAÇÕES DE CONTATO</button>
@@ -410,6 +420,9 @@
         /*END SET PASSOS*/
         
         /*DEFAULT VARS*/
+        var displayFormularios = $(".display-formularios");
+        var displayConfirmacao = $(".display-confirmacao");
+        var formularioCadastraConta = $(".formulario-cadastro");
         var botaoCadastraConta = $("#botaoCadastraConta");
         var sectionCadastra = $(".section-cadastra");
         var botaoVoltar = $(".section-cadastra .botao-voltar");
@@ -482,6 +495,16 @@
                 }, 500);
             }
         }
+        
+        function mensagemConfirmaEmail(email){
+            var mensagem = "Foi enviando um e-mail para <b>" + email + "</b>  com um <b>link de confirmação</b>.<br><br>Clique no link para ativar sua conta e começar a aproveitar as ofertas e promoções da nossa loja!";
+            displayFormularios.hide();
+            displayConfirmacao.html(mensagem).css({
+                visibility: "visible",
+                opacity: "1"
+            });
+        }
+        mensagemConfirmaEmail("teste");
         
         /*END DEFAULT FUNCTIONS*/
         
@@ -906,9 +929,12 @@
                         }else if(validacaoPassos[isValidating] != "running" && ctrlValidation < totalPassos){
                             isValidating++;
                         }else if(ctrlValidation == totalPassos){
-                            validationHasFinished = true;
-                            lastValidationAtiva = false;
-                            toggleLoading();
+                            
+                            function finish(){
+                                validationHasFinished = true;
+                                lastValidationAtiva = false;
+                                toggleLoading();
+                            }
                             
                             var errors = 0;
                             validacaoPassos.forEach(function(val, step){
@@ -924,7 +950,33 @@
                                 }
                             });
                             if(errors == 0){
-                                console.log("FINALIZAR CADASTRO");
+                                var formData = new FormData(formularioCadastraConta.get(0));
+                                var msgErro = "Desculpe, ocorreu um erro ao enviar os dados. Recarregue a página e tente novamente";
+                                var msgSucesso = "Seu cadastro foi feito com sucesso!";
+                                $.ajax({
+                                    type: "POST",
+                                    data: formData,
+                                    url: "@grava-cadastro-conta.php",
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
+                                    error: function(){
+                                        notificacaoPadrao(msgErro);
+                                        finish();
+                                    },
+                                    success: function(resposta){
+                                        console.log(resposta);
+                                        if(resposta == "true"){
+                                            mensagemAlerta(msgSucesso, false, "limegreen");
+                                            mensagemConfirmaEmail(objEmail.val());
+                                        }else{
+                                            mensagemAlerta(msgErro, false, "limegreen");
+                                        }
+                                        finish();
+                                    }
+                                });
+                            }else{
+                                finish();
                             }
                         }
                     }

@@ -14,6 +14,7 @@
         private $tempo_fabricacao;
         private $descricao_curta;
         private $descricao_longa;
+        private $url_video;
         private $peso;
         private $comprimento;
         private $largura;
@@ -70,6 +71,7 @@
                 $this->tempo_fabricacao = $info["tempo_fabricacao"];
                 $this->descricao_curta = $info["descricao_curta"];
                 $this->descricao_longa = $info["descricao_longa"];
+                $this->url_video = $info["url_video"];
                 $this->peso = $info["peso"];
                 $this->comprimento = $info["comprimento"];
                 $this->largura = $info["largura"];
@@ -127,6 +129,9 @@
         public function get_descricao_longa_produto(){
             return $this->descricao_longa;
         }
+        public function get_url_video_produto(){
+            return $this->url_video;
+        }
         public function get_peso_produto(){
             return $this->peso;
         }
@@ -163,6 +168,7 @@
                 $infoProduto["tempo_fabricacao"] = $this->get_tempo_fabricacao_produto();
                 $infoProduto["descricao_curta"] = $this->get_descricao_curta_produto();
                 $infoProduto["descricao_longa"] = $this->get_descricao_longa_produto();
+                $infoProduto["url_video"] = $this->get_url_video_produto();
                 $infoProduto["peso"] = $this->get_peso_produto();
                 $infoProduto["comprimento"] = $this->get_comprimento_produto();
                 $infoProduto["largura"] = $this->get_largura_produto();

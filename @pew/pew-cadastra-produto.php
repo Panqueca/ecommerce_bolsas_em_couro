@@ -477,6 +477,11 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 cursor: pointer;
                 border: 1px solid #333;
                 transition: .2s;
+                white-space: nowrap;
+                margin-top: 5px;
+                display: block;
+                width: 200px;
+                text-align: center;
             }
             .btn-especificacoes:hover{
                 background-color: #fff;
@@ -855,7 +860,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 <br style="clear: both;">
                 <br style="clear: both;">
                 <div class="label-half" align=left style="margin: 0px;">
-                    <h3 class="input-title">URL Vídeo</h3>
+                    <h3 class="input-title">Iframe Vídeo</h3>
                     <input type="text" class="input-full" name="url_video" placeholder="https://www.youtube.com/watch?v=Ro7yHf_pU14">
                 </div>
                 <br style="clear: both">

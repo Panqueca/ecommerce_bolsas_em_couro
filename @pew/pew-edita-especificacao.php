@@ -27,7 +27,6 @@
             $queryEspecificacao = mysqli_query($conexao, "select * from $tabela_especificacoes where id = '$idEspecificacao'");
             $especificacao = mysqli_fetch_array($queryEspecificacao);
             $titulo = $especificacao["titulo"];
-            $imagem = $especificacao["imagem"];
             $dataControle = pew_inverter_data(substr($especificacao["data_controle"], 0, 10));
             $status = $especificacao["status"] == 1 ? "Ativa" : "Desativada";
             echo "<h2 class='titulo-edita'>Informações da especificacão</h2>";

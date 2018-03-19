@@ -207,9 +207,9 @@
             $this->quantidade_enderecos = 0;
             $this->status = 0;
             
-            
             $validacao = $this->validar_dados();
             if($validacao == "true"){
+            
                 $idConta = $this->grava_conta();
                 if((int)$idConta != 0){
                     /*ENDERECO*/
@@ -219,15 +219,19 @@
                         $rua = $infoEndereco["rua"];
                         $numero = $infoEndereco["numero"];
                         $complemento = $infoEndereco["complemento"];
+                        $bairro = $infoEndereco["bairro"];
+                        $cidade = $infoEndereco["cidade"];
+                        $estado = $infoEndereco["estado"];
                         $cadastraEndereco[$ctrlEnderecos] = new Enderecos();
-                        $cadastraEndereco[$ctrlEnderecos]->cadastra_endereco($idConta, "cliente", $cep, $rua, $numero, $complemento);
+                        $cadastraEndereco[$ctrlEnderecos]->cadastra_endereco($idConta, "cliente", $cep, $rua, $numero, $complemento, $bairro, $cidade, $estado);
                         $ctrlEnderecos++;
                     }
+                    return true;
                 }else{
                     return false;
                 }
             }else{
-                echo $validacao;
+                return $validacao;
             }
         }
     }
