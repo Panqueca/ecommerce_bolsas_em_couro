@@ -21,7 +21,7 @@
         margin: 0px;
         padding: 20px 0px 20px 0px;
         font-size: 32px;
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid #6abd45;
         display: block;
     }
     .section-cadastra .descricao-cadastre{
@@ -32,8 +32,8 @@
         color: #6abd45;
         margin: 100px 0px 100px 0px;
         transition: .3s;
-        visibility: hidden;
         opacity: 0;
+        display: none;
     }
     .section-cadastra .display-formularios{
         position: relative;
@@ -145,7 +145,7 @@
         background-color: #f3f3f3;
         pointer-events: none;
     }
-    .section-cadastra .display-formularios .formulario-cadastro input{
+    .section-cadastra .display-formularios .formulario-cadastro input, .section-cadastra .display-formularios .formulario-cadastro select{
         width: calc(100% - 10px);
         height: 30px;
         margin-top: 5px;
@@ -325,6 +325,15 @@
                         <h6 class="msg-input"></h6>
                     </div>
                     <div class="label-small">
+                        <h4 class="input-title">SEXO</h4>
+                        <select name="sexo" id="sexo">
+                            <option value="">- Selecione -</option>
+                            <option value="masculino">Masculino</option>
+                            <option value="feminino">Feminino</option>
+                        </select>
+                        <h6 class="msg-input msg-input-sexo"></h6>
+                    </div>
+                    <div class="label-small">
                         <h4 class="input-title">Data de nascimento</h4>
                         <input type="date" name="data_nascimento" id="dataNascimento">
                         <h6 class="msg-input"></h6>
@@ -384,6 +393,32 @@
     </div>
 </div>
 <script type="text/javascript">
+    /*INITIALIZE*/
+    var sectionCadastra = $(".section-cadastra");
+    var cadastreAberto = false;
+    
+    function toggleCadastreConta(){
+        if(!cadastreAberto){
+            cadastreAberto = true;
+            sectionCadastra.css({
+                visibility: "visible",
+                right: "0px",
+                opacity: "1",
+                trasition: "1s"
+            });
+            $("body").css("overflow", "hidden");
+        }else{
+            cadastreAberto = false;
+            sectionCadastra.css({
+                visibility: "hidden",
+                right: "-100%",
+                opacity: ".6"
+            });
+            $("body").css("overflow", "auto");
+        }
+    }
+    /*END INITIALIZE*/
+    
     $(document).ready(function(){
         /*SET MASCARAS*/
         phone_mask(".mascara-numero");
@@ -424,37 +459,15 @@
         var displayConfirmacao = $(".display-confirmacao");
         var formularioCadastraConta = $(".formulario-cadastro");
         var botaoCadastraConta = $("#botaoCadastraConta");
-        var sectionCadastra = $(".section-cadastra");
         var botaoVoltar = $(".section-cadastra .botao-voltar");
         var backgroundLoading = $(".section-cadastra .background-loading");
         var botaoContinuar = $(".botao-continuar");
         var validandoDados = false;
         var lastValidationAtiva = false;
         var passoAtivo = 1;
-        var cadastreAberto = false;
         /*END DEFAULT VARS*/
 
         /*DEFAULT FUNCTIONS*/
-        function toggleCadastreConta(){
-            if(!cadastreAberto){
-                cadastreAberto = true;
-                sectionCadastra.css({
-                    visibility: "visible",
-                    right: "0px",
-                    opacity: "1",
-                    trasition: "1s"
-                });
-                $("body").css("overflow", "hidden");
-            }else{
-                cadastreAberto = false;
-                sectionCadastra.css({
-                    visibility: "hidden",
-                    right: "-100%",
-                    opacity: ".6"
-                });
-                $("body").css("overflow", "auto");
-            }
-        }
         
         var mudandoPasso = false;
         function mudarPasso(passo){
@@ -500,11 +513,10 @@
             var mensagem = "Foi enviando um e-mail para <b>" + email + "</b>  com um <b>link de confirmação</b>.<br><br>Clique no link para ativar sua conta e começar a aproveitar as ofertas e promoções da nossa loja!";
             displayFormularios.hide();
             displayConfirmacao.html(mensagem).css({
-                visibility: "visible",
+                display: "block",
                 opacity: "1"
             });
         }
-        mensagemConfirmaEmail("teste");
         
         /*END DEFAULT FUNCTIONS*/
         
@@ -537,6 +549,7 @@
             var objConfirmaSenha = $("#confirmaSenha");
             var objCelular = $("#celular");
             var objCpf = $("#cpf");
+            var objSexo = $("#sexo");
             var objDataNascimento = $("#dataNascimento");
             
             // PASSO 2
@@ -604,6 +617,14 @@
                             var msg = "O campo CPF deve ser preenchido corretamente";
                             objCpf.addClass("wrong-input");
                             objCpf.next(".msg-input").text(msg).css({
+                                visibility: "visible",
+                                opacity: "1"
+                            });
+                            break;
+                        case objSexo:
+                            var msg = "Selecione uma opção no campo sexo";
+                            objSexo.addClass("wrong-input");
+                            objSexo.next(".msg-input").text(msg).css({
                                 visibility: "visible",
                                 opacity: "1"
                             });
@@ -709,12 +730,26 @@
                             visibility: "hidden",
                             opacity: "0"
                         });
-                        if(field == objTermos){
-                            field.removeClass("wrong-input");
-                            $(".msg-input-checkbox").text("").css({
-                                visibility: "hidden",
-                                opacity: "0"
-                            });
+                        $(".msg-input-sexo").text("").css({
+                            visibility: "hidden",
+                            opacity: "0"
+                        });
+                        switch(field){
+                            case objTermos:
+                                field.removeClass("wrong-input");
+                                $(".msg-input-checkbox").text("").css({
+                                    visibility: "hidden",
+                                    opacity: "0"
+                                });
+                                break;
+                            case objSexo:
+                                field.removeClass("wrong-input");
+                                $(".msg-input-sexo").text("").css({
+                                    visibility: "hidden",
+                                    opacity: "0"
+                                });
+                                break;
+                                
                         }
                     }
                 });
@@ -751,8 +786,9 @@
                 var confirmaSenha = objConfirmaSenha.val();
                 var celular = objCelular.val();
                 var cpf = objCpf.val();
+                var sexo = objSexo.val();
                 var dataNascimento = objDataNascimento.val();
-                var allFields = [objNome, objEmail, objSenha, objConfirmaSenha, objCelular, objCpf, objDataNascimento];
+                var allFields = [objNome, objEmail, objSenha, objConfirmaSenha, objCelular, objCpf, objSexo, objDataNascimento];
                 var invalidFields = [];
                 var ctrlInvalid = 0;
                 var thisStep = 1;
@@ -785,6 +821,11 @@
 
                     if(validarCPF(cpf) == false){
                         invalidFields[ctrlInvalid] = objCpf;
+                        ctrlInvalid++;
+                    }
+                    
+                    if(sexo == ""){
+                        invalidFields[ctrlInvalid] = objSexo;
                         ctrlInvalid++;
                     }
 

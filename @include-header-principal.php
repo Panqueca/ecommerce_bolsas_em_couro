@@ -783,7 +783,7 @@
     ?>
     <nav class="nav-header">
         <div class="top-bar">
-            <a href="#" class="link-padrao botao-entrar"><i class="fas fa-sign-in-alt" data-fa-transform="grow-6 left-6"></i> ENTRAR</a> OU
+            <a class="link-padrao botao-entrar" id="botaoEntrar"><i class="fas fa-sign-in-alt" data-fa-transform="grow-6 left-6"></i> ENTRAR</a> OU
             <a class="link-padrao" id="botaoCadastraConta">CRIE SUA CONTA</a>
             <div class="header-cart">
                 <div class="cart-button"><i class="fas fa-shopping-bag"></i></div>
@@ -1023,5 +1023,9 @@
     });
 </script>
 <?php
+    if(isset($_SESSION["minha_conta"])){
+        print_r($_SESSION["minha_conta"]);
+    }
     require_once "@include-cadastra-conta.php";
+    require_once "@include-login.php";
 ?>

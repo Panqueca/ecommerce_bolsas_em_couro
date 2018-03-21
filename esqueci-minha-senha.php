@@ -2,7 +2,7 @@
     session_start();
     $nomeEmpresa = "Bolsas em Couro";
     $descricaoPagina = "DESCRIÇÃO MODELO ATUALIZAR...";
-    $tituloPagina = "MUDAR TITULO - $nomeEmpresa";
+    $tituloPagina = "Termos e condições - $nomeEmpresa";
 ?>
 <!DOCTYPE html>
 <html>
@@ -24,9 +24,13 @@
         <!--PAGE CSS-->
         <style>
             .main-content{
-                width: 100%;
-                margin: 0 auto;
+                width: 80%;
+                margin: 80px auto 80px auto;
                 min-height: 300px;
+            }
+            .main-content article{
+                text-align: justify;
+                margin: 40px 0px 0px 0px;
             }
         </style>
         <!--END PAGE CSS-->
@@ -48,16 +52,8 @@
         ?>
         <!--THIS PAGE CONTENT-->
         <div class="main-content">
-            <h2 align=center>TESTES MINHA CONTA</h2>
-            <?php
-                require_once "@classe-minha-conta.php";
-                $enderecos = array();
-                $enderecos[0] = array();
-                $enderecos[0]["cep"] = "80230040";
-                $enderecos[0]["rua"] = "Engenheiros Rebouças";
-                $enderecos[0]["numero"] = "2111";
-                $enderecos[0]["complemento"] = "Apto 06";
-            ?>
+            <h1 align=center>ESQUECI MINHA SENHA</h1>
+            <article>Ao contrário do que se acredita, Lorem Ipsum não é simplesmente um texto randômico. Com mais de 2000 anos, suas raízes podem ser encontradas em uma obra de literatura latina clássica datada de 45 AC. Richard McClintock, um professor de latim do Hampden-Sydney College na Virginia, pesquisou uma das mais obscuras palavras em latim, consectetur, oriunda de uma passagem de Lorem Ipsum, e, procurando por entre citações da palavra na literatura clássica, descobriu a sua indubitável origem. Lorem Ipsum vem das seções 1.10.32 e 1.10.33 do "de Finibus Bonorum et Malorum" (Os Extremos do Bem e do Mal), de Cícero, escrito em 45 AC. Este livro é um tratado de teoria da ética muito popular na época da Renascença. A primeira linha de Lorem Ipsum, "Lorem Ipsum dolor sit amet..." vem de uma linha na seção 1.10.32.</article>
         </div>
         <!--END THIS PAGE CONTENT-->
         <?php

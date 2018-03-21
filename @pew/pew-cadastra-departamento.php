@@ -53,6 +53,7 @@
                     mensagemAlerta(msgErro);
                 },
                 success: function(resposta){
+                    console.log(resposta)
                     if(resposta == "true"){
                         mensagemAlerta(msgSucesso, false, "#259e25", "pew-departamentos.php?focus="+titulo);
                     }else{

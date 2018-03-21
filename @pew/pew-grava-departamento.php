@@ -16,7 +16,7 @@
         $tabela_departamentos = $pew_custom_db->tabela_departamentos;
         $titulo = addslashes(trim($_POST["titulo"]));
         $descricao = addslashes(trim($_POST["descricao"]));
-        $posicao = (int)$_POST["posicao"]);
+        $posicao = (int)$_POST["posicao"];
         $data = date("Y-m-d h:i:s");
 
         function url_format($string){

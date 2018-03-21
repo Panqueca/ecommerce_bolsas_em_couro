@@ -20,7 +20,7 @@
         $cpf = addslashes($_POST["cpf"]);
         $cpf = str_replace(".", "", $cpf);
         $dataNascimento = addslashes($_POST["data_nascimento"]);
-        $sexo = "masculino";
+        $sexo = addslashes($_POST["sexo"]);
         $cep = addslashes($_POST["cep"]);
         $cep = str_replace("-", "", $cep);
         $rua = addslashes($_POST["rua"]);
@@ -51,7 +51,7 @@
         $enderecos[0]["estado"] = $estado;
         
         $minhaConta = new MinhaConta();
-        $cadastro = $minhaConta->cadastrar_conta($nome, $email, $senha, $celular, $telefone, $cpf, $dataNascimento, $sexo, $enderecos);
+        $cadastro = $minhaConta->cadastrar_conta($nome, $email, $senha, $celular, $telefone, $cpf, $sexo, $dataNascimento, $enderecos);
         if($cadastro == true){
             echo "true";
         }else{

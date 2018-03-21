@@ -11,8 +11,8 @@
         private $celular;
         private $telefone;
         private $cpf;
-        private $data_nascimento;
         private $sexo;
+        private $data_nascimento;
         private $data_cadastro;
         private $data_controle;
         private $status;
@@ -58,8 +58,8 @@
                 $this->celular = $info["celular"];
                 $this->telefone = $info["telefone"];
                 $this->cpf = $info["cpf"];
-                $this->data_nascimento = $info["data_nascimento"];
                 $this->sexo = $info["sexo"];
+                $this->data_nascimento = $info["data_nascimento"];
                 $this->data_cadastro = $info["data_cadastro"];
                 $this->data_controle = $info["data_controle"];
                 $this->status = $info["status"];
@@ -100,12 +100,12 @@
             return $this->cpf;
         }
         
-        public function get_data_nascimento(){
-            return $this->data_nascimento;
-        }
-        
         public function get_sexo(){
             return $this->sexo;
+        }
+        
+        public function get_data_nascimento(){
+            return $this->data_nascimento;
         }
         
         public function get_data_cadastro(){
@@ -138,8 +138,8 @@
                 $infoMinhaConta["celular"] = $this->get_celular();
                 $infoMinhaConta["telefone"] = $this->get_telefone();
                 $infoMinhaConta["cpf"] = $this->get_cpf();
-                $infoMinhaConta["data_nascimento"] = $this->get_data_nascimento();
                 $infoMinhaConta["sexo"] = $this->get_sexo();
+                $infoMinhaConta["data_nascimento"] = $this->get_data_nascimento();
                 $infoMinhaConta["data_cadastro"] = $this->get_data_cadastro();
                 $infoMinhaConta["data_controle"] = $this->get_data_controle();
                 $infoMinhaConta["status"] = $this->get_status();
@@ -191,7 +191,7 @@
             }
         }
         
-        public function cadastrar_conta($usuario, $email, $senha, $celular, $telefone, $cpf, $data_nascimento, $sexo, $enderecos){
+        public function cadastrar_conta($usuario, $email, $senha, $celular, $telefone, $cpf, $sexo, $data_nascimento, $enderecos){
             $this->id = null;
             $this->usuario = $usuario;
             $this->email = $email;
@@ -199,8 +199,8 @@
             $this->celular = $celular;
             $this->telefone = $telefone;
             $this->cpf = $cpf;
-            $this->data_nascimento = $data_nascimento;
             $this->sexo = $sexo;
+            $this->data_nascimento = $data_nascimento;
             $this->data_cadastro = date("Y-m-d h:i:s");
             $this->data_controle = date("Y-m-d h:i:s");
             $this->enderecos = $enderecos;
