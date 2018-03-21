@@ -326,11 +326,11 @@
         <ul class="footer-links links-estaticos">
             <li class='first-li'>
                 <span>
-                    <a href="#" class="link-principal">INSTITUCIONAL</a>
+                    <a href="institucional.php" class="link-principal">INSTITUCIONAL</a>
                     <ul class="sub-menu">
-                        <li><a href='#' class='sub-link'>Quem Somos</a></li>
-                        <li><a href='#' class='sub-link'>Garantia de qualidade</a></li>
-                        <li><a href='#' class='sub-link'>Frete Grátis</a></li>
+                        <li><a href='quem-somos.php' class='sub-link'>Quem Somos</a></li>
+                        <li><a href='garantia-de-qualidade.php' class='sub-link'>Garantia de qualidade</a></li>
+                        <li><a href='frete-gratis.php' class='sub-link'>Frete Grátis</a></li>
                     </ul>
                 </span>
             </li>
@@ -338,7 +338,7 @@
                 <span>
                     <a class="link-principal">POLÍTICAS</a>
                     <ul class="sub-menu">
-                        <li><a href='#' class='sub-link'>Entrega e devolução</a></li>
+                        <li><a href='entrega-e-devolucao.php' class='sub-link'>Entrega e devolução</a></li>
                     </ul>
                 </span>
             </li>
@@ -354,7 +354,7 @@
                     </ul>
                 </span>
             </li>
-            <li class='first-li'><span><a href="formas-pagamento.php" class="link-principal">FORMAS DE PAGAMENTO</a></span></li>
+            <li class='first-li'><span><a href="formas-de-pagamento.php" class="link-principal">FORMAS DE PAGAMENTO</a></span></li>
             <li class='first-li'><span><a href="seguranca.php" class="link-principal">SEGURANÇA</a></span></li>
         </ul>
     </div>

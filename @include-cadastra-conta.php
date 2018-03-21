@@ -124,6 +124,9 @@
         visibility: hidden;
         z-index: 80;
         text-align: center;
+        display: flex;
+        justify-content: center;
+        text-align: center;
     }
     .section-cadastra .display-formularios .formulario-cadastro .background-loading .icone-loading{
         position: absolute;

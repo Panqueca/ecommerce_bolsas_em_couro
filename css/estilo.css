@@ -8,14 +8,16 @@ body{
 }
 .link-padrao{
     text-decoration: none;
-    color: #666;
+    color: #5583fe;
     padding: 0px 1px 1px 1px;
+    margin: 0px 4px 0px 4px;
     border-bottom: 1px solid transparent;
     font-size: 12px;
     font-weight: normal;
+    display: inline-block;
 }
 .link-padrao:hover{
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #5583fe;
 }
 .navigation-tree{
     width: 80%;

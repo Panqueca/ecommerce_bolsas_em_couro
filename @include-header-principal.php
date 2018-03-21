@@ -44,6 +44,7 @@
         -o-transition: .2s;
         transition: .2s;
         cursor: pointer;
+        color: #666;
     }
     .header-principal .nav-header .top-bar .link-padrao:hover{
         color: #111;
