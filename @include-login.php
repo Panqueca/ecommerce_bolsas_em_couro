@@ -12,6 +12,8 @@
         visibility: hidden;
         transition: .4s all ease;
         opacity: .6;
+        overflow: hidden;
+        overflow-y: scroll;
     }
     .section-login .display-login{
         width: 40%;
@@ -215,6 +217,26 @@
         opacity: 1;
     }
     /*END SECTION BOTTOM*/
+    @media screen and (max-width: 860px){
+        .section-login .display-login{
+            width: 60%;   
+        }
+        @media screen and (max-width: 560px){
+            .section-login .display-login{
+                width: 95%;
+            }      
+            .section-login .display-login .titulo{
+                font-size: 24px;
+            }
+            .section-login .display-formularios{
+                height: 75vh;
+                width: 90%;
+            }
+            .section-login .display-formularios .formulario-login{
+                height: 74vh;   
+            }
+        }
+    }
 </style>
 <div class="section-login">
     <div class="display-login">

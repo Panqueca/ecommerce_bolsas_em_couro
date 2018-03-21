@@ -12,12 +12,14 @@
         visibility: hidden;
         transition: .4s all ease;
         opacity: .6;
+        overflow: hidden;
+        overflow-y: scroll;
     }
     .section-cadastra .display-cadastra{
         width: 80%;
         margin: 0 auto;
     }
-    .section-cadastra .titulo-cadastre{
+    .section-cadastra .titulo{
         margin: 0px;
         padding: 20px 0px 20px 0px;
         font-size: 32px;
@@ -26,6 +28,14 @@
     }
     .section-cadastra .descricao-cadastre{
         font-weight: normal;
+    }
+    .section-cadastra .descricao-cadastre .link-padrao{
+        color: #5583fe;
+        border: none;
+        cursor: pointer;
+    }
+    .section-cadastra .descricao-cadastre .link-padrao:hover{
+        text-decoration: underline;
     }
     .section-cadastra .display-confirmacao{
         font-size: 24px;
@@ -266,16 +276,56 @@
         opacity: 1;
     }
     /*END SECTION BOTTOM*/
+    @media screen and (max-width: 860px){
+        .section-cadastra .display-cadastra{
+            width: 60%;   
+        }
+        @media screen and (max-width: 560px){
+            .section-cadastra .display-cadastra{
+                width: 95%;
+            }      
+            .section-cadastra .display-cadastra .titulo{
+                font-size: 24px;   
+            }
+            .section-cadastra .display-formularios{
+                height: 55vh;
+                width: 90%;
+            }
+            .section-cadastra .display-formularios .formulario-login{
+                height: 55vh;   
+            }
+            .section-cadastra .display-formularios .top-buttons{
+                font-size: 10px;   
+            }
+            .section-cadastra .display-formularios .label-half{
+                width: calc(100% - 30px);
+                margin: 5px 15px 5px 15px;
+            }
+            .section-cadastra .display-formularios .label-medium{
+                width: calc(100% - 30px);
+                margin: 5px 15px 5px 15px;
+            }
+            .section-cadastra .display-formularios .label-small{
+                width: calc(100% - 30px);
+                margin: 5px 15px 5px 15px; 
+            }
+            .section-cadastra .display-formularios .label-xsmall{
+                width: calc((100%/2) - 30px);
+                margin: 5px 15px 5px 15px;   
+            }
+        }
+    }
 </style>
 <div class="section-cadastra">
     <div class="display-cadastra">
-        <h3 class="titulo-cadastre">SE CADASTRE</h3>
+        <h3 class="titulo">SE CADASTRE</h3>
         <h5 class="descricao-cadastre">
             <p>
                 É um fato conhecido de todos que um leitor se distrairá com o conteúdo de texto legível de uma página quando estiver examinando sua diagramação.
             </p>
             <p>
-                Existem muitas variações disponíveis de passagens de Lorem Ipsum, mas a maioria sofreu algum tipo de alteração.
+                Existem muitas variações disponíveis de passagens de Lorem Ipsum, mas a maioria sofreu algum tipo de alteração.<br><br>
+                Já tem conta? <a class="link-padrao" id="botaoAlternaLogin">Faça login aqui.</a>
             </p>
         </h5>
         <div class="display-confirmacao"></div>
@@ -462,6 +512,7 @@
         var botaoVoltar = $(".section-cadastra .botao-voltar");
         var backgroundLoading = $(".section-cadastra .background-loading");
         var botaoContinuar = $(".botao-continuar");
+        var botaoAlternaLogin = $("#botaoAlternaLogin");
         var validandoDados = false;
         var lastValidationAtiva = false;
         var passoAtivo = 1;
@@ -1050,6 +1101,12 @@
         
         botaoVoltar.off().on("click", function(){
             toggleCadastreConta();
+        });
+        botaoAlternaLogin.off().on("click", function(){
+            if(cadastreAberto){
+                toggleCadastreConta(); 
+            }
+            toggleLogin();
         });
         /*END DEFAULT TRIGGERS*/
     });
