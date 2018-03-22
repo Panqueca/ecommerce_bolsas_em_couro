@@ -70,32 +70,32 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             <form method="post" action="pew-update-banner.php" enctype="multipart/form-data">
                 <input type="hidden" name="id_banner" value="<?php echo $idBanner;?>">
                 <input type="hidden" name="imagem_antiga" value="<?php echo $imagem;?>">
-                <label class="label-medium">
-                    <h2>Título do Banner</h2>
+                <div class="label-medium">
+                    <h2 class='titulo'>Título do Banner</h2>
                     <input type="text" name="titulo" placeholder="Título" min="3" class="input-full" value="<?php echo $titulo;?>" required>
-                </label>
-                <label class="label-medium">
-                    <h2>Descrição do Banner</h2>
+                </div>
+                <div class="label-medium">
+                    <h2 class='titulo'>Descrição do Banner</h2>
                     <input type="text" name="descricao" placeholder="Descrição" min="3" class="input-full" value="<?php echo $descricao;?>" required>
-                </label>
-                <label class="label-medium">
-                    <h2>Link de redirecionamento</h2>
+                </div>
+                <div class="label-medium">
+                    <h2 class='titulo'>Link de redirecionamento</h2>
                     <input type="text" name="link" placeholder="www.efectusweb.com.br" class="input-full" value="<?php echo $link;?>" required>
-                </label>
-                <label class="label-full">
-                    <label class="label-half">
+                </div>
+                <div class="label-full">
+                    <div class="label-half">
                         <img src="../imagens/banners/<?php echo $imagem;?>" width="100%">
-                    </label>
-                    <label class="label-half">
-                        <h2>Selecione a imagem do banner: (1200px : 450px)</h2>
+                    </div>
+                    <div class="label-half">
+                        <h2 class='titulo'>Selecione a imagem do banner: (1200px : 450px)</h2>
                         <input type="file" name="imagem" class="input-full">
-                    </label>
-                </label>
+                    </div>
+                </div>
                 <br style="clear: both;">
                 <a href="pew-deleta-banner.php?id_banner=<?php echo $idBanner;?>&acao=deletar" class='btn-excluir'>Excluir Banner</a>
-                <label class="label-full">
-                    <input type="submit" class="btn-submit" value="Atualizar Banner">
-                </label>
+                <div class="label-xsmall">
+                    <input type="submit" class="btn-submit label-input" value="Atualizar Banner">
+                </div>
                 <br style="claer: both;">
                 <br><br><br><a href='pew-banners.php' class='link-padrao'>Voltar</a>
             </form>

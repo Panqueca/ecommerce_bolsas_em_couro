@@ -72,7 +72,6 @@ body{
     transition: .2s;
     outline: none;
     cursor: pointer;
-    border-radius: 30px;
 }
 .btn-submit:hover{
     border-color: #175a17;
@@ -308,81 +307,71 @@ input:focus, select:focus, textarea:focus{
     z-index: 10;
     bottom: 0px;
 }
-.label-small{
-    width: 23%;
-    margin: 1%;
-    margin-bottom: 20px;
-    margin-top: 20px;
+.xsmall{
+    width: calc((100%/6) - 30.23px);
+    margin: 5px 15px 5px 15px;
     float: left;
-    padding: 0px;
-    position: relative;
+    display: flex;
+    flex-flow: row wrap;
 }
-.label-medium{
-    width: 31.3%;
-    margin: 1%;
-    margin-bottom: 20px;
-    margin-top: 20px;
+.small{
+    width: calc((100%/4) - 30px);
+    margin: 5px 15px 5px 15px;
     float: left;
-    padding: 0px;
-    position: relative;
+    display: flex;
+    flex-flow: row wrap;
 }
-.label-half{
-    width: 48%;
-    margin: 1%;
-    margin-bottom: 20px;
-    margin-top: 20px;
+.medium{
+    width: calc((100%/3) - 30px);
+    margin: 5px 15px 5px 15px;
     float: left;
-    padding: 0px;
-    position: relative;
+    display: flex;
+    flex-flow: row wrap;
 }
-.label-full{
-    width: 99%;
-    margin: .5%;
-    margin-bottom: 20px;
-    margin-top: 20px;
-    padding: 0px;
-    position: relative;
+.half{
+    width: calc((100%/2) - 30px);
+    margin: 5px 15px 5px 15px;
+    float: left;
+    display: flex;
+    flex-flow: row wrap;
 }
-.input-small{
-    width: 21%;
-    padding: 1%;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin: 1%;
-    margin-bottom: 10px;
+.large{
+    width: calc((100%/1.5) - 30px);
+    margin: 5px 15px 5px 15px;
+    float: left;
+    display: flex;
+    flex-flow: row wrap;
+}
+.xlarge{
+    width: calc((100%/1.335) - 30px);
+    margin: 5px 15px 5px 15px;
+    float: left;
+    display: flex;
+    flex-flow: row wrap;
+}
+.full{
+    width: calc(100% - 30px);
+    margin: 5px 15px 5px 15px;
+    display: flex;
+    flex-flow: row wrap;
+}
+.label-input{
+	width: calc(100% - 10px);
+    height: 30px;
+    line-height: 30px;
     margin-top: 10px;
-}
-.input-medium{
-    width: 29.3%;
-    padding: 1%;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin: 1%;
     margin-bottom: 10px;
-    margin-top: 10px;
+    padding: 0px 5px 0px 5px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: .3s;
 }
-.input-half{
-    width: 46%;
-    padding: 1%;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin: 1%;
-    margin-bottom: 10px;
-    margin-top: 10px;
+.clear{
+    clear: both;
 }
-.input-full{
-    width: 96%;
-    padding: 1%;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
-    margin: 1%;
-    margin-top: 10px;
-}
-.input-title{
-    margin: 0px;
+.label-title{
     font-size: 16px;
-    color: #df2321;
+    margin: 0px;
 }
 /*FIM FORMULARIO GERAL PADRAO*/
 /*BARRA DE BUSCA PADRAO*/
