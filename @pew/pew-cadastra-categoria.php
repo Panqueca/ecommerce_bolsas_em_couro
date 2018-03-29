@@ -1,14 +1,16 @@
 <h2 class=titulo-edita>Cadastrar categoria</h2>
 <form id='formCadCategoria'>
-    <div class='label-full'>
-        <h3 class="input-title">Título</h3>
-        <input type='text' class='input-full' placeholder='Título da categoria' name='titulo' id='tituloCategoria' maxlength='35'>
+    <div class='label full'>
+        <h3 class="label-title">Título</h3>
+        <input type='text' class='label-input' placeholder='Título da categoria' name='titulo' id='tituloCategoria' maxlength='35'>
     </div>
-    <div class='label-full'>
-        <h3 class="input-title">Descrição (opcional, recomendado 156 caracteres)</h3>
-        <textarea class='input-full' placeholder='Descrição da categoria SEO Google' name='descricao' id='descricaoCategoria'></textarea>
+    <div class='label full clear'>
+        <h3 class="label-title">Descrição (opcional, recomendado 156 caracteres)</h3>
+        <textarea class='label-textarea' placeholder='Descrição da categoria SEO Google' name='descricao' id='descricaoCategoria' rows="3"></textarea>
     </div>
-    <input type='submit' class='btn-submit' value='Cadastrar'>
+    <div class="label small">
+        <input type='submit' class='btn-submit label-input' value='Cadastrar'>
+    </div>
     <br style="clear: both;">
 </form>
 <style>

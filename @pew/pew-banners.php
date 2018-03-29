@@ -38,13 +38,12 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 padding-bottom: 50px;
             }
             .box-banner{
+                position: relative;
                 width: 40%;
                 margin: 4.5%;
-                background-color: #eee;
                 padding: 0.5%;
                 padding-top: 10px;
                 padding-bottom: 10px;
-                position: relative;
                 border-radius: 20px;
                 float: left;
             }
@@ -67,8 +66,15 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 width: 100%;
                 border-radius: 10px;
             }
-            .comteudo-painel .btn-desativar{
-                color: #fff;
+            .box-banner .controllers{
+                position: absolute;
+                display: flex;
+                bottom: 0px;
+                width: 100%;
+                justify-content: center;
+                height: 70px;
+                line-height: 50px;
+                background: rgba(255, 255, 255, 0.4);
             }
         </style>
         <!--FIM THIS PAGE CSS-->
@@ -106,8 +112,12 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                                 echo "<div class='indice'>$i</div>";
                                 echo "<div class='img-banner'><img src='../imagens/banners/$imagem'></div>";
                                 echo "<div class='controllers'>";
-                                    echo $btnStatus;
-                                    echo "<a href='pew-edita-banner.php?id_banner=$id' class='btn-alterar' title='Clique para alterar o banner'>Alterar</a>";
+                                    echo "<div class='small'>";
+                                        echo $btnStatus;
+                                    echo "</div>";
+                                    echo "<div class='small'>";
+                                        echo "<a href='pew-edita-banner.php?id_banner=$id' class='btn-alterar' title='Clique para alterar o banner'>Alterar</a>";
+                                    echo "</div>";
                                 echo "</div>";
                             echo "</div>";
                         }

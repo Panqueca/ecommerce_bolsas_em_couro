@@ -28,8 +28,8 @@ if(isset($dataSend)){
         }
         $ctrlColluns++;
     }
+    
     /*CUSTOM SEARCH VARS*/
-    $custom_search = $busca;
     $custom_table = false;
     if($dataType == "POST"){
         $custom_table = isset($_POST["custom_table"]) && $_POST["custom_table"] != null ? $_POST["custom_table"] : false;
@@ -49,7 +49,8 @@ if(isset($dataSend)){
 
     $produtosSelecionados = array();
     $ctrlProdutos = 0;
-    if(contarResultados($tabela_produtos, $searchCondition) > 0 && $custom_table == false){
+    if($custom_table == false){
+        $totalResultado = contarResultados($tabela_produtos, $searchCondition);
         $queryProdutos = mysqli_query($conexao, "select id from $tabela_produtos where $searchCondition");
         while($produtos = mysqli_fetch_array($queryProdutos)){
             $idProduto = $produtos["id"];
@@ -72,7 +73,7 @@ if(isset($dataSend)){
         }
         print_r(json_encode($produtosSelecionados));
     }else if($custom_table != false && $custom_table != null){
-        $custom_search = str_replace("where", "", $custom_search);
+        $custom_search = str_replace("where", "", $dataSend);
         $totalResultados = contarResultados($custom_table, $custom_search);
         if($totalResultados > 0){
             $resultadosSelecionados = array();

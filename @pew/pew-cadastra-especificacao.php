@@ -1,11 +1,12 @@
 <h2 class=titulo-edita>Cadastrar especificação</h2>
 <form id='formCadEspecificacao' method="post" action="pew-grava-especificacao.php">
-    <div class='label-full'>
-        <h3 class="input-title">Título</h3>
-        <input type='text' class='input-full' placeholder='Título da Especificacao' name='titulo' id='tituloEspecificacao' maxlength='35'>
+    <div class='label half'>
+        <h3 class="label-title">Título</h3>
+        <input type='text' class='label-input' placeholder='Título da Especificacao' name='titulo' id='tituloEspecificacao' maxlength='35'>
     </div>
-    <input type='submit' class='btn-submit' value='Cadastrar'>
-    <br style="clear: both;">
+    <div class='label small clear'>
+        <input type='submit' class='btn-submit label-input' value='Cadastrar'>
+    </div>
 </form>
 <style>
     .titulo-edita{

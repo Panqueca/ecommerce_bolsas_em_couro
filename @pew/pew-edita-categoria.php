@@ -33,17 +33,17 @@
             echo "<h2 class=titulo-edita>Informações da categoria</h2>";
             echo "<form id='formUpdateCategoria'>";
                 echo "<input type='hidden' name='id_categoria' id='idCategoria' value='$idCategoria'>";
-                echo "<div class='label-full'>";
-                    echo "<h3 class='input-title'>Título</h3>";
-                    echo "<input type='text' class='input-full' placeholder='Título da categoria' name='titulo' id='tituloCategoria' value='$titulo' maxlength='35'>";
+                echo "<div class='label full'>";
+                    echo "<h3 class='label-title'>Título</h3>";
+                    echo "<input type='text' class='label-input' placeholder='Título da categoria' name='titulo' id='tituloCategoria' value='$titulo' maxlength='35'>";
                 echo "</div>";
-                echo "<div class='label-full'>";
-                    echo "<h3 class='input-title'>Descrição (opcional, recomendado 156 caracteres)</h3>";
-                    echo "<textarea class='input-full' placeholder='Descrição da categoria SEO Google' name='descricao' id='descricaoCategoria'>$descricao</textarea>";
+                echo "<div class='label full'>";
+                    echo "<h3 class='label-title'>Descrição (opcional, recomendado 156 caracteres)</h3>";
+                    echo "<textarea class='label-input' placeholder='Descrição da categoria SEO Google' name='descricao' id='descricaoCategoria'>$descricao</textarea>";
                 echo "</div>";
-                echo "<div class='label-full'>";
-                    echo "<h3 class='input-title'>Status</h3>";
-                    echo "<select name='status' id='statusCategoria' class='input-small'>";
+                echo "<div class='label small'>";
+                    echo "<h3 class='label-title'>Status</h3>";
+                    echo "<select name='status' id='statusCategoria' class='label-input'>";
                         $possibleStatus = array("Ativa", "Desativada");
                         foreach($possibleStatus as $optionStatus){
                             $selected = $optionStatus == $status ? "selected" : "";
@@ -52,9 +52,18 @@
                         }
                     echo "</select>";
                 echo "</div>";
-                echo "<h3 class='input-full'>Última modificação: $dataControle</h3>";
-                echo "<input type='button' class='btn-excluir botao-acao' pew-acao='deletar' pew-id-categoria='$idCategoria' value='Excluir'>";
-                echo "<input type='submit' class='btn-submit' value='Atualizar'>";
+                echo "<div class='label half'>";
+                    echo "<h3>Última modificação: $dataControle</h3>";
+                echo "</div>";
+                echo "<div class='group clear'>";
+                    echo "<div class='label small'>";
+                        echo "<input type='button' class='btn-excluir botao-acao label-input' pew-acao='deletar' pew-id-categoria='$idCategoria' value='Excluir'>";
+                    echo "</div>";
+                    echo "<div class='label small'>";
+                        echo "<input type='submit' class='btn-submit label-input' value='Atualizar'>";
+                    echo "</div>";
+                echo "</div>";
+                echo "<br class='clear'>";
             echo "</form>";
         }else{
             loadingError();
@@ -102,6 +111,7 @@
                     mensagemAlerta(msgErro);
                 },
                 success: function(resposta){
+                    console.log(resposta);
                     if(resposta == "true"){
                         mensagemAlerta(msgSucesso, false, "#259e25", "pew-categorias.php?focus="+titulo);
                     }else{

@@ -1,8 +1,8 @@
 <h2 class=titulo-edita>Cadastrar categoria vitrine</h2>
 <form id='formCadCategoria'>
-    <div class='label-half'>
-        <h3 class="input-title">Categoria</h3>
-        <select class="input-full" name="info_categoria" id="infoCategoria">
+    <div class='label half'>
+        <h3 class="label-title">Categoria</h3>
+        <select class="label-input" name="info_categoria" id="infoCategoria">
             <option value="">- Selecione -</option>
             <?php
                 require_once "pew-system-config.php";
@@ -17,20 +17,22 @@
         </select>
         <h4 style="color: red; display: none;" id="mensagemCadastro">Esta categoria já está ativa.</h4>
     </div>
-    <div class='label-half'>
-        <h3 class="input-title">Imagem da categoria (500px : 400px)</h3>
-        <input type='file' class='input-full' name='imagem' id='imagemCategoria' accept="image/*" required>
+    <div class='label half'>
+        <h3 class="label-title">Imagem da categoria (500px : 400px)</h3>
+        <input type='file' class='label-input' name='imagem' id='imagemCategoria' accept="image/*" required>
     </div>
-    <br style="clear: both;">
-    <div class='label-full'>
-        <h3>Selecionar esta categoria como ativa?</h3>
-        <select name="status">
+    <div class='label half'>
+        <h3 class="label-title">Selecionar esta categoria como ativa?</h3>
+        <select name="status" class="label-input">
             <option value="1">Sim</option>
             <option value="0">Não</option>
         </select>
     </div>
-    <input type='submit' class='btn-submit' value='Cadastrar'>
-    <br style="clear: both;">
+    <div class='label small'>
+        <h3 class="label-title">&nbsp;</h3>
+        <input type='submit' class='btn-submit' value='Cadastrar'>
+    </div>
+    <br class="clear">
 </form>
 <style>
     .titulo-edita{

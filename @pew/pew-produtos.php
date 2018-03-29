@@ -33,124 +33,98 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         <!--THIS PAGE CSS-->
         <style>
             .lista-produtos{
-                width: 80%;
-                margin-left: 10%;
+                width: 100%;
+                margin: 40px auto 40px auto;
             }
             .box-produto{
-                width: 98%;
-                margin-top: 50px;
-                border-radius: 10px;
-                padding: 1%;
-                padding-top: 10px;
-                padding-bottom: 40px;
-                -webkit-box-shadow: 0px 0px 45px 8px rgba(0,0,0,0.10);
-                -moz-box-shadow: 0px 0px 45px 8px rgba(0,0,0,0.10);
-                box-shadow: 0px 0px 45px 8px rgba(0,0,0,0.10);
                 position: relative;
+                width: calc(25% - 22px);
+                margin: 10px;
+                background-color: #fff;
+                border: 1px solid #ccc;
+                transition: .2s;
+                color: #666;
+            }
+            .box-produto:hover{
+                -webkit-box-shadow: 0px 0px 15px 8px rgba(0, 0, 0, .1);
+                -moz-box-shadow: 0px 0px 15px 8px rgba(0, 0, 0, .1);
+                box-shadow: 0px 0px 15px 8px rgba(0, 0, 0, .1); 
             }
             .box-produto .imagem{
-                width: 20%;
-                float: left;
+                width: 100%;
                 background-color: #fff;
-                border-radius: 10px;
+                border-bottom: 1px solid #ccc;
             }
             .box-produto .imagem img{
                 width: 100%;
                 border-radius: 10px;
             }
             .box-produto .informacoes{
-                width: 78%;
-                margin-left: 22%;
+                width: calc(100%);
+                padding: 0px;
+                margin: 0px auto;
             }
             .box-produto .informacoes .nome-produto{
                 text-align: left;
-                font-size: 36px;
-                padding-bottom: 5px;
-                margin-bottom: 5px;
-                border-bottom: 2px solid #111;
-                margin: 0;
+                font-size: 18px;
+                margin: 10px 0px 10px 15px;
             }
             .box-produto .informacoes .nome-produto a{
                 text-decoration: none;
                 color: #111;
             }
-            .info-small{
-                width: 32.3%;
-                margin: .5%;
-                margin-top: 20px;
-                height: 50px;
-                margin-bottom: 10px;
-                background-color: #fbfbfb;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                border-radius: 10px;
+            .box-produto .informacoes .nome-produto a:hover{
+                color: #f78a14;
+            }
+            .box-info{
                 position: relative;
-                float: left;
-            }
-            .info-half{
-                width: 49%;
-                margin: .5%;
-                margin-top: 20px;
-                height: 50px;
+                text-align: left;
                 margin-bottom: 10px;
-                background-color: #fbfbfb;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                border-radius: 10px;
+            }
+            .box-info .titulo{
+                font-size: 14px;
+                border-bottom: 1px solid #ccc;
+                padding: 5px 0px 5px 0px;
+                margin: 0px;
+                color: #111;
+            }
+            .box-info .descricao{
+                font-size: 14px; 
+                margin: 5px 0px 5px 0px;
+            }
+            .bottom-buttons{
                 position: relative;
-                float: left;
+                width: 100%;
+                display: flex;
+                flex-flow: row wrap;
+                align-items: flex-end;
+                font-size: 12px;
             }
-            .info-full{
-                width: 99%;
-                margin: .5%;
-                margin-top: 20px;
-                height: 50px;
-                margin-bottom: 10px;
-                background-color: #fbfbfb;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                border-radius: 10px;
-                position: relative;
-                float: left;
+            .bottom-buttons .box-button{
+                width: 50%;
             }
-            .info-titulo{
-                position: absolute;
-                background-color: #111;
-                color: #fff;
-                padding: 5px;
-                padding-left: 10px;
-                padding-right: 10px;
-                border-radius: 20px;
-                top: -5px;
-                left: -2px;
-                margin: 0;
+            .bottom-buttons .btn-status-produto{
+                width: 100%;
+                margin: 0px;
+                padding: 0px;
+                border: none;
+                border-bottom: 2px solid #bf1e1c;
+                border-radius: 0px;
             }
-            .btn-status-produto{
-                border-color: #eee;
-                position: absolute;
-                bottom: -20px;
-                right: 100px;
-                padding: 15px;
-                padding-left: 25px;
-                padding-right: 25px;
+            .bottom-buttons .btn-ativar{
+                border-color: #2f912f;
             }
-            .btn-ativar{
-                padding-bottom: 5px;
-                position: absolute;
-                right: 100px;
-                bottom: -10px;
+            .bottom-buttons .btn-alterar-produto{
+                width: 100%;
+                margin: 0px;
+                padding: 0px;
+                border: none;
+                border-bottom: 2px solid #333;
+                border-radius: 0px;
             }
-            .btn-ativar:hover{
-                border-color: #00ff66;
-            }
-            .btn-alterar-produto{
-                border-color: #eee;
-                position: absolute;
-                bottom: -10px;
-                right: -10px;
-                padding: 5px;
-                padding-left: 25px;
-                padding-right: 25px;
+            .bottom-buttons .btn-status-produto:hover, .bottom-buttons .btn-alterar-produto:hover{
+                background-color: #f0f0f0;
+                transform: scale(1);
             }
         </style>
         <!--FIM THIS PAGE CSS-->
@@ -164,15 +138,14 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         <h1 class="titulos"><?php echo $page_title; ?></h1>
         <section class="conteudo-painel">
             <a href="pew-cadastra-produto.php" class="btn-padrao" title="Cadastre um novo produto">Cadastrar novo</a>
+            <form action="pew-produtos.php" method="get" class="form-busca">
+                <label class="field-busca">
+                    <h3 class="titulo-busca">Busca de produtos</h3>
+                    <input type="search" name="busca" placeholder="Pesquise por produtos, categorias, marcas ou descrição." class="barra-busca" title="Buscar">
+                    <input type="submit" value="Buscar" class="btn-buscar">
+                </label>
+            </form>
             <div class="lista-produtos">
-                <br><br>
-                <form action="pew-produtos.php" method="get" class="form-busca">
-                    <label class="field-busca">
-                        <h3 class="titulo-busca">Busca de produtos</h3>
-                        <input type="search" name="busca" placeholder="Pesquise por produtos, categorias, marcas ou descrição." class="barra-busca" title="Buscar">
-                        <input type="submit" value="Buscar" class="btn-buscar">
-                    </label>
-                </form>
                 <?php
                     $tabela_produtos = $pew_custom_db->tabela_produtos;
                     $tabela_imagens_produtos = $pew_custom_db->tabela_imagens_produtos;
@@ -199,7 +172,9 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                         while($produtos = mysqli_fetch_array($queryProdutos)){
                             $id = $produtos["id"];
                             $nome = $produtos["nome"];
-                            $marca = $produtos["marca"];
+                            $marca = $produtos["marca"] != "" ? $produtos["marca"] : "Não selecionada";
+                            $estoque = $produtos["estoque"];
+                            $sku = $produtos["sku"];
                             $data = $produtos["data"];
                             $data = substr($data, 0, 10);
                             $data = inverterData($data);
@@ -224,14 +199,32 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                                 echo "<div class='imagem'><a href='$urlAlteraProd'><img src='$dirIMG'></a></div>";
                                 echo "<div class='informacoes'>";
                                     echo "<h3 class='nome-produto'><a href='$urlAlteraProd'>$nome</a></h3>";
-                                    echo "<div class='info-half'><h4 class='info-titulo'><i class='fa fa-tag' aria-hidden='true'></i> Marca</h4><h3 class='info-descricao'>$marca</h3></div>";
-                                    echo "<div class='info-half'><h4 class='info-titulo'><i class='fa fa-calendar' aria-hidden='true'></i> Data</h4><h3 class='info-descricao'>$data</h3></div>";
-                                    echo "<div class='info-half'><h4 class='info-titulo'><i class='fa fa-eye' aria-hidden='true'></i> Visualizações</h4><h3 class='info-descricao'>$visualizacoes</h3></div>";
-                                    echo "<div class='info-half'><h4 class='info-titulo'><i class='fa fa-power-off' aria-hidden='true'></i> Status</h4><h3 class='info-descricao' id='viewStatusProd'>$status</h3></div>";
-                                    echo $btnStatus;
-                                    echo "<a href='$urlAlteraProd' class='btn-alterar btn-alterar-produto' title='Clique para fazer alterações no produto'>Alterar</a>";
-                                    echo "<br style='clear: both;'>";
-                                echo "</div></div>";
+                                    echo "<div class='half box-info'>";
+                                        echo "<h4 class='titulo'><i class='fa fa-power-off' aria-hidden='true'></i> Status</h4>";
+                                        echo "<h3 class='descricao' id='viewStatusProd'>$status</h3>";
+                                    echo "</div>";
+                                    echo "<div class='half box-info'>";
+                                        echo "<h4 class='titulo'><i class='fa fa-tag' aria-hidden='true'></i> Marca</h4>";
+                                        echo "<h3 class='descricao'>$marca</h3>";
+                                    echo "</div>";
+                                    echo "<div class='half box-info'>";
+                                        echo "<h4 class='titulo'><i class='fas fa-cubes'></i> Estoque</h4>";
+                                        echo "<h3 class='descricao'>$estoque</h3>";
+                                    echo "</div>";
+                                    echo "<div class='half box-info'>";
+                                        echo "<h4 class='titulo'><i class='fas fa-hashtag'></i> SKU</h4>";
+                                        echo "<h3 class='descricao'>$sku</h3>";
+                                    echo "</div>";
+                                    echo "<div class='bottom-buttons group clear'>";
+                                        echo "<div class='box-button' style='margin: 0px;'>";
+                                            echo $btnStatus;
+                                        echo "</div>";
+                                        echo "<div class='box-button' style='margin: 0px;'>";
+                                            echo "<a href='$urlAlteraProd' class='btn-alterar btn-alterar-produto' title='Clique para fazer alterações no produto'>Alterar</a>";
+                                        echo "</div>";
+                                    echo "</div>";
+                                echo "</div>";
+                            echo "</div>";
                             global $count, $selectedProds;
                             $count++;
                             $selectedProds[$count] = $id;

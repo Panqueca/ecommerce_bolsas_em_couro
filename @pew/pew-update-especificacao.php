@@ -11,10 +11,15 @@
             $invalid_fileds[$i] = $post_name;
         }
     }
+
     if($gravar){
         echo "<h3 align=center>Atualizando especificação...</h3>";
+        
         require_once "pew-system-config.php";
+        require_once "@classe-system-functions.php";
+        
         $tabela_especificacoes = $pew_custom_db->tabela_especificacoes;
+        
         $idEspecificacao = (int)$_POST["id_especificacao"];
         $titulo = addslashes(trim($_POST["titulo"]));
         $status = (int)$_POST["status"];

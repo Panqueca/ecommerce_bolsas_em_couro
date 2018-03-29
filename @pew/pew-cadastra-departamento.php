@@ -1,19 +1,20 @@
 <h2 class=titulo-edita>Cadastrar departamento</h2>
 <form id='formCadDepartamento'>
-    <div class='label-full'>
-        <h3 class='input-title'>Título</h3>
-        <input type='text' class='input-full' placeholder='Título do departamento' name='titulo' id='tituloDepartamento' maxlength='35'>
+    <div class='label full '>
+        <h3 class='label-title'>Título</h3>
+        <input type='text' class='label-input' placeholder='Título do departamento' name='titulo' id='tituloDepartamento' maxlength='35'>
     </div>
-    <div class='label-full'>
-        <h3 class='input-title'>Descrição</h3>
-        <textarea class='input-full' placeholder='Descrição do departamento' name='descricao' id='descricaoDepartamento'></textarea>
+    <div class='label xlarge'>
+        <h3 class='label-title'>Descrição</h3>
+        <textarea class='label-textarea' placeholder='Descrição do departamento' name='descricao' id='descricaoDepartamento'></textarea>
     </div>
-    <div class='label-full'>
-        <h3 class='input-title'>Posição</h3>
-        <input type="number" class="input-small" name="posicao" id="posicaoDepartamento" placeholder="Posição">
+    <div class='label xsmall'>
+        <h3 class='label-title'>Posição</h3>
+        <input type="number" class="label-input" name="posicao" id="posicaoDepartamento" placeholder="Posição" style="margin-top: 10px;">
     </div>
-    <input type='submit' class='btn-submit' value='Cadastrar'>
-    <br style="clear: both;"><br style="clear: both;">
+    <div class='label small clear'>
+        <input type='submit' class='btn-submit label-input' value='Cadastrar'>
+    </div>
 </form>
 <style>
     .titulo-edita{

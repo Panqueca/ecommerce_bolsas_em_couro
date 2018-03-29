@@ -670,48 +670,48 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         <h1 class="titulos"><?php echo $page_title; ?><a href="pew-orcamentos.php" class="btn-voltar"><i class="fa fa-arrow-left" aria-hidden="true"></i> Voltar</a></h1>
         <section class="conteudo-painel">
             <form method="post" action="pew-grava-orcamento.php" class="formulario-cadastro-orcamento">
-                <div class="label-full">
+                <div class="group clear">
                     <h3 align='left' style="margin: 0px;">Informações do cliente</h3>
-                    <label class="label-half">
-                        <h3 class="input-title" align=left>Nome</h3>
-                        <input type="text" name="nome_cliente" id="nomeCliente" placeholder="Nome" class="input-full">
+                    <label class="label half">
+                        <h3 class="label-title" align=left>Nome</h3>
+                        <input type="text" name="nome_cliente" id="nomeCliente" placeholder="Nome" class="label-input">
                     </label>
-                    <label class="label-half">
-                        <h3 class="input-title" align=left>Telefone</h3>
-                        <input type="text" name="telefone_cliente" id="telefoneCliente" placeholder="(DDD) 99999-9999" class="input-full">
+                    <label class="label half">
+                        <h3 class="label-title" align=left>Telefone</h3>
+                        <input type="text" name="telefone_cliente" id="telefoneCliente" placeholder="(DDD) 99999-9999" class="label-input">
                     </label>
-                    <label class="label-half">
-                        <h3 class="input-title" align=left>E-mail</h3>
-                        <input type="text" name="email_cliente" id="emailCliente" placeholder="email@dominio.com.br" class="input-full">
+                    <label class="label half">
+                        <h3 class="label-title" align=left>E-mail</h3>
+                        <input type="text" name="email_cliente" id="emailCliente" placeholder="email@dominio.com.br" class="label-input">
                     </label>
-                    <label class="label-small">
-                        <h3 class="input-title" align=left>RG</h3>
-                        <input type="text" name="rg_cliente" id="rgCliente" placeholder="RG Cliente" class="input-full">
+                    <label class="label small">
+                        <h3 class="label-title" align=left>RG</h3>
+                        <input type="text" name="rg_cliente" id="rgCliente" placeholder="RG Cliente" class="label-input">
                     </label>
-                    <label class="label-small">
-                        <h3 class="input-title" align=left>CPF</h3>
-                        <input type="text" name="cpf_cliente" id="cpfCliente" placeholder="CPF Cliente" class="input-full">
+                    <label class="label small">
+                        <h3 class="label-title" align=left>CPF</h3>
+                        <input type="text" name="cpf_cliente" id="cpfCliente" placeholder="CPF Cliente" class="label-input">
                     </label>
                     <br style="clear: both;">
                 </div>
-                <div class="label-full">
+                <div class="group clear">
                     <h3 align='left' style="margin: 0px;">Informações de envio</h3>
-                    <label class="label-half">
-                        <h3 class="input-title" align=left>CEP</h3>
-                        <input type="text" name="cep_cliente" id="cepCliente" placeholder="CEP" class="input-full">
+                    <label class="label half">
+                        <h3 class="label-title" align=left>CEP</h3>
+                        <input type="text" name="cep_cliente" id="cepCliente" placeholder="CEP" class="label-input">
                     </label>
-                    <label class="label-small">
-                        <h3 class="input-title" align=left>Número</h3>
-                        <input type="text" name="numero_rua_cliente" id="numeroRuaCliente" placeholder="Número" class="input-full">
+                    <label class="label small">
+                        <h3 class="label-title" align=left>Número</h3>
+                        <input type="text" name="numero_rua_cliente" id="numeroRuaCliente" placeholder="Número" class="label-input">
                     </label>
-                    <label class="label-small">
-                        <h3 class="input-title" align=left>Complemento</h3>
-                        <input type="text" name="complemento_rua_cliente" id="complementoRuaCliente" placeholder="Complemento" class="input-full">
+                    <label class="label small">
+                        <h3 class="label-title" align=left>Complemento</h3>
+                        <input type="text" name="complemento_rua_cliente" id="complementoRuaCliente" placeholder="Complemento" class="label-input">
                     </label>
                 </div>
                 <br style="clear: both;">
                 <br style="clear: both;">
-                <div class="label-small" align=left>
+                <div class="label small">
                     <h3>Produtos para o orçamento:</h3><br>
                     <!--PRODUTOS RELACIONADOS-->
                     <a class="btn-produtos-relacionados">Produtos Selecionados (0)</a>
@@ -745,19 +745,20 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                     </div>
                     <!--END PRODUTOS RELACIONADOS-->
                 </div>
-                <div class="label-small" align=left>
-                    <br><br>
-                    <h3 style="margin: 5px;">Desconto: <input type="number" class="view-total-desconto" value="0" max="100">%</h3>
-                    <h3 style="margin: 5px;">Total: R$ <span class="view-total-orcamento">0.00</span></h3>
+                <div class="label small">
+                    <div class="full">
+                        <h3 class='label-title'>Desconto:&nbsp; <input type="number" class="view-total-desconto label-input" value="0" max="100"> %</h3>
+                    </div>
+                    <div class="full">
+                        <h3 class='label-title'>Total: R$ <span class="view-total-orcamento">0.00</span></h3>
+                    </div>
                     <input type="hidden" class="ctrl-total-desconto" name="total_desconto" value="0">
                     <input type="hidden" class="ctrl-total-orcamento" name="total_orcamento" value="0">
                 </div>
-                <div class="label-small">
-                    <br style="clear: both">
-                    <br style="clear: both">
-                    <input type="submit" class="btn-submit" value="Cadastrar">
+                <div class="label small clear">
+                    <input type="submit" class="btn-submit label-input" value="Cadastrar">
                 </div>
-                <br style="clear: both">
+                <br class='clear'>
             </form>
         </section>
     </body>

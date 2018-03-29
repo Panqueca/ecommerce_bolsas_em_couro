@@ -1,19 +1,20 @@
 <h2 class=titulo-edita>Cadastrar marca</h2>
 <form id='formCadMarca' method="post" action="pew-grava-marca.php" enctype="multipart/form-data">
-    <div class='label-full'>
-        <h3 class="input-title">Título</h3>
-        <input type='text' class='input-full' placeholder='Título da Marca' name='titulo' id='tituloMarca' maxlength='35'>
+    <div class='label full'>
+        <h3 class="label-title">Título</h3>
+        <input type='text' class='label-input' placeholder='Título da Marca' name='titulo' id='tituloMarca' maxlength='35'>
     </div>
-    <div class='label-full'>
-        <h3 class="input-title">Descrição (opcional, recomendado 156 caracteres)</h3>
-        <textarea class='input-full' placeholder='Descrição da Marca' name='descricao' id='descricaoMarca'></textarea>
+    <div class='label full'>
+        <h3 class="label-title">Descrição (opcional, recomendado 156 caracteres)</h3>
+        <textarea class='label-textarea' placeholder='Descrição da Marca' name='descricao' id='descricaoMarca'></textarea>
     </div>
-    <div class='label-full'>
-        <h3 class='input-title'>Imagem (300px : 300px)</h3>
-        <input type='file' class='input-full' name='imagem' accept='image/*'>
+    <div class='label full'>
+        <h3 class='label-title'>Imagem (300px : 300px)</h3>
+        <input type='file' class='label-input' name='imagem' accept='image/*'>
     </div>
-    <input type='submit' class='btn-submit' value='Cadastrar'>
-    <br style="clear: both;">
+    <div class='label small clear'>
+        <input type='submit' class='btn-submit label-input' value='Cadastrar'>
+    </div>
 </form>
 <style>
     .titulo-edita{

@@ -1,10 +1,7 @@
+<?php
+    require_once "@classe-system-functions.php";
+?>
 <style>
-    @import url('https://fonts.googleapis.com/css?family=Montserrat');
-    body{
-        margin: 0px;
-        font-family: 'Montserrat', sans-serif;
-        background-color: #fdfdfd;
-    }
     .section-header{
         width: 100%;
         height: 100px;
@@ -231,7 +228,7 @@
         right: 0px;
     }
 </style>
-<link type="text/css" rel="stylesheet" href="fontes/font-awesome-4.7.0/css/font-awesome.min.css">
+<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 <?php
 /*Função para inversão de data buscada no banco de dados*/
 function inverterData($data){
@@ -249,7 +246,7 @@ function inverterData($data){
             <div class="date-field">
                 <i class='fa fa-calendar' aria-hidden='true'></i> <?php echo inverterData(substr(date("Y-m-d h:i:s"), 0, 10)); ?>
             </div>
-            <div class="login-field"><i class='fa fa-user-circle-o' aria-hidden='true'></i>
+            <div class="login-field"><i class="fas fa-user-circle"></i>
                 <?php
                     $pew_usuario = $_SESSION[$name_session_user];
                     $pew_nivel = (int)$_SESSION[$name_session_nivel];
@@ -278,7 +275,7 @@ function inverterData($data){
                 /*Primeiro Link*/
                 $linksPrincipais[0]["titulo_link"] = "Banners";
                 $linksPrincipais[0]["url_link"] = "pew-banners.php";
-                $linksPrincipais[0]["sub_link"][0]["titulo_sub_link"] = "<i class='fa fa-picture-o' aria-hidden='true'></i> Listar Banners";
+                $linksPrincipais[0]["sub_link"][0]["titulo_sub_link"] = "<i class='fas fa-images'></i> Listar Banners";
                 $linksPrincipais[0]["sub_link"][0]["url_sub_link"] = "pew-banners.php";
                 $linksPrincipais[0]["sub_link"][1]["titulo_sub_link"] = "<i class='fa fa-plus' aria-hidden='true'></i> Cadastrar novo";
                 $linksPrincipais[0]["sub_link"][1]["url_sub_link"] = "pew-cadastra-banner.php";
@@ -303,7 +300,7 @@ function inverterData($data){
                 /*Quarto Link*/
                 $linksPrincipais[3]["titulo_link"] = "Orçamentos";
                 $linksPrincipais[3]["url_link"] = "pew-orcamentos.php";
-                $linksPrincipais[3]["sub_link"][0]["titulo_sub_link"] = "<i class='fa fa-money' aria-hidden='true'></i> Pedidos de orçamento";
+                $linksPrincipais[3]["sub_link"][0]["titulo_sub_link"] = "<i class='fas fa-dollar-sign'></i> Pedidos de orçamento";
                 $linksPrincipais[3]["sub_link"][0]["url_sub_link"] = "pew-orcamentos.php";
                 $linksPrincipais[3]["sub_link"][1]["titulo_sub_link"] = "<i class='fa fa-plus' aria-hidden='true'></i> Cadastrar orçamento";
                 $linksPrincipais[3]["sub_link"][1]["url_sub_link"] = "pew-cadastra-orcamento.php";

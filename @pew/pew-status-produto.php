@@ -21,7 +21,7 @@ if(isset($_POST["id_produto"]) && isset($_POST["acao"])){
 
     $contarProduto = mysqli_query($conexao, "select count(id) as total_produto from $tabela_produtos where id = '$idProduto'");
     $contagem = mysqli_fetch_assoc($contarProduto);
-    if($contagem["total_produto"] > 0){
+    if($contagem["total_produto"] > 0 && $acao != "excluir_imagem"){
         if($acao == "excluir"){
             /*EXCLUIR TODOS OS DADOS DO PRODUTO DE TODAS AS TABELAS RELACIONADAS*/
             $queryImagens = mysqli_query($conexao, "select * from $tabela_imagens_produtos where id_produto = '$idProduto'");
@@ -45,19 +45,19 @@ if(isset($_POST["id_produto"]) && isset($_POST["acao"])){
             mysqli_query($conexao, "update $tabela_produtos set status = $status where id = '$idProduto'");
         }
         echo "true";
-    }else{
-        if($acao == "excluir_imagem"){
-            $idImagem = $idProduto;
-            $queryImagens = mysqli_query($conexao, "select imagem from $tabela_imagens_produtos where id = '$idImagem'");
-            while($imagens = mysqli_fetch_array($queryImagens)){
-                $imagem = $imagens["imagem"];
+    }else if($acao == "excluir_imagem"){
+        $idImagem = $idProduto;
+        $queryImagens = mysqli_query($conexao, "select imagem from $tabela_imagens_produtos where id = '$idImagem'");
+        while($imagens = mysqli_fetch_array($queryImagens)){
+            $imagem = $imagens["imagem"];
+            if(file_exists($dirImagens.$imagem) && $imagem != ""){
                 unlink($dirImagens.$imagem);
-                mysqli_query($conexao, "delete from $tabela_imagens_produtos where id = '$idImagem'");
             }
-            echo "imagem_excluida";
-        }else{
-            echo "false";
         }
+        mysqli_query($conexao, "delete from $tabela_imagens_produtos where id = '$idImagem'");
+        echo "imagem_excluida";
+    }else{
+        echo "false";
     }
     mysqli_close($conexao);
 }else{

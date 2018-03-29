@@ -11,10 +11,15 @@
             $invalid_fileds[$i] = $post_name;
         }
     }
+
     if($gravar){
         echo "<h3 align=center>Gravando especificação...</h3>";
+        
         require_once "pew-system-config.php";
+        require_once "@classe-system-functions.php";
+        
         $tabela_especificacoes = $pew_custom_db->tabela_especificacoes;
+        
         $titulo = addslashes(trim($_POST["titulo"]));
         $dataAtual = date("Y-m-d h:i:s");
 

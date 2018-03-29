@@ -502,6 +502,9 @@
         visibility: hidden;
         opacity: 0;
     }
+    .header-principal .nav-header .display-links .sub-menu ul{
+        list-style: none;
+    }
     .header-principal .nav-header .display-links .first-li:hover .link-principal{
         background-color: #f6f6f6;
     }
@@ -554,8 +557,18 @@
         transition: visibility 0s, opacity .3s, left .2s;
     }
     .header-principal .nav-header .display-links .sub-menu li .sub-sub-menu li{
+        position: relative;
         white-space: nowrap;
         min-width: 200px;
+    }
+    .header-principal .nav-header .display-links .sub-menu li .sub-sub-menu li .box-destaque{
+        position: absolute;
+        width: 250px;
+        top: 0px;
+        left: 100%;
+    }
+    .header-principal .nav-header .display-links .sub-menu li .sub-sub-menu li .box-destaque .imagem{
+        width: 100%;   
     }
     .header-principal .nav-header .display-links .sub-menu li .sub-sub-menu .sub-sub-links{
         display: block;
@@ -845,11 +858,12 @@
                 $this->qtd_sublinks++;
             }
 
-            public function add_sub_sublink($idSublink, $titulo, $url){
+            public function add_sub_sublink($idSublink, $titulo, $url, $produto_destaque = false){
                 $this->sub_sublinks[$this->qtd_sub_sublinks] = array();
                 $this->sub_sublinks[$this->qtd_sub_sublinks]["id_sublink"] = $idSublink;
                 $this->sub_sublinks[$this->qtd_sub_sublinks]["titulo"] = $titulo;
                 $this->sub_sublinks[$this->qtd_sub_sublinks]["url"] = $url;
+                $this->sub_sublinks[$this->qtd_sub_sublinks]["produto_destaque"] = $produto_destaque;
                 foreach($this->sublinks as $indice => $sublink){
                     $id = $sublink["id"];
                     if($idSublink == $id){
@@ -886,8 +900,17 @@
                                     $getIdSubLink = $subSubLink["id_sublink"];
                                     $titulo = $subSubLink["titulo"];
                                     $url = $subSubLink["url"];
+                                    $produto_destaque = $subSubLink["produto_destaque"];
+                                    $displayDestaque = null;
+                                    if($produto_destaque != false && $produto_destaque != ""){
+                                        $imagemDestaque = $produto_destaque["imagem"];
+                                        $displayDestaque = "<div class='box-destaque'><img src='$imagemDestaque' class='imagem'></div>";
+                                    }
+                                    
                                     if($getIdSubLink == $idSubLink){
-                                        echo "<li><a href='$url' class='sub-sub-links'>$titulo</a></li>";
+                                        echo "<li><a href='$url' class='sub-sub-links'>$titulo</a>";
+                                            echo $displayDestaque;
+                                        echo "</li>";
                                     }
                                 }
                                 echo "</ul>";
@@ -900,21 +923,139 @@
                 echo "</li>";
             }
         }
-
+        
+        /*DISPLAY LINKS*/
+        
+        /*LINKS*/
+        
         $link_nav = null;
-        $link_nav[0] = new NavLinks("PÁGINA INICIAL", "index.php");
-        $link_nav[1] = new NavLinks("FEMENINO", "#feminino");
-        $link_nav[1]->add_sublink(1, "CATEGORIA 1", "loja.php?departamento=feminino&categoria=categoria_1");
-        $link_nav[1]->add_sublink(2, "CATEGORIA 2", "loja.php?departamento=feminino&categoria=categoria_2");
-        $link_nav[1]->add_sub_sublink(1, "SUBCATEGORIA 1", "loja.php?departamento=feminino&categoria=categoria_1&subcategoria=subcategoria_1");
-        $link_nav[1]->add_sub_sublink(1, "SUBCATEGORIA 2", "loja.php?departamento=feminino&categoria=categoria_1&subcategoria=subcategoria_2");
-        $link_nav[2] = new NavLinks("MASCULINO", "loja.php?departamento=masculino");
-        $link_nav[3] = new NavLinks("MOCHILAS", "loja.php?departamento=mochilas");
-        $link_nav[4] = new NavLinks("ACESSÓRIOS", "loja.php?departamento=acessorios");
-        $link_nav[5] = new NavLinks("BAZAR", "loja.php?departamento=bazar");
-        $link_nav[6] = new NavLinks("DICAS", "dicas.php");
-        $link_nav[7] = new NavLinks("CONTATO", "contato.php");
+        $countLinks = 0;
+        $link_nav[$countLinks] = new NavLinks("PÁGINA INICIAL", "index.php");
+        $countLinks++;
+        
+        /*INICIO LINKS ALTERAVEIS*/
+        
+        /*SET TABLES*/
+        require_once "@pew/pew-system-config.php";
+        require_once "@classe-system-functions.php";
+        $tabela_categorias = $pew_db->tabela_categorias;
+        $tabela_subcategorias = $pew_db->tabela_subcategorias;
+        $tabela_categorias_produtos = $pew_custom_db->tabela_categorias_produtos;
+        $tabela_subcategorias_produtos = $pew_custom_db->tabela_subcategorias_produtos;
+        $tabela_produtos = $pew_custom_db->tabela_produtos;
+        $tabela_imagens_produtos = $pew_custom_db->tabela_imagens_produtos;
+        $tabela_departamentos = $pew_custom_db->tabela_departamentos;
+        $tabela_links_menu = $pew_custom_db->tabela_links_menu;
+        /*END SET TABLES*/
+        
+        
+        global $departamentoLinks, $ctrlDepartamentoLinks;
+        $departamentoLinks = array();
+        $ctrlDepartamentoLinks = 0;
+            
+        $totalDepartamentos = (int)$pew_functions->contar_resultados($tabela_departamentos, "status = 1");
 
+        if($totalDepartamentos > 0){
+            $queryDepartamentos = mysqli_query($conexao, "select * from $tabela_departamentos where status = 1 order by posicao asc");
+            while($infoDepartamentos = mysqli_fetch_array($queryDepartamentos)){
+                $idDepartamento = $infoDepartamentos["id"];
+                $tituloDepartamento = $infoDepartamentos["departamento"];
+                $refDepartamento = $infoDepartamentos["ref"];
+                $urlDepartamento = "loja.php?departamento=$refDepartamento";
+                $departamentoLinks[$ctrlDepartamentoLinks] = array();
+                $departamentoLinks[$ctrlDepartamentoLinks]["titulo"] = $tituloDepartamento;
+                $departamentoLinks[$ctrlDepartamentoLinks]["url"] = $urlDepartamento;
+                $qtdSub = $pew_functions->contar_resultados($tabela_links_menu, "id_departamento = '$idDepartamento'");
+                if($qtdSub > 0){
+                    $querySub = mysqli_query($conexao, "select * from $tabela_links_menu where id_departamento = '$idDepartamento'");
+                    $ctrlSub = 0;
+                    $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"] = array();
+                    while($infoSub = mysqli_fetch_array($querySub)){
+                        $idCategoria = $infoSub["id_categoria"];
+                        $totalCategoria = $pew_functions->contar_resultados($tabela_categorias, "id = '$idCategoria' and status = 1");
+                        if($totalCategoria > 0){
+                            $queryCategoria = mysqli_query($conexao, "select * from $tabela_categorias where id = '$idCategoria' and status = 1");
+                            $infoCategoria = mysqli_fetch_array($queryCategoria);
+                            $tituloCategoria = $infoCategoria["categoria"];
+                            $refCategoria = $infoCategoria["ref"];
+                            $urlCategoria = "loja.php?departamento=$refDepartamento&categoria=$refCategoria";
+                            $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub] = array();
+                            $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["titulo"] = $tituloCategoria;
+                            $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["url"] = $urlCategoria;
+                            $totalSubcategorias = $pew_functions->contar_resultados($tabela_subcategorias, "id_categoria = '$idCategoria'");
+                            $ctrlSubsublinks = 0;
+                            if($totalSubcategorias > 0){
+                                $querySubcategorias = mysqli_query($conexao, "select * from $tabela_subcategorias where id_categoria = '$idCategoria' order by subcategoria asc");
+                                while($infoSubcategoriras = mysqli_fetch_array($querySubcategorias)){
+                                    $idSubcategoria = $infoSubcategoriras["id"];
+                                    $tituloSubcategoria = $infoSubcategoriras["subcategoria"];
+                                    $refSubcategoria = $infoSubcategoriras["ref"];
+                                    $urlSubcategoria = "loja.php?departamento=$refDepartamento&categoria=$refCategoria&subcategoria=$refSubcategoria";
+                                    $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["subsublinks"][$ctrlSubsublinks] = array();
+                                    $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["subsublinks"][$ctrlSubsublinks]["titulo"] = $tituloSubcategoria;
+                                    $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["subsublinks"][$ctrlSubsublinks]["url"] = $urlSubcategoria;
+                                    $totalProdutos = $pew_functions->contar_resultados($tabela_subcategorias_produtos, "id_subcategoria = '$idSubcategoria'");
+                                    if($totalProdutos > 0){
+                                        $queryIdProdutos = mysqli_query($conexao, "select id_produto from $tabela_subcategorias_produtos where id_subcategoria = '$idSubcategoria' order by rand()");
+                                        $infoQuery = mysqli_fetch_array($queryIdProdutos);
+                                        $idProduto = $infoQuery["id_produto"];
+                                        $totalProduto = $pew_functions->contar_resultados($tabela_produtos, "id = '$idProduto'");
+                                        if($totalProduto > 0){
+                                            $queryImagemProduto = mysqli_query($conexao, "select * from $tabela_imagens_produtos where id_produto = '$idProduto' order by posicao desc");
+                                            $infoImagem = mysqli_fetch_array($queryImagemProduto);
+                                            $imagem = $infoImagem["imagem"];
+                                            $dirImagens = "imagens/produtos/";
+                                            
+                                            /*$departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["subsublinks"][$ctrlSubsublinks]["box_destaque"] = array();
+                                            $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["subsublinks"][$ctrlSubsublinks]["box_destaque"]["imagem"] = $dirImagens.$imagem;*/
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                            $ctrlSub++;
+                        }
+                    }
+                }
+                $ctrlDepartamentoLinks++;
+            }   
+        }
+
+        
+        foreach($departamentoLinks as $link_departamento){
+            $tituloLink = $link_departamento["titulo"];
+            $urlLink = $link_departamento["url"];
+            $link_nav[$countLinks] = new NavLinks($tituloLink, $urlLink);
+            $sublinks = isset($link_departamento["sublinks"]) ? $link_departamento["sublinks"] : null;
+            $totalSublinks = count($sublinks);
+            foreach($sublinks as $indice => $slink){
+                $titulo = $slink["titulo"];
+                $url = $slink["url"];
+                $subsublinks = isset($slink["subsublinks"]) ? $slink["subsublinks"] : null;
+                $totalSubsub = count($subsublinks);
+                $link_nav[$countLinks]->add_sublink($countLinks, $titulo, $url);
+                if($totalSubsub > 0){
+                    foreach($subsublinks as $sublink){
+                        $tituloSub = $sublink["titulo"];
+                        $urlSub = $sublink["url"];
+                        $boxDestaque = isset($sublink["box_destaque"]) && $sublink["box_destaque"] != "" ? $sublink["box_destaque"] : false;
+                        $link_nav[$countLinks]->add_sub_sublink($countLinks, $tituloSub, $urlSub, $boxDestaque);
+                    }
+                }
+            }
+            $countLinks++;
+        }
+        
+        /*END LINKS ALTERAVEIS*/
+        
+        $link_nav[$countLinks] = new NavLinks("DICAS", "dicas.php");
+        $countLinks++;
+        $link_nav[$countLinks] = new NavLinks("CONTATO", "contato.php");
+        
+        /*END LINKS*/
+        
+        
+        /*DESENHA A ESTRUTURA*/
         $quantidadeLinks = count($link_nav);
         if($quantidadeLinks > 0){
             echo "<div class='botao-nav-mobile'><i class='fas fa-bars'></i></div>";
@@ -926,6 +1067,8 @@
                 }
             echo "</ul>";
         }
+        
+        /*END DISPLAY LINKS*/
         ?>
     </nav>
 </header>

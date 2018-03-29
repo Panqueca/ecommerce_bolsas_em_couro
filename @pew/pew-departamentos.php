@@ -27,6 +27,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         <link type="text/css" rel="stylesheet" href="css/categorias.css">
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/standard.js"></script>
+        <script type="text/javascript" src="js/pew.js"></script>
         <!--FIM LINKS e JS PADRAO-->
         <!--THIS PAGE LINKS-->
         <!--FIM THIS PAGE LINKS-->

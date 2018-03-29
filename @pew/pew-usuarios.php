@@ -167,7 +167,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                                     $nivel = "Designer";
                             }
                             $i++;
-                            echo "<div class='box-usuario'><div class='indice'>$i</div><div class='name-field'><h3 class='title'>Usuário</h3>$usuario</div><div class='nivel-field'><h3 class='title'>Nível</h3>$nivel</div><div class='control-field'><h3 class='title'>Editar</h3><a href='pew-edita-usuario.php?id_usuario=$idUsuario' class='btn-editar'><i class='fa fa-pencil' aria-hidden='true'></i> Editar</a></div></div>";
+                            echo "<div class='box-usuario'><div class='indice'>$i</div><div class='name-field'><h3 class='title'>Usuário</h3>$usuario</div><div class='nivel-field'><h3 class='title'>Nível</h3>$nivel</div><div class='control-field'><h3 class='title'>Editar</h3><a href='pew-edita-usuario.php?id_usuario=$idUsuario' class='btn-editar'><i class='fas fa-edit'></i> Editar</a></div></div>";
                         }
                     }else{
                         echo "<h3 align='center'>Não foram encontrados usuários.</h3>";

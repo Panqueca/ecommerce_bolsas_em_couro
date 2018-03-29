@@ -426,7 +426,8 @@
                     <?php
                         $ctrlImagens = 0;
                         $imagemPrincipal = null;
-                        foreach($imagensProduto as $srcImagem){
+                        foreach($imagensProduto as $infoImagem){
+                            $srcImagem = $infoImagem["src"];
                             $ctrlImagens++;
                             $imagemPrincipal = $ctrlImagens == 1 ? $srcImagem : $imagemPrincipal;
                             echo "<div class='box-miniaturas'><img src='$dirImagensProduto/$srcImagem' alt='$nomeEmpresa - $nomeProduto - Imagem $ctrlImagens' class='miniatura'></div>";

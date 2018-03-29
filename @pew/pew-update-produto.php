@@ -43,6 +43,7 @@
         $comprimentoProduto = floatval($_POST["comprimento"]);
         $larguraProduto = floatval($_POST["largura"]);
         $alturaProduto = floatval($_POST["altura"]);
+        $departamentosProduto = isset($_POST["departamentos"]) ? $_POST["departamentos"] : "";
         $categoriasProduto = isset($_POST["categorias"]) ? $_POST["categorias"] : "";
         $especificacoes = isset($_POST["especicacao_produto"]) ? $_POST["especicacao_produto"] : "";
         $produtosRelacionados = isset($_POST["produtos_relacionados"]) ? $_POST["produtos_relacionados"] : "";
@@ -59,6 +60,8 @@
         $tabela_imagens = $pew_custom_db->tabela_imagens_produtos;
         $tabela_categorias = $pew_db->tabela_categorias;
         $tabela_subcategorias = $pew_db->tabela_subcategorias;
+        $tabela_departamentos = $pew_custom_db->tabela_departamentos;
+        $tabela_departamentos_produtos = $pew_custom_db->tabela_departamentos_produtos;
         $tabela_categorias_produtos = $pew_custom_db->tabela_categorias_produtos;
         $tabela_subcategorias_produtos = $pew_custom_db->tabela_subcategorias_produtos;
         $tabela_produtos_relacionados = $pew_custom_db->tabela_produtos_relacionados;
@@ -83,6 +86,13 @@
             echo "<h3 align=center>Gravando dados...</h3>";
             mysqli_query($conexao, "update $tabela_produtos set sku = '$skuProduto', nome = '$nomeProduto', marca = '$marcaProduto', preco = '$precoProduto', preco_promocao = '$precoPromocaoProduto', promocao_ativa = '$promocaoAtiva', estoque = '$estoqueProduto', estoque_baixo = '$estoqueBaixoProduto', tempo_fabricacao = '$tempoFabricacaoProduto', descricao_curta = '$descricaoCurtaProduto', descricao_longa = '$descricaoLongaProduto', url_video = '$urlVideoProduto', peso = '$pesoProduto', comprimento = '$comprimentoProduto', largura = '$larguraProduto', altura = '$alturaProduto', data = '$dataAtual', status = '$statusProduto' where id = '$idProduto'");
 
+            /*ATUALIZA DEPARTAMENTOS*/
+            if($departamentosProduto != ""){
+                mysqli_query($conexao, "delete from $tabela_departamentos_produtos where id_produto = '$idProduto'");
+                foreach($departamentosProduto as $idDepartamento){
+                    mysqli_query($conexao, "insert into $tabela_departamentos_produtos (id_produto, id_departamento) values ('$idProduto', '$idDepartamento')");
+                }
+            }
             /*ATUALIZA CATEGORIAS DO PRODUTO*/
             if($categoriasProduto != ""){
                 $queryCategoriasAtuais = mysqli_query($conexao, "select id_categoria from $tabela_categorias_produtos where id_produto = '$idProduto'");

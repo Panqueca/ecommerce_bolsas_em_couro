@@ -5,16 +5,18 @@ if(isset($_POST["id_categoria"])){
 <h2 class=titulo-edita>Cadastrar subcategoria</h2>
 <form id='formCadCategoria'>
     <input type="hidden" value="<?php echo $idCategoria;?>" id="idCategoria">
-    <div class='label-full'>
-        <h3 class="input-title">Título</h3>
-        <input type='text' class='input-full' placeholder='Título da subcategoria' name='titulo' id='titulSubcategoria' maxlength='35'>
+    <div class='label full'>
+        <h3 class="label-title">Título</h3>
+        <input type='text' class='label-input' placeholder='Título da subcategoria' name='titulo' id='titulSubcategoria' maxlength='35'>
     </div>
-    <div class='label-full'>
-        <h3 class="input-title">Descrição (opcional, recomendado 156 caracteres)</h3>
-        <textarea class='input-full' placeholder='Descrição da subcategoria SEO Google' name='descricao' id='descricaoSubcategoria'></textarea>
+    <div class='label full'>
+        <h3 class="label-title">Descrição (opcional, recomendado 156 caracteres)</h3>
+        <textarea class='label-textarea' placeholder='Descrição da subcategoria SEO Google' name='descricao' id='descricaoSubcategoria'></textarea>
     </div>
-    <input type='submit' class='btn-submit' value='Cadastrar'>
-    <br style="clear: both;"><br style="clear: both;">
+    <div class='label small clear'>
+        <input type='submit' class='btn-submit label-input' value='Cadastrar'>
+    </div>
+    <br class="clear">
 </form>
 <?php
 }else{

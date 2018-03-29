@@ -21,7 +21,12 @@
         private $altura;
         private $imagens = array();
         private $cores = array();
+        private $especificacoes_tecnicas = array();
         private $data;
+        private $departamentos = array();
+        private $categorias = array();
+        private $subcategorias = array();
+        private $relacionados = array();
         private $visualizacoes;
         private $status;
         private $produto_montado;
@@ -32,7 +37,7 @@
             global $globalVars, $pew_functions;
             $this->global_vars = $globalVars;
             $this->pew_functions = $pew_functions;
-            $produto_montado = false;
+            $this->produto_montado = false;
         }
 
         private function conexao(){
@@ -78,13 +83,16 @@
                 $this->altura = $info["altura"];
                 $this->data = $info["data"];
                 $this->visualizacoes = $info["visualizacoes"];
+                $this->status = $info["status"];
                 $this->produto_montado = true;
                 $info_produto = array();
                 if($this->pew_functions->contar_resultados($tabela_imagens_produtos, "where id_produto = '$idProduto'") > 0){
-                    $queryImagens = mysqli_query($this->conexao(), "select * from $tabela_imagens_produtos where id_produto = '$idProduto'");
+                    $queryImagens = mysqli_query($this->conexao(), "select id, imagem from $tabela_imagens_produtos where id_produto = '$idProduto'");
                     $ctrlImagens = 0;
                     while($infoImagens = mysqli_fetch_array($queryImagens)){
-                        $this->imagens[$ctrlImagens] = $infoImagens["imagem"];
+                        $this->imagens[$ctrlImagens] = array();
+                        $this->imagens[$ctrlImagens]["id_imagem"] = $infoImagens["id"];
+                        $this->imagens[$ctrlImagens]["src"] = $infoImagens["imagem"];
                         $ctrlImagens++;
                     }
                 }
@@ -147,11 +155,140 @@
         public function get_imagens_produto(){
             return $this->imagens;
         }
+        public function get_especificacoes_produto(){
+            $condicao = "id_produto = '".$this->id."'";
+            $tabela_especificacoes = $this->global_vars["tabela_especificacoes"];
+            $tabela_especificacoes_produtos = $this->global_vars["tabela_especificacoes_produtos"];
+            $totalEspecificacoes = $this->pew_functions->contar_resultados($tabela_especificacoes_produtos, $condicao);
+            $return = false;
+            if($totalEspecificacoes > 0){
+                $return = array();
+                $ctrlEspecificacoes = 0;
+                $queryDepartamentos = mysqli_query($this->conexao(), "select id_especificacao, descricao from $tabela_especificacoes_produtos where $condicao");
+                while($infoEspecProd = mysqli_fetch_array($queryDepartamentos)){
+                    $condition = "id = '".$infoEspecProd["id_especificacao"]."'";
+                    $totalEspec = $this->pew_functions->contar_resultados($tabela_especificacoes, $condition);
+                    if($totalEspec > 0){
+                        $queryEspec = mysqli_query($this->conexao(), "select titulo from $tabela_especificacoes where $condition");
+                        $infoEspecificacao = mysqli_fetch_array($queryEspec);
+                        $return[$ctrlEspecificacoes] = array();
+                        $return[$ctrlEspecificacoes]["id"] = $infoEspecProd["id_especificacao"];
+                        $return[$ctrlEspecificacoes]["descricao"] = $infoEspecProd["descricao"];
+                        $return[$ctrlEspecificacoes]["titulo"] = $infoEspecificacao["titulo"];
+                        $ctrlEspecificacoes++;
+                    }
+                }
+            }
+            return $return;
+        }
         public function get_data_produto(){
             return $this->data;
         }
+        public function get_departamentos_produto(){
+            $condicao = "id_produto = '".$this->id."'";
+            $tabela_departamentos = $this->global_vars["tabela_departamentos"];
+            $tabela_departamentos_produtos = $this->global_vars["tabela_departamentos_produtos"];
+            $totalDepartamentos = $this->pew_functions->contar_resultados($tabela_departamentos_produtos, $condicao);
+            $return = false;
+            if($totalDepartamentos > 0){
+                $return = array();
+                $ctrlDepartamentos = 0;
+                $queryDepartamentos = mysqli_query($this->conexao(), "select id_departamento from $tabela_departamentos_produtos where $condicao");
+                while($infoDepartamentoProd = mysqli_fetch_array($queryDepartamentos)){
+                    $condition = "id = '".$infoDepartamentoProd["id_departamento"]."'";
+                    $totalDepart = $this->pew_functions->contar_resultados($tabela_departamentos, $condition);
+                    if($totalDepart > 0){
+                        $queryDepart = mysqli_query($this->conexao(), "select departamento, ref from $tabela_departamentos where $condition");
+                        $infoDepartamento = mysqli_fetch_array($queryDepart);
+                        $return[$ctrlDepartamentos] = array();
+                        $return[$ctrlDepartamentos]["id"] = $infoDepartamentoProd["id_departamento"];
+                        $return[$ctrlDepartamentos]["titulo"] = $infoDepartamento["departamento"];
+                        $return[$ctrlDepartamentos]["ref"] = $infoDepartamento["ref"];
+                        $ctrlDepartamentos++;
+                    }
+                }
+            }
+            return $return;
+        }
+        public function get_categorias_produto(){
+            $condicao = "id_produto = '".$this->id."'";
+            $tabela_categorias = $this->global_vars["tabela_categorias"];
+            $tabela_categorias_produtos = $this->global_vars["tabela_categorias_produtos"];
+            $totalCategorias = $this->pew_functions->contar_resultados($tabela_categorias_produtos, $condicao);
+            $return = false;
+            if($totalCategorias > 0){
+                $return = array();
+                $ctrlCategorias = 0;
+                $queryCategorias = mysqli_query($this->conexao(), "select id_categoria from $tabela_categorias_produtos where $condicao");
+                while($infoCategoriaProd = mysqli_fetch_array($queryCategorias)){
+                    $condition = "id = '".$infoCategoriaProd["id_categoria"]."'";
+                    $totalCategoria = $this->pew_functions->contar_resultados($tabela_categorias, $condition);
+                    if($totalCategoria > 0){
+                        $queryCategoria = mysqli_query($this->conexao(), "select categoria, ref from $tabela_categorias where $condition");
+                        $infoCategoria = mysqli_fetch_array($queryCategoria);
+                        $return[$ctrlCategorias] = array();
+                        $return[$ctrlCategorias]["id"] = $infoCategoriaProd["id_categoria"];
+                        $return[$ctrlCategorias]["titulo"] = $infoCategoria["categoria"];
+                        $return[$ctrlCategorias]["ref"] = $infoCategoria["ref"];
+                        $ctrlCategorias++;
+                    }
+                }
+            }
+            return $return;
+        }
+        public function get_subcategorias_produto(){
+            $condicao = "id_produto = '".$this->id."'";
+            $tabela_subcategorias = $this->global_vars["tabela_subcategorias"];
+            $tabela_subcategorias_produtos = $this->global_vars["tabela_subcategorias_produtos"];
+            $totalSubcategorias = $this->pew_functions->contar_resultados($tabela_subcategorias_produtos, $condicao);
+            $return = false;
+            if($totalSubcategorias > 0){
+                $return = array();
+                $ctrlSubcategorias = 0;
+                $querySubcategorias = mysqli_query($this->conexao(), "select id_subcategoria from $tabela_subcategorias_produtos where $condicao");
+                while($infoSubcategoriaProd = mysqli_fetch_array($querySubcategorias)){
+                    $condition = "id = '".$infoSubcategoriaProd["id_subcategoria"]."'";
+                    $totalSubcategoria = $this->pew_functions->contar_resultados($tabela_subcategorias, $condition);
+                    if($totalSubcategoria > 0){
+                        $querySubcategoria = mysqli_query($this->conexao(), "select subcategoria, id_categoria, ref from $tabela_subcategorias where $condition");
+                        $infoSubcategoria = mysqli_fetch_array($querySubcategoria);
+                        $return[$ctrlSubcategorias] = array();
+                        $return[$ctrlSubcategorias]["id_subcategoria"] = $infoSubcategoriaProd["id_subcategoria"];
+                        $return[$ctrlSubcategorias]["id_categoria"] = $infoSubcategoria["id_categoria"];
+                        $return[$ctrlSubcategorias]["titulo"] = $infoSubcategoria["subcategoria"];
+                        $return[$ctrlSubcategorias]["ref"] = $infoSubcategoria["ref"];
+                        $ctrlSubcategorias++;
+                    }
+                }
+            }
+            return $return;
+        }
+        public function get_relacionados_produto(){
+            $condicao = "id_produto = '".$this->id."'";
+            $tabela_produtos_relacionados = $this->global_vars["tabela_produtos_relacionados"];
+            $totalEspecificacoes = $this->pew_functions->contar_resultados($tabela_produtos_relacionados, $condicao);
+            $return = false;
+            if($totalEspecificacoes > 0){
+                $return = array();
+                $ctrlEspecificacoes = 0;
+                $queryRelacionados = mysqli_query($this->conexao(), "select id_relacionado from $tabela_produtos_relacionados where $condicao");
+                while($infoRelacionado = mysqli_fetch_array($queryRelacionados)){
+                    $condition = "id = '".$infoRelacionado["id_relacionado"]."'";
+                    $totalProdRelacionado = $this->pew_functions->contar_resultados($tabela_produtos, $condition);
+                    if($totalProdRelacionado > 0){
+                        $return[$ctrlEspecificacoes] = array();
+                        $return[$ctrlEspecificacoes]["id_relacionado"] = $infoRelacionado["id_relacionado"];
+                        $ctrlEspecificacoes++;
+                    }
+                }
+            }
+            return $return;
+        }
         public function get_visualizacoes_produto(){
             return $this->visualizacoes;
+        }
+        public function get_status_produto(){
+            return $this->status;   
         }
         public function montar_array(){
             if($this->produto_montado == true){
@@ -176,6 +313,7 @@
                 $infoProduto["imagens"] = $this->get_imagens_produto();
                 $infoProduto["data"] = $this->get_data_produto();
                 $infoProduto["visualizacoes"] = $this->get_visualizacoes_produto();
+                $infoProduto["status"] = $this->get_status_produto();
                 return $infoProduto;
             }else{
                 return false;

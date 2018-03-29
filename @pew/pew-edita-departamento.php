@@ -19,10 +19,20 @@
     if($carregar){
         $idDepartamento = $_POST["id_departamento"];
         require_once "pew-system-config.php";
+        require_once "@classe-system-functions.php";
+
+        /*SET TABLES*/
         $tabela_departamentos = $pew_custom_db->tabela_departamentos;
+        $tabela_links_menu = $pew_custom_db->tabela_links_menu;
+        $tabela_categorias = $pew_db->tabela_categorias;
+        $tabela_subcategorias = $pew_db->tabela_subcategorias;
+        /*END SET TABLES*/
+        
         $contarDepartamento = mysqli_query($conexao, "select count(id) as total_departamento from $tabela_departamentos where id = '$idDepartamento'");
         $contagem = mysqli_fetch_assoc($contarDepartamento);
         $totalDepartamento = $contagem["total_departamento"];
+        
+        $selectedCategorias = array();
         if($totalDepartamento > 0){
             $queryDepartamento = mysqli_query($conexao, "select * from $tabela_departamentos where id = '$idDepartamento'");
             $departamento = mysqli_fetch_array($queryDepartamento);
@@ -32,23 +42,50 @@
             $dataControle = pew_inverter_data(substr($departamento["data_controle"], 0, 10));
             $status = $departamento["status"] == 1 ? "Ativo" : "Desativado";
             echo "<h2 class=titulo-edita>Informações do departamento</h2>";
-            echo "<form id='formUpdateDepartamento'>";
+            echo "<form id='formUpdateDepartamento' method='post' action='pew-update-departamento.php'>";
                 echo "<input type='hidden' name='id_departamento' id='idDepartamento' value='$idDepartamento'>";
-                echo "<div class='label-full'>";
-                    echo "<h3 class='input-title'>Título</h3>";
-                    echo "<input type='text' class='input-full' placeholder='Título do departamento' name='titulo' id='tituloDepartamento' value='$titulo' maxlength='35'>";
+                echo "<div class='label full'>";
+                    echo "<h3 class='label-title'>Título</h3>";
+                    echo "<input type='text' class='label-input' placeholder='Título do departamento' name='titulo' id='tituloDepartamento' value='$titulo' maxlength='35'>";
                 echo "</div>";
-                echo "<div class='label-full'>";
-                    echo "<h3 class='input-title'>Descrição (opcional)</h3>";
-                    echo "<textarea class='input-full' placeholder='Descrição do departamento' name='descricao' id='descricaoDepartamento'>$descricao</textarea>";
+            ?>
+            <div class="half">
+                <div class="select-categorias">
+                    <h3 class="titulo">Selecione as categorias para o menu</h3>
+                    <ul class="list-categorias">
+                        <?php
+                            $condicaoCategorias = "status  = 1";
+                            $totalCategorias = $pew_functions->contar_resultados($tabela_categorias, $condicaoCategorias);
+                            if($totalCategorias > 0){
+                                $queryCategorias = mysqli_query($conexao, "select categoria, id from $tabela_categorias where $condicaoCategorias");
+                                while($categorias = mysqli_fetch_array($queryCategorias)){
+                                    $idCategoria = $categorias["id"];
+                                    $categoria = $categorias["categoria"];
+                                    $checked = $pew_functions->contar_resultados($tabela_links_menu, "id_departamento = '$idDepartamento' and id_categoria = '$idCategoria'") > 0 ? "checked" : "";
+                                    echo "<li class='box-categoria'><label><i class='fas fa-folder icone'></i>$categoria<input type='checkbox' value='$idCategoria' class='check-categorias' name='categorias_menu[]' $checked></label>";
+                                    echo "</li>";
+                                }
+                            }else{
+                                echo "<div class='full'>Nenhuma categoria foi cadastrada</div>";
+                            }
+                        ?>
+                    </ul>
+                </div>
+            </div>
+            <?php
+                echo "<div class='label half'>";
+                    echo "<h3 class='label-title'>Descrição (opcional)</h3>";
+                    echo "<textarea class='label-textarea' placeholder='Descrição do departamento' name='descricao' id='descricaoDepartamento' rows=5>$descricao</textarea>";
                 echo "</div>";
-                echo "<div class='label-medium'>";
-                    echo "<h3 class='input-title'>Posição</h3>";
-                    echo "<input type='number' class='input-full' name='posicao' id='posicaoDepartamento' placeholder='Posição' value='$posicao'>";
+                echo "<br class='clear'>";
+                echo "<br class='clear'>";
+                echo "<div class='label medium'>";
+                    echo "<h3 class='label-title'>Posição</h3>";
+                    echo "<input type='number' class='label-input' name='posicao' id='posicaoDepartamento' placeholder='Posição' value='$posicao'>";
                 echo "</div>";
-                echo "<div class='label-medium'>";
-                    echo "<h3 class='input-title'>Status</h3>";
-                    echo "<select class='input-full' name='status' id='statusDepartamento'>";
+                echo "<div class='label medium'>";
+                    echo "<h3 class='label-title'>Status</h3>";
+                    echo "<select class='label-input' name='status' id='statusDepartamento'>";
                         $possibleStatus = array("Ativo", "Desativado");
                         foreach($possibleStatus as $optionStatus){
                             $selected = $optionStatus == $status ? "selected" : "";
@@ -57,12 +94,16 @@
                         }
                     echo "</select>";
                 echo "</div>";
-                echo "<div class='label-medium'>";
-                    echo "<h3 class='input-full'>Última modificação: $dataControle</h3>";
+                echo "<div class='medium'>";
+                    echo "<h3>Última modificação: $dataControle</h3>";
                 echo "</div>";
-                echo "<div class='label-full'>";
-                    echo "<input type='button' class='btn-excluir botao-acao' pew-acao='deletar' pew-id-departamento='$idDepartamento' value='Excluir'>";
-                    echo "<input type='submit' class='btn-submit' value='Atualizar'>";
+                echo "<div class='label half jc-center'>";
+                    echo "<div class='half'>";
+                        echo "<input type='button' class='btn-excluir botao-acao label-input' pew-acao='deletar' pew-id-departamento='$idDepartamento' value='Excluir'>";
+                    echo "</div>";
+                    echo "<div class='half'>";
+                        echo "<input type='submit' class='btn-submit label-input' value='Atualizar'>";
+                    echo "</div>";
                 echo "</div>";
             echo "</form>";
             echo "<br style='clear: both;'>";
@@ -88,39 +129,20 @@
 <script>
     $(document).ready(function(){
         var formUpdate = $("#formUpdateDepartamento");
+        var atualizando = false;
         formUpdate.off().on("submit", function(){
             event.preventDefault();
-            var objId = $("#idDepartamento");
-            var objTitulo = $("#tituloDepartamento");
-            var objDescricao = $("#descricaoDepartamento");
-            var objPosicao = $("#posicaoDepartamento");
-            var objStatus = $("#statusDepartamento");
-            var idDepartamento = objId.val();
-            var titulo = objTitulo.val();
-            var descricao = objDescricao.val();
-            var posicao = objPosicao.val();
-            var status = objStatus.val();
-            if(titulo.length < 3){
-                mensagemAlerta("O campo Título deve conter no mínimo 3 caracteres.", objTitulo);
-                return false;
-            }
-            var msgErro = "Não foi possível atualizar o departamento. Recarregue a página e tente novamente.";
-            var msgSucesso = "O Departamento foi atualizado com sucesso!";
-            $.ajax({
-                type: "POST",
-                url: "pew-update-departamento.php",
-                data: {id_departamento: idDepartamento, titulo: titulo, descricao: descricao, posicao: posicao, status: status},
-                error: function(){
-                    mensagemAlerta(msgErro);
-                },
-                success: function(resposta){
-                    if(resposta == "true"){
-                        mensagemAlerta(msgSucesso, false, "#259e25", "pew-departamentos.php?focus="+titulo);
-                    }else{
-                        mensagemAlerta(msgErro);
-                    }
+            if(!atualizando){
+                atualizando = true;
+                var objTitulo = $("#tituloDepartamento");
+                var titulo = objTitulo.val();
+                if(titulo.length < 3){
+                    mensagemAlerta("O campo Título deve conter no mínimo 3 caracteres.", objTitulo);
+                    atualizando = false;
+                    return false;
                 }
-            });
+                formUpdate.submit();
+            }
         });
         $(".botao-acao").each(function(){
             var botao = $(this);

@@ -39,10 +39,14 @@
                     /*VARIAVEIS DO PRODUTO*/
                     $imagens = $infoProduto["imagens"];
                     $qtdImagens = count($imagens);
-                    if($qtdImagens > 0 && file_exists($dirImagensProdutos."/".$imagens[0]) && $imagens[0] != ""){
+                    if($qtdImagens > 0){
                         $imagemPrincipal = $imagens[0];
+                        $srcImagem = $imagemPrincipal["src"];
+                        if(!file_exists($dirImagensProdutos."/".$srcImagem) || $srcImagem == ""){
+                            $srcImagem = "produto-padrao.png";
+                        }
                     }else{
-                        $imagemPrincipal = "produto-padrao.png";
+                        $srcImagem = "produto-padrao.png";
                     }
                     $nome = $infoProduto["nome"];
                     $maxCaracteres = 31;
@@ -59,7 +63,7 @@
 
                     /*DISPLAY DO PRODUTO*/
                     echo "<div class='box-produto'>";
-                        echo "<a href='$urlProduto'><img src='$dirImagensProdutos/$imagemPrincipal' title='$nome' alt='$nome - $nomeLoja'></a>";
+                        echo "<a href='$urlProduto'><img src='$dirImagensProdutos/$srcImagem' title='$nome' alt='$nome - $nomeLoja'></a>";
                         echo "<a href='$urlProduto' class='title-link'><h3 class='titulo-produto' title='$nome'>$nomeEllipses</h3></a>";
                         echo "<h4 class='preco-produto'>$priceField ou <span class='view-parcelas'>$txtParcelas R$". number_format($precoParcela, 2, ",", ".") ."</span></h4>";
                         echo "<a href='$urlProduto' class='call-to-action'>COMPRAR</a>";
@@ -147,10 +151,14 @@
                     /*VARIAVEIS DO PRODUTO*/
                     $imagens = $infoProduto["imagens"];
                     $qtdImagens = count($imagens);
-                    if($qtdImagens > 0 && file_exists($dirImagensProdutos."/".$imagens[0]) && $imagens[0] != ""){
+                    if($qtdImagens > 0){
                         $imagemPrincipal = $imagens[0];
+                        $srcImagem = $imagemPrincipal["src"];
+                        if(!file_exists($dirImagensProdutos."/".$srcImagem) || $srcImagem == ""){
+                            $srcImagem = "produto-padrao.png";
+                        }
                     }else{
-                        $imagemPrincipal = "produto-padrao.png";
+                        $srcImagem = "produto-padrao.png";
                     }
                     $nome = $infoProduto["nome"];
                     $maxCaracteres = 31;
@@ -167,7 +175,7 @@
 
                     /*DISPLAY DO PRODUTO*/
                     echo "<div class='box-produto'>";
-                        echo "<a href='$urlProduto'><img src='$dirImagensProdutos/$imagemPrincipal' title='$nome' alt='$nome - $nomeLoja'></a>";
+                        echo "<a href='$urlProduto'><img src='$dirImagensProdutos/$srcImagem' title='$nome' alt='$nome - $nomeLoja'></a>";
                         echo "<a href='$urlProduto' class='title-link'><h3 class='titulo-produto' title='$nome'>$nomeEllipses</h3></a>";
                         echo "<h4 class='preco-produto'>$priceField ou <span class='view-parcelas'>$txtParcelas R$". number_format($precoParcela, 2, ",", ".") ."</span></h4>";
                         echo "<a href='$urlProduto' class='call-to-action'>COMPRAR</a>";

@@ -41,10 +41,11 @@
         $comprimentoProduto = floatval($_POST["comprimento"]);
         $larguraProduto = floatval($_POST["largura"]);
         $alturaProduto = floatval($_POST["altura"]);
+        $departamentosProdutos = isset($_POST["departamentos"]) ? $_POST["departamentos"] : "";
         $categoriasProduto = isset($_POST["categorias"]) ? $_POST["categorias"] : "";
+        $subcategoriasProduto = isset($_POST["subcategorias"]) ? $_POST["subcategorias"] : "";
         $especificacoes = isset($_POST["especicacao_produto"]) ? $_POST["especicacao_produto"] : "";
         $produtosRelacionados = isset($_POST["produtos_relacionados"]) ? $_POST["produtos_relacionados"] : "";
-        $subcategoriasProduto = isset($_POST["subcategorias"]) ? $_POST["subcategorias"] : "";
         $statusProduto = intval($_POST["status"]) == 1 ? 1 : 0;
         $urlVideoProduto = addslashes($_POST["url_video"]);
         $http = substr($urlVideoProduto, 0, 5);
@@ -62,6 +63,7 @@
         $tabela_imagens = $pew_custom_db->tabela_imagens_produtos;
         $tabela_categorias = $pew_db->tabela_categorias;
         $tabela_subcategorias = $pew_db->tabela_subcategorias;
+        $tabela_departamentos_produtos = $pew_db->tabela_departamentos_produtos;
         $tabela_categorias_produtos = $pew_custom_db->tabela_categorias_produtos;
         $tabela_subcategorias_produtos = $pew_custom_db->tabela_subcategorias_produtos;
         $tabela_especificacoes_produtos = $pew_custom_db->tabela_especificacoes_produtos;
@@ -95,6 +97,12 @@
             $idProduto = mysqli_fetch_assoc($queryID);
             $idProduto = $idProduto["last_insert_id()"];
 
+            /*INSERE DEPARTAMENTOS*/
+            if($departamentosProdutos != ""){
+                foreach($departamentosProdutos as $idDepartamento){
+                    mysqli_query($conexao, "insert into $tabela_departamentos_produtos (id_produto, id_departamento) values ('$idProduto', '$idDepartamento')");
+                }
+            }
             /*INSERE CATEGORIAS*/
             if($categoriasProduto != ""){
                 foreach($categoriasProduto as $idCategoria){

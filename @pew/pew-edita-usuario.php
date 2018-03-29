@@ -155,26 +155,29 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             <div class="formulario">
                 <form action="pew-update-usuario.php" method="post" id="formUpdateUsuario">
                     <input type="hidden" name="id_usuario" value="<?php echo $idUsuario;?>">
-                    <label class="label-full">
-                        <h3 class="input-title">Usuário</h3>
-                        <input type="text" class="input-full" placeholder="Usuário" name="usuario" id="usuario" value="<?php echo $usuario;?>">
+                    <label class="label full">
+                        <h3 class="label-title">Usuário</h3>
+                        <input type="text" class="label-input" placeholder="Usuário" name="usuario" id="usuario" value="<?php echo $usuario;?>">
                     </label>
-                    <label class="label-full">
-                        <h3 class="input-title">Nova Senha</h3>
-                        <input type="password" class="input-full" placeholder="Senha" name="newsenha" id="newsenha">
+                    <label class="label full">
+                        <h3 class="label-title">Nova Senha</h3>
+                        <input type="password" class="label-input" placeholder="Senha" name="newsenha" id="newsenha">
                     </label>
-                    <label class="label-full">
-                        <h3 class="input-title">E-mail</h3>
-                        <input type="email" class="input-full" placeholder="E-mail" name="email" id="email" value="<?php echo $email;?>">
+                    <label class="label full">
+                        <h3 class="label-title">E-mail</h3>
+                        <input type="email" class="label-input" placeholder="E-mail" name="email" id="email" value="<?php echo $email;?>">
                     </label>
-                    <label class="label-full label-submit">
-                        <h3 class="input-title">Nível</h3>
-                        <select class="input-full" name="nivel" id="nivel">
+                    <label class="label half">
+                        <h3 class="label-title">Nível</h3>
+                        <select class="label-input" name="nivel" id="nivel">
                             <option value="1" <?php if($nivel == 1){ echo "selected"; } ?>>Designer</option>
                             <option value="2" <?php if($nivel == 2){ echo "selected"; } ?>>Comercial</option>
                             <option value="3" <?php if($nivel == 3){ echo "selected"; } ?>>Administrador</option>
                         </select>
-                        <input type="submit" value="Atualizar" class="btn-submit">
+                    </label>
+                    <label class="label half">
+                        <h3 class="label-title"><!--ESPAÇAMENTO-->&nbsp;</h3>
+                        <input type="submit" value="Atualizar" class="btn-submit label-input">
                     </label>
                 </form>
             </div>

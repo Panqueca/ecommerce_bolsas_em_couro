@@ -38,26 +38,25 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         <h1 class="titulos"><?php echo $page_title; ?><a href="pew-banners.php" class="btn-voltar"><i class="fa fa-arrow-left" aria-hidden="true"></i> Voltar</a></h1>
         <section class="conteudo-painel">
             <form method="post" action="pew-grava-banner.php" enctype="multipart/form-data">
-                <div class="label-medium">
+                <div class="medium">
                     <h2 class="label-title">Título do Banner</h2>
                     <input type="text" name="titulo" placeholder="Título" min="3" class="label-input" required>
                 </div>
-                <div class="label-medium">
+                <div class="medium">
                     <h2 class="label-title">Descrição do Banner</h2>
                     <input type="text" name="descricao" placeholder="Descrição" min="3" class="label-input" required>
                 </div>
-                <div class="label-medium">
+                <div class="medium">
                     <h2 class="label-title">Link de redirecionamento</h2>
                     <input type="text" name="link" placeholder="www.efectusweb.com.br" class="label-input">
                 </div>
-                <div class="label-half">
+                <div class="half">
                     <h2 class="label-title">Selecione a imagem do banner: (1200px : 450px)</h2>
                     <input type="file" name="imagem" class="label-input" required>
                 </div>
-                <div class="label-xsmall clear">
+                <div class="small clear">
                     <input type="submit" class="btn-submit label-input" value="Cadastrar Banner">
                 </div>
-                <br style="claer: both;">
             </form>
         </section>
     </body>
