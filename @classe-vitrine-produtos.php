@@ -9,6 +9,7 @@
         private $descricao_vitrine;
         private $quantidade_produtos;
         private $global_vars;
+        private $pew_functions;
 
         function __construct($tipo = "standard", $limiteProdutos = 4, $tituloVitrine = "", $descricaoVitrine = ""){
             $this->tipo = $tipo;
@@ -16,8 +17,9 @@
             $this->titulo_vitrine = $tituloVitrine;
             $this->descricao_vitrine = $descricaoVitrine;
             $this->quantidade_produtos = 0;
-            global $globalVars;
+            global $globalVars, $pew_functions;
             $this->global_vars = $globalVars;
+            $this->pew_functions = $pew_functions;
         }
 
         private function conexao(){
@@ -119,21 +121,70 @@
 
         private function vitrine_categorias($condicao = ""){
             /*SET */
-            number_format(2, 2);
             $tabela_categorias = $this->global_vars["tabela_categorias"];
-            $tabela_categorias_produtos = $this->global_vars["tabela_categorias_produtos"];
-            $dirImagens = "imagens/categorias/destaques";
-            echo "<section class='vitrine-categorias'>";
-                if($this->titulo_vitrine != null){
-                    echo "<div class='titulo-vitrine'>".$this->titulo_vitrine."</div>";
-                }
-                echo "<div class='box-categoria'><a href='#'><img src='$dirImagens/categoria-destaque-malas-para-viagem.png'></a><a href='#' class='call-to-action'>CONFIRA</a></div>";
-                echo "<div class='box-categoria-dupla'>";
-                    echo "<div class='box'><a href='#'><img src='$dirImagens/categoria-destaque-mochilas-masculinas.png'></a><a href='#' class='call-to-action'>CONFIRA</a></div>";
-                    echo "<div class='box'><a href='#'><img src='$dirImagens/categoria-destaque-linha-executiva.png'></a><a href='#' class='call-to-action'>CONFIRA</a></div>";
-                echo "</div>";
-                echo "<div class='box-categoria'><a href='#'><img src='$dirImagens/categoria-destaque-acessorios-femininos.png'></a><a href='#' class='call-to-action'>CONFIRA</a></div>";
-            echo "</section>";
+            $tabela_categorias_vitrine = $this->global_vars["tabela_categoria_destaque"];
+            $condicao = "status = 1";
+            $totalMain = $this->pew_functions->contar_resultados($tabela_categorias_vitrine, $condicao);
+            $ctrlCategorias = 0;
+            $limitCategorias = 4;
+            
+            if($totalMain > 0){
+                echo "<section class='vitrine-categorias'>";
+                    if($this->titulo_vitrine != null){
+                        echo "<div class='titulo-vitrine'>".$this->titulo_vitrine."</div>";
+                    }
+                
+                    function listar_categoria($img, $ref, $type){
+                        $dirImagens = "imagens/categorias/destaques";
+                        $urlRedirect = "loja.php?categoria=$ref";
+                        switch($type){
+                            case "normal":
+                                echo "<div class='box-categoria'><a href='$urlRedirect'><img src='$dirImagens/$img'></a><a href='$urlRedirect' class='call-to-action'>CONFIRA</a></div>";
+                                break;
+                            case "normal_alter":
+                                echo "<span class='alter-spacing'></span>";
+                                echo "<div class='box-categoria'><a href='$urlRedirect'><img src='$dirImagens/$img'></a><a href='$urlRedirect' class='call-to-action'>CONFIRA</a></div>";
+                                break;
+                            case "double_1":
+                                echo "<div class='box-categoria-dupla'>";
+                                echo "<div class='box'><a href='$urlRedirect'><img src='$dirImagens/$img'></a><a href='$urlRedirect' class='call-to-action'>CONFIRA</a></div>";
+                                break;
+                            case "double_2":
+                                echo "<div class='box'><a href='$urlRedirect'><img src='$dirImagens/$img'></a><a href='$urlRedirect' class='call-to-action'>CONFIRA</a></div>";
+                                echo "</div>";
+                                break;
+                        }
+                    }
+                
+                    $queryCatDestaque = mysqli_query($this->conexao(), "select * from $tabela_categorias_vitrine where $condicao limit $limitCategorias");
+                    while($infoCatDestaque = mysqli_fetch_array($queryCatDestaque)){
+                        $idCategoriaMain = $infoCatDestaque["id_categoria"];
+                        $imagemCatDestaque = $infoCatDestaque["imagem"];
+                        $condicaoCat = "id = '$idCategoriaMain'";
+                        $totalCat = $this->pew_functions->contar_resultados($tabela_categorias, $condicaoCat);
+                        if($totalCat > 0){
+                            $queryInfoCategoria = mysqli_query($this->conexao(), "select categoria, ref from $tabela_categorias where $condicaoCat");
+                            $infoCategoria = mysqli_fetch_array($queryInfoCategoria);
+                            $tituloCat = $infoCategoria["categoria"];
+                            $refCat = $infoCategoria["ref"];
+                            $refDouble = $totalMain < $limitCategorias ? "normal" : "double_$ctrlCategorias";
+                            $refNormal = $totalMain < $limitCategorias && $ctrlCategorias == 0 ? "normal_alter" : "normal";
+                            switch($ctrlCategorias){
+                                case 1:
+                                    $type = $refDouble;
+                                    break;
+                                case 2:
+                                    $type = $refDouble;
+                                    break;
+                                default:
+                                    $type = $refNormal;
+                            }
+                            listar_categoria($imagemCatDestaque, $refCat, $type);
+                            $ctrlCategorias++;
+                        }
+                    }
+                echo "</section>";
+            }
         }
 
         public function vitrine_carrossel(){
