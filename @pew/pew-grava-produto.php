@@ -1,6 +1,6 @@
 <?php
-    $post_fields = array("sku", "nome", "marca", "preco", "preco_promocao", "promocao_ativa", "estoque", "estoque_baixo", "tempo_fabricacao", "descricao_curta", "descricao_longa", "url_video", "peso", "comprimento", "largura", "altura", "status");
-    $file_fields = array("imagem");
+    $post_fields = array("sku", "nome", "marca", "id_cor", "preco", "preco_promocao", "promocao_ativa", "estoque", "estoque_baixo", "tempo_fabricacao", "descricao_curta", "descricao_longa", "url_video", "peso", "comprimento", "largura", "altura", "status");
+    $file_fields = array();
     $invalid_fields = array();
     $gravar = true;
     $i = 0;
@@ -22,11 +22,14 @@
     }
     if($gravar){
         require_once "pew-system-config.php";
+        require_once "@classe-system-functions.php";
+        
         $dataAtual = date("Y-m-d h:i:s");
         /*POST DATA*/
         $skuProduto = addslashes($_POST["sku"]);
         $nomeProduto = addslashes($_POST["nome"]);
         $marcaProduto = addslashes($_POST["marca"]);
+        $idCor = (int)$_POST["id_cor"];
         $precoProduto = $_POST["preco"];
         $precoProduto = pew_number_format($precoProduto);
         $precoPromocaoProduto = $_POST["preco_promocao"];
@@ -48,8 +51,9 @@
         $produtosRelacionados = isset($_POST["produtos_relacionados"]) ? $_POST["produtos_relacionados"] : "";
         $statusProduto = intval($_POST["status"]) == 1 ? 1 : 0;
         $urlVideoProduto = addslashes($_POST["url_video"]);
+        
         $http = substr($urlVideoProduto, 0, 5);
-        if($http != "http:" && $http != "https"){
+        if($http != "http:" && $http != "https" && $urlVideoProduto != ""){
             $urlVideoProduto = "http://".$urlVideoProduto;
         }
         /*END POST DATA*/
@@ -61,36 +65,25 @@
         /*SET TABLES*/
         $tabela_produtos = $pew_custom_db->tabela_produtos;
         $tabela_imagens = $pew_custom_db->tabela_imagens_produtos;
+        $tabela_cores = $pew_custom_db->tabela_cores;
         $tabela_categorias = $pew_db->tabela_categorias;
         $tabela_subcategorias = $pew_db->tabela_subcategorias;
-        $tabela_departamentos_produtos = $pew_db->tabela_departamentos_produtos;
+        $tabela_departamentos_produtos = $pew_custom_db->tabela_departamentos_produtos;
         $tabela_categorias_produtos = $pew_custom_db->tabela_categorias_produtos;
         $tabela_subcategorias_produtos = $pew_custom_db->tabela_subcategorias_produtos;
         $tabela_especificacoes_produtos = $pew_custom_db->tabela_especificacoes_produtos;
         $tabela_produtos_relacionados = $pew_custom_db->tabela_produtos_relacionados;
         /*END SET TABLES*/
 
-        /*DEFAULT FUNCTIONS*/
-        if(!function_exists("stringFormat")){
-            function stringFormat($string){
-                $string = str_replace("Ç", "c", $string);
-                $string = str_replace("ç", "c", $string);
-                $string = preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"), $string);
-                $string = strtolower($string);
-                $string = str_replace("/", "-", $string);
-                $string = str_replace("|", "-", $string);
-                $string = str_replace(" ", "-", $string);
-                $string = str_replace(",", "", $string);
-                return $string;
-            }
-        }
-        /*END DEFAULT FUNCTIONS*/
-
         /*VALIDACOES E SQL FUNCTIONS*/
         if($nomeProduto != ""){
             echo "<h3 align=center>Gravando dados...</h3>";
+            
+            $condicaoCor = "id = '$idCor'";
+            $idCor = $pew_functions->contar_resultados($tabela_cores, $condicaoCor) > 0 ? $idCor : null;
+            
             /*INSERE DADOS PRODUTO*/
-            mysqli_query($conexao, "insert into $tabela_produtos (sku, nome, marca, preco, preco_promocao, promocao_ativa, estoque, estoque_baixo, tempo_fabricacao, descricao_curta, descricao_longa, url_video, peso, comprimento, largura, altura, data, status) values ('$skuProduto', '$nomeProduto', '$marcaProduto', '$precoProduto', '$precoPromocaoProduto', '$promocaoAtiva', '$estoqueProduto', '$estoqueBaixoProduto', '$tempoFabricacaoProduto', '$descricaoCurtaProduto', '$descricaoLongaProduto', '$urlVideoProduto', '$pesoProduto', '$comprimentoProduto', '$larguraProduto', '$alturaProduto', '$dataAtual', '$statusProduto')");
+            mysqli_query($conexao, "insert into $tabela_produtos (sku, nome, marca, id_cor, preco, preco_promocao, promocao_ativa, estoque, estoque_baixo, tempo_fabricacao, descricao_curta, descricao_longa, url_video, peso, comprimento, largura, altura, data, status) values ('$skuProduto', '$nomeProduto', '$marcaProduto', '$idCor', '$precoProduto', '$precoPromocaoProduto', '$promocaoAtiva', '$estoqueProduto', '$estoqueBaixoProduto', '$tempoFabricacaoProduto', '$descricaoCurtaProduto', '$descricaoLongaProduto', '$urlVideoProduto', '$pesoProduto', '$comprimentoProduto', '$larguraProduto', '$alturaProduto', '$dataAtual', '$statusProduto')");
 
             /*PEGA ID PRODUTO INSERIDO*/
             $queryID = mysqli_query($conexao, "select last_insert_id()");
@@ -140,19 +133,28 @@
                 }
             }
             /*INSERE IMAGENS*/
-            $posicao = 0;
-            $post_images_name = "imagem";
-            if(isset($_FILES[$post_images_name])){
-                $quantidadeImagens = count($_FILES[$post_images_name]["tmp_name"]);
-                for($i = 0; $i < $quantidadeImagens; $i++){
-                    $imgInfoPostName = $_FILES[$post_images_name]["name"][$i];
-                    if($imgInfoPostName != ""){
-                        $posicao++;
-                        $ext = pathinfo($_FILES[$post_images_name]["name"][$i], PATHINFO_EXTENSION);
-                        $ref = substr(md5($nomeProduto), 0, 16);
-                        $nomeFoto = $ref.$posicao;
-                        $nomeFinalImagem = $nomeFoto.".".$ext;
-                        move_uploaded_file($_FILES[$post_images_name]["tmp_name"][$i], $dirImagensProdutos.$nomeFinalImagem);
+            $maxImagens = isset($_POST["maximo_imagens"]) && (int)$_POST["maximo_imagens"] ? (int)$_POST["maximo_imagens"] : 4;
+            for($i = 1; $i <= $maxImagens; $i++){
+                $posicaoAnterior = $i - 1;                
+                $condicaoImagem = "id_produto = '$idProduto' and posicao = '$posicaoAnterior'";
+                $totalImagem = $pew_functions->contar_resultados($tabela_imagens, $condicaoImagem);
+                
+                if($totalImagem == 0 && $posicaoAnterior > 0){
+                    $posicao = $posicaoAnterior;
+                }else{
+                    $posicao = $i;
+                }
+                
+                if(isset($_FILES["imagem$i"])){
+                    $nomeIMG = $_FILES["imagem$i"]["name"];
+                    if($nomeIMG != ""){
+                        $ext = pathinfo($_FILES["imagem$i"]["name"], PATHINFO_EXTENSION);
+                        $ref = substr(md5($nomeProduto.$posicao), 0, 4);
+                        $urlTitulo = $pew_functions->url_format($nomeProduto);
+                        $nomeFinalImagem = $urlTitulo."-".$ref.".".$ext;
+                        
+                        move_uploaded_file($_FILES["imagem$i"]["tmp_name"], $dirImagensProdutos.$nomeFinalImagem);
+                        
                         mysqli_query($conexao, "insert into $tabela_imagens (id_produto, imagem, posicao, status) values ('$idProduto', '$nomeFinalImagem', '$posicao', 1)");
                     }
                 }

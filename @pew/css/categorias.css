@@ -21,7 +21,7 @@
     padding: 2%;
     padding-top: 5px;
     padding-bottom: 5px;
-    background-color: #f1f1f1;
+    background-color: #f0f0f0;
     margin-bottom: 2px;
     font-size: 16px;
     text-align: left;
@@ -38,27 +38,21 @@
     cursor: pointer;
 }
 .box-categoria:hover{
-    background-color: #dedede;
+    background-color: #eee;
     cursor: pointer;
-}
-.box-categoria-active{
-    background-color: #eee;
-    border-color: #f78a14;
-    color: #f78a14;
-    height: auto;
-}
-.box-categoria-active:hover{
-    background-color: #eee;
 }
 .disable-categorias{
     color: #999;
     border-color: #999;
 }
 .box-categoria-active{
-    background-color: #eee;
+    background-color: #f9f9f9;
     border-color: #f78a14;
     color: #f78a14;
     height: auto;
+}
+.box-categoria-active:hover{
+    background-color: #fff;   
 }
 .box-categoria .display-subcategorias{
     padding-left: 5px;
@@ -67,16 +61,13 @@
     transition: .3s;
 }
 .box-categoria .display-subcategorias .box{
-    width: 96%;
-    height: 20px;
-    padding: 2%;
-    padding-top: 10px;
-    padding-bottom: 5px;
+    width: calc(100% - 20px);
+    height: 30px;
+    padding: 0px 10px 0px 10px;
     overflow: hidden;
     background-color: transparent;
-    border-bottom: 2px solid #dedede;
-    border-left: 2px solid #dedede;
     font-size: 16px;
+    line-height: 30px;
     text-align: left;
     transition: .3s;
     cursor: pointer;
@@ -91,7 +82,7 @@
     margin-left: 0px;
 }
 .box-categoria .display-subcategorias .box:hover{
-    background-color: #dedede;
+    background-color: #f6f6f6;
 }
 .box-categoria-active .display-subcategorias .box-subcategoria-active{
     color: #f78a14;

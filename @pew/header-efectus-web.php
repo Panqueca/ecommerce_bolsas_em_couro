@@ -244,7 +244,7 @@ function inverterData($data){
     <header class="header-efectus-web">
         <div class="top-info">
             <div class="date-field">
-                <i class='fa fa-calendar' aria-hidden='true'></i> <?php echo inverterData(substr(date("Y-m-d h:i:s"), 0, 10)); ?>
+                <i class="fas fa-calendar-alt"></i> <?php echo inverterData(substr(date("Y-m-d h:i:s"), 0, 10)); ?>
             </div>
             <div class="login-field"><i class="fas fa-user-circle"></i>
                 <?php
@@ -288,14 +288,18 @@ function inverterData($data){
                 $linksPrincipais[1]["sub_link"][1]["url_sub_link"] = "pew-cadastra-produto.php";
                 $linksPrincipais[1]["sub_link"][2]["titulo_sub_link"] = "<i class='fa fa-tag' aria-hidden='true'></i> Marcas";
                 $linksPrincipais[1]["sub_link"][2]["url_sub_link"] = "pew-marcas.php";
-                $linksPrincipais[1]["sub_link"][3]["titulo_sub_link"] = "<i class='fa fa-cogs' aria-hidden='true'></i> Especificações técnicas";
-                $linksPrincipais[1]["sub_link"][3]["url_sub_link"] = "pew-especificacoes.php";
+                $linksPrincipais[1]["sub_link"][3]["titulo_sub_link"] = "<i class='fas fa-paint-brush'></i> Cores";
+                $linksPrincipais[1]["sub_link"][3]["url_sub_link"] = "pew-cores.php";
+                $linksPrincipais[1]["sub_link"][4]["titulo_sub_link"] = "<i class='fa fa-cogs' aria-hidden='true'></i> Especificações técnicas";
+                $linksPrincipais[1]["sub_link"][4]["url_sub_link"] = "pew-especificacoes.php";
+                $linksPrincipais[1]["sub_link"][5]["titulo_sub_link"] = "<i class='fas fa-chart-pie'></i> Relatórios";
+                $linksPrincipais[1]["sub_link"][5]["url_sub_link"] = "pew-produtos-relatorios.php";
                 /*Terceiro Link*/
                 $linksPrincipais[2]["titulo_link"] = "Vitrine";
                 $linksPrincipais[2]["url_link"] = "pew-categorias-vitrine.php";
                 $linksPrincipais[2]["sub_link"][0]["titulo_sub_link"] = "<i class='fa fa-tag' aria-hidden='true'></i> Categorias da vitrine";
                 $linksPrincipais[2]["sub_link"][0]["url_sub_link"] = "pew-categorias-vitrine.php";
-                $linksPrincipais[2]["sub_link"][1]["titulo_sub_link"] = "<i class='fa fa-star' aria-hidden='true'></i> Categoria destaque";
+                $linksPrincipais[2]["sub_link"][1]["titulo_sub_link"] = "<i class='fa fa-star' aria-hidden='true'></i> Categorias destaque";
                 $linksPrincipais[2]["sub_link"][1]["url_sub_link"] = "pew-categoria-destaque.php";
                 /*Quarto Link*/
                 $linksPrincipais[3]["titulo_link"] = "Orçamentos";
@@ -309,7 +313,7 @@ function inverterData($data){
                 /*Quinto Link*/
                 $linksPrincipais[4]["titulo_link"] = "Mensagens";
                 $linksPrincipais[4]["url_link"] = "pew-newsletter.php";
-                $linksPrincipais[4]["sub_link"][0]["titulo_sub_link"] = "<i class='fa fa-tags' aria-hidden='true'></i> E-mails newsletter";
+                $linksPrincipais[4]["sub_link"][0]["titulo_sub_link"] = "<i class='far fa-envelope'></i> E-mails newsletter";
                 $linksPrincipais[4]["sub_link"][0]["url_sub_link"] = "pew-newsletter.php";
                 /*Sexto Link*/
                 $linksPrincipais[5]["titulo_link"] = "Categorias";

@@ -144,7 +144,7 @@ $(document).ready(function(){
             /*END SET REQUIRED INPUTS*/
             
             function enviarFormulario(){
-                formCadastraProduto.trigger("submit");
+                formCadastraProduto.unbind("submit").submit();
             }
 
             function validaCampos(){
@@ -329,7 +329,6 @@ $(document).ready(function(){
     var atualizandoProduto = false;
     $("#formAtualizaProduto").off().on("submit", function(event){
         event.preventDefault();
-        console.log(event);
         var formAtualizaProduto = $(this);
         if(atualizandoProduto == false){
             atualizandoProduto = true;
@@ -361,8 +360,7 @@ $(document).ready(function(){
             /*END SET REQUIRED INPUTS*/
             
             function enviarFormulario(){
-                alert(event);
-                formAtualizaProduto.trigger("submit");
+                formAtualizaProduto.unbind("submit").submit();
             }
 
             function validaCampos(){

@@ -761,6 +761,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             $tabela_categorias_produtos = $pew_custom_db->tabela_categorias_produtos;
             $tabela_subcategorias_produtos = $pew_custom_db->tabela_subcategorias_produtos;
             $tabela_marcas = $pew_custom_db->tabela_marcas;
+            $tabela_cores = $pew_custom_db->tabela_cores;
             $tabela_produtos_relacionados = $pew_custom_db->tabela_produtos_relacionados;
             $tabela_especificacoes = $pew_custom_db->tabela_especificacoes;
             $tabela_especificacoes_produtos = $pew_custom_db->tabela_especificacoes_produtos;
@@ -787,6 +788,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 $precoPromocaoProduto = pew_number_format($precoPromocaoProduto);
                 $promocaoAtiva = $infoProduto["promocao_ativa"];
                 $marcaProduto = $infoProduto["marca"];
+                $idCorProduto = $infoProduto["id_cor"];
                 $estoqueProduto = $infoProduto["estoque"];
                 $estoqueBaixoProduto = $infoProduto["estoque_baixo"];
                 $tempoFabricacaoProduto = $infoProduto["tempo_fabricacao"];
@@ -837,8 +839,8 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 $ctrlRelacionados = 0;
                 if($relacionadosProdutos != false){
                     foreach($relacionadosProdutos as $infoRelacionados){
-                        $idEspecificacao = $infoEspecificacao["id_relacionado"];
-                        $selectedProdutosRelacionados[$idEspecificacao] = true;
+                        $idRelacionado = $infoRelacionados["id_relacionado"];
+                        $selectedProdutosRelacionados[$idRelacionado] = true;
                         $ctrlRelacionados++;
                     }
                 }
@@ -938,9 +940,33 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                         ?>
                     </select>
                 </div>
-                <div class="label medium">
+                <div class="label xsmall">
                     <h2 class='label-title'>SKU</h2>
                     <input type="text" name="sku" id="sku" placeholder="SKU" class="label-input" value="<?php echo $skuProduto;?>">
+                </div>
+                <div class="label xsmall">
+                    <h2 class='label-title'>Cor</h2>
+                    <select name="id_cor" id="idCor" class="label-input">
+                        <option value="">- Selecione -</option>
+                        <?php
+                            $condicaoCores = "status = 1";
+                            $totalCores = $pew_functions->contar_resultados($tabela_cores, $condicaoCores);
+                            if($totalCores > 0){
+                                $queryCores = mysqli_query($conexao, "select * from $tabela_cores order by cor asc");
+                                while($infoCores = mysqli_fetch_array($queryCores)){
+                                    $idCor = $infoCores["id"];
+                                    $tituloCor = $infoCores["cor"];
+                                    $selectedCor = $idCorProduto == $idCor ? "selected" : "";
+                                    echo "<option value='$idCor' $selectedCor>$tituloCor</option>";
+                                }
+                            }
+                        ?>
+                    </select>
+                    <?php
+                        if($totalCores == 0){
+                            echo "<h5 style='margin: 0px; margin-top: -6px;'>Nenhum cor cadastrada</h5>";
+                        }
+                    ?>
                 </div>
                 <!--END LINHA 3-->
                 <br class="clear">
@@ -1069,7 +1095,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                         <!--ESPECIFICACOES ADICIONADAS-->
                         <?php
                             $totalEspecificacoes = count($especificacoesProduto);
-                            if($totalEspecificacoes > 0){
+                            if($totalEspecificacoes > 0 && $especificacoesProduto != null){
                                 foreach($especificacoesProduto as $infoEspecificacao){
                                     $idEspec = $infoEspecificacao["id"];
                                     $tituloEspec = $infoEspecificacao["titulo"];
@@ -1143,17 +1169,23 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                             </div>
                             <div class="lista-relacionados-msg"><h4>Exibindo todos os produtos:</h4><a class="link-padrao limpar-todos-relacionados" title="Limpar todos os produtos listados abaixo e que foram selecionados">Limpar todos</a></div>
                         <?php
-                            $queryAllProdutos = mysqli_query($conexao, "select id, nome from $tabela_produtos where status = 1 order by nome asc");
-                            while($infoRelacionados = mysqli_fetch_array($queryAllProdutos)){
-                                $idProdutoRelacionado = $infoRelacionados["id"];
-                                $nomeProdutoRelacionado = $infoRelacionados["nome"];
-                                $checked = "";
-                                foreach($selectedProdutosRelacionados as $prodRelacionado){
-                                    if($idProdutoRelacionado == $prodRelacionado){
-                                        $checked = "checked";
+                            $condicaoRelacionados = "id != '$idProduto' and status = 1";
+                            $totalRelacionados = $pew_functions->contar_resultados($tabela_produtos, $condicaoRelacionados);
+                            if($totalRelacionados > 0){
+                                $queryAllProdutos = mysqli_query($conexao, "select id, nome from $tabela_produtos where $condicaoRelacionados order by nome asc");
+                                while($infoRelacionados = mysqli_fetch_array($queryAllProdutos)){
+                                    $idProdutoRelacionado = $infoRelacionados["id"];
+                                    $nomeProdutoRelacionado = $infoRelacionados["nome"];
+                                    $checked = "";
+                                    foreach($selectedProdutosRelacionados as $prodRelacionado){
+                                        if($idProdutoRelacionado == $prodRelacionado){
+                                            $checked = "checked";
+                                        }
                                     }
+                                    echo "<label class='label-relacionados'><input type='checkbox' name='produtos_relacionados[]' value='$idProdutoRelacionado' $checked> $nomeProdutoRelacionado</label>";
                                 }
-                                echo "<label class='label-relacionados'><input type='checkbox' name='produtos_relacionados[]' value='$idProdutoRelacionado' $checked> $nomeProdutoRelacionado</label>";
+                            }else{
+                                echo "<h4 class='full'>Nenhum produto encontrado</h4>";
                             }
                         ?>
                         </div>

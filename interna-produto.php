@@ -479,6 +479,7 @@
         }else{
             echo "<h3 class='mensagem-no-result'><i class='fas fa-search'></i> Nenhum produto foi encontrado</h3>";
             echo "<br><center><a href='index.php' class='link-padrao' align=center>Voltar a página inicial</a></center>";
+            echo "</div>";
         }
         ?>
         <!--END THIS PAGE CONTENT-->

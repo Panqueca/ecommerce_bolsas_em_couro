@@ -9,8 +9,8 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
     $efectus_empresa_administrativo = $_SESSION[$name_session_empresa];
     $efectus_user_administrativo = $_SESSION[$name_session_user];
     $efectus_nivel_administrativo = $_SESSION[$name_session_nivel];
-    $navigation_title = "Categoria destaque - $efectus_empresa_administrativo";
-    $page_title = "Gerenciamento da Categoria Destaque";
+    $navigation_title = "Categorias destaque - $efectus_empresa_administrativo";
+    $page_title = "Gerenciamento das Categorias Destaque";
 ?>
 <!DOCTYPE html>
 <html>

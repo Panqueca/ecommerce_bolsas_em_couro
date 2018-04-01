@@ -5,6 +5,8 @@
         "tabela_categorias" => $pew_db->tabela_categorias,
         "tabela_subcategorias" => $pew_db->tabela_subcategorias,
         "tabela_produtos" => $pew_custom_db->tabela_produtos,
+        "tabela_cores" => $pew_custom_db->tabela_cores,
+        "tabela_cores_produtos" => $pew_custom_db->tabela_cores_produtos,
         "tabela_marcas_produtos" => $pew_custom_db->tabela_marcas_produtos,
         "tabela_imagens_produtos" => $pew_custom_db->tabela_imagens_produtos,
         "tabela_departamentos" => $pew_custom_db->tabela_departamentos,

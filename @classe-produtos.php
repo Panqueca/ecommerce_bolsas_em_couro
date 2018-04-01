@@ -9,6 +9,7 @@
         private $preco_promocao;
         private $promocao_ativa;
         private $marca;
+        private $id_cor;
         private $estoque;
         private $estoque_baixo;
         private $tempo_fabricacao;
@@ -71,6 +72,7 @@
                 $this->preco_promocao = $this->pew_functions->custom_number_format($info["preco_promocao"]);
                 $this->promocao_ativa = $this->pew_functions->custom_number_format($info["promocao_ativa"]);
                 $this->marca = $info["marca"];
+                $this->id_cor = $info["id_cor"];
                 $this->estoque = $info["estoque"];
                 $this->estoque_baixo = $info["estoque_baixo"];
                 $this->tempo_fabricacao = $info["tempo_fabricacao"];
@@ -121,6 +123,9 @@
         }
         public function get_marca_produto(){
             return $this->marca;
+        }
+        public function get_id_cor_produto(){
+            return $this->id_cor;
         }
         public function get_estoque_produto(){
             return $this->estoque;
@@ -265,6 +270,7 @@
         }
         public function get_relacionados_produto(){
             $condicao = "id_produto = '".$this->id."'";
+            $tabela_produtos = $this->global_vars["tabela_produtos"];
             $tabela_produtos_relacionados = $this->global_vars["tabela_produtos_relacionados"];
             $totalEspecificacoes = $this->pew_functions->contar_resultados($tabela_produtos_relacionados, $condicao);
             $return = false;
@@ -300,6 +306,7 @@
                 $infoProduto["preco_promocao"] = $this->get_preco_promocao_produto();
                 $infoProduto["promocao_ativa"] = $this->get_promocao_ativa();
                 $infoProduto["marca"] = $this->get_marca_produto();
+                $infoProduto["id_cor"] = $this->get_id_cor_produto();
                 $infoProduto["estoque"] = $this->get_estoque_produto();
                 $infoProduto["estoque_baixo"] = $this->get_estoque_baixo_produto();
                 $infoProduto["tempo_fabricacao"] = $this->get_tempo_fabricacao_produto();

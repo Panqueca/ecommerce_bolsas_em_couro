@@ -35,11 +35,13 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             .lista-produtos{
                 width: 100%;
                 margin: 40px auto 40px auto;
+                display: flex;
+                flex-flow: row wrap;
             }
             .box-produto{
                 position: relative;
                 width: calc(25% - 22px);
-                margin: 10px;
+                padding: 10px 0px 40px 0px;
                 background-color: #fff;
                 border: 1px solid #ccc;
                 transition: .2s;
@@ -79,7 +81,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             .box-info{
                 position: relative;
                 text-align: left;
-                margin-bottom: 10px;
+                margin-bottom: 20px;
             }
             .box-info .titulo{
                 font-size: 14px;
@@ -93,8 +95,9 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 margin: 5px 0px 5px 0px;
             }
             .bottom-buttons{
-                position: relative;
+                position: absolute;
                 width: 100%;
+                bottom: 0px;
                 display: flex;
                 flex-flow: row wrap;
                 align-items: flex-end;

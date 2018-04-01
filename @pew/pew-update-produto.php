@@ -1,5 +1,5 @@
 <?php
-    $post_fields = array("id_produto", "sku", "nome", "marca", "preco", "preco_promocao", "promocao_ativa", "estoque", "estoque_baixo", "tempo_fabricacao", "descricao_curta", "descricao_longa", "url_video", "peso", "comprimento", "largura", "altura", "status");
+    $post_fields = array("id_produto", "sku", "nome", "marca", "id_cor", "preco", "preco_promocao", "promocao_ativa", "estoque", "estoque_baixo", "tempo_fabricacao", "descricao_curta", "descricao_longa", "url_video", "peso", "comprimento", "largura", "altura", "status");
     $file_fields = array();
     $invalid_fields = array();
     $gravar = true;
@@ -22,12 +22,15 @@
     }
     if($gravar){
         require_once "pew-system-config.php";
+        require_once "@classe-system-functions.php";
+        
         $dataAtual = date("Y-m-d h:i:s");
         /*POST DATA*/
         $idProduto = addslashes($_POST["id_produto"]);
         $skuProduto = addslashes($_POST["sku"]);
         $nomeProduto = addslashes($_POST["nome"]);
         $marcaProduto = addslashes($_POST["marca"]);
+        $idCor = (int)$_POST["id_cor"];
         $precoProduto = $_POST["preco"];
         $precoProduto = pew_number_format($precoProduto);
         $precoPromocaoProduto = $_POST["preco_promocao"];
@@ -38,7 +41,6 @@
         $tempoFabricacaoProduto = (int)$_POST["tempo_fabricacao"] != "" ? (int)$_POST["tempo_fabricacao"] : 1;;
         $descricaoCurtaProduto = addslashes($_POST["descricao_curta"]);
         $descricaoLongaProduto = addslashes($_POST["descricao_longa"]);
-        $urlVideoProduto = addslashes($_POST["url_video"]);
         $pesoProduto = floatval($_POST["peso"]);
         $comprimentoProduto = floatval($_POST["comprimento"]);
         $larguraProduto = floatval($_POST["largura"]);
@@ -49,7 +51,15 @@
         $produtosRelacionados = isset($_POST["produtos_relacionados"]) ? $_POST["produtos_relacionados"] : "";
         $subcategoriasProduto = isset($_POST["subcategorias"]) ? $_POST["subcategorias"] : "";
         $statusProduto = intval($_POST["status"]) == 1 ? 1 : 0;
+        $urlVideoProduto = addslashes($_POST["url_video"]);
+        
+        $http = substr($urlVideoProduto, 0, 5);
+        if($http != "http:" && $http != "https" && $urlVideoProduto != ""){
+            $urlVideoProduto = "http://".$urlVideoProduto;
+        }
+        
         /*END POST DATA*/
+        
 
         /*DIR VARS*/
         $dirImagensProdutos = "../imagens/produtos/";
@@ -58,6 +68,7 @@
         /*SET TABLES*/
         $tabela_produtos = $pew_custom_db->tabela_produtos;
         $tabela_imagens = $pew_custom_db->tabela_imagens_produtos;
+        $tabela_cores = $pew_custom_db->tabela_cores;
         $tabela_categorias = $pew_db->tabela_categorias;
         $tabela_subcategorias = $pew_db->tabela_subcategorias;
         $tabela_departamentos = $pew_custom_db->tabela_departamentos;
@@ -68,23 +79,13 @@
         $tabela_especificacoes_produtos = $pew_custom_db->tabela_especificacoes_produtos;
         /*END SET TABLES*/
 
-        if(!function_exists("stringFormat")){
-            function stringFormat($string){
-                $string = str_replace("Ç", "c", $string);
-                $string = str_replace("ç", "c", $string);
-                $string = preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"), $string);
-                $string = strtolower($string);
-                $string = str_replace("/", "-", $string);
-                $string = str_replace("|", "-", $string);
-                $string = str_replace(" ", "-", $string);
-                $string = str_replace(",", "", $string);
-                return $string;
-            }
-        }
-
         if($nomeProduto != ""){
             echo "<h3 align=center>Gravando dados...</h3>";
-            mysqli_query($conexao, "update $tabela_produtos set sku = '$skuProduto', nome = '$nomeProduto', marca = '$marcaProduto', preco = '$precoProduto', preco_promocao = '$precoPromocaoProduto', promocao_ativa = '$promocaoAtiva', estoque = '$estoqueProduto', estoque_baixo = '$estoqueBaixoProduto', tempo_fabricacao = '$tempoFabricacaoProduto', descricao_curta = '$descricaoCurtaProduto', descricao_longa = '$descricaoLongaProduto', url_video = '$urlVideoProduto', peso = '$pesoProduto', comprimento = '$comprimentoProduto', largura = '$larguraProduto', altura = '$alturaProduto', data = '$dataAtual', status = '$statusProduto' where id = '$idProduto'");
+            
+            $condicaoCor = "id = '$idCor'";
+            $idCor = $pew_functions->contar_resultados($tabela_cores, $condicaoCor) > 0 ? $idCor : null;
+            
+            mysqli_query($conexao, "update $tabela_produtos set sku = '$skuProduto', nome = '$nomeProduto', marca = '$marcaProduto', id_cor = '$idCor', preco = '$precoProduto', preco_promocao = '$precoPromocaoProduto', promocao_ativa = '$promocaoAtiva', estoque = '$estoqueProduto', estoque_baixo = '$estoqueBaixoProduto', tempo_fabricacao = '$tempoFabricacaoProduto', descricao_curta = '$descricaoCurtaProduto', descricao_longa = '$descricaoLongaProduto', url_video = '$urlVideoProduto', peso = '$pesoProduto', comprimento = '$comprimentoProduto', largura = '$larguraProduto', altura = '$alturaProduto', data = '$dataAtual', status = '$statusProduto' where id = '$idProduto'");
 
             /*ATUALIZA DEPARTAMENTOS*/
             if($departamentosProduto != ""){
@@ -162,34 +163,39 @@
             /*ATUALIZA IMAGENS DO PRODUTO*/
             $maxImagens = isset($_POST["maximo_imagens"]) && (int)$_POST["maximo_imagens"] ? (int)$_POST["maximo_imagens"] : 4;
             for($i = 1; $i <= $maxImagens; $i++){
-                $posicaoAnterior = $i - 1;
-                $contarImagem = mysqli_query($conexao, "select count(id) as total_imagem from $tabela_imagens where posicao = '$posicaoAnterior' and id_produto = '$idProduto'");
-                $contagem = mysqli_fetch_assoc($contarImagem);
-                if($contagem["total_imagem"] == 0 && $posicaoAnterior > 0){
+                $posicaoAnterior = $i - 1;                
+                $condicaoImagem = "id_produto = '$idProduto' and posicao = '$posicaoAnterior'";
+                $totalImagem = $pew_functions->contar_resultados($tabela_imagens, $condicaoImagem);
+                
+                if($totalImagem == 0 && $posicaoAnterior > 0){
                     $posicao = $posicaoAnterior;
                 }else{
                     $posicao = $i;
                 }
+                
                 if(isset($_FILES["imagem$i"])){
-                    $contarImagem = mysqli_query($conexao, "select count(id) as total_imagem from $tabela_imagens where id_produto = '$idProduto' and posicao = '$posicao'");
-                    $contagem = mysqli_fetch_assoc($contarImagem);
-                    $totalImgPosicao = $contagem["total_imagem"];
+                    $condicaoPosImagem = "id_produto = '$idProduto' and posicao = '$posicao'";
+                    $totalImgPosicao = $pew_functions->contar_resultados($tabela_imagens, $condicaoPosImagem);
                     $nomeIMG = $_FILES["imagem$i"]["name"];
                     if($nomeIMG != ""){
-                        $ref = substr(md5(uniqid(time())), 0, 4);
-                        $ref = $ref.$posicao;
-                        $nomeFoto = stringFormat($nome);
                         $ext = pathinfo($_FILES["imagem$i"]["name"], PATHINFO_EXTENSION);
-                        $nomeFoto = $nomeFoto."-product-image-".$ref.".".$ext;
-                        move_uploaded_file($_FILES["imagem$i"]["tmp_name"], $dirImagensProdutos.$nomeFoto);
+                        $ref = substr(md5($nomeProduto.$posicao), 0, 4);
+                        $urlTitulo = $pew_functions->url_format($nomeProduto);
+                        $nomeFinalImagem = $urlTitulo."-".$ref.".".$ext;
+                        move_uploaded_file($_FILES["imagem$i"]["tmp_name"], $dirImagensProdutos.$nomeFinalImagem);
+                        
                         if($totalImgPosicao > 0){
                             $queryImagem = mysqli_query($conexao, "select imagem from $tabela_imagens where id_produto = '$idProduto' and posicao = '$posicao'");
                             $arrayImagem = mysqli_fetch_array($queryImagem);
                             $imagem = $arrayImagem["imagem"];
-                            unlink($dirImagensProdutos.$imagem);
-                            mysqli_query($conexao, "update $tabela_imagens set imagem = '$nomeFoto', status = 1 where id_produto = '$idProduto' and posicao = '$posicao'");
+                            
+                            if(file_exists($dirImagensProdutos.$imagem) && $imagem != ""){
+                                unlink($dirImagensProdutos.$imagem);
+                            }
+                            
+                            mysqli_query($conexao, "update $tabela_imagens set imagem = '$nomeFinalImagems', status = 1 where id_produto = '$idProduto' and posicao = '$posicao'");
                         }else{
-                            mysqli_query($conexao, "insert into $tabela_imagens (id_produto, imagem, posicao, status) values ('$idProduto', '$nomeFoto', '$posicao', 1)");
+                            mysqli_query($conexao, "insert into $tabela_imagens (id_produto, imagem, posicao, status) values ('$idProduto', '$nomeFinalImagem', '$posicao', 1)");
                         }
                     }
                 }

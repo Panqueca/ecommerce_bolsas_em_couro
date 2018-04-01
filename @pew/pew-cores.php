@@ -9,8 +9,8 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
     $efectus_empresa_administrativo = $_SESSION[$name_session_empresa];
     $efectus_user_administrativo = $_SESSION[$name_session_user];
     $efectus_nivel_administrativo = $_SESSION[$name_session_nivel];
-    $navigation_title = "Marcas - $efectus_empresa_administrativo";
-    $page_title = "Gerenciamento de Marcas";
+    $navigation_title = "Cores - $efectus_empresa_administrativo";
+    $page_title = "Gerenciamento de Cores";
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,41 +33,41 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         <script>
             var filaAtiva = false;
             var cadastrando = false;
-            var classMarcaActive = "box-categoria-active";
-            var classGerActive = "display-ger-categorias-active";
-            var attrIdMarca = "pew-id-marca";
-            var attrTituloMarca = "pew-titulo-marca";
+            var classBoxActive = "box-categoria-active";
+            var classBoxCrudActive = "display-ger-categorias-active";
+            var attrIdCor = "pew-box-id";
+            var attrBoxTitle = "pew-box-title";
             var animationDelay = 100;
-            var objGerMarca = null;
-            var lastBoxMarca = null;
-            var marcaAtiva = null;
+            var objCrudBox = null;
+            var lastBoxActive = null;
+            var boxActive = null;
             var botaoCadastrar = null;
             var classBtnActive = "active-box";
             var classIconOpen = "fa-folder-open";
             var classIconClose = "fa-folder";
-            var qtdMarca = 0;
-            function carregarMarca(idMarca, boxMarca){
-                marcaAtiva = idMarca;
-                boxMarca.addClass(classMarcaActive);
+            var countBox = 0;
+            function carregarMarca(idCor, boxMarca){
+                boxActive = idCor;
+                boxMarca.addClass(classBoxActive);
                 var icone = boxMarca.children("h3").children("i");
                 icone.removeClass(classIconClose).addClass(classIconOpen);
                 if(filaAtiva){
-                    if(lastBoxMarca != null){
-                        var lastIcone = lastBoxMarca.children("h3").children("i");
+                    if(lastBoxActive != null){
+                        var lastIcone = lastBoxActive.children("h3").children("i");
                         lastIcone.removeClass(classIconOpen).addClass(classIconClose);
-                        lastBoxMarca.removeClass(classMarcaActive);
+                        lastBoxActive.removeClass(classBoxActive);
                     }
-                    objGerMarca.removeClass(classGerActive);
+                    objCrudBox.removeClass(classBoxCrudActive);
                 }
                 filaAtiva = true;
 
                 function loadPage(){
-                    lastBoxMarca = boxMarca;
+                    lastBoxActive = boxMarca;
                     if(!cadastrando){
-                        var url = "pew-edita-marca.php";
-                        objGerMarca.load(url, {id_marca: idMarca}, function(){
+                        var url = "pew-edita-cor.php";
+                        objCrudBox.load(url, {id_cor: idCor}, function(){
                             setTimeout(function(){
-                                objGerMarca.addClass(classGerActive);
+                                objCrudBox.addClass(classBoxCrudActive);
                             }, 300);
                         });
                     }
@@ -77,13 +77,13 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 }, animationDelay);
             }
 
-            function marcaFocus(tituloMarca){
+            function listFocus(tituloMarca){
                 setTimeout(function(){
                     unselectMarca();
                     $(".box-categoria").each(function(){
                         var box = $(this);
-                        var titulo = box.attr(attrTituloMarca);
-                        var id = box.attr(attrIdMarca);
+                        var titulo = box.attr(attrBoxTitle);
+                        var id = box.attr(attrIdCor);
                         if(titulo == tituloMarca){
                             carregarMarca(id, box);
                         }
@@ -92,28 +92,28 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             }
 
             function unselectMarca(){
-                if(qtdMarca > 0 && lastBoxMarca != null){
-                    var lastIcone = lastBoxMarca.children("h3").children("i");
+                if(countBox > 0 && lastBoxActive != null){
+                    var lastIcone = lastBoxActive.children("h3").children("i");
                     lastIcone.removeClass(classIconOpen).addClass(classIconClose);
-                    lastBoxMarca.removeClass(classMarcaActive);
-                    lastBoxMarca = null;
-                    marcaAtiva = null;
+                    lastBoxActive.removeClass(classBoxActive);
+                    lastBoxActive = null;
+                    boxActive = null;
                 }
             }
 
             $(document).ready(function(){
-                objGerMarca = $(".display-ger-categorias");
+                objCrudBox = $(".display-ger-categorias");
                 botaoCadastrar = $(".btn-cad-categoria");
 
                 var firstMarca = true;
                 $(".box-categoria").each(function(){
-                    qtdMarca++;
+                    countBox++;
                     var boxMarca = $(this);
                     var botaoAlternativo = boxMarca.children("h3");
-                    var idMarca = boxMarca.attr(attrIdMarca);
+                    var idCor = boxMarca.attr(attrIdCor);
                     function selectMarca(){
-                        if(marcaAtiva != idMarca){
-                            carregarMarca(idMarca, boxMarca);
+                        if(boxActive != idCor){
+                            carregarMarca(idCor, boxMarca);
                         }
                     }
                     if(firstMarca){
@@ -124,23 +124,23 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                         selectMarca();
                     });
                     botaoAlternativo.off().on("click", function(){
-                        if(marcaAtiva == idMarca){
-                            marcaAtiva = null;
+                        if(boxActive == idCor){
+                            boxActive = null;
                             filaAtiva = false;
                         }
-                        carregarMarca(idMarca, boxMarca);
+                        carregarMarca(idCor, boxMarca);
                     });
                 });
                 botaoCadastrar.off().on("click", function(){
                     if(!cadastrando){
                         cadastrando = true;
-                        var url = "pew-cadastra-marca.php";
+                        var url = "pew-cadastra-cor.php";
                         $(".mensagem-padrao").hide();
                         unselectMarca();
-                        objGerMarca.removeClass(classGerActive);
+                        objCrudBox.removeClass(classBoxCrudActive);
                         setTimeout(function(){
-                            objGerMarca.load(url, function(){
-                                objGerMarca.addClass(classGerActive);
+                            objCrudBox.load(url, function(){
+                                objCrudBox.addClass(classBoxCrudActive);
                                 cadastrando = false;
                             });
                         }, animationDelay);
@@ -154,53 +154,57 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             /*REQUIRE PADRAO*/
             require_once "header-efectus-web.php";
             require_once "pew-interatividade.php";
+            require_once "pew-system-config.php";
+            require_once "@classe-system-functions.php";
             /*FIM PADRAO*/
+            
+            /*SET TABLES*/
+            $tabela_cores = $pew_custom_db->tabela_cores;
+            /*END SET TABLES*/
 
             if(isset($_GET["focus"])){
                 $focus = $_GET["focus"];
-                echo "<script>$(document).ready(function(){ marcaFocus('$focus'); })</script>";
+                echo "<script>$(document).ready(function(){ listFocus('$focus'); })</script>";
             }
         ?>
         <h1 class="titulos"><?php echo $page_title; ?></h1>
         <section class="conteudo-painel">
-            <a class="btn-padrao btn-cad-categoria" title="Cadastre uma nova marca">Cadastrar nova marca</a>
+            <a class="btn-padrao btn-cad-categoria" title="Cadastre uma nova cor">Cadastrar nova cor</a>
             <br><br><br>
             <div class='painel-categorias'>
                 <?php
-                    require_once "pew-system-config.php";
-                    $tabela_marcas = $pew_custom_db->tabela_marcas;
-                    $contarMarcas = mysqli_query($conexao, "select count(id) as total_marcas from $tabela_marcas where status = 1");
-                    $contagem = mysqli_fetch_assoc($contarMarcas);
-                    $totalMarcasAtivas = $contagem["total_marcas"];
-                    $ctrlQtdCategorias = 0;
-                    $iconCategorias = "<i class='fa fa-folder icone-categorias' aria-hidden='true'></i>";
-                    $iconPlus = "<i class='fa fa-plus icone-categorias' aria-hidden='true'></i>";
-                    if($totalMarcasAtivas > 0){
-                        echo "<h2 class='titulo'>Marcas ativas:</h2>";
+                    $fileIcon = "<i class='fa fa-folder icone-categorias' aria-hidden='true'></i>";
+                    $plusIcon = "<i class='fa fa-plus icone-categorias' aria-hidden='true'></i>";
+    
+                    $condicaoCores = "status = 1";
+                    $totalCores = $pew_functions->contar_resultados($tabela_cores, $condicaoCores);
+                    $ctrlCores = 0;
+                    if($totalCores > 0){
+                        echo "<h2 class='titulo'>Cores ativas:</h2>";
                         echo "<div class='display-categorias'>";
-                        $queryMarcas = mysqli_query($conexao, "select id, marca from $tabela_marcas where status = 1 order by marca asc");
-                        while($marca = mysqli_fetch_array($queryMarcas)){
-                            $idMarca = $marca["id"];
-                            $nomeMarca = $marca["marca"];
-                            $ctrlQtdCategorias++;
-                            echo "<div class='box-categoria' pew-id-marca='$idMarca' style='height: 20px;' pew-titulo-marca='$nomeMarca'>";
-                                echo "<h3 class='alter-button-box-categoria' pew-id-marca='$idMarca' pew-titulo-marca='$nomeMarca'>".$iconCategorias." ".$nomeMarca."</h3>";
+                        $queryCores = mysqli_query($conexao, "select id, cor from $tabela_cores where $condicaoCores order by cor asc");
+                        while($infoCor = mysqli_fetch_array($queryCores)){
+                            $idCor = $infoCor["id"];
+                            $tituloCor = $infoCor["cor"];
+                            $ctrlCores++;
+                            echo "<div class='box-categoria' pew-box-id='$idCor' style='height: 20px;' pew-box-title='$tituloCor'>";
+                                echo "<h3 class='alter-button-box-categoria' pew-box-id='$idCor' pew-box-title='$tituloCor'>".$fileIcon." ".$tituloCor."</h3>";
                             echo "</div>";
                         }
                         echo "</div>";
                     }
-                    $contarMarcasDesativadas = mysqli_query($conexao, "select count(id) as total_marcas_desativadas from $tabela_marcas where status = 0");
-                    $contagem = mysqli_fetch_assoc($contarMarcasDesativadas);
-                    $totalCategoriasDesativadas = $contagem["total_marcas_desativadas"];
-                    if($totalCategoriasDesativadas > 0){
-                        echo "<h2 class='titulo'>Marcas desativadas:</h2>";
+                    
+                    $condicaoCoresDesativadas = "status = 0";
+                    $totalCoresDestativadas = $pew_functions->contar_resultados($tabela_cores, $condicaoCoresDesativadas);
+                    if($totalCoresDestativadas > 0){
+                        echo "<h2 class='titulo'>Cores desativadas:</h2>";
                         echo "<div class='display-categorias'>";
-                        $queryMarcas = mysqli_query($conexao, "select id, marca from $tabela_marcas where status = 0 order by marca asc");
-                        while($marca = mysqli_fetch_array($queryMarcas)){
-                            $idMarca = $marca["id"];
-                            $nomeMarca = $marca["marca"];
-                            $ctrlQtdCategorias++;
-                            echo "<div class='box-categoria disable-categorias' pew-id-marca='$idMarca' pew-titulo-marca='$nomeMarca'>$iconCategorias $nomeMarca</div>";
+                        $queryCoresD = mysqli_query($conexao, "select id, cor from $tabela_cores where $condicaoCoresDesativadas order by cor asc");
+                        while($infoCor = mysqli_fetch_array($queryCoresD)){
+                            $idCor = $infoCor["id"];
+                            $tituloCor = $infoCor["cor"];
+                            $ctrlCores++;
+                            echo "<div class='box-categoria disable-categorias' pew-box-id='$idCor' pew-box-title='$tituloCor'>$fileIcon $tituloCor</div>";
                         }
                         echo "</div>";
                     }
@@ -208,8 +212,8 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             </div>
             <?php
                 $class = "";
-                if($ctrlQtdCategorias == 0){
-                    echo "<br style='clear: both;'><h3 class='mensagem-padrao'>Nenhuma marca foi encontrada. <a class='link-padrao btn-cad-categoria'>Clique aqui e cadastre</a></h3>";
+                if($ctrlCores == 0){
+                    echo "<br style='clear: both;'><h3 class='mensagem-padrao'>Nenhuma cor foi encontrada. <a class='link-padrao btn-cad-categoria'>Clique aqui e cadastre</a></h3>";
                     $class = "display-ger-center";
                 }
                 echo "<div class='display-ger-categorias $class'></div>";

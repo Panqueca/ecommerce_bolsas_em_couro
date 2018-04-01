@@ -48,6 +48,7 @@
     }
     .header-principal .nav-header .top-bar .link-padrao:hover{
         color: #111;
+        border-color: #111;
     }
     .header-principal .nav-header .top-bar .header-cart{
         position: relative;
