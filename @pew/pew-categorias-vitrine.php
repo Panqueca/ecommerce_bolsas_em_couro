@@ -187,8 +187,10 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         ?>
         <h1 class="titulos"><?php echo $page_title; ?></h1>
         <section class="conteudo-painel">
-            <center><a class="btn-padrao btn-add-categoria" title="Adicionar categoria a vitrine">Adicionar categoria a vitrine</a></center>
-            <div class='painel-categorias'>
+            <div class="full clear label">
+                <a class="btn-flat btn-add-categoria" title="Adicionar categoria a vitrine"><i class="fas fa-plus"></i> Adicionar categoria a vitrine</a>
+            </div>
+            <div class='painel-categorias full'>
                 <?php
                     require_once "pew-system-config.php";
                     $tabela_categorias_vitrine = $pew_custom_db->tabela_categorias_vitrine;
@@ -217,7 +219,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             <?php
                 $class = "";
                 if($ctrlQtdDestaques == 0){
-                    echo "<br style='clear: both;'><h3 class='mensagem-padrao'>Nenhuma categoria vitrine foi encontrada. <a class='link-padrao btn-add-categoria'>Clique aqui e cadastre</a></h3>";
+                    echo "<br style='clear: both;'><h3 class='mensagem-padrao' align=center>Nenhuma categoria vitrine foi encontrada. <a class='link-padrao btn-add-categoria'>Clique aqui e cadastre</a></h3>";
                     $class = "display-ger-center";
                 }
                 echo "<div class='display-ger-categorias $class'></div>";

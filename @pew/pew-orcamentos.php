@@ -38,7 +38,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         <h1 class="titulos"><?php echo $page_title; ?></h1>
         <section class="conteudo-painel">
             <div class="group clear">
-                <form action="pew-produtos.php" method="get" class="label half clear">
+                <form action="pew-orcamentos.php" method="get" class="label half clear">
                     <label class="group">
                         <div class="group">
                             <h3 class="label-title">Busca de orçamentos</h3>
@@ -47,7 +47,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                             <div class="xlarge" style="margin-left: -5px; margin-right: 0px;">
                                 <input type="search" name="busca" placeholder="Nome, email, telefone, RG ou CPF" class="label-input" title="Buscar">
                             </div>
-                            <div class="xsmall">
+                            <div class="xsmall" style="margin-left: 0px;">
                                 <button type="submit" class="btn-submit label-input btn-flat" style="margin: 10px;">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -70,7 +70,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 if(isset($_GET["busca"]) && $_GET["busca"] != ""){
                     $busca = pew_string_format($_GET["busca"]);
                     $strBusca = "where nome_cliente like '%".$busca."%' or telefone_cliente like '%".$busca."%' or email_cliente like '%".$busca."%' or rg_cliente like '%".$busca."%' or cpf_cliente like '%".$busca."%'";
-                    echo "<h3>Exibindo resultados para: $busca</h3>";
+                    echo "<div class='full clear'><h3>Exibindo resultados para: $busca</h3></div>";
                 }else{
                     $strBusca = "";
                 }
@@ -116,7 +116,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                         echo "<td>$cpf</td>";
                         echo "<td>R$ $totalOrcamento</td>";
                         echo "<td>$status</td>";
-                        echo "<td><a href='pew-edita-orcamento.php?id_orcamento=$id' class='btn-editar'><i class='fa fa-eye' aria-hidden='true'></i></a></td></tr>";
+                        echo "<td align=center><a href='pew-edita-orcamento.php?id_orcamento=$id' class='btn-editar'><i class='fa fa-eye' aria-hidden='true'></i></a></td></tr>";
                     }
                     echo "</tbody></table>";
                 }else{

@@ -104,6 +104,11 @@
     background-color: #f78a14;
     color: #fff;
     font-weight: normal;
+    font-size: 18px;
+    height: 40px;
+    line-height: 40px;
+    width: calc(100% - 30px);
+    padding: 0px 15px 0px 15px;
 }
 .display-ger-center{
     margin-left: 15%;

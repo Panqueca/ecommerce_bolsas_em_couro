@@ -153,7 +153,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                             <div class="xlarge" style="margin-left: -5px; margin-right: 0px;">
                                 <input type="search" name="busca" placeholder="Busque por titulo, categorias, marcas..." class="label-input" title="Buscar">
                             </div>
-                            <div class="xsmall">
+                            <div class="xsmall" style="margin-left: 0px;">
                                 <button type="submit" class="btn-submit label-input btn-flat" style="margin: 10px;">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -166,10 +166,10 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                         <h4 class="subtitulos" align=left>Mais funções</h4>
                     </div>
                     <div class="label full">
-                        <a href="pew-cadastra-produto.php" class="btn-padrao btn-flat" title="Cadastre um novo produto"><i class="fas fa-plus"></i> Cadastrar produto</a>
-                        <a href="pew-marcas.php" class="btn-padrao btn-flat" title="Gerenciamento de marcas"><i class="fas fa-plus"></i> Marcas</a>
-                        <a href="pew-cores.php" class="btn-padrao btn-flat" title="Gerenciamento de cores"><i class="fas fa-plus"></i> Cores</a>
-                        <a href="pew-produtos-relatorios.php" class="btn-padrao btn-flat" title="Ver Relatórios"><i class="fas fa-chart-pie"></i> Relatórios</a>
+                        <a href="pew-cadastra-produto.php" class="btn-flat" title="Cadastre um novo produto"><i class="fas fa-plus"></i> Cadastrar produto</a>
+                        <a href="pew-marcas.php" class="btn-flat" title="Gerenciamento de marcas"><i class="fas fa-plus"></i> Marcas</a>
+                        <a href="pew-cores.php" class="btn-flat" title="Gerenciamento de cores"><i class="fas fa-plus"></i> Cores</a>
+                        <a href="pew-produtos-relatorios.php" class="btn-flat" title="Ver Relatórios"><i class="fas fa-chart-pie"></i> Relatórios</a>
                     </div>
                 </div>
             </div>
@@ -185,7 +185,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                     if(isset($_GET["busca"]) && $_GET["busca"] != ""){
                         $busca = pew_string_format($_GET["busca"]);
                         $strBusca = "where id like '%".$busca."%' or nome like '%".$busca."%' or marca like '%".$busca."%' or descricao_curta like '%".$busca."%' or descricao_longa like '%".$busca."%'";
-                        echo "<h3>Exibindo resultados para: $busca</h3>";
+                        echo "<div class='group clear'><h3>Exibindo resultados para: $busca</h3></div>";
                     }else{
                         $strBusca = "";
                     }

@@ -71,14 +71,25 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         ?>
         <h1 class="titulos"><?php echo $page_title; ?></h1>
         <section class="conteudo-painel">
-            <br><br><br><br>
-            <form class="form-busca" method="get" action="pew-newsletter.php">
-                <label class="field-busca">
-                    <h3 class="titulo-busca">Buscar newsletter</h3>
-                    <input type="search" name="busca" placeholder="Busque por nome, e-mail, ou data" class="barra-busca" autocomplete="off">
-                    <input type="submit" value="Buscar" class="btn-buscar">
-                </label>
-            </form>
+            <div class="group clear">
+                <form action="pew-newsletter.php" method="get" class="label half clear">
+                    <label class="group">
+                        <div class="group">
+                            <h3 class="label-title">Busca newsletter</h3>
+                        </div>
+                        <div class="group">
+                            <div class="xlarge" style="margin-left: -5px; margin-right: 0px;">
+                                <input type="search" name="busca" placeholder="Busque por nome, email ou data" class="label-input" title="Buscar">
+                            </div>
+                            <div class="xsmall" style="margin-left: 0px;">
+                                <button type="submit" class="btn-submit label-input btn-flat" style="margin: 10px;">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </label>
+                </form>
+            </div>
             <table class="table-padrao" cellspacing="0">
             <?php
                 $tabela_newsletter = $pew_custom_db->tabela_newsletter;

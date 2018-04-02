@@ -283,9 +283,10 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         ?>
         <h1 class="titulos"><?php echo $page_title; ?></h1>
         <section class="conteudo-painel">
-            <a class="btn-padrao btn-cad-categoria" title="Cadastre uma nova categoria">Cadastrar nova categoria</a>
-            <br><br><br>
-            <div class='painel-categorias'>
+            <div class="full label clear">
+                <a class="btn-cad-categoria btn-flat medium" title="Cadastre uma nova categoria"><i class="fas fa-plus"></i> Cadastrar nova categoria</a>
+            </div>
+            <div class='painel-categorias full clear'>
                 <?php
                     require_once "pew-system-config.php";
                     $tabela_categorias = $pew_db->tabela_categorias;

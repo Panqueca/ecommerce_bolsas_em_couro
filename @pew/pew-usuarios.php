@@ -33,18 +33,22 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 margin-bottom: 50px;
             }
             .box-usuario{
-                height: 50px;
-                line-height: 50px;
-                margin-left: 10%;
+                width: 500px;
+                height: 35px;
+                line-height: 35px;
                 margin-bottom: 50px;
-                width: 80%;
                 -webkit-box-shadow: 1px 1px 25px 1px rgba(0, 0, 0, 0.2);
                 -moz-box-shadow: 1px 1px 25px 1px rgba(0, 0, 0, 0.2);
                 box-shadow: 1px 1px 25px 1px rgba(0, 0, 0, 0.2);
                 border-radius: 20px;
+                background-color: #fff;
+                font-size: 16px;
+                display: flex;
+                flex-flow: row wrap;
             }
             .box-usuario .indice{
-                width: 7%;
+                width: 40px;
+                text-align: center;
                 background-color: #111;
                 color: #fff;
                 font-weight: bold;
@@ -53,15 +57,9 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 float: left;
             }
             .box-usuario .name-field{
-                width: 44.8%;
-                height: 50px;
-                float: left;
-                background-color: #fff;
                 position: relative;
-                font-size: 24px;
-                font-weight: bold;
-                text-align: left;
-                padding-left: 2%;
+                width: 300px;
+                float: left;
                 transition: .2s;
                 border-right: 2px solid #111;
             }
@@ -69,28 +67,18 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 background-color: #fbfbfb;
             }
             .box-usuario .nivel-field{
-                width: 20.6%;
-                height: 50px;
-                background-color: #fff;
                 position: relative;
+                width: 200px;
                 border-right: 2px solid #111;
-                font-size: 24px;
-                font-weight: bold;
-                margin: 0px;
+                padding: 0px 20px 0px 20px;
                 transition: .2s;
-                float: left;
             }
             .box-usuario .nivel-field:hover{
                 background-color: #fbfbfb;
             }
             .box-usuario .control-field{
-                width: 25%;
-                margin-left: 75%;
-                height: 50px;
-                background-color: #fff;
                 position: relative;
-                font-size: 24px;
-                font-weight: bold;
+                width: 150px;
                 border-top-right-radius: 20px;
                 border-bottom-right-radius: 20px;
                 transition: .2s;
@@ -124,32 +112,48 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         ?>
         <h1 class="titulos">Gerenciamento de Usuários Administrativos</h1>
         <section class="conteudo-painel">
-            <a href="pew-cadastra-usuario.php" class="btn-padrao">Cadastrar novo</a>
-            <br style="clear: both;">
-            <br style="clear: both;">
-            <form action="pew-usuarios.php" method="get" class="form-busca">
-                <div>
-                    <label class="field-busca">
-                        <h3 class="titulo-busca">Buscar usuários</h3>
-                        <input type="search" name="busca" placeholder="Busque por nome do usuário, e-mail ou nível" class="barra-busca" title="Busque por nome do usuário, e-mail ou nível">
-                        <input type="submit" value="Buscar" class="btn-buscar">
+            <div class="group clear">
+                <form action="pew-usuarios.php" method="get" class="label half clear">
+                    <label class="group">
+                        <div class="group">
+                            <h3 class="label-title">Busca de produtos</h3>
+                        </div>
+                        <div class="group">
+                            <div class="xlarge" style="margin-left: -5px; margin-right: 0px;">
+                                <input type="search" name="busca" placeholder="Busque por usuário, email, ou nível." class="label-input" title="Buscar">
+                            </div>
+                            <div class="xsmall" style="margin-left: 0px;">
+                                <button type="submit" class="btn-submit label-input btn-flat" style="margin: 10px;">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
                     </label>
+                </form>
+                <div class="label half jc-left">
+                    <div class="full">
+                        <h4 class="subtitulos" align=left>Mais funções</h4>
+                    </div>
+                    <div class="label full">
+                        <a href="pew-cadastra-usuario.php" class="btn-flat" title="Cadastre um novo usuário"><i class="fas fa-plus"></i> Cadastrar usuário</a>
+                    </div>
                 </div>
-            </form>
-            <div class="display-usuarios">
+            </div>
+            <div class="display-usuarios full clear">
                 <?php
                     $tabela_usuarios = $pew_db->tabela_usuarios_administrativos;
                     $strBusca = isset($_GET["busca"]) ? $_GET["busca"] : "";
                     $busca = "";
                     if($strBusca != ""){
                         $busca = "where usuario like '%".$strBusca."%' or nivel like '%".$strBusca."%' or email like '%".$strBusca."%'";
-                        echo "<h2 align='center'>Exibindo resultados para: $strBusca</h2><br>";
+                        echo "<div class='group'><h3>Exibindo resultados para: $strBusca</h3></div>";
                     }else{
-                        echo "<h2 align='center'>Listagem de Usuários</h2><br><br>";
+                        echo "<div class='full' style='padding-top: 40px;'><h3 class='subtitulos'>Listagem de Usuários</h3></div>";
                     }
                     $contarUsuarios = mysqli_query($conexao, "select count(id) as total_usuarios from $tabela_usuarios $busca");
                     $contagem = mysqli_fetch_assoc($contarUsuarios);
                     if($contagem["total_usuarios"] > 0){
+                        echo "<div class='full' style='margin-top: 40px;'>";
                         $queryUsuarios = mysqli_query($conexao, "select * from $tabela_usuarios $busca order by usuario asc");
                         $i = 0;
                         while($usuarios = mysqli_fetch_array($queryUsuarios)){
@@ -169,8 +173,9 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                             $i++;
                             echo "<div class='box-usuario'><div class='indice'>$i</div><div class='name-field'><h3 class='title'>Usuário</h3>$usuario</div><div class='nivel-field'><h3 class='title'>Nível</h3>$nivel</div><div class='control-field'><h3 class='title'>Editar</h3><a href='pew-edita-usuario.php?id_usuario=$idUsuario' class='btn-editar'><i class='fas fa-edit'></i> Editar</a></div></div>";
                         }
+                        echo "</div>";
                     }else{
-                        echo "<h3 align='center'>Não foram encontrados usuários.</h3>";
+                        echo "<h3 class='subtitulos'>Não foram encontrados usuários.</h3>";
                     }
                 ?>
             </div>
