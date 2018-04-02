@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 16-Mar-2018 às 03:51
+-- Generation Time: 02-Abr-2018 às 16:01
 -- Versão do servidor: 10.1.25-MariaDB
 -- PHP Version: 7.1.7
 
@@ -43,7 +43,7 @@ CREATE TABLE `pew_banners` (
 --
 
 INSERT INTO `pew_banners` (`id`, `titulo`, `descricao`, `imagem`, `link`, `posicao`, `status`) VALUES
-(27, 'Bolsas em couro legitimo', 'Bolsas em couro legitimo', 'bolsas-em-couro-legitimo-banner-home-a8ec3.png', 'http://www.google.com', 1, 1);
+(27, 'Bolsas em couro', 'Bolsas em couro', 'adesivos-mdf-banner-home-df97c.png', 'http://www.google.com', 4, 1);
 
 -- --------------------------------------------------------
 
@@ -60,6 +60,16 @@ CREATE TABLE `pew_categorias` (
   `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Extraindo dados da tabela `pew_categorias`
+--
+
+INSERT INTO `pew_categorias` (`id`, `categoria`, `descricao`, `ref`, `data_controle`, `status`) VALUES
+(12, 'Mochilas masculinas', '', 'mochilas-masculinas', '2018-03-29 04:15:05', 1),
+(13, 'Malas para viagem', '', 'malas-para-viagem', '2018-03-29 04:15:19', 1),
+(14, 'AcessÃ³rios femininos', '', 'acessorios-femininos', '2018-03-29 04:15:32', 1),
+(15, 'Linha exclusiva', '', 'linha-exclusiva', '2018-03-29 04:15:45', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -72,6 +82,14 @@ CREATE TABLE `pew_categorias_produtos` (
   `id_categoria` int(11) NOT NULL,
   `titulo_categoria` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `pew_categorias_produtos`
+--
+
+INSERT INTO `pew_categorias_produtos` (`id`, `id_produto`, `id_categoria`, `titulo_categoria`) VALUES
+(14, 7, 13, 'Malas para viagem'),
+(16, 9, 12, 'Mochilas masculinas');
 
 -- --------------------------------------------------------
 
@@ -104,6 +122,16 @@ CREATE TABLE `pew_categoria_destaque` (
   `data_controle` datetime NOT NULL,
   `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `pew_categoria_destaque`
+--
+
+INSERT INTO `pew_categoria_destaque` (`id`, `id_categoria`, `titulo`, `ref`, `imagem`, `data_controle`, `status`) VALUES
+(4, 13, 'Malas para viagem', 'malas-para-viagem', 'malas-para-viagem-categoria-destaque-refc2f4.png', '2018-03-29 06:01:38', 1),
+(5, 12, 'Mochilas masculinas', 'mochilas-masculinas', 'mochilas-masculinas-categoria-destaque-ref05e5.png', '2018-03-29 05:56:30', 1),
+(6, 15, 'Linha exclusiva', 'acessorios-femininos', 'linha-exclusiva-categoria-destaque-reffa24.png', '2018-03-29 04:38:12', 1),
+(7, 14, 'AcessÃ³rios femininos', 'acessorios-femininos', 'acessorios-femininos-categoria-destaque-ref5c9d.png', '2018-03-29 04:38:23', 1);
 
 -- --------------------------------------------------------
 
@@ -147,6 +175,27 @@ INSERT INTO `pew_contatos` (`id`, `nome`, `email`, `telefone`, `assunto`, `mensa
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `pew_cores`
+--
+
+CREATE TABLE `pew_cores` (
+  `id` int(11) NOT NULL,
+  `cor` varchar(255) NOT NULL,
+  `imagem` varchar(255) NOT NULL,
+  `data_controle` datetime NOT NULL,
+  `status` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `pew_cores`
+--
+
+INSERT INTO `pew_cores` (`id`, `cor`, `imagem`, `data_controle`, `status`) VALUES
+(2, 'Cor teste', 'd68e-refd68e.jpg', '2018-03-31 11:39:00', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `pew_cores_produtos`
 --
 
@@ -173,6 +222,17 @@ CREATE TABLE `pew_departamentos` (
   `status` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+--
+-- Extraindo dados da tabela `pew_departamentos`
+--
+
+INSERT INTO `pew_departamentos` (`id`, `departamento`, `descricao`, `posicao`, `ref`, `data_controle`, `status`) VALUES
+(13, 'BAZAR', '', 2, 'bazar', '2018-03-27', 1),
+(14, 'FEMININO', '', 0, 'feminino', '2018-03-29', 1),
+(15, 'MASCULINO', '', 4, 'masculino', '2018-03-27', 1),
+(12, 'ACESSÃ“RIOS', '', 1, 'acessorios', '2018-03-29', 1),
+(16, 'MOCHILAS', '', 5, 'mochilas', '2018-03-27', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -182,9 +242,17 @@ CREATE TABLE `pew_departamentos` (
 CREATE TABLE `pew_departamentos_produtos` (
   `id` int(11) NOT NULL,
   `id_produto` int(11) NOT NULL,
-  `id_departamento` int(11) NOT NULL,
-  `titulo_departamento` varchar(255) NOT NULL
+  `id_departamento` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `pew_departamentos_produtos`
+--
+
+INSERT INTO `pew_departamentos_produtos` (`id`, `id_produto`, `id_departamento`) VALUES
+(94, 9, 13),
+(90, 8, 14),
+(93, 5, 14);
 
 -- --------------------------------------------------------
 
@@ -208,6 +276,14 @@ CREATE TABLE `pew_enderecos` (
   `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Extraindo dados da tabela `pew_enderecos`
+--
+
+INSERT INTO `pew_enderecos` (`id`, `id_relacionado`, `ref_relacionado`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `estado`, `cidade`, `data_cadastro`, `data_controle`, `status`) VALUES
+(9, 15, 1, 80230040, 'Rua Engenheiros RebouÃ§as', '2111', 'Apto 06', 'RebouÃ§as', 'Curitiba', 'PR', '2018-03-20 01:13:29', '2018-03-20 01:13:29', 1),
+(10, 16, 1, 80230040, 'Rua Engenheiros RebouÃ§as', '2111', '', 'RebouÃ§as', 'Curitiba', 'PR', '2018-03-29 02:46:03', '2018-03-29 02:46:03', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -226,7 +302,7 @@ CREATE TABLE `pew_especificacoes_produtos` (
 --
 
 INSERT INTO `pew_especificacoes_produtos` (`id`, `id_especificacao`, `id_produto`, `descricao`) VALUES
-(46, 7, 5, 'Pequena');
+(82, 7, 5, 'Pequena');
 
 -- --------------------------------------------------------
 
@@ -246,7 +322,8 @@ CREATE TABLE `pew_especificacoes_tecnicas` (
 --
 
 INSERT INTO `pew_especificacoes_tecnicas` (`id`, `titulo`, `data_controle`, `status`) VALUES
-(7, 'Tamanho', '2018-03-05 02:28:43', 1);
+(10, 'Material externo', '2018-03-29 02:32:38', 1),
+(11, 'Material interno', '2018-03-29 02:32:55', 1);
 
 -- --------------------------------------------------------
 
@@ -269,7 +346,47 @@ CREATE TABLE `pew_imagens_produtos` (
 INSERT INTO `pew_imagens_produtos` (`id`, `id_produto`, `imagem`, `posicao`, `status`) VALUES
 (2, 3, '97e491dbd424e33e1.jpg', 1, 1),
 (3, 4, '97e491dbd424e33e1.jpg', 1, 1),
-(4, 5, '97e491dbd424e33e1.jpg', 1, 1);
+(4, 5, '97e491dbd424e33e1.jpg', 1, 1),
+(7, 7, 'produto-teste-2-4cc1.jpg', 1, 1),
+(9, 9, 'produto-teste-fcc3.jpg', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `pew_links_menu`
+--
+
+CREATE TABLE `pew_links_menu` (
+  `id` int(11) NOT NULL,
+  `id_departamento` int(11) NOT NULL,
+  `id_categoria` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `pew_links_menu`
+--
+
+INSERT INTO `pew_links_menu` (`id`, `id_departamento`, `id_categoria`) VALUES
+(25, 10, 5),
+(26, 10, 9),
+(27, 11, 8),
+(28, 6, 8),
+(29, 6, 9),
+(30, 7, 5),
+(31, 7, 6),
+(32, 8, 5),
+(33, 8, 6),
+(36, 13, 8),
+(39, 15, 5),
+(40, 15, 6),
+(43, 16, 5),
+(44, 16, 6),
+(48, 17, 6),
+(49, 17, 8),
+(53, 14, 8),
+(54, 14, 9),
+(59, 12, 5),
+(60, 12, 9);
 
 -- --------------------------------------------------------
 
@@ -286,6 +403,13 @@ CREATE TABLE `pew_marcas` (
   `data_controle` datetime NOT NULL,
   `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `pew_marcas`
+--
+
+INSERT INTO `pew_marcas` (`id`, `marca`, `descricao`, `ref`, `imagem`, `data_controle`, `status`) VALUES
+(1, 'Maidi Grey', '', 'maidi-grey', '', '2018-03-27 04:01:04', 1);
 
 -- --------------------------------------------------------
 
@@ -313,7 +437,8 @@ CREATE TABLE `pew_minha_conta` (
 --
 
 INSERT INTO `pew_minha_conta` (`id`, `usuario`, `email`, `senha`, `celular`, `telefone`, `cpf`, `data_nascimento`, `sexo`, `data_cadastro`, `data_controle`, `status`) VALUES
-(6, 'Rogerio', 'reyrogerio@hotmail.com', 'ada3c39413b4f6284c8301257812190e', '(41) 99753-6262', '', '05453531908', '1998-07-29', 'Masculino', '2018-03-12 09:53:13', '2018-03-12 09:53:13', 0);
+(15, 'Rogerio Mendes', 'reyrogerio@hotmail.com', '08541bb36f049db6004fd98457138485', '(41) 99753-6262', '', '05453531908', '1998-07-29', 'masculino', '2018-03-20 01:13:29', '2018-03-20 01:13:29', 1),
+(16, 'Rogerio Lucas', 'rogerio@efectusweb.com.br', '49b1c02523650909cb7ef5be6629cde2', '(41) 99753-6262', '', '72991534915', '1998-07-29', 'masculino', '2018-03-29 02:46:03', '2018-03-29 02:46:03', 0);
 
 -- --------------------------------------------------------
 
@@ -383,6 +508,7 @@ CREATE TABLE `pew_produtos` (
   `preco_promocao` varchar(255) NOT NULL,
   `promocao_ativa` int(11) NOT NULL,
   `marca` varchar(255) NOT NULL,
+  `id_cor` tinyint(4) NOT NULL,
   `estoque` int(11) NOT NULL,
   `estoque_baixo` int(11) NOT NULL,
   `tempo_fabricacao` int(11) NOT NULL,
@@ -402,8 +528,9 @@ CREATE TABLE `pew_produtos` (
 -- Extraindo dados da tabela `pew_produtos`
 --
 
-INSERT INTO `pew_produtos` (`id`, `sku`, `nome`, `preco`, `preco_promocao`, `promocao_ativa`, `marca`, `estoque`, `estoque_baixo`, `tempo_fabricacao`, `descricao_curta`, `descricao_longa`, `url_video`, `peso`, `comprimento`, `largura`, `altura`, `data`, `visualizacoes`, `status`) VALUES
-(5, 'bo-angelica', 'Bolsa angÃ©lica', '298.00', '265.65', 1, '', 5, 1, 30, 'Lorem Ipsum Ã© simplesmente uma simulaÃ§Ã£o de texto da indÃºstria tipogrÃ¡fica e de impressos, e vem sendo utilizado desde o sÃ©culo XVI.', '<p>Lorem Ipsum &eacute; simplesmente uma simula&ccedil;&atilde;o de texto da ind&uacute;stria tipogr&aacute;fica e de impressos, e vem sendo utilizado desde o s&eacute;culo XVI.</p><p>Lorem Ipsum &eacute; simplesmente uma simula&ccedil;&atilde;o de texto da ind&uacute;stria tipogr&aacute;fica e de impressos, e vem sendo utilizado desde o s&eacute;culo XVI.</p><p>Lorem Ipsum &eacute; simplesmente uma simula&ccedil;&atilde;o de texto da ind&uacute;stria tipogr&aacute;fica e de impressos, e vem sendo utilizado desde o s&eacute;culo XVI.</p>', 'https://www.youtube.com/watch?v=Ro7yHf_pU14', '500', '20', '20', '20', '2018-03-05 03:37:40', 0, 1);
+INSERT INTO `pew_produtos` (`id`, `sku`, `nome`, `preco`, `preco_promocao`, `promocao_ativa`, `marca`, `id_cor`, `estoque`, `estoque_baixo`, `tempo_fabricacao`, `descricao_curta`, `descricao_longa`, `url_video`, `peso`, `comprimento`, `largura`, `altura`, `data`, `visualizacoes`, `status`) VALUES
+(5, 'bo-angelicas', 'Bolsa angÃ©lica', '298.00', '265.65', 1, 'Maidi Grey', 2, 5, 1, 30, 'Lorem Ipsum Ã© simplesmente uma simulaÃ§Ã£o de texto da indÃºstria tipogrÃ¡fica e de impressos, e vem sendo utilizado desde o sÃ©culo XVI.', '<p>Lorem Ipsum &eacute; simplesmente uma simula&ccedil;&atilde;o de texto da ind&uacute;stria tipogr&aacute;fica e de impressos, e vem sendo utilizado desde o s&eacute;culo XVI.</p><p>Lorem Ipsum &eacute; simplesmente uma simula&ccedil;&atilde;o de texto da ind&uacute;stria tipogr&aacute;fica e de impressos, e vem sendo utilizado desde o s&eacute;culo XVI.</p><p>Lorem Ipsum &eacute; simplesmente uma simula&ccedil;&atilde;o de texto da ind&uacute;stria tipogr&aacute;fica e de impressos, e vem sendo utilizado desde o s&eacute;culo XVI.</p>', 'http://<iframe width=\'560\' height=\'315\' src=\'https://www.youtube.com/embed/3O9EMwTE7xo?rel=0&controls=0&showinfo=0\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen></iframe>', '500', '20', '20', '20', '2018-03-31 11:34:17', 0, 1),
+(9, '212121', 'Produto teste', '12', '0', 0, 'Maidi Grey', 0, 1, 1, 0, 'asdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsa', '<p>asdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsaasdasadsdsa</p>', '', '21212121', '122121', '21212121', '212121', '2018-04-01 02:17:06', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -516,6 +643,12 @@ ALTER TABLE `pew_contatos`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `pew_cores`
+--
+ALTER TABLE `pew_cores`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `pew_cores_produtos`
 --
 ALTER TABLE `pew_cores_produtos`
@@ -555,6 +688,12 @@ ALTER TABLE `pew_especificacoes_tecnicas`
 -- Indexes for table `pew_imagens_produtos`
 --
 ALTER TABLE `pew_imagens_produtos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `pew_links_menu`
+--
+ALTER TABLE `pew_links_menu`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -626,12 +765,12 @@ ALTER TABLE `pew_banners`
 -- AUTO_INCREMENT for table `pew_categorias`
 --
 ALTER TABLE `pew_categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT for table `pew_categorias_produtos`
 --
 ALTER TABLE `pew_categorias_produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `pew_categorias_vitrine`
 --
@@ -641,7 +780,7 @@ ALTER TABLE `pew_categorias_vitrine`
 -- AUTO_INCREMENT for table `pew_categoria_destaque`
 --
 ALTER TABLE `pew_categoria_destaque`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `pew_config_orcamentos`
 --
@@ -653,6 +792,11 @@ ALTER TABLE `pew_config_orcamentos`
 ALTER TABLE `pew_contatos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
+-- AUTO_INCREMENT for table `pew_cores`
+--
+ALTER TABLE `pew_cores`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
 -- AUTO_INCREMENT for table `pew_cores_produtos`
 --
 ALTER TABLE `pew_cores_produtos`
@@ -661,42 +805,47 @@ ALTER TABLE `pew_cores_produtos`
 -- AUTO_INCREMENT for table `pew_departamentos`
 --
 ALTER TABLE `pew_departamentos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `pew_departamentos_produtos`
 --
 ALTER TABLE `pew_departamentos_produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 --
 -- AUTO_INCREMENT for table `pew_enderecos`
 --
 ALTER TABLE `pew_enderecos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `pew_especificacoes_produtos`
 --
 ALTER TABLE `pew_especificacoes_produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 --
 -- AUTO_INCREMENT for table `pew_especificacoes_tecnicas`
 --
 ALTER TABLE `pew_especificacoes_tecnicas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `pew_imagens_produtos`
 --
 ALTER TABLE `pew_imagens_produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+--
+-- AUTO_INCREMENT for table `pew_links_menu`
+--
+ALTER TABLE `pew_links_menu`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 --
 -- AUTO_INCREMENT for table `pew_marcas`
 --
 ALTER TABLE `pew_marcas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `pew_minha_conta`
 --
 ALTER TABLE `pew_minha_conta`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `pew_newsletter`
 --
@@ -711,12 +860,12 @@ ALTER TABLE `pew_orcamentos`
 -- AUTO_INCREMENT for table `pew_produtos`
 --
 ALTER TABLE `pew_produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `pew_produtos_relacionados`
 --
 ALTER TABLE `pew_produtos_relacionados`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 --
 -- AUTO_INCREMENT for table `pew_subcategorias`
 --

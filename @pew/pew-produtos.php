@@ -33,15 +33,18 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         <!--THIS PAGE CSS-->
         <style>
             .lista-produtos{
-                width: 100%;
-                margin: 40px auto 40px auto;
+                width: calc(100% - 30px);
+                margin: 40px 15px 40px 15px;
+                padding-top: 50px;
                 display: flex;
                 flex-flow: row wrap;
+                justify-content: left;
             }
             .box-produto{
                 position: relative;
                 width: calc(25% - 22px);
                 padding: 10px 0px 40px 0px;
+                margin: 0px 20px 0px 0px;
                 background-color: #fff;
                 border: 1px solid #ccc;
                 transition: .2s;
@@ -139,16 +142,39 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             require_once "pew-interatividade.php";
         ?>
         <h1 class="titulos"><?php echo $page_title; ?></h1>
-        <section class="conteudo-painel">
-            <a href="pew-cadastra-produto.php" class="btn-padrao" title="Cadastre um novo produto">Cadastrar novo</a>
-            <form action="pew-produtos.php" method="get" class="form-busca">
-                <label class="field-busca">
-                    <h3 class="titulo-busca">Busca de produtos</h3>
-                    <input type="search" name="busca" placeholder="Pesquise por produtos, categorias, marcas ou descrição." class="barra-busca" title="Buscar">
-                    <input type="submit" value="Buscar" class="btn-buscar">
-                </label>
-            </form>
-            <div class="lista-produtos">
+            <section class="conteudo-painel">
+            <div class="group clear">
+                <form action="pew-produtos.php" method="get" class="label half clear">
+                    <label class="group">
+                        <div class="group">
+                            <h3 class="label-title">Busca de produtos</h3>
+                        </div>
+                        <div class="group">
+                            <div class="xlarge" style="margin-left: -5px; margin-right: 0px;">
+                                <input type="search" name="busca" placeholder="Busque por titulo, categorias, marcas..." class="label-input" title="Buscar">
+                            </div>
+                            <div class="xsmall">
+                                <button type="submit" class="btn-submit label-input btn-flat" style="margin: 10px;">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </label>
+                </form>
+                <div class="label half jc-left">
+                    <div class="full">
+                        <h4 class="subtitulos" align=left>Mais funções</h4>
+                    </div>
+                    <div class="label full">
+                        <a href="pew-cadastra-produto.php" class="btn-padrao btn-flat" title="Cadastre um novo produto"><i class="fas fa-plus"></i> Cadastrar produto</a>
+                        <a href="pew-marcas.php" class="btn-padrao btn-flat" title="Gerenciamento de marcas"><i class="fas fa-plus"></i> Marcas</a>
+                        <a href="pew-cores.php" class="btn-padrao btn-flat" title="Gerenciamento de cores"><i class="fas fa-plus"></i> Cores</a>
+                        <a href="pew-produtos-relatorios.php" class="btn-padrao btn-flat" title="Ver Relatórios"><i class="fas fa-chart-pie"></i> Relatórios</a>
+                    </div>
+                </div>
+            </div>
+            <div class="lista-produtos full clear">
+                <h4 class="subtitulos group clear" align=left style="margin-bottom: 10px">Listagem de produtos</h4>
                 <?php
                     $tabela_produtos = $pew_custom_db->tabela_produtos;
                     $tabela_imagens_produtos = $pew_custom_db->tabela_imagens_produtos;

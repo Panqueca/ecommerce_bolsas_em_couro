@@ -37,16 +37,34 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         ?>
         <h1 class="titulos"><?php echo $page_title; ?></h1>
         <section class="conteudo-painel">
-            <a href="pew-cadastra-orcamento.php" class="btn-padrao" title="Cadastre um novo produto">Cadastrar novo</a>
-            <br><br><br>
-            <form class="form-busca" method="get" action="pew-orcamentos.php">
-                <label class="field-busca">
-                    <h3 class="titulo-busca">Buscar pedidos</h3>
-                    <input type="search" name="busca" placeholder="Busque por nome, email, telefone, RG ou CPF" class="barra-busca" autocomplete="off">
-                    <input type="submit" value="Buscar" class="btn-buscar">
-                </label>
-            </form>
-            <table class="table-padrao" cellspacing="0">
+            <div class="group clear">
+                <form action="pew-produtos.php" method="get" class="label half clear">
+                    <label class="group">
+                        <div class="group">
+                            <h3 class="label-title">Busca de orçamentos</h3>
+                        </div>
+                        <div class="group">
+                            <div class="xlarge" style="margin-left: -5px; margin-right: 0px;">
+                                <input type="search" name="busca" placeholder="Nome, email, telefone, RG ou CPF" class="label-input" title="Buscar">
+                            </div>
+                            <div class="xsmall">
+                                <button type="submit" class="btn-submit label-input btn-flat" style="margin: 10px;">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </label>
+                </form>
+                <div class="label half jc-left">
+                    <div class="full">
+                        <h4 class="subtitulos" align=left>Mais funções</h4>
+                    </div>
+                    <div class="label full">
+                        <a href="pew-cadastra-orcamento.php" class="btn-padrao btn-flat" title="Cadastre um novo orçamento"><i class="fas fa-plus"></i> Cadastrar orçamento</a>
+                    </div>
+                </div>
+            </div>
+            <table class="table-padrao group clear" cellspacing="0">
             <?php
                 $tabela_orcamentos = $pew_custom_db->tabela_orcamentos;
                 if(isset($_GET["busca"]) && $_GET["busca"] != ""){
