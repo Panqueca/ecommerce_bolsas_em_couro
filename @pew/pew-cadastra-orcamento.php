@@ -24,7 +24,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         <!--LINKS e JS PADRAO-->
         <link type="image/png" rel="icon" href="imagens/sistema/identidadeVisual/icone-efectus-web.png">
         <link type="text/css" rel="stylesheet" href="css/estilo.css">
-        <script type="text/javascript" src="../js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/standard.js"></script>
         <!--FIM LINKS e JS PADRAO-->
         <!--THIS PAGE LINKS-->
@@ -717,7 +717,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                     <a class="btn-produtos-relacionados">Produtos Selecionados (0)</a>
                     <div class="display-produtos-relacionados">
                         <div class="header-relacionados">
-                            <h3 class="title-relacionados">Lista de produtos ativos</h3>
+                            <h3 class="title-relacionados">Lista de produtos</h3>
                             <!--<h5 class="descricao-relacionados">Selecione os produtos relacionados</h5>-->
                             <input type="search" class="busca-relacionados" name="busca_relacionados" placeholder="Busque categoria, nome, marca, id, ou sku" form="busca_produto">
                             <label title="Listar somente os produtos que já foram selecionados"><input type="checkbox" id="checkOnlyActives"> Somente os selecionados</label>

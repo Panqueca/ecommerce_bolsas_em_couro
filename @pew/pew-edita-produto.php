@@ -1222,7 +1222,9 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                     </div>
                 </div>
                 <br><br>
-                <a href="pew-produtos.php" class="link-padrao">Voltar</a>
+                <div class="full" align=center>
+                    <a href="pew-produtos.php" class="link-padrao">Voltar</a>
+                </div>
             </form>
         </section>
     </body>

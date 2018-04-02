@@ -150,10 +150,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 <h3>Comercial: Acesso a Banners, Produtos e Categorias</h3>
                 <h3>Administrador: Acesso total</h3>
             </div>
-            <br style="clear: both;">
-            <div class="buttons">
-                <a href="pew-usuarios.php" class="link-padrao">Voltar</a>
-            </div>
+            <br class="clear">
         </section>
     </body>
 </html>

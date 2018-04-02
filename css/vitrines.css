@@ -55,7 +55,6 @@
     width: 100%;
 }
 .vitrine-standard .display-produtos .box-produto .title-link{
-    color: #333;
     text-decoration: none;
 }
 .vitrine-standard .display-produtos .box-produto .titulo-produto{
@@ -65,6 +64,10 @@
     text-overflow: ellipsis;
     line-height: 20px;
     height: 40px;
+    color: #333;
+}
+.vitrine-standard .display-produtos .box-produto .titulo-produto:hover{
+    color: #6abd45;  
 }
 .vitrine-standard .display-produtos .box-produto .preco-produto{
     font-size: .7em;
@@ -340,7 +343,6 @@
     width: 100%;
 }
 .vitrine-carrossel .display-produtos .box-produto .title-link{
-    color: #333;
     text-decoration: none;
 }
 .vitrine-carrossel .display-produtos .box-produto .titulo-produto{
@@ -350,6 +352,10 @@
     text-overflow: ellipsis;
     line-height: 20px;
     height: 40px;
+    color: #333;
+}
+.vitrine-carrossel .display-produtos .box-produto .titulo-produto:hover{
+    color: #6abd45;  
 }
 .vitrine-carrossel .display-produtos .box-produto .preco-produto{
     font-size: .7em;

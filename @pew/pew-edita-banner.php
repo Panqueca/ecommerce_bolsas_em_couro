@@ -90,11 +90,13 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                     <input type="file" name="imagem" class="label-input ">
                 </div>
                 <div class="group clear">
-                    <div class="label small">
-                        <input type="submit" class="btn-submit label-input" value="Atualizar Banner">
+                    <div class="label xsmall">
+                        <button type="submit" class="btn-submit label-input">
+                            <i class="far fa-save"></i> Salvar
+                        </button>
                     </div>
-                    <div class="label small">
-                        <a href="pew-deleta-banner.php?id_banner=<?php echo $idBanner;?>&acao=deletar" class='btn-excluir label-input'>Excluir Banner</a>
+                    <div class="label xsmall">
+                        <a href="pew-deleta-banner.php?id_banner=<?php echo $idBanner;?>&acao=deletar" class='btn-excluir label-input'><i class="fas fa-trash-alt"></i> Excluir</a>
                     </div>
                 
                 </div>

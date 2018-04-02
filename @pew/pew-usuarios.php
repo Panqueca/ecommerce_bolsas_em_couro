@@ -33,7 +33,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 margin-bottom: 50px;
             }
             .box-usuario{
-                width: 500px;
+                width: 50%;
                 height: 35px;
                 line-height: 35px;
                 margin-bottom: 50px;
@@ -45,21 +45,22 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 font-size: 16px;
                 display: flex;
                 flex-flow: row wrap;
+                line-height: 48px;
             }
             .box-usuario .indice{
                 width: 40px;
+                line-height: 40px;
                 text-align: center;
                 background-color: #111;
                 color: #fff;
                 font-weight: bold;
                 border-top-left-radius: 20px;
                 border-bottom-left-radius: 20px;
-                float: left;
             }
             .box-usuario .name-field{
                 position: relative;
-                width: 300px;
-                float: left;
+                width: 200px;
+                padding: 0px 0px 0px 20px;
                 transition: .2s;
                 border-right: 2px solid #111;
             }
@@ -68,7 +69,6 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             }
             .box-usuario .nivel-field{
                 position: relative;
-                width: 200px;
                 border-right: 2px solid #111;
                 padding: 0px 20px 0px 20px;
                 transition: .2s;
@@ -78,10 +78,13 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             }
             .box-usuario .control-field{
                 position: relative;
-                width: 150px;
                 border-top-right-radius: 20px;
                 border-bottom-right-radius: 20px;
+                padding: 0px 0px 0px 20px;
                 transition: .2s;
+            }
+            .box-usuario .control-field .btn-editar{
+                font-size: 16px;   
             }
             .box-usuario .control-field:hover{
                 background-color: #fbfbfb;
@@ -171,7 +174,21 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                                     $nivel = "Designer";
                             }
                             $i++;
-                            echo "<div class='box-usuario'><div class='indice'>$i</div><div class='name-field'><h3 class='title'>Usuário</h3>$usuario</div><div class='nivel-field'><h3 class='title'>Nível</h3>$nivel</div><div class='control-field'><h3 class='title'>Editar</h3><a href='pew-edita-usuario.php?id_usuario=$idUsuario' class='btn-editar'><i class='fas fa-edit'></i> Editar</a></div></div>";
+                            echo "<div class='box-usuario'>";
+                                echo "<div class='indice'>$i</div>";
+                                echo "<div class='name-field'>";
+                                    echo "<h3 class='title'>Usuário</h3>";
+                                    echo $usuario;
+                                echo "</div>";
+                                echo "<div class='nivel-field'>";
+                                    echo "<h3 class='title'>Nível</h3>";
+                                    echo $nivel;
+                                echo "</div>";
+                                echo "<div class='control-field'>";
+                                    echo "<h3 class='title'>Editar</h3>";
+                                    echo "<a href='pew-edita-usuario.php?id_usuario=$idUsuario' class='btn-editar'><i class='fas fa-edit'></i> Editar</a>";
+                                echo "</div>";
+                            echo "</div>";
                         }
                         echo "</div>";
                     }else{

@@ -251,6 +251,7 @@ input:focus, select:focus, textarea:focus{
     transition: .2s;
     outline: none;
     cursor: pointer;
+    text-align: center;
 }
 .btn-submit:hover{
     border-color: #175a17;
@@ -294,6 +295,7 @@ input:focus, select:focus, textarea:focus{
     transition: .2s;
     cursor: pointer;
     display: inline-block;
+    text-align: center;
 }
 .btn-ativar:hover{
     color: #2aa32a;
@@ -314,6 +316,7 @@ input:focus, select:focus, textarea:focus{
     transition: .2s;
     cursor: pointer;
     display: inline-block;
+    text-align: center;
 }
 .btn-desativar:hover{
     border-color: #af2120;
@@ -334,6 +337,7 @@ input:focus, select:focus, textarea:focus{
     transition: .2s;
     cursor: pointer;
     display: inline-block;
+    text-align: center;
 }
 .btn-alterar:hover{
     border-color: #333;
@@ -349,6 +353,7 @@ input:focus, select:focus, textarea:focus{
     transition: .2s;
     outline: none;
     cursor: pointer;
+    text-align: center;
 }
 .btn-excluir:hover{
     background-color: #ea5959;

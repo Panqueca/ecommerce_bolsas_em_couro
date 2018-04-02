@@ -347,6 +347,8 @@
                         opacity: "0"
                     });
                 });
+                
+                input_mask(".input-frete", "99999-999");
             });
         </script>
         <!--END PAGE JS-->

@@ -53,7 +53,8 @@
                 padding: 10px;
                 color: red;
                 padding: 0px;
-                padding-bottom: 5px;
+                padding-bottom: 3px;
+                line-height: 24px;
             }
             .link-padrao{
                 color: #f78a14;
@@ -82,6 +83,11 @@
                     if(isset($_GET["msg"])){
                         $msg = $_GET["msg"];
                         echo "<br><font class='msg'><i class='fa fa-exclamation-triangle' aria-hidden='true'></i> $msg</font><br><br>";
+                    }
+                
+                    if(isset($_GET["next"])){
+                        $next = addslashes($_GET["next"]);
+                        echo "<input type='hidden' name='next_page' value='$next'>";
                     }
                 ?>
                 <div class="label group">

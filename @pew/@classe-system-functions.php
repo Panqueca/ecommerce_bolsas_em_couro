@@ -1,5 +1,4 @@
 <?php
-    require_once "@include-global-vars.php";
     class systemFunctions{
         protected $global_vars;
 

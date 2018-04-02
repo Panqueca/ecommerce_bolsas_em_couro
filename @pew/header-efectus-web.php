@@ -1,6 +1,3 @@
-<?php
-    require_once "@classe-system-functions.php";
-?>
 <style>
     .section-header{
         width: 100%;
@@ -228,30 +225,16 @@
         right: 0px;
     }
 </style>
-<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-<?php
-/*Função para inversão de data buscada no banco de dados*/
-function inverterData($data){
-    if(count(explode("-",$data)) > 1){
-        return implode("/",array_reverse(explode("-",$data)));
-    }elseif(count(explode("/",$data)) > 1){
-        return implode("-",array_reverse(explode("/",$data)));
-    }
-}
-/*FIM Função para inversão de data buscada no banco de dados*/
-?>
+
 <section class="section-header">
     <header class="header-efectus-web">
         <div class="top-info">
             <div class="date-field">
-                <i class="fas fa-calendar-alt"></i> <?php echo inverterData(substr(date("Y-m-d h:i:s"), 0, 10)); ?>
+                <i class="fas fa-calendar-alt"></i> <?php echo $pew_functions->inverter_data(substr(date("Y-m-d h:i:s"), 0, 10)); ?>
             </div>
             <div class="login-field"><i class="fas fa-user-circle"></i>
                 <?php
-                    $pew_usuario = $_SESSION[$name_session_user];
-                    $pew_nivel = (int)$_SESSION[$name_session_nivel];
-                    $pew_usuario = ucwords($pew_usuario);
-                    switch($pew_nivel){
+                    switch($pew_session->nivel){
                         case 2:
                             $pew_nivel = "Comercial";
                             break;
@@ -262,7 +245,7 @@ function inverterData($data){
                             $pew_nivel = "Designer";
                     }
                 ?>
-                <?php echo $pew_usuario." | ".$pew_nivel; ?>
+                <?php echo $pew_session->usuario." | ".$pew_nivel; ?>
                 <div class="menu-field">
                     <a href="pew-configurar-conta.php"><li>Configurar conta</li></a>
                     <a href="deslogar.php"><li>Sair</li></a>

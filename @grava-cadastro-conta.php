@@ -58,8 +58,8 @@
             echo "false";
         }
     }else{
-        print_r($invalid_fields);
-        //echo "false";
+        //print_r($invalid_fields);
+        echo "false";
     }
 
 ?>

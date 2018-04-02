@@ -60,6 +60,9 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 background-color: #fff;
                 border-bottom: 1px solid #ccc;
             }
+            .box-produto .imagem:hover{
+                opacity: .9;   
+            }
             .box-produto .imagem img{
                 width: 100%;
                 border-radius: 10px;

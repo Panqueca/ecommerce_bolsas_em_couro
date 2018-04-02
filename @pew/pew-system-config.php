@@ -1,5 +1,6 @@
 <?php
     /*CLASSE PRINCIPAL DO SISTEMA*/
+
     if(!class_exists("Pew_Data_Base")){
         class Pew_Data_Base{
             public $db_host;
@@ -83,79 +84,64 @@
     $pew_custom_db = new Pew_Custom_Data_Base("pew_produtos", "pew_marcas", "pew_marcas_produtos", "pew_cores", "pew_cores_produtos", "pew_imagens_produtos", "pew_departamentos", "pew_departamentos_produtos", "pew_categorias_produtos", "pew_subcategorias_produtos", "pew_orcamentos", "pew_config_orcamentos", "pew_categorias_vitrine", "pew_categoria_destaque", "pew_especificacoes_tecnicas", "pew_especificacoes_produtos", "pew_produtos_relacionados", "pew_newsletter", "pew_minha_conta", "pew_enderecos", "pew_links_menu");
     /*FIM TABELAS CUSTOMIZADAS ADICIONAIS*/
 
+    /*GLOBAL VARS*/
+    $globalVars = array(
+        "conexao" => $conexao,
+        "tabela_categorias" => $pew_db->tabela_categorias,
+        "tabela_subcategorias" => $pew_db->tabela_subcategorias,
+        "tabela_produtos" => $pew_custom_db->tabela_produtos,
+        "tabela_cores" => $pew_custom_db->tabela_cores,
+        "tabela_cores_produtos" => $pew_custom_db->tabela_cores_produtos,
+        "tabela_marcas_produtos" => $pew_custom_db->tabela_marcas_produtos,
+        "tabela_imagens_produtos" => $pew_custom_db->tabela_imagens_produtos,
+        "tabela_departamentos" => $pew_custom_db->tabela_departamentos,
+        "tabela_departamentos_produtos" => $pew_custom_db->tabela_departamentos_produtos,
+        "tabela_categorias_produtos" => $pew_custom_db->tabela_categorias_produtos,
+        "tabela_subcategorias_produtos" => $pew_custom_db->tabela_subcategorias_produtos,
+        "tabela_categorias_vitrine" => $pew_custom_db->tabela_categorias_vitrine,
+        "tabela_categoria_destaque" => $pew_custom_db->tabela_categoria_destaque,
+        "tabela_especificacoes" => $pew_custom_db->tabela_especificacoes,
+        "tabela_especificacoes_produtos" => $pew_custom_db->tabela_especificacoes_produtos,
+        "tabela_produtos_relacionados" => $pew_custom_db->tabela_produtos_relacionados,
+        "tabela_minha_conta" => $pew_custom_db->tabela_minha_conta,
+        "tabela_enderecos" => $pew_custom_db->tabela_enderecos,
+    );
+    global $globalVars;
+
+    /*END GLOBAL VARS*/
+
+    // Aditional Functions
+    require_once "@classe-system-functions.php";
+
     /*CLASSE SESSÃO ADMINISTRATIVA*/
     if(!class_exists("Pew_Session")){
         class Pew_Session{
-            public $name_user;
-            public $name_pass;
-            public $name_nivel;
-            public $name_empresa;
+            public $usuario;
+            public $senha;
+            public $nivel;
+            public $empresa;
 
-            function __construct($n_user, $n_pass, $n_nivel, $n_empresa){
-                $this->name_user = $n_user;
-                $this->name_pass = $n_pass;
-                $this->name_nivel = $n_nivel;
-                $this->name_empresa = $n_empresa;
+            function __construct($usuario, $senha, $nivel, $empresa){
+                $this->usuario = $usuario;
+                $this->senha = $senha;
+                $this->nivel = $nivel;
+                $this->empresa = $empresa;
             }
-        }
-    }
-    $pew_session = new Pew_Session("efectusweb_usuario_administrativo", "efectusweb_senha_administrativo", "efectusweb_nivel_administrativo", "efectusweb_empresa_administrativo");
-    /*FIM CLASSE SESSÃO ADMINISTRATIVA*/
-
-    /*FUNCOES DE SEGURANÇA DO SISTEMA*/
-    if(!function_exists('pew_string_format')){ /*FUNÇÃO CONTRA SQL INJECTION*/
-        function pew_string_format($string){
-            //remove tudo que contenha sintaxe sql
-            $valCampos = array("'", '"', "update", "from", "select", "insert", "delete", "where", "drop table", "show tables", "#", "*", "--");
-            foreach($valCampos as $validacao){
-                $string = str_replace($validacao, "", $string);
-            }
-            $string = trim($string);//limpa espaços vazio
-            $string = strip_tags($string);//tira tags html e php
-            return $string;
-        }
-    }
-    /*FIM FUNCOES DE SEGURANÇA DO SISTEMA*/
-
-    /*FUNCOES COMPLEMENTARES AO SISTEMA*/
-    if(!function_exists('pew_inverter_data')){
-        function pew_inverter_data($data){
-            if(count(explode("-",$data)) > 1){
-                return implode("/",array_reverse(explode("-",$data)));
-            }elseif(count(explode("/",$data)) > 1){
-                return implode("-",array_reverse(explode("/",$data)));
-            }
-        }
-    }
-    if(!function_exists('pew_number_format')){
-        function pew_number_format($val, $sep = "."){
-            $prepareStr = str_replace(" ", "", $val);
-            $prepareStr = str_replace(",", ".", $prepareStr);
-            $totalCaracteres = strlen($prepareStr);
-            $cleanedVal = floatval(str_replace(".", "", $prepareStr));
-            $temPonto = strlen($cleanedVal) < $totalCaracteres ? true : false;
-            if($temPonto){
-                $explodedVal = explode(".", $prepareStr);
-                $totalExplodes = count($explodedVal);
-                $indiceLastExplode = $totalExplodes - 1;
-                $decimal = strlen($explodedVal[$indiceLastExplode]) == 2 ? true : false;
-                if($decimal){
-                    $caracteresStrCleaned = strlen($cleanedVal);
-                    $totalCaractesMilhar = $caracteresStrCleaned - 2;
-                    $milharVal = substr($cleanedVal, 0, $totalCaractesMilhar);
-                    $decimalsVal = substr($cleanedVal, $totalCaractesMilhar, 2);
-                    $sep = $sep == "." || $sep ==  "," ? $sep : ".";
-                    $formatedVal = $milharVal.$sep.$decimalsVal;
+            
+            function auth(){
+                global $pew_db, $pew_functions, $conexao;
+                $tabela_usuarios_administrativos = $pew_db->tabela_usuarios_administrativos;
+                $authCondition = "usuario = '" . $this->usuario . "' and senha = '" . $this->senha . "'";
+                $totalUsuario = $pew_functions->contar_resultados($tabela_usuarios_administrativos, $authCondition);
+                if($totalUsuario > 0){
+                    return true;
                 }else{
-                    $formatedVal = $cleanedVal.$sep."00";
+                    return false;
                 }
-                return $formatedVal;
-            }else{
-                return $cleanedVal;
             }
         }
     }
-    /*FIM FUNCOES COMPLEMENTARES AO SISTEMA*/
+    /*FIM CLASSE SESSÃO ADMINISTRATIVA*/
 
     date_default_timezone_set("America/Sao_Paulo");
 ?>

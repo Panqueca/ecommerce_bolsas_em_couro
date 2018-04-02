@@ -248,32 +248,3 @@ for(var i = 0; i < quantidadeMascaras; i++){
 }
 */
 /*END MASCARA TELEFONE*/
-
-var todasImagens = null;
-var qtdImagens = 0;
-
-function loading_imagens(objImg){
-    var objImagens = $('img');
-    
-    function loading(imagem){
-        imagem.load(function(){
-            console.log("imagem carregada"); 
-        });
-    }
-    
-    objImagens.each(function(){
-        var loaded = this.complete;
-        var objImagem = $(this);
-        console.log(loaded);
-        if(!loaded){
-            loading(objImagem);
-        }else{
-            console.log("ueh");
-        }
-    });
-}
-
-
-$(document).ready(function(){
-    loading_imagens();
-});

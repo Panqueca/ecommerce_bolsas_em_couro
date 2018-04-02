@@ -28,7 +28,6 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         <script type="text/javascript" src="js/standard.js"></script>
         <!--FIM LINKS e JS PADRAO-->
         <!--THIS PAGE LINKS-->
-        <script type="text/javascript" src="js/banners.js"></script>
         <!--FIM THIS PAGE LINKS-->
         <!--THIS PAGE CSS-->
         <style>
@@ -39,17 +38,16 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             }
             .box-banner{
                 position: relative;
-                width: 40%;
-                margin: 4.5%;
-                padding: 0.5%;
-                padding-top: 10px;
-                padding-bottom: 10px;
+                width: calc(50% - 80px);
+                margin: 10px 20px 10px 20px;
                 border-radius: 20px;
                 float: left;
             }
             .box-banner .indice{
                 width: 40px;
                 height: 40px;
+                line-height: 40px;
+                text-align: center;
                 border-radius: 50%;
                 background-color: #fff;
                 color: #111;
@@ -78,6 +76,48 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             }
         </style>
         <!--FIM THIS PAGE CSS-->
+        <script>
+            $(document).ready(function(){
+                $(".btn-status-banner").off().on("click", function(){
+                    var botao = $(this);
+                    var idBanner = botao.attr("data-banner-id");
+                    var acao = botao.attr("data-acao");
+                    function statusBanner(){
+                        $.ajax({
+                            type: "POST",
+                            url: "pew-status-banner.php",
+                            data: {id_banner: idBanner, acao: acao},
+                            beforeSend: function(){
+                                notificacaoPadrao("Aguarde...", "success");
+                            },
+                            error: function(){
+                                setTimeout(function(){
+                                    notificacaoPadrao("Não foi possível "+acao+" o banner", "error", 5000);
+                                }, 1000);
+                            },
+                            success: function(respota){
+                                setTimeout(function(){
+                                    if(respota == "true"){
+                                        var resultado = acao == "ativar" ? "ativado" : "desativado";
+                                        notificacaoPadrao("O Banner foi "+resultado+"!", "success", 5000);
+                                        if(resultado == "ativado"){
+                                            botao.addClass("btn-desativar").removeClass("btn-ativar").text("Desativar");
+                                            botao.attr("data-acao", "desativar");
+                                        }else{
+                                            botao.addClass("btn-ativar").removeClass("btn-desativar").text("Ativar");
+                                            botao.attr("data-acao", "ativar");
+                                        }
+                                    }else{
+                                        notificacaoPadrao("Não foi possível desativar o banner", "error", 5000);
+                                    }
+                                }, 500);
+                            }
+                        });
+                    }
+                    mensagemConfirma("Tem certeza que deseja "+acao+" este banner?", statusBanner);
+                });
+            });
+        </script>
     </head>
     <body>
         <?php
@@ -88,8 +128,11 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         ?>
         <h1 class="titulos"><?php echo $page_title; ?></h1>
         <section class="conteudo-painel">
-            <a href="pew-cadastra-banner.php" class="btn-padrao" title="Cadastre um novo banner">Cadastrar novo</a>
+            <div class="full label">
+                <a href="pew-cadastra-banner.php" class="btn-flat" title="Cadastre um novo banner"><i class="fas fa-plus"></i> Cadastrar banner</a>
+            </div>
             <div class="lista-banners">
+                <h3 class="subtitulos">Listagem de banners</h3>
                 <?php
                     $tabela_banners = $pew_db->tabela_banners;
                     $contarBanners = mysqli_query($conexao, "select count(id) as total_banners from $tabela_banners");
