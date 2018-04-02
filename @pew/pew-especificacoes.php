@@ -1,15 +1,13 @@
 <?php
-session_start();
-require_once "pew-system-config.php";
-$name_session_user = $pew_session->name_user;
-$name_session_pass = $pew_session->name_pass;
-$name_session_nivel = $pew_session->name_nivel;
-$name_session_empresa = $pew_session->name_empresa;
-if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) && isset($_SESSION[$name_session_nivel]) && isset($_SESSION[$name_session_empresa])){
-    $efectus_empresa_administrativo = $_SESSION[$name_session_empresa];
-    $efectus_user_administrativo = $_SESSION[$name_session_user];
-    $efectus_nivel_administrativo = $_SESSION[$name_session_nivel];
-    $navigation_title = "Especificações - $efectus_empresa_administrativo";
+    session_start();
+    
+    $thisPageURL = substr($_SERVER["REQUEST_URI"], strpos($_SERVER["REQUEST_URI"], '@pew'));
+    $_POST["next_page"] = str_replace("@pew/", "", $thisPageURL);
+    
+    require_once "@link-important-functions.php";
+    require_once "@valida-sessao.php";
+
+    $navigation_title = "Especificações - " . $pew_session->empresa;
     $page_title = "Gerenciamento de Especificações técnicas";
 ?>
 <!DOCTYPE html>
@@ -25,7 +23,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         <link type="image/png" rel="icon" href="imagens/sistema/identidadeVisual/icone-efectus-web.png">
         <link type="text/css" rel="stylesheet" href="css/estilo.css">
         <link type="text/css" rel="stylesheet" href="css/categorias.css">
-        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script type="text/javascript" src="js/standard.js"></script>
         <!--FIM LINKS e JS PADRAO-->
         <!--THIS PAGE LINKS-->
@@ -163,9 +161,10 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         ?>
         <h1 class="titulos"><?php echo $page_title; ?></h1>
         <section class="conteudo-painel">
-            <a class="btn-padrao btn-cad-categoria" title="Cadastre uma nova especificação">Cadastrar nova especificação</a>
-            <br><br><br>
-            <div class='painel-categorias'>
+            <div class="full label clear">
+                <a class="btn-flat btn-cad-categoria" title="Cadastre uma nova especificação"><i class="fas fa-plus"></i> Cadastrar nova especificação</a>
+            </div>
+            <div class='painel-categorias full'>
                 <?php
                     require_once "pew-system-config.php";
                     $tabela_especificacoes = $pew_custom_db->tabela_especificacoes;
@@ -217,9 +216,3 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         </section>
     </body>
 </html>
-<?php
-    mysqli_close($conexao);
-}else{
-    header("location: index.php?msg=Área Restrita. É necessário fazer login para continuar.");
-}
-?>

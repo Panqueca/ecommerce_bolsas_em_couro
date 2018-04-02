@@ -1,16 +1,14 @@
 <?php
-session_start();
-require_once "pew-system-config.php";
-$name_session_user = $pew_session->name_user;
-$name_session_pass = $pew_session->name_pass;
-$name_session_nivel = $pew_session->name_nivel;
-$name_session_empresa = $pew_session->name_empresa;
-if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) && isset($_SESSION[$name_session_nivel]) && isset($_SESSION[$name_session_empresa])){
-    $efectus_empresa_administrativo = $_SESSION[$name_session_empresa];
-    $efectus_user_administrativo = $_SESSION[$name_session_user];
-    $efectus_nivel_administrativo = $_SESSION[$name_session_nivel];
-    $navigation_title = "Categorias produtos - $efectus_empresa_administrativo";
-    $page_title = "Gerenciamento de Categorias de produtos";
+    session_start();
+    
+    $thisPageURL = substr($_SERVER["REQUEST_URI"], strpos($_SERVER["REQUEST_URI"], '@pew'));
+    $_POST["next_page"] = str_replace("@pew/", "", $thisPageURL);
+    
+    require_once "@link-important-functions.php";
+    require_once "@valida-sessao.php";
+
+    $navigation_title = "Categorias vitrine - " . $pew_session->empresa;
+    $page_title = "Gerenciamento de Vitrine";
 ?>
 <!DOCTYPE html>
 <html>
@@ -25,7 +23,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         <link type="image/png" rel="icon" href="imagens/sistema/identidadeVisual/icone-efectus-web.png">
         <link type="text/css" rel="stylesheet" href="css/estilo.css">
         <link type="text/css" rel="stylesheet" href="css/categorias.css">
-        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script type="text/javascript" src="js/standard.js"></script>
         <!--FIM LINKS e JS PADRAO-->
         <!--THIS PAGE LINKS-->
@@ -227,9 +225,3 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         </section>
     </body>
 </html>
-<?php
-    mysqli_close($conexao);
-}else{
-    header("location: index.php?msg=Área Restrita. É necessário fazer login para continuar.");
-}
-?>

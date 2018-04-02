@@ -28,7 +28,7 @@
             $categoria = mysqli_fetch_array($queryCategoria);
             $titulo = $categoria["categoria"];
             $descricao = $categoria["descricao"];
-            $dataControle = pew_inverter_data(substr($categoria["data_controle"], 0, 10));
+            $dataControle = $pew_functions->inverter_data(substr($categoria["data_controle"], 0, 10));
             $status = $categoria["status"] == 1 ? "Ativa" : "Desativada";
             echo "<h2 class=titulo-edita>Informações da categoria</h2>";
             echo "<form id='formUpdateCategoria'>";

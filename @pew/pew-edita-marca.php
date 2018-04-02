@@ -30,7 +30,7 @@
             $titulo = $marca["marca"];
             $descricao = $marca["descricao"];
             $imagem = $marca["imagem"];
-            $dataControle = pew_inverter_data(substr($marca["data_controle"], 0, 10));
+            $dataControle = $pew_functions->inverter_data(substr($marca["data_controle"], 0, 10));
             $status = $marca["status"] == 1 ? "Ativa" : "Desativada";
             echo "<h2 class='titulo-edita'>Informações da marca</h2>";
             echo "<form id='formUpdateMarca' method='post' action='pew-update-marca.php' enctype='multipart/form-data'>";

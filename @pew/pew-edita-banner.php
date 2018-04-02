@@ -1,15 +1,13 @@
 <?php
-session_start();
-require_once "pew-system-config.php";
-$name_session_user = $pew_session->name_user;
-$name_session_pass = $pew_session->name_pass;
-$name_session_nivel = $pew_session->name_nivel;
-$name_session_empresa = $pew_session->name_empresa;
-if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) && isset($_SESSION[$name_session_nivel]) && isset($_SESSION[$name_session_empresa])){
-    $efectus_empresa_administrativo = $_SESSION[$name_session_empresa];
-    $efectus_user_administrativo = $_SESSION[$name_session_user];
-    $efectus_nivel_administrativo = $_SESSION[$name_session_nivel];
-    $navigation_title = "Edita Banner - $efectus_empresa_administrativo";
+    session_start();
+    
+    $thisPageURL = substr($_SERVER["REQUEST_URI"], strpos($_SERVER["REQUEST_URI"], '@pew'));
+    $_POST["next_page"] = str_replace("@pew/", "", $thisPageURL);
+    
+    require_once "@link-important-functions.php";
+    require_once "@valida-sessao.php";
+
+    $navigation_title = "Edita Banner - " . $pew_session->empresa;
     $page_title = "Editar Banner";
 ?>
 <!DOCTYPE html>
@@ -109,10 +107,6 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
     }else{
         echo "<script>window.location.href='pew-banners.php?msg=Selecione um banner para editar';</script>";
     }
-    mysqli_close($conexao);
-}else{
-    header("location: index.php?msg=Área Restrita. É necessário fazer login para continuar.");
-}
 ?>
     </body>
 </html>

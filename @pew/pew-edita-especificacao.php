@@ -27,7 +27,7 @@
             $queryEspecificacao = mysqli_query($conexao, "select * from $tabela_especificacoes where id = '$idEspecificacao'");
             $especificacao = mysqli_fetch_array($queryEspecificacao);
             $titulo = $especificacao["titulo"];
-            $dataControle = pew_inverter_data(substr($especificacao["data_controle"], 0, 10));
+            $dataControle = $pew_functions->inverter_data(substr($especificacao["data_controle"], 0, 10));
             $status = $especificacao["status"] == 1 ? "Ativa" : "Desativada";
             echo "<h2 class='titulo-edita'>Informações da especificacão</h2>";
             echo "<form id='formUpdateEspecificacao' method='post' action='pew-update-especificacao.php'>";

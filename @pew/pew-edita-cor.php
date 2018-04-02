@@ -34,7 +34,7 @@
             $infoCor = mysqli_fetch_array($query);
             $titulo = $infoCor["cor"];
             $imagem = $infoCor["imagem"];
-            $dataControle = pew_inverter_data(substr($infoCor["data_controle"], 0, 10));
+            $dataControle = $pew_functions->inverter_data(substr($infoCor["data_controle"], 0, 10));
             $status = $infoCor["status"] == 1 ? "Ativa" : "Desativada";
             
             echo "<h2 class='titulo-edita'>Informações da cor</h2>";

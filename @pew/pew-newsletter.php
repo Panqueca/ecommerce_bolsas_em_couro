@@ -1,15 +1,13 @@
 <?php
-session_start();
-require_once "pew-system-config.php";
-$name_session_user = $pew_session->name_user;
-$name_session_pass = $pew_session->name_pass;
-$name_session_nivel = $pew_session->name_nivel;
-$name_session_empresa = $pew_session->name_empresa;
-if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) && isset($_SESSION[$name_session_nivel]) && isset($_SESSION[$name_session_empresa])){
-    $efectus_empresa_administrativo = $_SESSION[$name_session_empresa];
-    $efectus_user_administrativo = $_SESSION[$name_session_user];
-    $efectus_nivel_administrativo = $_SESSION[$name_session_nivel];
-    $navigation_title = "Newsletter - $efectus_empresa_administrativo";
+    session_start();
+    
+    $thisPageURL = substr($_SERVER["REQUEST_URI"], strpos($_SERVER["REQUEST_URI"], '@pew'));
+    $_POST["next_page"] = str_replace("@pew/", "", $thisPageURL);
+    
+    require_once "@link-important-functions.php";
+    require_once "@valida-sessao.php";
+
+    $navigation_title = "Newsletter - " . $pew_session->empresa;
     $page_title = "Gerenciamento de e-mails cadastrados";
 ?>
 <!DOCTYPE html>
@@ -117,7 +115,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                         $id = $newsletter["id"];
                         $nome = $newsletter["nome"];
                         $email = $newsletter["email"];
-                        $data = inverterData(substr($newsletter["data"], 0, 10));
+                        $data = $pew_functions->inverter_data(substr($newsletter["data"], 0, 10));
                         echo "<tr><td>$data</td>";
                         echo "<td>$nome</td>";
                         echo "<td>$email</td>";
@@ -134,9 +132,3 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
         </section>
     </body>
 </html>
-<?php
-    mysqli_close($conexao);
-}else{
-    header("location: index.php?msg=Área Restrita. É necessário fazer login para continuar.");
-}
-?>

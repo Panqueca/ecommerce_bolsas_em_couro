@@ -1,15 +1,13 @@
 <?php
-session_start();
-require_once "pew-system-config.php";
-$name_session_user = $pew_session->name_user;
-$name_session_pass = $pew_session->name_pass;
-$name_session_nivel = $pew_session->name_nivel;
-$name_session_empresa = $pew_session->name_empresa;
-if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) && isset($_SESSION[$name_session_nivel]) && isset($_SESSION[$name_session_empresa])){
-    $efectus_empresa_administrativo = $_SESSION[$name_session_empresa];
-    $efectus_user_administrativo = $_SESSION[$name_session_user];
-    $efectus_nivel_administrativo = $_SESSION[$name_session_nivel];
-    $navigation_title = "Editar produto - $efectus_empresa_administrativo";
+    session_start();
+    
+    $thisPageURL = substr($_SERVER["REQUEST_URI"], strpos($_SERVER["REQUEST_URI"], '@pew'));
+    $_POST["next_page"] = str_replace("@pew/", "", $thisPageURL);
+    
+    require_once "@link-important-functions.php";
+    require_once "@valida-sessao.php";
+
+    $navigation_title = "Editar produto - " . $pew_session->empresa;
     $page_title = "Editando produto";
 ?>
 <!DOCTYPE html>
@@ -770,7 +768,7 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             /*END SET TABLES*/
 
             /*DEFAULT VARS*/
-            $idProduto = isset($_GET["id_produto"]) ? pew_string_format($_GET["id_produto"]) : 0;
+            $idProduto = isset($_GET["id_produto"]) ? (int)$_GET["id_produto"] : 0;
             $dirImagensProdutos = "../imagens/produtos";
             /*END DEFAULT VARS*/
 
@@ -783,9 +781,9 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
                 $skuProduto = $infoProduto["sku"];
                 $nomeProduto = $infoProduto["nome"];
                 $precoProduto = $infoProduto["preco"];
-                $precoProduto = pew_number_format($precoProduto);
+                $precoProduto = $pew_functions->custom_number_format($precoProduto);
                 $precoPromocaoProduto = $infoProduto["preco_promocao"];
-                $precoPromocaoProduto = pew_number_format($precoPromocaoProduto);
+                $precoPromocaoProduto = $pew_functions->custom_number_format($precoPromocaoProduto);
                 $promocaoAtiva = $infoProduto["promocao_ativa"];
                 $marcaProduto = $infoProduto["marca"];
                 $idCorProduto = $infoProduto["id_cor"];
@@ -1233,7 +1231,4 @@ if(isset($_SESSION[$name_session_user]) && isset($_SESSION[$name_session_pass]) 
             }else{
                 echo "<h3 align='center'>Nenhum produto foi encontrado. <a href='pew-produtos.php' class='link-padrao'>Voltar.</a></h3>";
             }
-}else{
-    header("location: index.php?msg=Área Restrita. É necessário fazer login para continuar.");
-}
 ?>
