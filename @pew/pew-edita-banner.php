@@ -3,6 +3,7 @@
     
     $thisPageURL = substr($_SERVER["REQUEST_URI"], strpos($_SERVER["REQUEST_URI"], '@pew'));
     $_POST["next_page"] = str_replace("@pew/", "", $thisPageURL);
+    $_POST["invalid_levels"] = array(2);
     
     require_once "@link-important-functions.php";
     require_once "@valida-sessao.php";
@@ -19,12 +20,10 @@
         <meta name="description" content="Acesso Restrito. Efectus Web.">
         <meta name="author" content="Efectus Web">
         <title><?php echo $navigation_title; ?></title>
-        <!--LINKS e JS PADRAO-->
-        <link type="image/png" rel="icon" href="imagens/sistema/identidadeVisual/icone-efectus-web.png">
-        <link type="text/css" rel="stylesheet" href="css/estilo.css">
-        <script type="text/javascript" src="js/jquery.min.js"></script>
-        <script type="text/javascript" src="js/standard.js"></script>
-        <!--FIM LINKS e JS PADRAO-->
+        <?php
+            require_once "@link-standard-styles.php";
+            require_once "@link-standard-scripts.php";
+        ?>
         <script>
             $(document).ready(function(){
                 $(".btn-excluir").each(function(){
@@ -43,11 +42,13 @@
     </head>
     <body>
     <?php
-        /*REQUIRE PADRAO*/
-        require_once "header-efectus-web.php";
-        require_once "pew-interatividade.php";
-        /*FIM PADRAO*/
+        // STANDARD REQUIRE
+        require_once "@include-body.php";
+        if(isset($block_level) && $block_level == true){
+            $pew_session->block_level();
+        }
     ?>
+    <!--PAGE CONTENT-->
     <h1 class="titulos"><?php echo $page_title; ?><a href="pew-banners.php" class="btn-voltar"><i class="fa fa-arrow-left" aria-hidden="true"></i> Voltar</a></h1>
 <?php
     $tabela_banners = $pew_db->tabela_banners;

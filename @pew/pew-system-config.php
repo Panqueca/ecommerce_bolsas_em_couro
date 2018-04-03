@@ -26,8 +26,8 @@
             }
         }
     }
-    /*$pew_db = new Pew_Data_Base("www.efectusdigital.com.br", "efectus_rogerio", "efectusRogerio@123", "efectus_bolsasemcouro", "pew_banners", "pew_categorias", "pew_subcategorias", "pew_contatos", "pew_usuarios_administrativos");*/
-    $pew_db = new Pew_Data_Base("localhost", "root", "", "pew_bolsasemcouro", "pew_banners", "pew_categorias", "pew_subcategorias", "pew_contatos", "pew_usuarios_administrativos");
+    $pew_db = new Pew_Data_Base("www.efectusdigital.com.br", "efectus_rogerio", "efectusRogerio@123", "efectus_bolsasemcouro", "pew_banners", "pew_categorias", "pew_subcategorias", "pew_contatos", "pew_usuarios_administrativos");
+    /*$pew_db = new Pew_Data_Base("localhost", "root", "", "pew_bolsasemcouro", "pew_banners", "pew_categorias", "pew_subcategorias", "pew_contatos", "pew_usuarios_administrativos");*/
     $conexao = mysqli_connect($pew_db->db_host, $pew_db->db_user, $pew_db->db_pass, $pew_db->db_name);
     /*CLASSE PRINCIPAL DO SISTEMA*/
 
@@ -138,6 +138,11 @@
                 }else{
                     return false;
                 }
+            }
+            
+            function block_level(){
+                echo "<h3 align=center style='padding-top: 150px;'><i class='fas fa-exclamation-triangle'></i><br>Acesso restrito<br>Você não pode acessar esta página.<br><br> Qualquer dúvida entre em contato com a <a href='https://www.efectusdigital.com.br' target='_blank' class='link-padrao'>Efectus Digital</a></h3>";
+                die();
             }
         }
     }

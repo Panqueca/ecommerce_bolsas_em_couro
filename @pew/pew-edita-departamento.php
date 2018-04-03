@@ -39,7 +39,7 @@
             $titulo = $departamento["departamento"];
             $descricao = $departamento["descricao"];
             $posicao = $departamento["posicao"];
-            $dataControle = pew_inverter_data(substr($departamento["data_controle"], 0, 10));
+            $dataControle = $pew_functions->inverter_data(substr($departamento["data_controle"], 0, 10));
             $status = $departamento["status"] == 1 ? "Ativo" : "Desativado";
             echo "<h2 class=titulo-edita>Informações do departamento</h2>";
             echo "<form id='formUpdateDepartamento' method='post' action='pew-update-departamento.php'>";

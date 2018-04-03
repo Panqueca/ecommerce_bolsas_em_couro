@@ -3,6 +3,7 @@
     
     $thisPageURL = substr($_SERVER["REQUEST_URI"], strpos($_SERVER["REQUEST_URI"], '@pew'));
     $_POST["next_page"] = str_replace("@pew/", "", $thisPageURL);
+    $_POST["invalid_levels"] = array(1);
     
     require_once "@link-important-functions.php";
     require_once "@valida-sessao.php";
@@ -19,17 +20,11 @@
         <meta name="description" content="Acesso Restrito. Efectus Web.">
         <meta name="author" content="Efectus Web">
         <title><?php echo $navigation_title; ?></title>
-        <!--LINKS e JS PADRAO-->
-        <link type="image/png" rel="icon" href="imagens/sistema/identidadeVisual/icone-efectus-web.png">
-        <link type="text/css" rel="stylesheet" href="css/estilo.css">
-        <script type="text/javascript" src="js/jquery.min.js"></script>
-        <script type="text/javascript" src="js/standard.js"></script>
-        <script type="text/javascript" src="js/pew.js"></script>
-        <!--FIM LINKS e JS PADRAO-->
-        <!--THIS PAGE LINKS-->
+        <?php
+            require_once "@link-standard-styles.php";
+            require_once "@link-standard-scripts.php";
+        ?>
         <script type="text/javascript" src="js/produtos.js"></script>
-        <script type="text/javascript" src="custom-textarea/ckeditor.js"></script>
-        <!--FIM THIS PAGE LINKS-->
         <script>
             var selecionandoCategoria = false;
             function checkSubcategorias(idSubcategoria){
@@ -619,11 +614,13 @@
     </head>
     <body>
         <?php
-            require_once "pew-system-config.php";
-            require_once "@classe-system-functions.php";
+            // STANDARD REQUIRE
+            require_once "@include-body.php";
+            if(isset($block_level) && $block_level == true){
+                $pew_session->block_level();
+            }
+        
             require_once "../@classe-produtos.php";
-            require_once "header-efectus-web.php";
-            require_once "pew-interatividade.php";
 
             /*SET TABLES*/
             $tabela_produtos = $pew_custom_db->tabela_produtos;
@@ -745,6 +742,7 @@
                     $selectedProdutosRelacionados = array();
                 }
         ?>
+        <!--PAGE CONTENT-->
         <h1 class="titulos"><?php echo $page_title; ?><a href="pew-produtos.php" class="btn-voltar"><i class="fa fa-arrow-left" aria-hidden="true"></i> Voltar</a></h1>
         <form name="busca_produto"><!--ESTA AQUI APENAS PARA NÃO BUGAR QUANDO DER ENTER NO INPUT BUSCA PRODUTO E TAMBÉM PARA FUNCIONAR O TRIGGER DA TECLA ENTER--></form>
         <section class="conteudo-painel">

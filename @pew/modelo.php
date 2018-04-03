@@ -27,9 +27,7 @@
     <body>
         <?php
             /*REQUIRE PADRAO*/
-            require_once "@link-body-scripts.php";
-            require_once "header-efectus-web.php";
-            require_once "pew-interatividade.php";
+            require_once "@include-body.php";
             /*FIM PADRAO*/
         ?>
         <h1 class="titulos"><?php echo $page_title; ?></h1>

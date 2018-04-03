@@ -1,4 +1,5 @@
 <?php
+    require_once "@pew/pew-system-config.php";
     $globalVars = array(
         "conexao" => $conexao,
         "tabela_categorias" => $pew_db->tabela_categorias,
