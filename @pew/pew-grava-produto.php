@@ -31,9 +31,9 @@
         $marcaProduto = addslashes($_POST["marca"]);
         $idCor = (int)$_POST["id_cor"];
         $precoProduto = $_POST["preco"];
-        $precoProduto = pew_number_format($precoProduto);
+        $precoProduto = $pew_functions->custom_number_format($precoProduto);
         $precoPromocaoProduto = $_POST["preco_promocao"];
-        $precoPromocaoProduto = pew_number_format($precoPromocaoProduto);
+        $precoPromocaoProduto = $pew_functions->custom_number_format($precoPromocaoProduto);
         $promocaoAtiva = intval($_POST["promocao_ativa"]) == 1 ? 1 : 0;
         $estoqueProduto = (int)($_POST["estoque"]) != "" ? (int)$_POST["estoque"] : 0;
         $estoqueBaixoProduto = (int)($_POST["estoque_baixo"]) != "" ? (int)$_POST["estoque_baixo"] : 1;
