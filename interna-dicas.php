@@ -2,7 +2,7 @@
     session_start();
     $nomeEmpresa = "Bolsas em Couro";
     $descricaoPagina = "DESCRIÇÃO MODELO ATUALIZAR...";
-    $tituloPagina = "MUDAR TITULO - $nomeEmpresa";
+    $tituloPagina = "Titulo da dica - $nomeEmpresa";
 ?>
 <!DOCTYPE html>
 <html>
