@@ -28,6 +28,11 @@
                 margin: 0 auto;
                 min-height: 300px;
             }
+            .main-content .display{
+                width: 75vw;
+                margin: 10vh auto;
+                color: #ccc;
+            }
         </style>
         <!--END PAGE CSS-->
         <!--PAGE JS-->
@@ -48,7 +53,29 @@
         ?>
         <!--THIS PAGE CONTENT-->
         <div class="main-content">
-
+            <!--GET = titulo, ref-->
+            <?php
+                $getNome = isset($_GET["titulo"]) ? $_GET["titulo"] : "Produto não encontrado";
+                $getToken = isset($_GET["token"]) ? $_GET["token"] : "Produto não encontrado";
+                
+            ?>
+            <div class="box-breadcrumb">
+                <img title='' src='' alt=''>
+                <div class='breadcrumb'>
+                    <h4>Página inicial > Dicas > Cuidados com o Couro</h4>
+                    <h1>CUIDADOS COM O COURO</h1>
+                    <h2>subtitulo</h2>
+                </div>
+            </div>
+            <div class='display'>
+                <article class="descricao">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris aliquet malesuada feugiat. Curabitur fermentum bibendum nulla, non dictum ipsum tincidunt non. Quisque convallis pharetra tempor. Donec id pretium leo. Pellentesque luctus massa non elit viverra pellentesque. Cras vitae neque molestie, rhoncus ipsum sit amet, lobortis dui. Fusce in urna sem. Vivamus vehicula dignissim augue et scelerisque. Etiam quam nisi, molestie ac dolor in, tincidunt tincidunt arcu. Praesent sed justo finibus, fringilla velit quis, porta erat. Donec blandit metus ut arcu iaculis iaculis. Cras nec dolor fringilla justo ullamcorper auctor. Aliquam eget pretium velit. Morbi urna justo, pulvinar id lobortis in, aliquet placerat orci.<br><br>
+                    
+                    Etiam nisi turpis, eleifend nec tellus id, efficitur pellentesque dolor. Proin vitae massa a augue sagittis vulputate. Duis vel fringilla magna, sit amet vestibulum enim. Fusce laoreet accumsan nisl eu sagittis. Morbi hendrerit sapien eget efficitur imperdiet. Aenean vitae nisl id est placerat congue a et nisi. Suspendisse vitae quam ipsum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Suspendisse eu risus lacus. Ut tristique libero eget est dictum, commodo malesuada orci elementum. Proin molestie eu mi in tempus.<br><br>
+                    
+                    In hac habitasse platea dictumst. Cras augue nisl, cursus mattis mattis id, lacinia nec augue. Integer nec augue non metus interdum rhoncus. Proin non imperdiet ante. Sed mollis, justo ac dapibus auctor, tellus mi congue nisl, nec commodo ex justo ut eros. Etiam fringilla porta dolor vitae gravida. Nulla facilisi. Nam dui eros, mattis ut turpis at, eleifend accumsan odio. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed id ultrices erat, vehicula viverra ante. Etiam sit amet dignissim tellus, ac laoreet ligula. Aenean fringilla sodales lorem, ac maximus est hendrerit in.
+                </article>
+            </div>
         </div>
         <!--END THIS PAGE CONTENT-->
         <?php
