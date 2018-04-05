@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 05-Abr-2018 às 19:13
+-- Generation Time: 05-Abr-2018 às 19:21
 -- Versão do servidor: 10.1.25-MariaDB
 -- PHP Version: 7.1.7
 
@@ -254,6 +254,25 @@ INSERT INTO `pew_departamentos_produtos` (`id`, `id_produto`, `id_departamento`)
 (94, 9, 13),
 (90, 8, 14),
 (93, 5, 14);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `pew_dicas`
+--
+
+CREATE TABLE `pew_dicas` (
+  `id` int(11) NOT NULL,
+  `titulo` varchar(200) DEFAULT NULL,
+  `subtitulo` varchar(255) NOT NULL,
+  `descricao_curta` varchar(255) DEFAULT NULL,
+  `descricao_longa` text NOT NULL,
+  `imagem` varchar(255) DEFAULT NULL,
+  `thumb` varchar(255) DEFAULT NULL,
+  `video` varchar(255) DEFAULT NULL,
+  `data_controle` datetime DEFAULT NULL,
+  `status` tinyint(4) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -668,6 +687,12 @@ ALTER TABLE `pew_departamentos_produtos`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `pew_dicas`
+--
+ALTER TABLE `pew_dicas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `pew_enderecos`
 --
 ALTER TABLE `pew_enderecos`
@@ -812,6 +837,11 @@ ALTER TABLE `pew_departamentos`
 --
 ALTER TABLE `pew_departamentos_produtos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+--
+-- AUTO_INCREMENT for table `pew_dicas`
+--
+ALTER TABLE `pew_dicas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `pew_enderecos`
 --
