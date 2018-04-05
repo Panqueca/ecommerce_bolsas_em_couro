@@ -23,10 +23,55 @@
         <!--END DEFAULT LINKS-->
         <!--PAGE CSS-->
         <style>
-            .main-content{
+            .background-loja{
                 width: 100%;
+            }
+            .background-loja img{
+                width: 100%;
+            }
+            .main-content{
+                position: relative;
+                top: -200px;
+                width: 90%;
                 margin: 0 auto;
+                margin-bottom: -150px;
                 min-height: 300px;
+                background-color: #fff;
+                overflow: hidden;
+            }
+			.main-content .display-container{
+				display: flex;
+				width: 100%;
+				background-color: #000;
+			}
+			.main-content .display-container .box-item{
+				flex: 1;
+				height: 400px;
+				margin: 0 10px 20px 10px;
+				background-color: #fff;
+				-webkit-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.75);
+				-moz-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.75);
+				box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.75);
+			}
+            @media screen and (max-width: 1100px){
+                .main-content{
+                    top: -150px;
+                    margin-bottom: -100px;
+                }
+                @media screen and (max-width: 720px){
+                    .main-content{
+                        top: -100px;
+                        margin-bottom: -50px;
+                    }
+                    @media screen and (max-width: 480px){
+                         .main-content{
+                            width: 100%;
+                            padding: 0px;
+                            top: 0px;
+                            margin: 0 auto;
+                        }
+                    }
+                }
             }
         </style>
         <!--END PAGE CSS-->
@@ -47,8 +92,18 @@
             require_once "@include-interatividade.php";
         ?>
         <!--THIS PAGE CONTENT-->
+        <div class="background-loja">
+            <img src="imagens/departamentos/linha-feminina.png">
+        </div>
         <div class="main-content">
-
+        	<div class="display-cont">
+        		<div class="box-cont">
+        			<div class="item-thumb"></div>
+        			<div class="item-desc"></div>
+        		</div>
+        		<div class="box-cont"></div>
+        		<div class="box-cont"></div>
+        	</div>
         </div>
         <!--END THIS PAGE CONTENT-->
         <?php
