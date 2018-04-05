@@ -39,19 +39,65 @@
                 background-color: #fff;
                 overflow: hidden;
             }
-			.main-content .display-container{
+			.main-content .display-cont{
 				display: flex;
-				width: 100%;
-				background-color: #000;
+				justify-content: center;
+				flex-flow: row wrap;
+				margin-bottom: 20px;
 			}
-			.main-content .display-container .box-item{
-				flex: 1;
-				height: 400px;
-				margin: 0 10px 20px 10px;
-				background-color: #fff;
-				-webkit-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.75);
-				-moz-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.75);
-				box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.75);
+			.main-content .display-cont .box-cont{
+				flex: 0 0 25%;
+				margin: 40px 10px 0px 10px;
+				transition: .2s;
+			}
+			.main-content .display-cont .box-cont .item-thumb{
+				transition: .3s;
+			}
+			.main-content .display-cont .box-cont .item-thumb img{
+				display: block;
+				margin: 0px;
+			}
+			.main-content .display-cont .box-cont .item-thumb:hover{
+				filter: brightness(.8);
+			}
+			.main-content .display-cont .box-cont:hover{
+				transform: scale(1.05);
+			}
+			.main-content .display-cont .box-cont .item-desc{
+				-webkit-box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, .1);
+				-moz-box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, .1);
+				box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, .1);
+				height: 168px;
+			}
+			.main-content .display-cont .box-cont .item-int-desc{
+				width: 90%;
+				margin: 0 auto;
+			}
+			.main-content .display-cont .box-cont .item-desc .item-int-desc a{
+				text-decoration: none;
+				color: #555;
+			}
+			.main-content .display-cont .box-cont .item-desc .item-int-desc a .titulo{
+				font-size: 20px;
+				font-weight: normal;
+				margin: 0;
+				padding-top: 10px;
+			}
+			.main-content .display-cont .box-cont .item-desc .item-int-desc a:hover{
+				color: #111;
+			}
+			.main-content .display-cont .box-cont .item-desc .item-int-desc p{
+				font-size: 14px;
+			}
+			.main-content .display-cont .box-cont .item-desc .item-int-desc .btn-dicas{
+				background-color: #eee;
+				color: #999;
+				padding: 3px 6px 3px;
+				font-size: 12px;
+			}
+			.main-content .display-cont .box-cont .item-desc .item-int-desc .btn-dicas:hover{
+				color: #111;
+				background-color: #ddd;
 			}
             @media screen and (max-width: 1100px){
                 .main-content{
@@ -93,16 +139,27 @@
         ?>
         <!--THIS PAGE CONTENT-->
         <div class="background-loja">
-            <img src="imagens/departamentos/linha-feminina.png">
+            <img src="imagens/departamentos/background-dicas.png">
         </div>
         <div class="main-content">
         	<div class="display-cont">
-        		<div class="box-cont">
-        			<div class="item-thumb"></div>
-        			<div class="item-desc"></div>
-        		</div>
-        		<div class="box-cont"></div>
-        		<div class="box-cont"></div>
+        		<?php
+        		echo "<div class='box-cont'>";
+        			echo "<div class='item-thumb'>";
+        				echo "<a href='#'><img src='imagens/Thumbizinha.png' width='100%'></a>";
+        			echo "</div>";
+        			echo "<div class='item-desc'>";
+        				echo "<div class='item-int-desc'>";
+							$max = 155;
+							$descricao = "Dica para limpar sua bolsa</h2></a>
+							<p>Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica e de impressos, e vem sendo utilizado desde o século XVI, quando um impressor";
+							$descricao = substr($descricao, 0, $max)."...";
+							echo "<a href='#'><h2 class='titulo'>$descricao</p>";
+							echo "<a href='#' class='btn-dicas'>Continuar lendo</a>";
+        				echo "</div>";
+        			echo "</div>";
+        		echo "</div>";
+        		?>
         	</div>
         </div>
         <!--END THIS PAGE CONTENT-->
