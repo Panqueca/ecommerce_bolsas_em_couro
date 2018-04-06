@@ -22,7 +22,7 @@ if($calcular){
     $peso = $_POST["peso"];
     $valorMercadoria = $_POST["valor_mercadoria"] > 0 ? $_POST["valor_mercadoria"] : '0';
 
-    $cepEnvio = "80230040";
+    $cepEnvio = "80710110";
 
     $data['nCdEmpresa'] = '';
     $data['sDsSenha'] = '';

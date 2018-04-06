@@ -257,3 +257,12 @@ function input_mask(objInput, maskPattern){
         });
     });
 }
+
+function isJson(str){
+    try{
+        JSON.parse(str);
+    }catch(e){
+        return false;
+    }
+    return true;
+}

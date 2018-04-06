@@ -353,6 +353,7 @@
                     });
                 });
                 
+                /*CALCULO DE FRETE*/
                 var inputFrete = $(".input-frete");
                 var botaoCalculoFrete = $(".botao-calculo-frete");
                 var displayResultadoFrete = $(".resultado-frete");
@@ -362,34 +363,51 @@
                 var infoCalculoFrete = $(".display-info-calculo-frete");
                 
                 var jsonProduto = new Array();
-                var idProduto = infoCalculoFrete.children("freteIdProduto");
-                var tituloProduto = infoCalculoFrete.children("freteTituloProduto");
-                var precoProduto = infoCalculoFrete.children("fretePrecoProduto");
-                var comprimentoProduto = infoCalculoFrete.children("freteComprimentoProduto");
-                var larguraProduto = infoCalculoFrete.children("freteLarguraProduto");
-                var alturaProduto = infoCalculoFrete.children("freteAlturaProduto");
-                var pesoProduto = infoCalculoFrete.children("fretePesoProduto");
+                
+                var idProduto = infoCalculoFrete.children("#freteIdProduto").val();
+                var tituloProduto = infoCalculoFrete.children("#freteTituloProduto").val();
+                var precoProduto = infoCalculoFrete.children("#fretePrecoProduto").val();
+                var comprimentoProduto = infoCalculoFrete.children("#freteComprimentoProduto").val();
+                var larguraProduto = infoCalculoFrete.children("#freteLarguraProduto").val();
+                var alturaProduto = infoCalculoFrete.children("#freteAlturaProduto").val();
+                var pesoProduto = infoCalculoFrete.children("#fretePesoProduto").val();
                 jsonProduto[0] = {"id": idProduto, "titulo": tituloProduto, "preco": precoProduto, "comprimento": comprimentoProduto, "largura": larguraProduto, "altura": alturaProduto, "peso": pesoProduto};
-                
-                
+                                
                 input_mask(".input-frete", "99999-999");
                 
                 botaoCalculoFrete.off().on("click", function(){
                     if(!calculandoFrete){
                         var urlFrete = "frete-correios/@trigger-calculo.php";
                         var cepDestino = inputFrete.val();
-                        var codigosServico = ["41106"];
+                        var codigosServico = ["41106", "40010", "40215", "40290"];
                         if(cepDestino.length == 9){
                             
                             botaoCalculoFrete.html(iconLoading);
                             calculandoFrete = true;
-                            var mensagemFinal = null;
+                            var mensagemFinal = [];
                             var ctrlExec = 0;
+                            
+                            function get_titulo_servico(cod){
+                                switch(cod){
+                                    case "40010":
+                                        var titulo = "SEDEX";
+                                        break;
+                                    case "40215":
+                                        var titulo = "SEDEX 10";
+                                        break;
+                                    case "40290":
+                                        var titulo = "SEDEX Hoje";
+                                        break;
+                                    default:
+                                        var titulo = "PAC";
+                                }
+                                return titulo;
+                            }
                             codigosServico.forEach(function(codigo){
                                 var dados = {
                                     cep_destino: cepDestino,
                                     codigo_correios: codigo,
-                                    produtos: JSON.stringify(jsonProduto[0]),
+                                    produtos: jsonProduto,
                                 }
                                 $.ajax({
                                     type: "POST",
@@ -401,25 +419,36 @@
                                         displayResultadoFrete.html("Ocorreu um erro ao calcular o frete. Recarregue a página e tente novamente.");
                                     },
                                     success: function(resultado){
-                                        botaoCalculoFrete.html(iconFrete);
-                                        switch(codigo){
-                                            case "41106":
-                                                var tituloServico = "PAC";
-                                                break;
-                                        }
-                                        var msgPadrao = tituloServico + ": <b>R$" + resultado + "<b>";
-                                        mensagemFinal = mensagemFinal == null ? msgPadrao : "<br>" + msgPadrao;
                                         
-                                        if(resultado == false){
-                                            displayResultadoFrete.html(mensagemFinal);
+                                        var tituloServico = get_titulo_servico(codigo);
+                                        
+                                        if(resultado != false){
+                                            if(isJson(resultado) == true && JSON.parse(resultado) != false){
+                                                var jsonData = JSON.parse(resultado);
+                                                var valor = jsonData.valor.toFixed(2);
+                                                var prazo = jsonData.prazo;
+                                                var msgPadrao = tituloServico + ": <b>R$" + valor + "</b> em até <b>" + prazo + "</b>";
+                                                mensagemFinal[ctrlExec] = "<br>" + msgPadrao + "<br>";
+                                            }else{
+                                                mensagemFinal[ctrlExec] = "<br>" + tituloServico + ": Localidade insdisponível<br>";
+                                            }
                                         }else{
                                             notificacaoPadrao("Ocorreu um erro ao calcular o frete. Recarregue a página e tente novamente.");
                                         }
-                                        alert(resultado)
-                                        
                                         ctrlExec++;
-                                        if(ctrlExec == codigosServico.length){
+                                        
+                                        if(ctrlExec == codigosServico.length && mensagemFinal.length > 0){
+                                            botaoCalculoFrete.html(iconFrete);
                                             calculandoFrete = false;
+                                            var mensagem = "";
+                                            mensagemFinal.forEach(function(msg){
+                                                if(msg == "") msg = "<br>" + get_titulo_servico(codigo) + ": Localidade indisponível<br>";
+                                                mensagem += msg;
+                                            });
+                                            displayResultadoFrete.html(mensagem);
+                                        }else if(mensagemFinal.length == 0){
+                                            var msg = "<br>" + get_titulo_servico(codigo) + ": Localidade indisponível<br>";
+                                            displayResultadoFrete.html(msg);
                                         }
                                     }
                                 });
@@ -431,6 +460,7 @@
                         }
                     }
                 });
+                /*END CALCULO DE FRETE*/
             });
         </script>
         <!--END PAGE JS-->
