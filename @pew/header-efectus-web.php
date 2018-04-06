@@ -277,41 +277,46 @@
                 $linksPrincipais[1]["sub_link"][5]["titulo_sub_link"] = "<i class='fas fa-chart-pie'></i> Relatórios";
                 $linksPrincipais[1]["sub_link"][5]["url_sub_link"] = "pew-produtos-relatorios.php";
                 /*Terceiro Link*/
-                $linksPrincipais[2]["titulo_link"] = "Vitrine";
-                $linksPrincipais[2]["url_link"] = "pew-categorias-vitrine.php";
-                $linksPrincipais[2]["sub_link"][0]["titulo_sub_link"] = "<i class='fa fa-tag' aria-hidden='true'></i> Categorias da vitrine";
-                $linksPrincipais[2]["sub_link"][0]["url_sub_link"] = "pew-categorias-vitrine.php";
-                $linksPrincipais[2]["sub_link"][1]["titulo_sub_link"] = "<i class='fa fa-star' aria-hidden='true'></i> Categorias destaque";
-                $linksPrincipais[2]["sub_link"][1]["url_sub_link"] = "pew-categoria-destaque.php";
+                $linksPrincipais[2]["titulo_link"] = "Dicas";
+                $linksPrincipais[2]["url_link"] = "pew-dicas.php";
+                $linksPrincipais[2]["sub_link"][0]["titulo_sub_link"] = "<i class='fas fa-info-circle' aria-hidden='true'></i> Listar Dicas";
+                $linksPrincipais[2]["sub_link"][0]["url_sub_link"] = "pew-dicas.php";
                 /*Quarto Link*/
-                $linksPrincipais[3]["titulo_link"] = "Orçamentos";
-                $linksPrincipais[3]["url_link"] = "pew-orcamentos.php";
-                $linksPrincipais[3]["sub_link"][0]["titulo_sub_link"] = "<i class='fas fa-dollar-sign'></i> Pedidos de orçamento";
-                $linksPrincipais[3]["sub_link"][0]["url_sub_link"] = "pew-orcamentos.php";
-                $linksPrincipais[3]["sub_link"][1]["titulo_sub_link"] = "<i class='fa fa-plus' aria-hidden='true'></i> Cadastrar orçamento";
-                $linksPrincipais[3]["sub_link"][1]["url_sub_link"] = "pew-cadastra-orcamento.php";
-                $linksPrincipais[3]["sub_link"][2]["titulo_sub_link"] = "<i class='fa fa-cogs' aria-hidden='true'></i> Opções orçamentos";
-                $linksPrincipais[3]["sub_link"][2]["url_sub_link"] = "pew-config-orcamentos.php";
+                $linksPrincipais[3]["titulo_link"] = "Vitrine";
+                $linksPrincipais[3]["url_link"] = "pew-categorias-vitrine.php";
+                $linksPrincipais[3]["sub_link"][0]["titulo_sub_link"] = "<i class='fa fa-tag' aria-hidden='true'></i> Categorias da vitrine";
+                $linksPrincipais[3]["sub_link"][0]["url_sub_link"] = "pew-categorias-vitrine.php";
+                $linksPrincipais[3]["sub_link"][1]["titulo_sub_link"] = "<i class='fa fa-star' aria-hidden='true'></i> Categorias destaque";
+                $linksPrincipais[3]["sub_link"][1]["url_sub_link"] = "pew-categoria-destaque.php";
                 /*Quinto Link*/
-                $linksPrincipais[4]["titulo_link"] = "Mensagens";
-                $linksPrincipais[4]["url_link"] = "pew-newsletter.php";
-                $linksPrincipais[4]["sub_link"][0]["titulo_sub_link"] = "<i class='far fa-envelope'></i> E-mails newsletter";
-                $linksPrincipais[4]["sub_link"][0]["url_sub_link"] = "pew-newsletter.php";
+                $linksPrincipais[4]["titulo_link"] = "Orçamentos";
+                $linksPrincipais[4]["url_link"] = "pew-orcamentos.php";
+                $linksPrincipais[4]["sub_link"][0]["titulo_sub_link"] = "<i class='fas fa-dollar-sign'></i> Pedidos de orçamento";
+                $linksPrincipais[4]["sub_link"][0]["url_sub_link"] = "pew-orcamentos.php";
+                $linksPrincipais[4]["sub_link"][1]["titulo_sub_link"] = "<i class='fa fa-plus' aria-hidden='true'></i> Cadastrar orçamento";
+                $linksPrincipais[4]["sub_link"][1]["url_sub_link"] = "pew-cadastra-orcamento.php";
+                $linksPrincipais[4]["sub_link"][2]["titulo_sub_link"] = "<i class='fa fa-cogs' aria-hidden='true'></i> Opções orçamentos";
+                $linksPrincipais[4]["sub_link"][2]["url_sub_link"] = "pew-config-orcamentos.php";
                 /*Sexto Link*/
-                $linksPrincipais[5]["titulo_link"] = "Categorias";
-                $linksPrincipais[5]["url_link"] = "pew-categorias.php";
-                $linksPrincipais[5]["sub_link"][0]["titulo_sub_link"] = "<i class='fa fa-tags' aria-hidden='true'></i> Listar Categorias";
-                $linksPrincipais[5]["sub_link"][0]["url_sub_link"] = "pew-categorias.php";
-                $linksPrincipais[5]["sub_link"][1]["url_sub_link"] = "pew-departamentos.php";
-                $linksPrincipais[5]["sub_link"][1]["titulo_sub_link"] = "<i class='fa fa-th-list' aria-hidden='true'></i> Departamentos";
-                $linksPrincipais[5]["sub_link"][1]["url_sub_link"] = "pew-departamentos.php";
+                $linksPrincipais[5]["titulo_link"] = "Mensagens";
+                $linksPrincipais[5]["url_link"] = "pew-newsletter.php";
+                $linksPrincipais[5]["sub_link"][0]["titulo_sub_link"] = "<i class='far fa-envelope'></i> E-mails newsletter";
+                $linksPrincipais[5]["sub_link"][0]["url_sub_link"] = "pew-newsletter.php";
                 /*Setimo Link*/
-                $linksPrincipais[6]["titulo_link"] = "Usuários";
-                $linksPrincipais[6]["url_link"] = "pew-usuarios.php";
-                $linksPrincipais[6]["sub_link"][0]["titulo_sub_link"] = "<i class='fa fa-users' aria-hidden='true'></i> Listar Usuários";
-                $linksPrincipais[6]["sub_link"][0]["url_sub_link"] = "pew-usuarios.php";
-                $linksPrincipais[6]["sub_link"][1]["titulo_sub_link"] = "<i class='fa fa-plus' aria-hidden='true'></i> Cadastrar novo";
-                $linksPrincipais[6]["sub_link"][1]["url_sub_link"] = "pew-cadastra-usuario.php";
+                $linksPrincipais[6]["titulo_link"] = "Categorias";
+                $linksPrincipais[6]["url_link"] = "pew-categorias.php";
+                $linksPrincipais[6]["sub_link"][0]["titulo_sub_link"] = "<i class='fa fa-tags' aria-hidden='true'></i> Listar Categorias";
+                $linksPrincipais[6]["sub_link"][0]["url_sub_link"] = "pew-categorias.php";
+                $linksPrincipais[6]["sub_link"][1]["url_sub_link"] = "pew-departamentos.php";
+                $linksPrincipais[6]["sub_link"][1]["titulo_sub_link"] = "<i class='fa fa-th-list' aria-hidden='true'></i> Departamentos";
+                $linksPrincipais[6]["sub_link"][1]["url_sub_link"] = "pew-departamentos.php";
+                /*Oitavo Link*/
+                $linksPrincipais[7]["titulo_link"] = "Usuários";
+                $linksPrincipais[7]["url_link"] = "pew-usuarios.php";
+                $linksPrincipais[7]["sub_link"][0]["titulo_sub_link"] = "<i class='fa fa-users' aria-hidden='true'></i> Listar Usuários";
+                $linksPrincipais[7]["sub_link"][0]["url_sub_link"] = "pew-usuarios.php";
+                $linksPrincipais[7]["sub_link"][1]["titulo_sub_link"] = "<i class='fa fa-plus' aria-hidden='true'></i> Cadastrar novo";
+                $linksPrincipais[7]["sub_link"][1]["url_sub_link"] = "pew-cadastra-usuario.php";
 
                 $quantidadeLinks = count($linksPrincipais);
                 if($quantidadeLinks > 0){
