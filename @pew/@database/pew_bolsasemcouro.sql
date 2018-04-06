@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 02-Abr-2018 às 16:01
+-- Generation Time: 05-Abr-2018 às 19:21
 -- Versão do servidor: 10.1.25-MariaDB
 -- PHP Version: 7.1.7
 
@@ -250,9 +250,29 @@ CREATE TABLE `pew_departamentos_produtos` (
 --
 
 INSERT INTO `pew_departamentos_produtos` (`id`, `id_produto`, `id_departamento`) VALUES
+(95, 10, 13),
 (94, 9, 13),
 (90, 8, 14),
 (93, 5, 14);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `pew_dicas`
+--
+
+CREATE TABLE `pew_dicas` (
+  `id` int(11) NOT NULL,
+  `titulo` varchar(200) DEFAULT NULL,
+  `subtitulo` varchar(255) NOT NULL,
+  `descricao_curta` varchar(255) DEFAULT NULL,
+  `descricao_longa` text NOT NULL,
+  `imagem` varchar(255) DEFAULT NULL,
+  `thumb` varchar(255) DEFAULT NULL,
+  `video` varchar(255) DEFAULT NULL,
+  `data_controle` datetime DEFAULT NULL,
+  `status` tinyint(4) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -667,6 +687,12 @@ ALTER TABLE `pew_departamentos_produtos`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `pew_dicas`
+--
+ALTER TABLE `pew_dicas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `pew_enderecos`
 --
 ALTER TABLE `pew_enderecos`
@@ -770,12 +796,12 @@ ALTER TABLE `pew_categorias`
 -- AUTO_INCREMENT for table `pew_categorias_produtos`
 --
 ALTER TABLE `pew_categorias_produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `pew_categorias_vitrine`
 --
 ALTER TABLE `pew_categorias_vitrine`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `pew_categoria_destaque`
 --
@@ -810,7 +836,12 @@ ALTER TABLE `pew_departamentos`
 -- AUTO_INCREMENT for table `pew_departamentos_produtos`
 --
 ALTER TABLE `pew_departamentos_produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+--
+-- AUTO_INCREMENT for table `pew_dicas`
+--
+ALTER TABLE `pew_dicas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `pew_enderecos`
 --
@@ -830,7 +861,7 @@ ALTER TABLE `pew_especificacoes_tecnicas`
 -- AUTO_INCREMENT for table `pew_imagens_produtos`
 --
 ALTER TABLE `pew_imagens_produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `pew_links_menu`
 --
@@ -860,7 +891,7 @@ ALTER TABLE `pew_orcamentos`
 -- AUTO_INCREMENT for table `pew_produtos`
 --
 ALTER TABLE `pew_produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `pew_produtos_relacionados`
 --
@@ -870,7 +901,7 @@ ALTER TABLE `pew_produtos_relacionados`
 -- AUTO_INCREMENT for table `pew_subcategorias`
 --
 ALTER TABLE `pew_subcategorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `pew_subcategorias_produtos`
 --
