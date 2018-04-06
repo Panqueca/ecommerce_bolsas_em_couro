@@ -59,7 +59,7 @@
 
         mysqli_query($conexao, "update $tabela_dica set id = '$id', titulo = '$titulo', subtitulo = '$subtitulo', ref = '$refDicas', descricao_curta = '$descricaoCurta', descricao_longa = '$descricaoLonga', imagem = '$nomeImagem', thumb = '$thumb', video = '$video', data_controle = '$data', status = '$status' where id = '$id'");
         
-        header("location: pew_dicas.php");
+        header("location: pew-dicas.php");
         echo "true";
     }else{
         echo "false";

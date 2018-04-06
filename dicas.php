@@ -54,6 +54,7 @@
 				transition: .3s;
 			}
 			.main-content .display-cont .box-cont .item-thumb img{
+				width: 100%;
 				display: block;
 				margin: 0px;
 			}
@@ -144,21 +145,45 @@
         <div class="main-content">
         	<div class="display-cont">
         		<?php
-        		echo "<div class='box-cont'>";
-        			echo "<div class='item-thumb'>";
-        				echo "<a href='#'><img src='imagens/Thumbizinha.png' width='100%'></a>";
-        			echo "</div>";
-        			echo "<div class='item-desc'>";
-        				echo "<div class='item-int-desc'>";
-							$max = 155;
-							$descricao = "Dica para limpar sua bolsa</h2></a>
-							<p>Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica e de impressos, e vem sendo utilizado desde o século XVI, quando um impressor";
-							$descricao = substr($descricao, 0, $max)."...";
-							echo "<a href='#'><h2 class='titulo'>$descricao</p>";
-							echo "<a href='#' class='btn-dicas'>Continuar lendo</a>";
-        				echo "</div>";
-        			echo "</div>";
-        		echo "</div>";
+				require_once "@pew/pew-system-config.php";
+				
+				$tabela_dicas = $pew_custom_db->tabela_dicas;
+				
+				$dirImagens = "imagens/dicas";
+				
+				$contar = mysqli_query($conexao, "select count(id) as total from $tabela_dicas where status = 1");
+                $contagem = mysqli_fetch_assoc($contar);
+                $total = $contagem["total"];
+				
+				if($total > 0){
+					$queryDicas = mysqli_query($conexao, "select * from $tabela_dicas");
+					while($dicas = mysqli_fetch_array($queryDicas)){
+						$id = $dicas["id"];
+						$thumb = $dicas["thumb"];
+						$titulo = $dicas["titulo"];
+						$refDica = $dicas["ref"];
+						$descricaoCurta = $dicas["descricao_curta"];
+						$urlDica = "interna-dicas.php?titulo=$refDica&id_dica=$id";
+						$max = 155;
+						$descricaoCurta = substr($descricaoCurta, 0, $max)."...";
+						$srcImagem = file_exists($dirImagens."/".$thumb) && $thumb != "" ? $dirImagens."/".$thumb : $dirImagens."/"."thumb-padrao.png";
+						echo "<div class='box-cont'>";
+							echo "<div class='item-thumb'>";
+								echo "<a href='$urlDica'>";
+									echo "<img src='$srcImagem' title='$titulo' alt='Dicas - $titulo'>";
+								echo "</a>";
+							echo "</div>";
+							echo "<div class='item-desc'>";
+								echo "<div class='item-int-desc'>";
+									echo "<a href='$urlDica'><h2 class='titulo'>$titulo</h2>";
+									echo "<p>$descricaoCurta</p>";
+									echo "<a href='$urlDica' class='btn-dicas'>Continuar lendo</a>";
+								echo "</div>";
+							echo "</div>";
+						echo "</div>";
+					}
+				}
+				
         		?>
         	</div>
         </div>
