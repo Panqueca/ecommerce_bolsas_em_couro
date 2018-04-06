@@ -1,7 +1,9 @@
 <?php
 
+require_once "classe-sistema-empacotamento.php";
+$functions = new Empacotamento();
+
 function frete($produtos = null, $codigo_correios = "41106", $cep_destino = null, $declarar_valor = false, $url_api = null){
-    
     require_once "classe-sistema-empacotamento.php";
     require_once "calculo-caixas.php";
     
@@ -25,7 +27,7 @@ function frete($produtos = null, $codigo_correios = "41106", $cep_destino = null
     $caixas = calcular_caixas($carrinho);
 
     function calcular_frete($servicoCorreios, $cepDestino, $declararValor, $url_api_transportadora){
-        global $caixas;
+        global $caixas, $functions;
         $frete_caixas = array();
         $ctrlFrete = 0;
         foreach($caixas as $infoCaixa){
@@ -90,19 +92,23 @@ function frete($produtos = null, $codigo_correios = "41106", $cep_destino = null
         }
 
         $freteFinal = 0;
+        $prazoFinal = 0;
         if(count($frete_caixas) > 0){
             foreach($frete_caixas as $arrayCaixa){
                 $valorFrete = $arrayCaixa["Valor"];
-                $prazoEntrega = $arrayCaixa["PrazoEntrega"];
+                $prazoFinal = $arrayCaixa["PrazoEntrega"] > $prazoFinal ? $arrayCaixa["PrazoEntrega"] : $prazoFinal;
                 //print_r($arrayCaixa);
                 $freteFinal += $valorFrete;
             }
         }
+        
+        $freteFinal = $functions->custom_number_format($freteFinal);
+        
+        $finalReturn = '{"valor": '.$freteFinal.', "prazo": "'.$prazoFinal.' dias"}';
 
-        return $freteFinal;
+        return $finalReturn;
     }
 
     $frete = calcular_frete($codigo_correios, $cep_destino, $declarar_valor, $url_api);
     return $frete;
 }
-?>

@@ -11,10 +11,10 @@
             $this->produtos[$this->produtos_configurados]["id"] = $id;
             $this->produtos[$this->produtos_configurados]["title"] = $title;
             $this->produtos[$this->produtos_configurados]["preco"] = $preco;
-            $this->produtos[$this->produtos_configurados]["comprimento"] = $this->valida_dimensao($comprimento);
-            $this->produtos[$this->produtos_configurados]["largura"] = $this->valida_dimensao($largura);
-            $this->produtos[$this->produtos_configurados]["altura"] = $this->valida_dimensao($altura);
-            $this->produtos[$this->produtos_configurados]["peso"] = $this->valida_dimensao($peso_produto);
+            $this->produtos[$this->produtos_configurados]["comprimento"] = $this->custom_number_format($comprimento);
+            $this->produtos[$this->produtos_configurados]["largura"] = $this->custom_number_format($largura);
+            $this->produtos[$this->produtos_configurados]["altura"] = $this->custom_number_format($altura);
+            $this->produtos[$this->produtos_configurados]["peso"] = $this->custom_number_format($peso_produto);
             $this->produtos[$this->produtos_configurados]["empacotado"] = false;            
             $this->produtos_configurados++;
         }
@@ -41,7 +41,7 @@
             return $carrinho;
         }
         
-        public function valida_dimensao($val, $sep = "."){
+        public function custom_number_format($val, $sep = "."){
             $prepareStr = str_replace(" ", "", $val);
             $prepareStr = str_replace(",", ".", $prepareStr);
             $totalCaracteres = strlen($prepareStr);
@@ -75,7 +75,8 @@
                         case true:
                             if($shortDecimal){
                                 $ctrlCaracteres = strlen($cleanedVal);
-                                $formatedVal = substr($cleanedVal, 0, $ctrlCaracteres - 1) . $sep . $explodedVal[$totalExplodes - 1];
+                                $decimal = strlen($explodedVal[$totalExplodes - 1]) == 1 ? $explodedVal[$totalExplodes - 1]."0" : $explodedVal[$totalExplodes - 1];
+                                $formatedVal = substr($cleanedVal, 0, $ctrlCaracteres - 1) . $sep . $decimal;
                             }else{
                                 $formatedVal = $milharVal.$sep.$decimalsVal;
                             }
