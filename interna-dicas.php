@@ -28,10 +28,23 @@
                 margin: 0 auto;
                 min-height: 300px;
             }
+            .main-content .box{
+                position: relative;
+            }
+            .main-content .box img{
+                width: 100%;
+            }
+            .main-content .box .breadcrumb{
+                position: absolute;
+                bottom: 5vw;
+                left: 10vw;
+                color: #fff;
+                font-size: 1vw;
+            }
             .main-content .display{
                 width: 75vw;
                 margin: 10vh auto;
-                color: #ccc;
+                color: #aaa;
             }
         </style>
         <!--END PAGE CSS-->
@@ -59,8 +72,8 @@
                 $getToken = isset($_GET["token"]) ? $_GET["token"] : "Produto não encontrado";
                 
             ?>
-            <div class="box-breadcrumb">
-                <img title='' src='' alt=''>
+            <div class="box">
+                <img title='' src='imagens/dicas/banner-interno.png' alt=''>
                 <div class='breadcrumb'>
                     <h4>Página inicial > Dicas > Cuidados com o Couro</h4>
                     <h1>CUIDADOS COM O COURO</h1>
