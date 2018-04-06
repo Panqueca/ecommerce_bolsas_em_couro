@@ -253,6 +253,11 @@
                 color: #111;
                 background-color: #dedede;
             }
+            .section-produto .display-info-produto .resultado-frete{
+                font-size: 12px;
+                margin: 10px 0px 10px 0px;
+                color: #333;
+            }
             .section-produto .display-info-produto .sem-estoque{
                 pointer-events: none;
                 background-color: #ccc;
@@ -348,7 +353,84 @@
                     });
                 });
                 
+                var inputFrete = $(".input-frete");
+                var botaoCalculoFrete = $(".botao-calculo-frete");
+                var displayResultadoFrete = $(".resultado-frete");
+                var iconFrete = "<i class='fas fa-truck'></i>";
+                var iconLoading = "<i class='fas fa-spinner fa-spin icone-loading'></i>";
+                var calculandoFrete = false;
+                var infoCalculoFrete = $(".display-info-calculo-frete");
+                
+                var jsonProduto = new Array();
+                var idProduto = infoCalculoFrete.children("freteIdProduto");
+                var tituloProduto = infoCalculoFrete.children("freteTituloProduto");
+                var precoProduto = infoCalculoFrete.children("fretePrecoProduto");
+                var comprimentoProduto = infoCalculoFrete.children("freteComprimentoProduto");
+                var larguraProduto = infoCalculoFrete.children("freteLarguraProduto");
+                var alturaProduto = infoCalculoFrete.children("freteAlturaProduto");
+                var pesoProduto = infoCalculoFrete.children("fretePesoProduto");
+                jsonProduto[0] = {"id": idProduto, "titulo": tituloProduto, "preco": precoProduto, "comprimento": comprimentoProduto, "largura": larguraProduto, "altura": alturaProduto, "peso": pesoProduto};
+                
+                
                 input_mask(".input-frete", "99999-999");
+                
+                botaoCalculoFrete.off().on("click", function(){
+                    if(!calculandoFrete){
+                        var urlFrete = "frete-correios/@trigger-calculo.php";
+                        var cepDestino = inputFrete.val();
+                        var codigosServico = ["41106"];
+                        if(cepDestino.length == 9){
+                            
+                            botaoCalculoFrete.html(iconLoading);
+                            calculandoFrete = true;
+                            var mensagemFinal = null;
+                            var ctrlExec = 0;
+                            codigosServico.forEach(function(codigo){
+                                var dados = {
+                                    cep_destino: cepDestino,
+                                    codigo_correios: codigo,
+                                    produtos: JSON.stringify(jsonProduto[0]),
+                                }
+                                $.ajax({
+                                    type: "POST",
+                                    url: urlFrete,
+                                    data: JSON.stringify(dados),
+                                    contentType: "application/json",
+                                    error: function(){
+                                        botaoCalculoFrete.html(iconFrete);
+                                        displayResultadoFrete.html("Ocorreu um erro ao calcular o frete. Recarregue a página e tente novamente.");
+                                    },
+                                    success: function(resultado){
+                                        botaoCalculoFrete.html(iconFrete);
+                                        switch(codigo){
+                                            case "41106":
+                                                var tituloServico = "PAC";
+                                                break;
+                                        }
+                                        var msgPadrao = tituloServico + ": <b>R$" + resultado + "<b>";
+                                        mensagemFinal = mensagemFinal == null ? msgPadrao : "<br>" + msgPadrao;
+                                        
+                                        if(resultado == false){
+                                            displayResultadoFrete.html(mensagemFinal);
+                                        }else{
+                                            notificacaoPadrao("Ocorreu um erro ao calcular o frete. Recarregue a página e tente novamente.");
+                                        }
+                                        alert(resultado)
+                                        
+                                        ctrlExec++;
+                                        if(ctrlExec == codigosServico.length){
+                                            calculandoFrete = false;
+                                        }
+                                    }
+                                });
+                                
+                            });
+                            
+                        }else{
+                            displayResultadoFrete.html("O campo CEP precisa ser preenchido corretamente.");
+                        }
+                    }
+                });
             });
         </script>
         <!--END PAGE JS-->
@@ -397,6 +479,14 @@
             $imagensProduto = $infoProduto["imagens"];
             $urlVideo = $infoProduto["url_video"];
             /*INFO PRODUTO*/
+                
+            /*FRETE VARS*/
+            $precoFrete = $precoFinal;
+            $comprimentoProduto = $infoProduto["comprimento"];
+            $larguraProduto = $infoProduto["largura"];
+            $alturaProduto = $infoProduto["altura"];
+            $pesoProduto = $infoProduto["peso"];
+            /*END FRETE VARS*/
 
             /*HTML VIEW*/
             $viewPriceField = null;
@@ -467,6 +557,16 @@
                         <h5 class="titulo-frete">CALCULAR FRETE</h5>
                         <input type="text" class="input-frete">
                         <button class="botao-calculo-frete"><i class="fas fa-truck"></i></button>
+                        <div class='resultado-frete'></div>
+                        <div class="display-info-calculo-frete">
+                            <input type="hidden" id="freteIdProduto" value="<?php echo $idProduto; ?>">
+                            <input type="hidden" id="freteTituloProduto" value="<?php echo $nomeProduto; ?>">
+                            <input type="hidden" id="fretePrecoProduto" value="<?php echo $precoFrete; ?>">
+                            <input type="hidden" id="freteComprimentoProduto" value="<?php echo $comprimentoProduto; ?>">
+                            <input type="hidden" id="freteLarguraProduto" value="<?php echo $larguraProduto; ?>">
+                            <input type="hidden" id="freteAlturaProduto" value="<?php echo $alturaProduto; ?>">
+                            <input type="hidden" id="fretePesoProduto" value="<?php echo $pesoProduto; ?>">
+                        </div>
                     </div>
                 </div>
             </section>

@@ -1,8 +1,12 @@
 <?php
+    $jsonData = file_get_contents('php://input');
+    print_r(json_decode($jsonData));
+
     $post_fields = array("cep_destino", "produtos");
     $invalid_fileds = array();
     $calcular = true;
     $i = 0;
+die();
     foreach($post_fields as $post_name){
         if(!isset($_POST[$post_name])){
             $calcular = false;
@@ -17,7 +21,7 @@
 
         $codigoCorreios = isset($_POST["codigo_correios"]) ? $_POST["codigo_correios"] : "41106";
         
-        $cepDestino = $_POST["cep_destino"];
+        $cepDestino = str_replace("-", "", $_POST["cep_destino"]);
         
         $declararValor = isset($_POST["declarar_valor"]) ? $_POST["declarar_valor"] : false;
 
@@ -33,7 +37,7 @@
         $produtos[0]["peso"] = ".3";
         */
         
-        $url_correios_api = 'localhost/xampp/github/frete-correios/ws-correios.php';
+        $url_correios_api = 'localhost/xampp/github/ecommerce_bolsas_em_couro/frete-correios/ws-correios.php';
 
         $valorFrete = frete($produtos, $codigoCorreios, $cepDestino, $declararValor, $url_correios_api);
         if($valorFrete != false && $produtos != false){
@@ -43,5 +47,6 @@
         }
         
     }else{
+        print_r($invalid_fileds);
         echo "false";
     }
