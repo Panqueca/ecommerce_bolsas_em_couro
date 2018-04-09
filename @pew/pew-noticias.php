@@ -56,9 +56,11 @@
                 }else{
                     $strBusca = "";
                 }
+				
                 $contarNoticias = mysqli_query($conexao, "select count(id) as total_noticias from $tabela_noticias $strBusca");
                 $contagemProdutos = mysqli_fetch_assoc($contarNoticias);
                 $totalNoticias = $contagemProdutos["total_noticias"];
+				
                 if($totalNoticias > 0){
                     echo "<thead>";
                         echo "<td>Data</td>";

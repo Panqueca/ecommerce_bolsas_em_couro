@@ -39,19 +39,66 @@
                 background-color: #fff;
                 overflow: hidden;
             }
-			.main-content .display-container{
+			.main-content .display-cont{
 				display: flex;
-				width: 100%;
-				background-color: #000;
+				justify-content: center;
+				flex-flow: row wrap;
+				margin-bottom: 20px;
 			}
-			.main-content .display-container .box-item{
-				flex: 1;
-				height: 400px;
-				margin: 0 10px 20px 10px;
-				background-color: #fff;
-				-webkit-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.75);
-				-moz-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.75);
-				box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.75);
+			.main-content .display-cont .box-cont{
+				flex: 0 0 25%;
+				margin: 40px 10px 0px 10px;
+				transition: .2s;
+			}
+			.main-content .display-cont .box-cont .item-thumb{
+				transition: .3s;
+			}
+			.main-content .display-cont .box-cont .item-thumb img{
+				width: 100%;
+				display: block;
+				margin: 0px;
+			}
+			.main-content .display-cont .box-cont .item-thumb:hover{
+				filter: brightness(.8);
+			}
+			.main-content .display-cont .box-cont:hover{
+				transform: scale(1.05);
+			}
+			.main-content .display-cont .box-cont .item-desc{
+				-webkit-box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, .1);
+				-moz-box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, .1);
+				box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, .1);
+				height: 168px;
+			}
+			.main-content .display-cont .box-cont .item-int-desc{
+				width: 90%;
+				margin: 0 auto;
+			}
+			.main-content .display-cont .box-cont .item-desc .item-int-desc a{
+				text-decoration: none;
+				color: #555;
+			}
+			.main-content .display-cont .box-cont .item-desc .item-int-desc a .titulo{
+				font-size: 20px;
+				font-weight: normal;
+				margin: 0;
+				padding-top: 10px;
+			}
+			.main-content .display-cont .box-cont .item-desc .item-int-desc a:hover{
+				color: #111;
+			}
+			.main-content .display-cont .box-cont .item-desc .item-int-desc p{
+				font-size: 14px;
+			}
+			.main-content .display-cont .box-cont .item-desc .item-int-desc .btn-dicas{
+				background-color: #eee;
+				color: #999;
+				padding: 3px 6px 3px;
+				font-size: 12px;
+			}
+			.main-content .display-cont .box-cont .item-desc .item-int-desc .btn-dicas:hover{
+				color: #111;
+				background-color: #ddd;
 			}
             @media screen and (max-width: 1100px){
                 .main-content{
@@ -93,16 +140,51 @@
         ?>
         <!--THIS PAGE CONTENT-->
         <div class="background-loja">
-            <img src="imagens/departamentos/linha-feminina.png">
+            <img src="imagens/departamentos/background-dicas.png">
         </div>
         <div class="main-content">
         	<div class="display-cont">
-        		<div class="box-cont">
-        			<div class="item-thumb"></div>
-        			<div class="item-desc"></div>
-        		</div>
-        		<div class="box-cont"></div>
-        		<div class="box-cont"></div>
+        		<?php
+				require_once "@pew/pew-system-config.php";
+				
+				$tabela_dicas = $pew_custom_db->tabela_dicas;
+				
+				$dirImagens = "imagens/dicas";
+				
+				$contar = mysqli_query($conexao, "select count(id) as total from $tabela_dicas where status = 1");
+                $contagem = mysqli_fetch_assoc($contar);
+                $total = $contagem["total"];
+				
+				if($total > 0){
+					$queryDicas = mysqli_query($conexao, "select * from $tabela_dicas");
+					while($dicas = mysqli_fetch_array($queryDicas)){
+						$id = $dicas["id"];
+						$thumb = $dicas["thumb"];
+						$titulo = $dicas["titulo"];
+						$refDica = $dicas["ref"];
+						$descricaoCurta = $dicas["descricao_curta"];
+						$urlDica = "interna-dicas.php?titulo=$refDica&id_dica=$id";
+						$max = 155;
+						$descricaoCurta = substr($descricaoCurta, 0, $max)."...";
+						$srcImagem = file_exists($dirImagens."/".$thumb) && $thumb != "" ? $dirImagens."/".$thumb : $dirImagens."/"."thumb-padrao.png";
+						echo "<div class='box-cont'>";
+							echo "<div class='item-thumb'>";
+								echo "<a href='$urlDica'>";
+									echo "<img src='$srcImagem' title='$titulo' alt='Dicas - $titulo'>";
+								echo "</a>";
+							echo "</div>";
+							echo "<div class='item-desc'>";
+								echo "<div class='item-int-desc'>";
+									echo "<a href='$urlDica'><h2 class='titulo'>$titulo</h2>";
+									echo "<p>$descricaoCurta</p>";
+									echo "<a href='$urlDica' class='btn-dicas'>Continuar lendo</a>";
+								echo "</div>";
+							echo "</div>";
+						echo "</div>";
+					}
+				}
+				
+        		?>
         	</div>
         </div>
         <!--END THIS PAGE CONTENT-->
