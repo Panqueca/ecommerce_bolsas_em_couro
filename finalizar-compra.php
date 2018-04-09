@@ -426,6 +426,7 @@
                                 echo "</span>";
                             echo "</div>";
                         }
+                        $totalItens = $pew_functions->custom_number_format($totalItens);
                         echo "<div class='display-resultados-frete'>";
                             echo "<h5 class='titulo'>Método de envio</h5>";
                             echo "<div class='span-frete'></div>";
