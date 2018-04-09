@@ -10,3 +10,6 @@
 <link rel="stylesheet" type="text/css" href="js/slick-slider/slick-theme.css">
 <script src="js/vitrine-carrossel.js"></script>
 <!--END SLICK SLIDER-->
+<!--CARRINHO-->
+<?php require_once "@include-carrinho.php"; ?>
+<!--END CARRINHO-->

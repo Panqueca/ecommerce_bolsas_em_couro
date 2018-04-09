@@ -798,20 +798,69 @@
     ?>
     <nav class="nav-header">
         <div class="top-bar">
-            <a class="link-padrao botao-entrar" id="botaoEntrar"><i class="fas fa-sign-in-alt" data-fa-transform="grow-6 left-6"></i> ENTRAR</a> OU
-            <a class="link-padrao" id="botaoCadastraConta">CRIE SUA CONTA</a>
+            <?php
+                require_once "@classe-minha-conta.php";
+                $loginConta = new MinhaConta();
+                
+                function botoes_login(){
+                    echo "<a class='link-padrao botao-entrar' id='botaoEntrar'><i class='fas fa-sign-in-alt' data-fa-transform='grow-6 left-6'></i> ENTRAR</a> OU";
+                    echo "<a class='link-padrao' id='botaoCadastraConta'>CRIE SUA CONTA</a>";
+                }
+            
+                if(isset($_SESSION["minha_conta"])){
+                    $sessaoConta = $_SESSION["minha_conta"];
+                    $email = isset($sessaoConta["email"]) ? $sessaoConta["email"] : null;
+                    $senha = isset($sessaoConta["senha"]) ? $sessaoConta["senha"] : null;
+                    if($loginConta->auth($email, $senha) == true){
+                        $idConta = $loginConta->query_minha_conta("md5(email) = '$email' and senha = '$senha'");
+                        $loginConta->montar_minha_conta($idConta);
+                        $infoConta = $loginConta->montar_array();
+                        $nomeCompleto = $infoConta["usuario"];
+                        $splitNome = explode(" ", $nomeCompleto);
+                        echo "<a class='link-padrao botao-minha-conta'><i class='far fa-user'></i> Olá, $splitNome[0]</a>";
+                    }else{
+                        $loginConta->reset_session();
+                        botoes_login();
+                    }
+                }else{
+                    botoes_login();
+                }
+            ?>
             <div class="header-cart">
                 <div class="cart-button"><i class="fas fa-shopping-bag"></i></div>
                 <div class="cart-display">
                     <h4 class="cart-title">Sua Bolsa</h4>
                     <div class="display-itens">
-                        <div class="cart-item">
-                            <span class="item-quantity" title="Alterar quantidade">3x</span> <a href="#" class="item-name">Bolsa Marrom Amerela brilhante</a><span class="item-price">R$ 250.00</span> <button class="remove-button" title="Remover este item"><i class="fas fa-times"></i></button>
-                        </div>
+                        <?php
+                            require_once "@classe-carrinho-compras.php";
+                            $cls_carrinho = new Carrinho();
+                            $carrinho = $cls_carrinho->get_carrinho();
+                            $totalCarrinho = 0;
+                            if(count($carrinho) > 0){
+                                foreach($carrinho as $item){
+                                    $id = $item["id"];
+                                    $titulo = $item["nome"];
+                                    $preco = $item["preco"];
+                                    $quantidade = $item["quantidade"];
+                                    $total = $preco * $quantidade;
+                                    $total = $pew_functions->custom_number_format($total);
+                                    $totalCarrinho += $total;
+                                    $url = "interna-produto.php?id_produto=$id";
+                                    echo "<div class='cart-item'>";
+                                        echo "<span class='item-quantity'>{$quantidade}x</span>";
+                                        echo "<a href='$url' class='item-name'>$titulo</a>";
+                                        echo "<span class='item-price'>R$ $total</span>";
+                                        echo "<button class='remove-button' title='Remover este item' carrinho-id-produto='$id'><i class='fas fa-times'></i></button>";
+                                    echo "</div>";
+                                }
+                            }else{
+                                echo "<div align=center>Bolsa vazia</div>";
+                            }
+                        ?>
                     </div>
                     <div class="cart-bottom">
-                        <span class="total-price">TOTAL: <span class="price-view">R$ 250.00</span></span><br>
-                        <a href="#" class="finalize-button">Finalizar compra</a>
+                        <span class="total-price">TOTAL: <span class="price-view">R$ <?php echo $pew_functions->custom_number_format($totalCarrinho); ?></span></span><br>
+                        <a href="finalizar-compra.php" class="finalize-button">Finalizar compra</a>
                     </div>
                 </div>
                 <div class="cart-background"></div>
@@ -1169,7 +1218,7 @@
 </script>
 <?php
     if(isset($_SESSION["minha_conta"])){
-        print_r($_SESSION["minha_conta"]);
+        require_once "@include-minha-conta.php";
     }
     require_once "@include-cadastra-conta.php";
     require_once "@include-login.php";

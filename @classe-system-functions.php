@@ -45,17 +45,18 @@
                     foreach($sepStartVal as $number){
                         $somaStart += $number;
                     }
-                    $is_under_zero = $somaStart == 0 ? true : false;
+                    $is_under_one = $somaStart == 0 ? true : false;
 
                     $sep = $sep == "." || $sep ==  "," ? $sep : ".";
-                    if($is_under_zero){
+                    if($is_under_one){
                         $formatedVal = "0".$sep.$cleanedVal;
                     }else{
                         switch($decimal){
                             case true:
                                 if($shortDecimal){
                                     $ctrlCaracteres = strlen($cleanedVal);
-                                    $formatedVal = substr($cleanedVal, 0, $ctrlCaracteres - 1) . $sep . $explodedVal[$totalExplodes - 1];
+                                    $decimal = strlen($explodedVal[$totalExplodes - 1]) == 1 ? $explodedVal[$totalExplodes - 1]."0" : $explodedVal[$totalExplodes - 1];
+                                    $formatedVal = substr($cleanedVal, 0, $ctrlCaracteres - 1) . $sep . $decimal;
                                 }else{
                                     $formatedVal = $milharVal.$sep.$decimalsVal;
                                 }
@@ -65,10 +66,10 @@
                                 break;
                         }
                     }
-                    
+
                     return $formatedVal;
                 }else{
-                    return $cleanedVal;
+                    return $cleanedVal.".00";
                 }
             }
 

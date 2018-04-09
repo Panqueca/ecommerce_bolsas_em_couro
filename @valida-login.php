@@ -1,6 +1,7 @@
 <?php
 
 require_once "@classe-system-functions.php";
+require_once "@classe-minha-conta.php";
 require_once "@pew/pew-system-config.php";
 $tabela_minha_conta = $pew_custom_db->tabela_minha_conta;
 
@@ -37,13 +38,9 @@ if($validar){
     if($loginValidado && !$confirmacaoPendente){
         
         if($iniciarLogin){
-            session_start();
-            if(isset($_SESSION["minha_conta"])){
-                unset($_SESSION["minha_conta"]); // Caso já houvesse alguma sessão iniciada
-            }
-            $_SESSION["minha_conta"] = array();
-            $_SESSION["minha_conta"]["email"] = md5($email);
-            $_SESSION["minha_conta"]["senha"] = $senha;
+            $minhaConta = new MinhaConta();
+            $minhaConta->logar(addslashes($_POST["email"]), addslashes($_POST["senha"]));
+            print_r($_SESSION);
         }
         
         $return = "true";

@@ -197,7 +197,27 @@
                 margin: 0px 0px 0px 10px;
                 border-radius: 50%;
             }
-            .section-produto .display-info-produto .botao-comprar{
+            .section-produto .display-info-produto .display-comprar{
+                display: flex;
+                justify-content: flex-end;
+                flex-flow: row wrap;
+            }
+            .section-produto .display-info-produto .display-comprar .quantidade-produto{
+                height: 36px;
+                width: 40px;
+                padding: 0px;
+                border: 2px solid #ddd;
+                margin-right: 5px;
+                text-align: center;
+                color: #666;
+                font-size: 18px;
+                line-height: 36px;
+                outline: none;
+            }
+            .section-produto .display-info-produto .display-comprar .quantidade-produto:focus{
+                border-color: #888;   
+            }
+            .section-produto .display-info-produto .display-comprar .botao-comprar{
                 border: none;
                 color: #fff;
                 background-color: #408122;
@@ -208,10 +228,10 @@
                 cursor: pointer;
                 outline: none;
             }
-            .section-produto .display-info-produto .botao-comprar:hover{
+            .section-produto .display-info-produto .display-comprar .botao-comprar:hover{
                 background-color: #2f6117;
             }
-            .section-produto .display-info-produto .botao-comprar:active{
+            .section-produto .display-info-produto .display-comprar .botao-comprar:active{
                 background-color: #333;
             }
             .section-produto .display-info-produto .calculo-frete{
@@ -535,7 +555,7 @@
 
             $viewDisponibilidadadeField = $estoqueProduto == 0 ? "<div class='view-disponibilidade indisponivel'><span class='icone-disponibilidade'><i class='fas fa-times'></i></span> SEM ESTOQUE</div>" : "<div class='view-disponibilidade disponivel'><span class='icone-disponibilidade'><i class='fas fa-check'></i></span> EM ESTOQUE</div>";
 
-            $viewBotaoComprar = $estoqueProduto == 0 ? "<button class='botao-comprar sem-estoque'>COMPRAR</button>" : "<button  class='botao-comprar' id='addProdutoCarrinho'>COMPRAR</button>";
+            $viewBotaoComprar = $estoqueProduto == 0 ? "<button class='botao-comprar sem-estoque'>COMPRAR</button>" : "<input type='number' class='quantidade-produto' value=1 placeholder='Qtd'><button  class='botao-comprar' id='addProdutoCarrinho' carrinho-id-produto='$idProduto'>COMPRAR</button>";
             /*END HTML VIEW*/
                 
             $iconArrow = "<i class='fas fa-angle-right icon'></i>";

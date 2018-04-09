@@ -91,6 +91,46 @@
         -moz-box-shadow: 1px 1px 25px 1px rgba(0, 0, 0, 0.2);
         box-shadow: 1px 1px 25px 1px rgba(0, 0, 0, 0.2);
     }
+    #btnConfirmar{
+        background-color: #32cd32;
+        color: #111;
+        padding: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+        color: #fff;
+        border: none;
+        margin: 10px;
+        text-decoration: none;
+        transition: .2s;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    #btnConfirmar:hover{
+        background-color: #2aa32a;
+        -webkit-box-shadow: 1px 1px 25px 1px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 1px 1px 25px 1px rgba(0, 0, 0, 0.2);
+        box-shadow: 1px 1px 25px 1px rgba(0, 0, 0, 0.2);
+    }
+    #btnCancelar{
+        background-color: #ea5959;
+        color: #111;
+        padding: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+        color: #fff;
+        border: none;
+        margin: 10px;
+        text-decoration: none;
+        transition: .2s;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    #btnCancelar:hover{
+        background-color: #af2120;
+        -webkit-box-shadow: 1px 1px 25px 1px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 1px 1px 25px 1px rgba(0, 0, 0, 0.2);
+        box-shadow: 1px 1px 25px 1px rgba(0, 0, 0, 0.2);
+    }
 </style>
 <div class="msg-padrao"></div>
 <?php

@@ -396,7 +396,7 @@
                 if(errors > 0){
                     setInputMessages(errorFields);
                 }else{
-                    window.location.reload();
+                    //window.location.reload();
                 }
                 
                 if(closeLoading){

@@ -101,8 +101,8 @@
                 /*END ESPECIFICACOES TECNICAS*/
 
                 /*PRODUTOS RELACIONADOS*/
-                var botaoProdutosRelacionados = $(".btn-produtos-relacionados");
-                var displayRelacionados = $(".display-produtos-relacionados");
+                var botaoProdutosRelacionados = $(".btn-relacionados");
+                var displayRelacionados = $(".display-relacionados");
                 var background = $(".background-interatividade");
                 var botaoSalvarRelacionados = $(".btn-salvar-relacionados");
                 var botaoCleanRelacionados = $(".limpar-todos-relacionados");
@@ -385,6 +385,292 @@
                 /*END TRIGGERS*/
 
                 /*END PRODUTOS RELACIONADOS*/
+                
+                /*CORES RELACIONADAS*/
+                var botaoCoresRelacionadas = $(".btn-relacionados");
+                var displayRelacionados = $(".display-relacionados");
+                var background = $(".background-interatividade");
+                var botaoSalvarRelacionados = $(".btn-salvar-relacionados");
+                var botaoCleanRelacionados = $(".limpar-todos-relacionados");
+                var barraBusca = $(".busca-relacionados");
+                var checkOnlyActives = $("#checkOnlyActives");
+                var listaRelacionados = $(".lista-relacionados");
+                var msgListaRelacionados = $(".lista-relacionados .lista-relacionados-msg");
+                var buscandoProduto = false;
+                var resetingBackground = false;
+                var lastSearchString = null;
+
+                /*!IMPORTANT FUNCTIONS*/
+                function isJson(str){
+                    try{
+                        JSON.parse(str);
+                    }catch(e){
+                        return false;
+                    }
+                    return true;
+                }
+                function setMessageRelacionados(str){
+                    listaRelacionados.css("padding", "30px 0px 10px 0px");
+                    msgListaRelacionados.children("h4").text(str);
+                    msgListaRelacionados.css({
+                        height: "30px",
+                        lineHeight: "30px",
+                        visibility: "visible",
+                        opacity: "1"
+                    });
+                }
+                function resetMessageRelacionados(){
+                    listaRelacionados.css("padding", "0px 0px 40px 0px");
+                    msgListaRelacionados.children("h4").text("");
+                    msgListaRelacionados.css({
+                        height: "5px",
+                        lineHeight: "5px",
+                        visibility: "hidden",
+                        opacity: "0"
+                    });
+                }
+                function resetAllInputs(){
+                    var onlyActives = checkOnlyActives.prop("checked");
+                    var ctrlView = 0;
+                    $(".label-relacionados").each(function(){
+                        var label = $(this);
+                        var input = label.children("input");
+                        if(onlyActives && input.prop("checked") == true){
+                            label.css("display", "inline-block").removeClass("last-search");
+                            ctrlView++;
+                        }else if(!onlyActives){
+                            label.css("display", "inline-block").removeClass("last-search");
+                            ctrlView++;
+                        }
+                    });
+                    if(onlyActives){
+                        setMessageRelacionados("Resultados encontrados: "+ctrlView);
+                    }else{
+                        resetMessageRelacionados();
+                    }
+                }
+                function listLastSearch(){
+                    var onlyActives = checkOnlyActives.prop("checked");
+                    var ctrlQtd = 0;
+                    $(".label-relacionados").each(function(){
+                        var label = $(this);
+                        var input = label.children("input");
+                        if(onlyActives && label.hasClass("last-search") && input.prop("checked") == true){
+                            label.css("display", "inline-block");
+                            ctrlQtd++;
+                        }else if(!onlyActives && label.hasClass("last-search")){
+                            label.css("display", "inline-block");
+                            ctrlQtd++;
+                        }
+                    });
+                    if(ctrlQtd > 0){
+                        setMessageRelacionados("Exibindo resultados mais aproximados:");
+                    }else{
+                        setMessageRelacionados("Nenhum resultado foi encontrado");
+                        botaoCleanRelacionados.css("visibility", "hidden");
+                    }
+                }
+                function contarProdutosSelecionados(){
+                    var contagem = 0;
+                    $(".label-relacionados").each(function(){
+                        var label = $(this);
+                        var input = label.children("input");
+                        if(input.prop("checked") == true){
+                            contagem++;
+                        }
+                    });
+                    return contagem;
+                }
+                function clearRelacionados(){
+                    $(".label-relacionados").each(function(){
+                        var label = $(this);
+                        var input = label.children("input");
+                        if(label.css("display") != "none"){
+                            input.prop("checked", false);
+                        }
+                    });
+                }
+                /*OPEN AND CLOSE*/
+                function abrirRelacionados(){
+                    background.css("display", "block");
+                    displayRelacionados.css({
+                        visibility: "visible",
+                        opacity: "1"
+                    });
+                    /*SEARCH TRIGGRES*/
+                    barraBusca.on("keyup", function(){
+                        buscarProdutos();
+                    });
+                    barraBusca.on("search", function(){
+                        buscarProdutos();
+                    });
+                    /*END SEARCH TRIGGRES*/
+                    /*BOTAO SOMENTE SELECIONADOS*/
+                    checkOnlyActives.off().on("change", function(){
+                        var checked = $(this).prop("checked");
+                        var buscaAtiva = barraBusca.val().length > 0 ? true : false;
+                        if(checked && !buscaAtiva){
+                            var ctrlQtd = 0;
+                            $(".label-relacionados").each(function(){
+                                var label = $(this);
+                                var input = label.children("input");
+                                var selecionado = input.prop("checked");
+                                if(!selecionado){
+                                    label.css("display", "none");
+                                }else{
+                                    ctrlQtd++;
+                                }
+                            });
+                            botaoCleanRelacionados.css("visibility", "visible");
+                            setMessageRelacionados("Resultados encontrados: "+ctrlQtd);
+                        }else if(buscaAtiva){
+                            lastSearchString = null;
+                            buscarProdutos();
+                            if(checked){
+                                botaoCleanRelacionados.css("visibility", "visible");
+                            }else{
+                                botaoCleanRelacionados.css("visibility", "hidden");
+                            }
+                        }else{
+                            /*LISTA TODOS OS PRODUTOS*/
+                            resetAllInputs();
+                            botaoCleanRelacionados.css("visibility", "hidden");
+                        }
+                    });
+                    /*END BOTAO SOMENTE SELECIONADOS*/
+                    /*LIMPAR RELACIONADOS*/
+                    botaoCleanRelacionados.off().on("click", function(){
+                        clearRelacionados();
+                    });
+                }
+                function fecharRelacionados(){
+                    displayRelacionados.css({
+                        visibility: "hidden",
+                        opacity: "0"
+                    });
+                    setTimeout(function(){
+                        background.css("display", "none");
+                    }, 200);
+                    var totalSelecionados = contarProdutosSelecionados();
+                    botaoCoresRelacionadas.text("Produtos Selecionados ("+totalSelecionados+")");
+                }
+                /*END OPEN AND CLOSE*/
+                /*END !IMPORTANT FUNCTIONS*/
+
+                /*MAIN SEARCH FUNCTION*/
+                function buscarProdutos(){
+                    buscandoProduto = true;
+                    var busca = barraBusca.val();
+                    var loadingBackground = $(".lista-relacionados .loading-background");
+                    var urlBuscaProdutos = "pew-busca-produtos.php";
+                    onlyActives = checkOnlyActives.prop("checked");
+
+                    function resetBackgroundLoading(){
+                        if(!resetingBackground){
+                            setInterval(function(){
+                                resetingBackground = true;
+                                if(!buscandoProduto){
+                                    loadingBackground.css({
+                                        visibility: "hidden",
+                                        opacity: "0"
+                                    });
+                                }
+                            }, 500);
+                        }
+                    }
+                    resetBackgroundLoading();
+                    if(busca.length > 0 && lastSearchString != busca){
+                        lastSearchString = busca;
+                        $.ajax({
+                            type: "POST",
+                            url: urlBuscaProdutos,
+                            data: {busca: busca},
+                            error: function(){
+                                loadingBackground.css({
+                                    visibility: "hidden",
+                                    opacity: "0"
+                                });
+                                notificacaoPadrao("Ocorreu um erro ao buscar o produto.");
+                            },
+                            success: function(resposta){
+                                console.log(resposta);
+                                setTimeout(function(){
+                                    buscandoProduto = false;
+                                }, 500);
+                                var selectedProdutos = [];
+                                var ctrlVQtdView = 0;
+                                function listarOpcoes(){
+                                    $(".label-relacionados").each(function(){
+                                        var label = $(this);
+                                        var input = label.children("input");
+                                        var inputIdProduto = input.val();
+                                        var inputChecked = input.prop("checked");
+                                        var arraySearch = selectedProdutos.some(function(id){
+                                            if(onlyActives){
+                                                return id === inputIdProduto && inputChecked == true;
+                                            }else{
+                                                return id === inputIdProduto;
+                                            }
+                                        });
+                                        if(arraySearch == false){
+                                            if(onlyActives){
+                                                label.css("display", "none");
+                                            }else{
+                                                label.css("display", "none").removeClass("last-search");
+                                            }
+                                        }else{
+                                            ctrlVQtdView++;
+                                            label.css("display", "inline-block").addClass("last-search");
+                                        }
+                                    });
+                                    setMessageRelacionados("Resultados encontrados: "+ctrlVQtdView);
+                                    if(ctrlVQtdView == 0){
+                                        listLastSearch();
+                                    }
+                                }
+                                if(resposta != "false" && isJson(resposta) == true){
+                                    var jsonData = JSON.parse(resposta);
+                                    var ctrlQtd = 0;
+                                    jsonData.forEach(function(id_produto){
+                                        selectedProdutos[ctrlQtd] = id_produto;
+                                        ctrlQtd++;
+                                    });
+                                    listarOpcoes();
+                                }else{
+                                    if(onlyActives){
+                                        listarOpcoes();
+                                    }else{
+                                        setMessageRelacionados("Exibindo resultados mais aproximados:");
+                                        listLastSearch();
+                                    }
+                                }
+                            },
+                            beforeSend: function(){
+                                loadingBackground.css({
+                                    visibility: "visible",
+                                    opacity: "1"
+                                });
+                            }
+                        });
+                    }else if(busca.length == 0){
+                        resetAllInputs();
+                    }
+                }
+                /*END MAIN SEARCH FUNCTION*/
+
+                /*TRIGGERS*/
+                botaoCoresRelacionadas.off().on("click", function(){
+                    abrirRelacionados();
+                });
+                botaoSalvarRelacionados.off().on("click", function(){
+                    fecharRelacionados();
+                });
+                background.off().on("click", function(){
+                    fecharRelacionados();
+                });
+                /*END TRIGGERS*/
+
+                /*END CORES RELACIONADAS*/
             });
         </script>
         <!--THIS PAGE CSS-->
@@ -455,7 +741,7 @@
             }
             /*END ESPECIFICACAO TECNICA*/
             /*PRODUTOS RELACIONADOS CSS*/
-            .btn-produtos-relacionados{
+            .btn-relacionados{
                 padding: 10px;
                 cursor: pointer;
                 border: 1px solid #999;
@@ -465,10 +751,10 @@
                 text-align: center;
                 margin-top: 10px;
             }
-            .btn-produtos-relacionados:hover{
+            .btn-relacionados:hover{
                 background-color: #fff;
             }
-            .display-produtos-relacionados{
+            .display-relacionados{
                 position: fixed;
                 width: 60%;
                 height: 70vh;
@@ -481,7 +767,7 @@
                 opacity: 0;
                 transition: .3s;
             }
-            .display-produtos-relacionados .header-relacionados{
+            .display-relacionados .header-relacionados{
                 position: relative;
                 width: 100%;
                 height: 10vh;
@@ -493,14 +779,14 @@
                 text-align: center;
                 z-index: 50;
             }
-            .display-produtos-relacionados .header-relacionados .title-relacionados{
+            .display-relacionados .header-relacionados .title-relacionados{
                 width: 26%;
                 height: 10vh;
                 margin: 0px;
                 padding: 0px 2% 0px 2%;
                 float: left;
             }
-            .display-produtos-relacionados .header-relacionados .busca-relacionados{
+            .display-relacionados .header-relacionados .busca-relacionados{
                 width: 38%;
                 height: 5vh;
                 font-size: 14px;
@@ -509,20 +795,20 @@
                 float: left;
                 border: none;
             }
-            .display-produtos-relacionados .header-relacionados label{
+            .display-relacionados .header-relacionados label{
                 width: 26%;
                 height: 10vh;
                 margin: 0px 2% 0px 0px;
                 font-size: 12px;
                 cursor: pointer;
             }
-            .display-produtos-relacionados .header-relacionados label input{
+            .display-relacionados .header-relacionados label input{
                 position: relative;
                 vertical-align: middle;
                 top: -1px;
                 cursor: pointer;
             }
-            .display-produtos-relacionados .bottom-relacionados{
+            .display-relacionados .bottom-relacionados{
                 width: 100%;
                 height: 10vh;
                 background-color: #eee;
@@ -531,16 +817,16 @@
                 border-radius: 0px 0px 6px 6px;
                 border-top: 2px solid #dedede;
             }
-            .display-produtos-relacionados .bottom-relacionados .btn-salvar-relacionados{
+            .display-relacionados .bottom-relacionados .btn-salvar-relacionados{
                 background-color: limegreen;
                 color: #fff;
                 padding: 10px 30px 10px 30px;
                 cursor: pointer;
             }
-            .display-produtos-relacionados .bottom-relacionados .btn-salvar-relacionados:hover{
+            .display-relacionados .bottom-relacionados .btn-salvar-relacionados:hover{
                 background-color: green;
             }
-            .display-produtos-relacionados .lista-relacionados{
+            .display-relacionados .lista-relacionados{
                 position: relative;
                 height: 50vh;
                 overflow-x: auto;
@@ -550,7 +836,7 @@
                 clear: both;
                 z-index: 40;
             }
-            .display-produtos-relacionados .lista-relacionados .loading-background{
+            .display-relacionados .lista-relacionados .loading-background{
                 position: fixed;
                 width: 60%;
                 height: 53vh;
@@ -565,13 +851,13 @@
                 transition: .3s;
                 opacity: 0;
             }
-            .display-produtos-relacionados .lista-relacionados .loading-background .loading-message{
+            .display-relacionados .lista-relacionados .loading-background .loading-message{
                 font-size: 18px;
                 text-align: center;
                 color: #f78a14;
                 margin: 0px;
             }
-            .display-produtos-relacionados .lista-relacionados .lista-relacionados-msg{
+            .display-relacionados .lista-relacionados .lista-relacionados-msg{
                 position: fixed;
                 width: 60%;
                 height: 5px;
@@ -584,11 +870,11 @@
                 border-bottom: 1px solid #dedede;
                 z-index: 40;
             }
-            .display-produtos-relacionados .lista-relacionados .lista-relacionados-msg h4{
+            .display-relacionados .lista-relacionados .lista-relacionados-msg h4{
                 margin: 0px;
                 padding: 0px 1% 5px 1%;
             }
-            .display-produtos-relacionados .lista-relacionados .lista-relacionados-msg .limpar-todos-relacionados{
+            .display-relacionados .lista-relacionados .lista-relacionados-msg .limpar-todos-relacionados{
                 position: absolute;
                 height: 30px;
                 top: 0px;
@@ -599,14 +885,14 @@
                 text-align: center;
                 visibility: hidden;
             }
-            .display-produtos-relacionados .lista-relacionados .label-relacionados{
+            .display-relacionados .lista-relacionados .label-relacionados{
                 cursor: pointer;
                 width: 98%;
                 padding: 5px 1% 5px 1%;
                 float: none;
                 display: inline-block;
             }
-            .display-produtos-relacionados .lista-relacionados .label-relacionados:hover{
+            .display-relacionados .lista-relacionados .label-relacionados:hover{
                 background-color: #fff;
             }
             /*END PRODUTOS RELACIONADOS CSS*/
@@ -1040,10 +1326,53 @@
                 <div class="half" align=left>
                     <!--PRODUTOS RELACIONADOS-->
                     <h3 class="label-title">Produtos Relacionados</h3>
-                    <a class="btn-produtos-relacionados">Produtos Selecionados <?php echo "(".$ctrlRelacionados.")";?></a>
-                    <div class="display-produtos-relacionados">
+                    <a class="btn-relacionados">Produtos Selecionados <?php echo "(".$ctrlRelacionados.")";?></a>
+                    <div class="display-relacionados">
                         <div class="header-relacionados">
                             <h3 class="title-relacionados">Produtos relacionados</h3>
+                            <!--<h5 class="descricao-relacionados">Selecione os produtos relacionados</h5>-->
+                            <input type="search" class="busca-relacionados" name="busca_relacionados" placeholder="Busque categoria, nome, marca, id, ou sku" form="busca_produto">
+                            <label title="Listar somente os produtos que já foram selecionados"><input type="checkbox" id="checkOnlyActives"> Somente os selecionados</label>
+                        </div>
+                        <div class="lista-relacionados">
+                            <div class="loading-background">
+                                <h4 class="loading-message"><i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i></h4>
+                            </div>
+                            <div class="lista-relacionados-msg"><h4>Exibindo todos os produtos:</h4><a class="link-padrao limpar-todos-relacionados" title="Limpar todos os produtos listados abaixo e que foram selecionados">Limpar todos</a></div>
+                        <?php
+                            $condicaoRelacionados = "id != '$idProduto' and status = 1";
+                            $totalRelacionados = $pew_functions->contar_resultados($tabela_produtos, $condicaoRelacionados);
+                            if($totalRelacionados > 0){
+                                $queryAllProdutos = mysqli_query($conexao, "select id, nome from $tabela_produtos where $condicaoRelacionados order by nome asc");
+                                while($infoRelacionados = mysqli_fetch_array($queryAllProdutos)){
+                                    $idProdutoRelacionado = $infoRelacionados["id"];
+                                    $nomeProdutoRelacionado = $infoRelacionados["nome"];
+                                    $checked = "";
+                                    foreach($selectedProdutosRelacionados as $prodRelacionado){
+                                        if($idProdutoRelacionado == $prodRelacionado){
+                                            $checked = "checked";
+                                        }
+                                    }
+                                    echo "<label class='label-relacionados'><input type='checkbox' name='produtos_relacionados[]' value='$idProdutoRelacionado' $checked> $nomeProdutoRelacionado</label>";
+                                }
+                            }else{
+                                echo "<h4 class='full'>Nenhum produto encontrado</h4>";
+                            }
+                        ?>
+                        </div>
+                        <div class="bottom-relacionados">
+                            <a class="btn-salvar-relacionados">Salvar</a>
+                        </div>
+                    </div>
+                    <!--END PRODUTOS RELACIONADOS-->
+                </div>
+                <div class="half" align=left>
+                    <!--PRODUTOS RELACIONADOS-->
+                    <h3 class="label-title">Cores Relacionadas</h3>
+                    <a class="btn-relacionados">Cores Selecionadas <?php echo "(".$ctrlRelacionados.")";?></a>
+                    <div class="display-relacionados display-cores-relacionadas">
+                        <div class="header-relacionados">
+                            <h3 class="title-relacionados">Cores relacionadas</h3>
                             <!--<h5 class="descricao-relacionados">Selecione os produtos relacionados</h5>-->
                             <input type="search" class="busca-relacionados" name="busca_relacionados" placeholder="Busque categoria, nome, marca, id, ou sku" form="busca_produto">
                             <label title="Listar somente os produtos que já foram selecionados"><input type="checkbox" id="checkOnlyActives"> Somente os selecionados</label>

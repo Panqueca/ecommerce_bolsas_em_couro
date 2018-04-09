@@ -234,5 +234,45 @@
                 return $validacao;
             }
         }
+        
+        function verify_session_start(){
+            if(!isset($_SESSION)){
+                session_start();
+            }
+        }
+        
+        public function logar($email, $senha){
+            $this->verify_session_start();
+            $this->reset_session(); // Se já houver alguma sessão
+            
+            $_SESSION["minha_conta"] = array();
+            $_SESSION["minha_conta"]["email"] = md5($email);
+            $_SESSION["minha_conta"]["senha"] = md5($senha);
+            
+            if($this->auth($_SESSION["minha_conta"]["email"], $_SESSION["minha_conta"]["senha"])){
+                return true;
+            }else{
+                $this->reset_session();
+                return false;
+            }
+        }
+        
+        public function auth($email = null, $senha = null){ // Dados devem estar em md5
+            if($email != null && $senha != null){
+                $tabela_minha_conta = $this->global_vars["tabela_minha_conta"];
+                $total = $this->pew_functions->contar_resultados($tabela_minha_conta, "md5(email) = '$email' and senha = '$senha'");
+                $return = $total > 0 ? true : false;
+                return $return;
+            }else{
+                return false;
+            }
+        }
+        
+        public function reset_session(){
+            $this->verify_session_start();
+            if(isset($_SESSION["minha_conta"])){
+                unset($_SESSION["minha_conta"]); // Caso já houvesse alguma sessão iniciada
+            }
+        }
     }
 ?>
