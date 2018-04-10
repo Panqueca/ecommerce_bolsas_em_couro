@@ -213,11 +213,11 @@
                 
                 // DADOS COMPRA
                 var displayDados = $(".dados-compra");
-                var tokenCarrinho = displayDados.children("#tokenCarrinho");
-                var idCliente = displayDados.children("#idCliente");
-                var nomeCliente = displayDados.children("#nomeCliente");
-                var cpfCliente = displayDados.children("#cpfCliente");
-                var emailCliente = displayDados.children("#emailCliente");
+                var tokenCarrinho = displayDados.children("#tokenCarrinho").val();
+                var idCliente = displayDados.children("#idCliente").val();
+                var nomeCliente = displayDados.children("#nomeCliente").val();
+                var cpfCliente = displayDados.children("#cpfCliente").val();
+                var emailCliente = displayDados.children("#emailCliente").val();
                 
                 // DADOS DA ENTREGA
                 var cepPadrao = $("#cepDestino").val() != "undefined" ? $("#cepDestino").val() : 0;
@@ -247,24 +247,25 @@
                 
                 
                 /*MAIN FUNCTIONS*/
-                function guardar_compra(cd_validacao, cd_transacao, cd_transporte){
+                function guardar_compra(cd_validacao, cd_transacao, cd_transporte, referencia){
                     var dados_compra = {
                         token_carrinho: tokenCarrinho,
                         itens_carrinho: jsonProduto,
                         codigo_confirmacao: cd_validacao,
                         codigo_transacao: cd_transacao,
                         codigo_transporte: cd_transporte,
+                        referencia: referencia,
                         id_cliente: idCliente,
                         nome_cliente: nomeCliente,
                         cpf_cliente: cpfCliente,
                         email_cliente: emailCliente,
-                        cep: $("#cepDestino"),
-                        rua: $("#ruaDestino"),
-                        numero: $("#numeroDestino"),
-                        complemento: $("#complementoDestino"),
-                        bairro: $("#bairroDestino"),
-                        cidade: $("#cidadeDestino"),
-                        estado: $("#estadoDestino"),
+                        cep: $("#cepDestino").val(),
+                        rua: $("#ruaDestino").val(),
+                        numero: $("#numeroDestino").val(),
+                        complemento: $("#complementoDestino").val(),
+                        bairro: $("#bairroDestino").val(),
+                        cidade: $("#cidadeDestino").val(),
+                        estado: $("#estadoDestino").val(),
                     }
                     
                     $.ajax({
@@ -278,7 +279,7 @@
                         success: function(resposta){
                             console.log(resposta);
                             if(resposta == "true"){
-                                mensagemAlerta("Sua compra foi finalizada com sucesso", false, "limegreen");
+                                mensagemAlerta("Sua compra foi finalizada com sucesso", false, "limegreen", "finalizar-compra.php");
                             }else{
                                 mensagemAlerta("Ocorreu um erro ao finalizar seu pedido. Recarregue a página e tente novamente.");
                             }
@@ -434,14 +435,16 @@
                                         window.location.reload();
                                     });
                                 },
-                                success: function(confirmationCode){
-                                    //console.log(confirmationCode)
-                                    if(confirmationCode != "false"){
+                                success: function(resposta){
+                                    if(resposta != "false"){
+                                        resposta = JSON.parse(resposta);
+                                        var confirmationCode = resposta.code;
+                                        var reference = resposta.reference;
                                         PagSeguroLightbox({
                                             code: confirmationCode
                                             }, {
                                             success: function(transactionCode) {
-                                                guardar_compra(confirmationCode, transactionCode, transportCode);
+                                                guardar_compra(confirmationCode, transactionCode, transportCode, reference);
                                             },
                                             abort: function() {
                                                 mensagemAlerta("Ocorreu um erro ao finalizar a compra. Tente novamente.", false, false, "finalizar-compra.php");

@@ -21,6 +21,8 @@
         "tabela_cores_relacionadas" => $pew_custom_db->tabela_cores_relacionadas,
         "tabela_minha_conta" => $pew_custom_db->tabela_minha_conta,
         "tabela_enderecos" => $pew_custom_db->tabela_enderecos,
+        "tabela_carrinhos" => $pew_custom_db->tabela_carrinhos,
+        "tabela_pedidos" => $pew_custom_db->tabela_pedidos,
     );
     global $globalVars;
 ?>

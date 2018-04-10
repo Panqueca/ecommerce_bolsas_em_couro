@@ -72,7 +72,7 @@ if(isset($_POST["cliente"])){
 
 if($enviarDados){
     
-    $data['reference'] = "PS".substr(md5(uniqid(time())), 0, 5); // REFERENCIA UNICA CRIADA PARA O PEDIDO
+    $data['reference'] = "PS".substr(md5(uniqid(time())), 0, 10); // REFERENCIA UNICA CRIADA PARA O PEDIDO
     $data['shippingType'] = 1;
     $data['shippingAddressStreet'] = $_POST["rua"];
     $data['shippingAddressNumber'] = $_POST["numero"];
@@ -114,8 +114,9 @@ if($enviarDados){
     
     $xml = simplexml_load_string($xml);
     
-    echo $xml->code;
+    $confirmationCode = $xml->code;
     
+    echo '{"reference": "'.$data['reference'].'", "code": "'.$confirmationCode.'"}'; // RETORNO EM JSON
 }else{
     echo "false";
 }
