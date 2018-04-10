@@ -119,6 +119,21 @@
                 cursor: pointer;
                 text-align: right;
             }
+            .main-content .display-carrinho .endereco-alternativo{
+                display: none;
+            }
+            .main-content .display-carrinho .endereco{
+                margin: 0px 0px 10px 15px;
+                font-weight: normal;
+            }
+            .main-content .display-carrinho .label-edita-endereco{
+                margin: 15px;
+                height: 20px;
+                display: block;
+                font-size: 14px;
+                line-height: 20px;
+                cursor: pointer;
+            }
             .main-content .display-carrinho .display-resultados-frete{
                 width: calc(40% - 20px);
             }
@@ -169,6 +184,17 @@
             .main-content .display-carrinho .bottom-info .botao-continuar:hover{
                 background-color: #518d36;   
             }
+            .botao-salvar{
+                background: #999;
+                color: #fff;
+                border: none;
+                padding: 5px 10px 5px 10px;
+                margin: 10px 0px 10px 0px;
+                cursor: pointer;
+            }
+            .botao-salvar:hover{
+                background-color: #777;   
+            }
         </style>
         <!--END PAGE CSS-->
         <!--PAGE JS-->
@@ -184,6 +210,8 @@
                 var iconLoading = "<i class='fas fa-spinner fa-spin icone-loading'></i>";
                 var calculandoFrete = false;
                 var infoCalculoFrete = $(".info-frete");
+                var cepPadrao = $("#cepDestino").val() != "undefined" ? $("#cepDestino").val() : 0;
+                var cepAlternativo = false;
                 
                 var jsonProduto = new Array();
                 var ctrl_array = 0;
@@ -390,9 +418,6 @@
                         }
                     });
                 });
-            });
-            
-            $(document).ready(function(){
                 
                 var carrinho = $("#carrinhoFinalizar").val();
                 var cepDestino = $("#cepDestino").val();
@@ -461,6 +486,69 @@
                         finalizarCompra();
                     });
                 }
+                
+                var objEnderecoAlternativo = $(".endereco-alternativo");
+                var objCheckboxEndereco = $("#enderecoDiferente");
+                var botaoSalvar = $(".salvar-new-endereco");
+                objCheckboxEndereco.off().on("change", function(){
+                    var checkbox = $(this);
+                    var checked = checkbox.prop("checked");
+                    if(checked){
+                        objEnderecoAlternativo.css({
+                            display: "block", 
+                        });
+                        
+                        $("#newCep").on("blur", function(){
+                            var cep = $("#newCep").val();
+                            var objRua = $("#newRua");
+                            var objBairro = $("#newBairro");
+                            var objEstado = $("#newEstado");
+                            var objCidade = $("#newCidade");
+                            if(cep.length == 9){
+                                var cepF = cep.replace("-", "");
+                                buscarCEP(cepF, objRua, objEstado, objCidade, objBairro);
+                            }else{
+                                objRua.val("");
+                                objBairro.val("");
+                                objEstado.val("");
+                                objCidade.val("");
+                            }
+                        });
+                        
+                        botaoSalvar.off().on("click", function(){
+                            var cep = $("#newCep").val();
+                            var rua = $("#newRua").val();
+                            var numero = $("#newNumero").val();
+                            
+                            
+                            if(IsCEP(cep) == false){
+                                mensagemAlerta("O campo CEP deve ser preenchido corretamente");
+                                return false;
+                            }
+
+                            if(rua.length == 0){
+                                mensagemAlerta("Certifique-se de que o CEP esteja preenchido corretamente");
+                                return false;
+                            }
+
+                            if(numero.length == 0){
+                                mensagemAlerta("O campo número deve conter no mínimo 1 caracter");
+                                return false;
+                            }
+                            
+                            cepAlternativo = true;
+                            $("#cepDestino").val(cep);
+                            calcular_frete();
+                        });
+                    }else{
+                        cepAlternativo = false;
+                        $("#cepDestino").val(cepPadrao);
+                        calcular_frete();
+                        objEnderecoAlternativo.css({
+                            display: "none", 
+                        });
+                    }
+                });
                 
             });
             
@@ -558,6 +646,55 @@
                                     $enderecos = $infoConta["enderecos"];
                                     $idEndereco = $enderecos["id"];
                                     $cepConta = $enderecos["cep"];
+                                    $rua = $enderecos["rua"];
+                                    $numero = $enderecos["numero"];
+                                    $complemento = $enderecos["complemento"] != "" ? ", {$enderecos["complemento"]}." : "";
+                                    echo "<h5 class='endereco'>Enviando para: <b>$rua, $numero $complemento</b></h5>";
+                                    echo "<label class='label-edita-endereco'>";
+                                        echo "<input type='checkbox' name='endereco_diferente' id='enderecoDiferente'> Enviar para outro endereço";
+                                    echo "</label>";
+                                    echo "<div class='endereco-alternativo'>";
+                                    ?>
+                                        <div class='label-medium'>
+                                            <h4 class='input-title'>CEP</h4>
+                                            <input type='text' placeholder='00000-000' name='cep' id='newCep' tabindex='1' class='mascara-cep input-standard'>
+                                            <h6 class='msg-input'></h6>
+                                        </div>
+                                        <div class='label-large'>
+                                            <h4 class='input-title'>Rua</h4>
+                                            <input type='text' placeholder='Rua' name='rua' id='newRua' class='input-nochange input-standard' readonly>
+                                            <h6 class='msg-input'></h6>
+                                        </div>
+                                        <br style='clear: both'>
+                                        <div class='label-medium'>
+                                            <h4 class='input-title'>Número</h4>
+                                            <input type='text' placeholder='Numero' name='numero' id='newNumero' tabindex='2' class='input-standard'>
+                                            <h6 class='msg-input'></h6>
+                                        </div>
+                                        <div class='label-medium'>
+                                            <h4 class='input-title'>Complemento</h4>
+                                            <input type='text' placeholder='Complemento' name='complemento' id='newComplemento' tabindex='3' class='input-standard'>
+                                            <h6 class='msg-input'></h6>
+                                        </div>
+                                        <div class='label-medium'>
+                                            <h4 class='input-title'>Bairro</h4>
+                                            <input type='text' placeholder='Bairro' name='bairro' id='newBairro' class='input-nochange input-standard' readonly>
+                                        </div>
+                                        <div class='group'>
+                                            <div class='label-medium'>
+                                                <h4 class='input-title'>Estado</h4>
+                                                <input type='text' placeholder='Estado' name='estado' id='newEstado' class='input-nochange input-standard' readonly>
+                                            </div>
+                                            <div class='label-medium'>
+                                                <h4 class='input-title'>Cidade</h4>
+                                                <input type='text' placeholder='Cidade' name='cidade' id='newCidade' class='input-nochange input-standard' readonly>
+                                            </div>
+                                        </div>
+                                        <div class='label-full clear'>
+                                            <button class='botao-salvar salvar-new-endereco' type='button'>SALVAR</button>
+                                        </div>
+                                    <?php
+                                    echo "</div>";
                                     echo "<div class='span-frete'></div>";
                                     echo "<input type='hidden' id='cepDestino' value='$cepConta'>";
                                     echo "<input type='hidden' id='idEndereco' value='$idEndereco'>";
