@@ -211,6 +211,14 @@
                 var viewTotalCompra = $(".final-value");
                 var viewCarrinhoFrete = $(".view-frete");
                 
+                // DADOS COMPRA
+                var displayDados = $(".dados-compra");
+                var tokenCarrinho = displayDados.children("#tokenCarrinho");
+                var idCliente = displayDados.children("#idCliente");
+                var nomeCliente = displayDados.children("#nomeCliente");
+                var cpfCliente = displayDados.children("#cpfCliente");
+                var emailCliente = displayDados.children("#emailCliente");
+                
                 // DADOS DA ENTREGA
                 var cepPadrao = $("#cepDestino").val() != "undefined" ? $("#cepDestino").val() : 0;
                 var ruaPadrao = $("#ruaDestino").val() != "undefined" ? $("#ruaDestino").val() : 0;
@@ -239,8 +247,43 @@
                 
                 
                 /*MAIN FUNCTIONS*/
-                function guardar_compra(){
-                    mensagemAlerta("Sua compra foi finalizada com sucesso", false, "limegreen");
+                function guardar_compra(cd_validacao, cd_transacao, cd_transporte){
+                    var dados_compra = {
+                        token_carrinho: tokenCarrinho,
+                        itens_carrinho: jsonProduto,
+                        codigo_confirmacao: cd_validacao,
+                        codigo_transacao: cd_transacao,
+                        codigo_transporte: cd_transporte,
+                        id_cliente: idCliente,
+                        nome_cliente: nomeCliente,
+                        cpf_cliente: cpfCliente,
+                        email_cliente: emailCliente,
+                        cep: $("#cepDestino"),
+                        rua: $("#ruaDestino"),
+                        numero: $("#numeroDestino"),
+                        complemento: $("#complementoDestino"),
+                        bairro: $("#bairroDestino"),
+                        cidade: $("#cidadeDestino"),
+                        estado: $("#estadoDestino"),
+                    }
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: "@grava-pedido.php",
+                        data: JSON.stringify(dados_compra),
+                        contentType: "application/json",
+                        error: function(){
+                            mensagemAlerta("Ocorreu um erro ao finalizar seu pedido. Recarregue a página e tente novamente.");
+                        },
+                        success: function(resposta){
+                            console.log(resposta);
+                            if(resposta == "true"){
+                                mensagemAlerta("Sua compra foi finalizada com sucesso", false, "limegreen");
+                            }else{
+                                mensagemAlerta("Ocorreu um erro ao finalizar seu pedido. Recarregue a página e tente novamente.");
+                            }
+                        }
+                    });
                 }
                                 
                 function calcular_frete(){
@@ -347,11 +390,11 @@
                 function finalizarCompra(){
                     
                     if(!finalizandoCompra){
-                        finalizarCompra = true;
+                        finalizandoCompra = true;
                         var botaoFinalizar = $("#botaoFinalizarCompra");
                         var opcaoFrete = $(".opcao-frete");
                         var viewCarrinhoFrete = $(".view-frete");
-                        var checkOption = false;
+                        var transportCode = false;
                         
                         botaoFinalizar.html("Validando " + iconLoading);
                         
@@ -361,11 +404,11 @@
                             var frete = input.attr("price-frete");
                             var checked = input.prop("checked");
                             if(checked){
-                                checkOption = value;
+                                transportCode = value;
                             }
                         });
 
-                        if(checkOption != false){
+                        if(transportCode != false){
 
                             var dados = {
                                 cep_destino: $("#cepDestino").val(),
@@ -376,7 +419,7 @@
                                 estado_destino: $("#estadoDestino").val(),
                                 cidade_destino: $("#cepDestino").val(),
                                 produtos: carrinho,
-                                codigo_correios: checkOption,
+                                codigo_correios: transportCode,
                             }
 
                             $.ajax({
@@ -391,14 +434,14 @@
                                         window.location.reload();
                                     });
                                 },
-                                success: function(resposta){
-                                    console.log(resposta)
-                                    if(resposta != "false"){
+                                success: function(confirmationCode){
+                                    //console.log(confirmationCode)
+                                    if(confirmationCode != "false"){
                                         PagSeguroLightbox({
-                                            code: resposta
+                                            code: confirmationCode
                                             }, {
                                             success: function(transactionCode) {
-                                                guardar_compra();
+                                                guardar_compra(confirmationCode, transactionCode, transportCode);
                                             },
                                             abort: function() {
                                                 mensagemAlerta("Ocorreu um erro ao finalizar a compra. Tente novamente.", false, false, "finalizar-compra.php");
@@ -794,6 +837,16 @@
                             echo "</div>";
                             if(isset($_SESSION["minha_conta"])){
                                 if($loginConta->auth($emailConta, $senhaConta) == true){
+                                    $idCliente = $loginConta->query_minha_conta("md5(email) = '$emailConta' and senha = '$senhaConta'");
+                                    $loginConta->montar_minha_conta($idCliente);
+                                    $infoCliente = $loginConta->montar_array();
+                                    echo "<div class='dados-compra'>";
+                                        echo "<input type='hidden' id='tokenCarrinho' value='{$_SESSION["carrinho"]["token"]}'>";
+                                        echo "<input type='hidden' id='idCliente' value='{$infoCliente["id"]}'>";
+                                        echo "<input type='hidden' id='nomeCliente' value='{$infoCliente["usuario"]}'>";
+                                        echo "<input type='hidden' id='cpfCliente' value='{$infoCliente["cpf"]}'>";
+                                        echo "<input type='hidden' id='emailCliente' value='{$infoCliente["email"]}'>";
+                                    echo "</div>";
                                     echo "<button type='button' class='botao-continuar botao-finalizar-compra' id='botaoFinalizarCompra'>Finalizar <i class='fas fa-check'></i></button>";
                                 }else{
                                     echo "<button type='button' class='botao-continuar botao-login-compra' id='botaoLoginCompra'><i class='fas fa-lock'></i> Faça login para continuar</button>";

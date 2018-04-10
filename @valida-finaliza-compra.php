@@ -11,9 +11,9 @@
         $cidadeDestino = isset($jsonData["cidade_destino"]) ? $jsonData["cidade_destino"] : null;
         $estadoDestino = isset($jsonData["estado_destino"]) ? $jsonData["estado_destino"] : null;
         
-        $produtos = isset($jsonData["produtos"]) ? json_decode($jsonData["produtos"]) : null;
+        $infoCarrinho = isset($jsonData["produtos"]) ? json_decode($jsonData["produtos"]) : null;
         
-        if($cepDestino != null && $produtos != null){
+        if($cepDestino != null && $infoCarrinho != null){
             $_POST["cep_destino"] = $cepDestino;
             $_POST["rua_destino"] = $ruaDestino;
             $_POST["numero_destino"] = $numeroDestino;
@@ -23,7 +23,9 @@
             $_POST["estado_destino"] = $estadoDestino;
             $_POST["produtos"] = array();
             $i = 0;
-            foreach($produtos as $objItem){
+            
+            $infoCarrinho = (array)$infoCarrinho;
+            foreach($infoCarrinho["itens"] as $objItem){
                 $item = (array)$objItem;
                 $_POST["produtos"][$i] = array();
                 $_POST["produtos"][$i]["id"] = $item["id"];
@@ -37,6 +39,8 @@
                 $_POST["produtos"][$i]["peso"] = $item["peso"];
                 $i++;
             }
+            
+            $tokenCarrinho = $infoCarrinho["token"];
         }
         
         
@@ -44,14 +48,14 @@
     }
 
     $post_fields = array("cep_destino", "produtos");
-    $invalid_fileds = array();
+    $invalid_fields = array();
     $finalizar = true;
     $i = 0;
     foreach($post_fields as $post_name){
         if(!isset($_POST[$post_name])){
             $finalizar = false;
             $i++;
-            $invalid_fileds[$i] = $post_name;
+            $invalid_fields[$i] = $post_name;
         }
     }
 
@@ -137,7 +141,7 @@
             echo "false";
         }
     }else{
-        print_r($invalid_fileds);
+        print_r($invalid_fields);
         //echo "false";
     }
 ?>

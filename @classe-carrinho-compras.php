@@ -29,14 +29,17 @@
         
         function set_token(){
             if(!isset($_SESSION["carrinho"]["token"]) || $_SESSION["carrinho"]["token"] == null){
-                $_SESSION["carrinho"]["token"] = "CTK" . substr(md5(time()), 0, 6);
+                $_SESSION["carrinho"]["token"] = "CTK" . substr(md5(time()), 0, 10);
             }
         }
         
         function verify_session(){
             if(!isset($_SESSION)) session_start();
             
-            if(!isset($_SESSION["carrinho"])) $_SESSION["carrinho"] = array(); $_SESSION["carrinho"]["itens"] = array();
+            if(!isset($_SESSION["carrinho"])){
+                $_SESSION["carrinho"] = array();   
+                $_SESSION["carrinho"]["itens"] = array();
+            }
             
             if(!isset($_SESSION["carrinho"]["token"]) || $_SESSION["carrinho"]["token"] == null){
                 $this->set_token();
@@ -95,7 +98,6 @@
                     return "true";
                     
                 }else if($is_adicionado == true){
-                    
                     set_produto($infoProduto["id"], $infoProduto["nome"], $precoFinal, $infoProduto["estoque"], $quantidade, $infoProduto["comprimento"], $infoProduto["largura"], $infoProduto["altura"], $infoProduto["peso"], $indice_item);
                     return "true";
                     
