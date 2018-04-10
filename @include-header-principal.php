@@ -836,8 +836,8 @@
                             $cls_carrinho = new Carrinho();
                             $carrinho = $cls_carrinho->get_carrinho();
                             $totalCarrinho = 0;
-                            if(count($carrinho) > 0){
-                                foreach($carrinho as $item){
+                            if(count($carrinho["itens"]) > 0){
+                                foreach($carrinho["itens"] as $item){
                                     $id = $item["id"];
                                     $titulo = $item["nome"];
                                     $preco = $item["preco"];
