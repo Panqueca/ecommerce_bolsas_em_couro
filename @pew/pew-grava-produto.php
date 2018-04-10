@@ -49,6 +49,7 @@
         $subcategoriasProduto = isset($_POST["subcategorias"]) ? $_POST["subcategorias"] : "";
         $especificacoes = isset($_POST["especicacao_produto"]) ? $_POST["especicacao_produto"] : "";
         $produtosRelacionados = isset($_POST["produtos_relacionados"]) ? $_POST["produtos_relacionados"] : "";
+        $coresRelacionadas = isset($_POST["cores_relacionadas"]) ? $_POST["cores_relacionadas"] : "";
         $statusProduto = intval($_POST["status"]) == 1 ? 1 : 0;
         $urlVideoProduto = addslashes($_POST["url_video"]);
         
@@ -73,6 +74,7 @@
         $tabela_subcategorias_produtos = $pew_custom_db->tabela_subcategorias_produtos;
         $tabela_especificacoes_produtos = $pew_custom_db->tabela_especificacoes_produtos;
         $tabela_produtos_relacionados = $pew_custom_db->tabela_produtos_relacionados;
+        $tabela_cores_relacionadas = $pew_custom_db->tabela_cores_relacionadas;
         /*END SET TABLES*/
 
         /*VALIDACOES E SQL FUNCTIONS*/
@@ -132,6 +134,15 @@
                     mysqli_query($conexao, "insert into $tabela_produtos_relacionados (id_produto, id_relacionado) values ('$idProduto', '$idProdutoRelacionado')");
                 }
             }
+            
+            /*INSERE CORES DE PRODUTOS RELACIONADOS*/
+            if($coresRelacionadas != ""){
+                foreach($coresRelacionadas as $idProdutoRelacionado){
+                    mysqli_query($conexao, "insert into $tabela_cores_relacionadas (id_produto, id_relacionado, $dataAtual, $statusProduto) values ('$idProduto', '$idProdutoRelacionado')");
+                }
+            }
+            
+            
             /*INSERE IMAGENS*/
             $maxImagens = isset($_POST["maximo_imagens"]) && (int)$_POST["maximo_imagens"] ? (int)$_POST["maximo_imagens"] : 4;
             for($i = 1; $i <= $maxImagens; $i++){

@@ -51,13 +51,14 @@
             public $tabela_especificacoes;
             public $tabela_especificacoes_produtos;
             public $tabela_produtos_relacionados;
+            public $tabela_cores_relacionadas;
             public $tabela_newsletter;
             public $tabela_minha_conta;
             public $tabela_enderecos;
             public $tabela_links_menu;
             public $tabela_dicas;
 
-            function __construct($tb_produtos, $tb_marcas, $tb_marcas_produtos, $tb_cores, $tb_cores_produtos, $tb_imagens_produtos, $tb_departamentos, $tb_departamentos_produtos, $tb_categorias_produtos, $tb_subcategorias_produtos, $tb_orcamentos, $tb_config_orcamentos, $tb_categorias_vitrine, $tb_categoria_destaque, $tb_especificacoes, $tb_especificacoes_produtos, $tb_produtos_relacionados, $tb_newsletter, $tb_minha_conta, $tb_enderecos, $tb_links_menu, $tb_dicas){
+            function __construct($tb_produtos, $tb_marcas, $tb_marcas_produtos, $tb_cores, $tb_cores_produtos, $tb_imagens_produtos, $tb_departamentos, $tb_departamentos_produtos, $tb_categorias_produtos, $tb_subcategorias_produtos, $tb_orcamentos, $tb_config_orcamentos, $tb_categorias_vitrine, $tb_categoria_destaque, $tb_especificacoes, $tb_especificacoes_produtos, $tb_produtos_relacionados, $tb_cores_relacionadas, $tb_newsletter, $tb_minha_conta, $tb_enderecos, $tb_links_menu, $tb_dicas){
                 $this->tabela_produtos = $tb_produtos;
                 $this->tabela_marcas = $tb_marcas;
                 $this->tabela_marcas_produtos = $tb_marcas_produtos;
@@ -75,6 +76,7 @@
                 $this->tabela_especificacoes = $tb_especificacoes;
                 $this->tabela_especificacoes_produtos = $tb_especificacoes_produtos;
                 $this->tabela_produtos_relacionados = $tb_produtos_relacionados;
+                $this->tabela_cores_relacionadas = $tb_cores_relacionadas;
                 $this->tabela_newsletter = $tb_newsletter;
                 $this->tabela_minha_conta = $tb_minha_conta;
                 $this->tabela_enderecos = $tb_enderecos;
@@ -83,7 +85,7 @@
             }
         }
     }
-    $pew_custom_db = new Pew_Custom_Data_Base("pew_produtos", "pew_marcas", "pew_marcas_produtos", "pew_cores", "pew_cores_produtos", "pew_imagens_produtos", "pew_departamentos", "pew_departamentos_produtos", "pew_categorias_produtos", "pew_subcategorias_produtos", "pew_orcamentos", "pew_config_orcamentos", "pew_categorias_vitrine", "pew_categoria_destaque", "pew_especificacoes_tecnicas", "pew_especificacoes_produtos", "pew_produtos_relacionados", "pew_newsletter", "pew_minha_conta", "pew_enderecos", "pew_links_menu", "pew_dicas");
+    $pew_custom_db = new Pew_Custom_Data_Base("pew_produtos", "pew_marcas", "pew_marcas_produtos", "pew_cores", "pew_cores_produtos", "pew_imagens_produtos", "pew_departamentos", "pew_departamentos_produtos", "pew_categorias_produtos", "pew_subcategorias_produtos", "pew_orcamentos", "pew_config_orcamentos", "pew_categorias_vitrine", "pew_categoria_destaque", "pew_especificacoes_tecnicas", "pew_especificacoes_produtos", "pew_produtos_relacionados", "pew_cores_relacionadas", "pew_newsletter", "pew_minha_conta", "pew_enderecos", "pew_links_menu", "pew_dicas");
     /*FIM TABELAS CUSTOMIZADAS ADICIONAIS*/
 
     /*GLOBAL VARS*/
