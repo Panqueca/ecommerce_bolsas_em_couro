@@ -204,7 +204,7 @@
                 function calcular_frete(){
                     if(!calculandoFrete){
                         var urlFrete = "frete-correios/@trigger-calculo.php";
-                        var cepDestino = $("#cepDestino").val();
+                        var cepDestino = typeof $("#cepDestino").val() != "undefined" ? $("#cepDestino").val() : 0;
                         var codigosServico = ["41106", "40010", "40215", "40290"];
                         displayResultadoFrete.html(iconLoading + " Calculando frete");
                         
