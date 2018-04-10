@@ -63,8 +63,14 @@
                 $this->data_cadastro = $info["data_cadastro"];
                 $this->data_controle = $info["data_controle"];
                 $this->status = $info["status"];
-                $this->enderecos = "usar_classe_enderecos";
-                $this->quantidade_enderecos = "usar_classe_enderecos";
+                
+                $enderecos = new Enderecos();
+                $id = $enderecos->query_endereco("id_relacionado = '{$this->id}' and status = 1 order by id desc");
+                $enderecos->montar_endereco("id = '$id'");
+                $infoEndereco = $enderecos->montar_array();
+                
+                $this->enderecos = $infoEndereco;
+                $this->quantidade_enderecos = count($infoEndereco);
                 $this->minha_conta_montada = true;
             }else{
                 $this->minha_conta_montada = false;
@@ -223,7 +229,7 @@
                         $cidade = $infoEndereco["cidade"];
                         $estado = $infoEndereco["estado"];
                         $cadastraEndereco[$ctrlEnderecos] = new Enderecos();
-                        $cadastraEndereco[$ctrlEnderecos]->cadastra_endereco($idConta, "cliente", $cep, $rua, $numero, $complemento, $bairro, $cidade, $estado);
+                        $cadastraEndereco[$ctrlEnderecos]->cadastra_endereco($idConta, "cliente", $cep, $rua, $numero, $complemento, $bairro, $estado, $cidade);
                         $ctrlEnderecos++;
                     }
                     return true;
@@ -232,6 +238,46 @@
                 }
             }else{
                 return $validacao;
+            }
+        }
+        
+        function verify_session_start(){
+            if(!isset($_SESSION)){
+                session_start();
+            }
+        }
+        
+        public function logar($email, $senha){
+            $this->verify_session_start();
+            $this->reset_session(); // Se já houver alguma sessão
+            
+            $_SESSION["minha_conta"] = array();
+            $_SESSION["minha_conta"]["email"] = md5($email);
+            $_SESSION["minha_conta"]["senha"] = md5($senha);
+            
+            if($this->auth($_SESSION["minha_conta"]["email"], $_SESSION["minha_conta"]["senha"])){
+                return true;
+            }else{
+                $this->reset_session();
+                return false;
+            }
+        }
+        
+        public function auth($email = null, $senha = null){ // Dados devem estar em md5
+            if($email != null && $senha != null){
+                $tabela_minha_conta = $this->global_vars["tabela_minha_conta"];
+                $total = $this->pew_functions->contar_resultados($tabela_minha_conta, "md5(email) = '$email' and senha = '$senha'");
+                $return = $total > 0 ? true : false;
+                return $return;
+            }else{
+                return false;
+            }
+        }
+        
+        public function reset_session(){
+            $this->verify_session_start();
+            if(isset($_SESSION["minha_conta"])){
+                unset($_SESSION["minha_conta"]); // Caso já houvesse alguma sessão iniciada
             }
         }
     }

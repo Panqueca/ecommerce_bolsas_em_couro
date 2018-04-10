@@ -28,16 +28,13 @@ function limpa_formulario(){
 }
 
 function buscarCEP(cep, rua, estado, cidade, bairro){
+    
     objRua = rua;
     objBairro = bairro;
     objCidade = cidade;
     objEstado = estado;
 
     function pesquisa_cep(){
-
-        //Nova variável "cep" somente com dígitos.
-        var getCep = $("#cep").val();
-        var cep = getCep.replace(/\D/g, '');
 
         //Verifica se campo cep possui valor informado.
         if (cep != ""){

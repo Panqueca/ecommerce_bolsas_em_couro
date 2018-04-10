@@ -166,7 +166,7 @@
         background-color: #6abd45;
         color: #fff;
         border: none;
-        width: 120px;
+        width: 95px;
         height: 30px;
         line-height: 32px;
         text-align: left;
@@ -178,10 +178,10 @@
         cursor: pointer;
         outline: none;
         font-weight: normal;
-        font-size: 18px;
+        font-size: 12px;
     }
     .section-login .formulario-login .botao-submit .icone{
-        font-size: 18px;
+        font-size: 14px;
         position: absolute;
         top: 0px;
         height: 30px;

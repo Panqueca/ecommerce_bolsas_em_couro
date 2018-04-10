@@ -17,8 +17,9 @@ function frete($produtos = null, $codigo_correios = "41106", $cep_destino = null
         $largura =  $infoProduto["largura"];
         $altura =  $infoProduto["altura"];
         $peso =  $infoProduto["peso"];
+        $quantidade = isset($infoProduto["quantidade"]) && $infoProduto["quantidade"] > 0 ? $infoProduto["quantidade"] : 1;
         
-        $empacotamento->add_produto($id, $titulo, $preco, $comprimento, $largura, $altura, $peso);
+        $empacotamento->add_produto($id, $titulo, $preco, $comprimento, $largura, $altura, $peso, $quantidade);
     }
 
 
@@ -104,7 +105,9 @@ function frete($produtos = null, $codigo_correios = "41106", $cep_destino = null
         
         $freteFinal = $functions->custom_number_format($freteFinal);
         
-        $finalReturn = '{"valor": '.$freteFinal.', "prazo": "'.$prazoFinal.' dias"}';
+        $textPrazo = $prazoFinal == 1 ? "dia" : "dias";
+        
+        $finalReturn = '{"valor": '.$freteFinal.', "prazo": "'.$prazoFinal.' '.$textPrazo.'"}';
 
         return $finalReturn;
     }

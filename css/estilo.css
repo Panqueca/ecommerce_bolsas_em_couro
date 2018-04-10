@@ -69,26 +69,32 @@ button{
 .label-xsmall{
     width: calc((100%/6) - 30.23px);
     margin: 5px 15px 5px 15px;
+    float: left;
 }
 .label-small{
     width: calc((100%/4) - 30px);
     margin: 5px 15px 5px 15px;
+    float: left;
 }
 .label-medium{
     width: calc((100%/3) - 30px);
     margin: 5px 15px 5px 15px;
+    float: left;
 }
 .label-half{
     width: calc((100%/2) - 30px);
     margin: 5px 15px 5px 15px;
+    float: left;
 }
 .label-large{
     width: calc((100%/1.5) - 30px);
     margin: 5px 15px 5px 15px;
+    float: left;
 }
 .label-xlarge{
     width: calc((100%/1.335) - 30px);
     margin: 5px 15px 5px 15px;
+    float: left;
 }
 .label-full{
     width: calc(100% - 30px);
@@ -103,5 +109,22 @@ button{
     border: 1px solid #ccc;
     outline: none;
     transition: .3s;
+}
+.input-title{
+    font-size: 14px;
+    margin: 0px;
+    text-align: left;
+    color: #666;
+}
+.input-nochange{
+    background-color: #f3f3f3;
+    pointer-events: none;
+}
+.group{
+    width: 100%;
+    clear: both;
+}
+.clear{
+    clear: both;
 }
 /*END FORM STYLES*/
