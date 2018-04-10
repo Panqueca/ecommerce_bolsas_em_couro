@@ -155,7 +155,7 @@
             .main-content .display-carrinho .bottom-info .display-total .view-total .title{
                 margin: 0px 25px 0px 0px;
             }
-            .main-content .display-carrinho .bottom-info .botao-finalizar-compra{
+            .main-content .display-carrinho .bottom-info .botao-continuar{
                 background-color: #6abd45;
                 border: none;
                 padding: 0px 20px 0px 20px;
@@ -166,7 +166,7 @@
                 outline: none;
                 cursor: pointer;
             }
-            .main-content .display-carrinho .bottom-info .botao-finalizar-compra:hover{
+            .main-content .display-carrinho .bottom-info .botao-continuar:hover{
                 background-color: #518d36;   
             }
         </style>
@@ -196,20 +196,19 @@
                     var larguraProduto = $(this).children("#freteLarguraProduto").val();
                     var alturaProduto = $(this).children("#freteAlturaProduto").val();
                     var pesoProduto = $(this).children("#fretePesoProduto").val();
-                    jsonProduto[ctrl_array] = {"id": idProduto, "titulo": tituloProduto, "preco": precoProduto, "comprimento": comprimentoProduto, "largura": larguraProduto, "altura": alturaProduto, "peso": pesoProduto};
+                    var quantidadeProduto = $(this).children("#freteQuantidadeProduto").val();
+                    jsonProduto[ctrl_array] = {"id": idProduto, "titulo": tituloProduto, "preco": precoProduto, "comprimento": comprimentoProduto, "largura": larguraProduto, "altura": alturaProduto, "peso": pesoProduto, "quantidade": quantidadeProduto};
                     ctrl_array++;
                 });                
                                 
-                input_mask(".input-frete", "99999-999");
-                
                 function calcular_frete(){
                     if(!calculandoFrete){
                         var urlFrete = "frete-correios/@trigger-calculo.php";
-                        var cepDestino = "80230-040";
+                        var cepDestino = $("#cepDestino").val();
                         var codigosServico = ["41106", "40010", "40215", "40290"];
                         displayResultadoFrete.html(iconLoading + " Calculando frete");
                         
-                        if(cepDestino.length == 9){
+                        if(cepDestino.length == 8){
                             
                             botaoCalculoFrete.html(iconLoading);
                             calculandoFrete = true;
@@ -309,7 +308,7 @@
                             viewCarrinhoFrete.html("R$ " + frete);
                             var total = parseFloat(totalCarrinho) + parseFloat(frete);
                             total = total.toFixed(2);
-                            viewTotalCompra.html("R$ " + total);
+                            viewTotalCompra.html(total);
                         });
                     });
                 }, 500);
@@ -349,6 +348,120 @@
                         mensagemConfirma("Tem certeza que deseja remover este produto?", remover);
                     });
                 });
+                
+                var controllerPreco = $(".controller-preco");
+                var inputQuantidade = controllerPreco.children(".quantidade-produto");
+                inputQuantidade.each(function(){
+                    var input = $(this);
+                    var idProduto = input.attr("carrinho-id-produto");
+                    var quantidade = 1;
+                    input.off().on("change", function(){
+                        quantidade = input.val();
+                        if(quantidade == 0 || quantidade == "" || typeof quantidade == "undefined"){
+                            quantidade = 1;
+                        }
+                        if(idProduto != "undefined" && idProduto > 0){
+                            adicionandoCarrinho = true;
+                            var quantidade = quantidade;
+                            $.ajax({
+                                type: "POST",
+                                url: "@classe-carrinho-compras.php",
+                                data: {acao_carrinho: "adicionar_produto", id_produto: idProduto, quantidade: quantidade},
+                                error: function(){
+                                    notificacaoPadrao("Ocorreu um erro ao adicionar o produto ao carrinho");
+                                    adicionandoCarrinho = false;
+                                },
+                                success: function(resposta){
+                                    if(resposta == "true"){
+                                        notificacaoPadrao("<i class='fas fa-plus'></i> Produto atualizado", "success");
+                                        setTimeout(function(){
+                                            window.location.reload();
+                                        }, 300);
+                                    }else if(resposta == "sem_estoque"){
+                                        notificacaoPadrao("<i class='fas fa-exclamation-circle'></i> Produto sem estoque");
+                                    }else{
+                                        notificacaoPadrao("Ocorreu um erro ao adicionar o produto ao carrinho");
+                                    }
+                                }
+
+                            });
+                        }else{
+                            notificacaoPadrao("Ocorreu um erro ao adicionar o produto ao carrinho");
+                        }
+                    });
+                });
+            });
+            
+            $(document).ready(function(){
+                
+                var carrinho = $("#carrinhoFinalizar").val();
+                var cepDestino = $("#cepDestino").val();
+                var idEndereco = $("#idEndereco").val();
+                function finalizarCompra(){
+                    var opcaoFrete = $(".opcao-frete");
+                    var viewCarrinhoFrete = $(".view-frete");
+                    var checkOption = false;
+                    opcaoFrete.each(function(){
+                        var input = $(this);
+                        var value = input.val();
+                        var frete = input.attr("price-frete");
+                        var checked = input.prop("checked");
+                        if(checked){
+                            checkOption = value;
+                        }
+                    });
+                    
+                    if(checkOption != false){
+                        var dados = {
+                            cep_destino: cepDestino,
+                            produtos: carrinho,
+                            codigo_correios: checkOption,
+                            id_endereco: idEndereco
+                        }
+                        
+                        $.ajax({
+                            type: "POST",
+                            url: "@valida-finaliza-compra.php",
+                            data: JSON.stringify(dados),
+                            contentType: "application/json",
+                            error: function(){
+                                mensagemAlerta("Ocorreu um erro ao finalizar sua compra");
+                            },
+                            success: function(resposta){
+                                console.log(resposta)
+                                if(resposta != "false"){
+                                    PagSeguroLightbox({
+                                        code: resposta
+                                        }, {
+                                        success: function(transactionCode) {
+                                            mensagemAlerta("Sua compra foi finalizada com sucesso", false, "limegreen");
+                                        },
+                                        abort: function() {
+                                            mensagemAlerta("Ocorreu um erro ao finalizar a compra. Tente novamente.", false, false, "finalizar-compra.php");
+                                        }
+                                    });
+                                }else{
+                                    mensagemAlerta("Ocorreu um erro ao finalizar sua compra");
+                                }
+                            }
+                        });
+                    }else{
+                        mensagemAlerta("Selecione uma opção de frete");
+                    }
+                }
+                
+                if(document.getElementById("botaoLoginCompra") != null){
+                    document.getElementById("botaoLoginCompra").addEventListener("click", function(){
+                        toggleLogin();
+                    });
+                }
+                
+                if(document.getElementById("botaoFinalizarCompra") != null){
+                    document.getElementById("botaoFinalizarCompra").addEventListener("click", function(){
+                        finalizarCompra();
+                    });
+                }
+                
             });
             
         </script>
@@ -374,6 +487,10 @@
                     $cls_carrinho = new Carrinho();
                     $carrinho_finalizar = $cls_carrinho->get_carrinho();
                     $tabela_imagens_produtos = $pew_custom_db->tabela_imagens_produtos;
+                
+                    $carrinho_json = json_encode($carrinho_finalizar);
+                
+                    echo "<input type='hidden' value='$carrinho_json' id='carrinhoFinalizar'>";
                 
                     $dirImagens = "imagens/produtos";
                     if(count($carrinho_finalizar) > 0){
@@ -408,7 +525,7 @@
                                 echo "<div class='price-field'>";
                                     echo "<div class='controller-preco'>";
                                         echo "<h5 class='price'>R$ $preco</h5>";
-                                        echo "<input type='number' class='quantidade-produto' placeholder='Qtd' value='$quantidade'>";
+                                        echo "<input type='number' class='quantidade-produto' placeholder='Qtd' value='$quantidade' carrinho-id-produto='$idProduto'>";
                                     echo "</div>";
                                     echo "<div class='view-subtotal-produto'>";
                                         echo "<h4 class='subtotal'>R$ <span class='view-price'>$subtotal</span></h4>";
@@ -423,13 +540,33 @@
                                     echo "<input type='hidden' id='freteLarguraProduto' value='$largura'>";
                                     echo "<input type='hidden' id='freteAlturaProduto' value='$altura'>";
                                     echo "<input type='hidden' id='fretePesoProduto' value='$peso'>";
+                                    echo "<input type='hidden' id='freteQuantidadeProduto' value='$quantidade'>";
                                 echo "</span>";
                             echo "</div>";
                         }
-                        $totalItens = $pew_functions->custom_number_format($totalItens);
                         echo "<div class='display-resultados-frete'>";
                             echo "<h5 class='titulo'>Método de envio</h5>";
-                            echo "<div class='span-frete'></div>";
+                            $totalItens = $pew_functions->custom_number_format($totalItens);
+                            if(isset($_SESSION["minha_conta"])){
+                                $sessaoConta = $_SESSION["minha_conta"];
+                                $emailConta = isset($sessaoConta["email"]) ? $sessaoConta["email"] : null;
+                                $senhaConta = isset($sessaoConta["senha"]) ? $sessaoConta["senha"] : null;
+                                if($loginConta->auth($emailConta, $senhaConta) == true){
+                                    $idConta = $loginConta->query_minha_conta("md5(email) = '$emailConta' and senha = '$senhaConta'");
+                                    $loginConta->montar_minha_conta($idConta);
+                                    $infoConta = $loginConta->montar_array();
+                                    $enderecos = $infoConta["enderecos"];
+                                    $idEndereco = $enderecos["id"];
+                                    $cepConta = $enderecos["cep"];
+                                    echo "<div class='span-frete'></div>";
+                                    echo "<input type='hidden' id='cepDestino' value='$cepConta'>";
+                                    echo "<input type='hidden' id='idEndereco' value='$idEndereco'>";
+                                }else{
+                                    echo "<h6 style='margin: 0px 0px 0px 15px; font-weight: normal;'>Entre com sua conta para calcular</h6>";
+                                }
+                            }else{
+                                echo "<h6 style='margin: 0px 0px 0px 15px; font-weight: normal;'>Entre com sua conta para calcular</h6>";
+                            }
                         echo "</div>";
                         echo "<div class='bottom-info'>";
                             echo "<input type='hidden' id='totalCarrinho' value='$totalItens'>";
@@ -440,7 +577,15 @@
                             echo "<div class='display-total'>";
                                 echo "<h4 class='view-total'><span class='title title-bold'>Total</span> R$ <span class='final-value view-total'>$totalItens</span></h4>";
                             echo "</div>";
-                            echo "<button type='button' class='botao-finalizar-compra'>Finalizar <i class='fas fa-check'></i></button>";
+                            if(isset($_SESSION["minha_conta"])){
+                                if($loginConta->auth($emailConta, $senhaConta) == true){
+                                    echo "<button type='button' class='botao-continuar botao-finalizar-compra' id='botaoFinalizarCompra'>Finalizar <i class='fas fa-check'></i></button>";
+                                }else{
+                                    echo "<button type='button' class='botao-continuar botao-login-compra' id='botaoLoginCompra'><i class='fas fa-lock'></i> Faça login para continuar</button>";
+                                }
+                            }else{
+                                echo "<button type='button' class='botao-continuar botao-login-compra' id='botaoLoginCompra'><i class='fas fa-lock'></i> Faça login para continuar</button>";
+                            }
                         echo "</div>";
                     }else{
                         echo "<h5 align=center style='width: 100%;'><br>Seu carrinho está vazio</h5>";

@@ -63,8 +63,14 @@
                 $this->data_cadastro = $info["data_cadastro"];
                 $this->data_controle = $info["data_controle"];
                 $this->status = $info["status"];
-                $this->enderecos = "usar_classe_enderecos";
-                $this->quantidade_enderecos = "usar_classe_enderecos";
+                
+                $enderecos = new Enderecos();
+                $id = $enderecos->query_endereco("id_relacionado = '{$this->id}' and status = 1 order by id desc");
+                $enderecos->montar_endereco("id = '$id'");
+                $infoEndereco = $enderecos->montar_array();
+                
+                $this->enderecos = $infoEndereco;
+                $this->quantidade_enderecos = count($infoEndereco);
                 $this->minha_conta_montada = true;
             }else{
                 $this->minha_conta_montada = false;
@@ -223,7 +229,7 @@
                         $cidade = $infoEndereco["cidade"];
                         $estado = $infoEndereco["estado"];
                         $cadastraEndereco[$ctrlEnderecos] = new Enderecos();
-                        $cadastraEndereco[$ctrlEnderecos]->cadastra_endereco($idConta, "cliente", $cep, $rua, $numero, $complemento, $bairro, $cidade, $estado);
+                        $cadastraEndereco[$ctrlEnderecos]->cadastra_endereco($idConta, "cliente", $cep, $rua, $numero, $complemento, $bairro, $estado, $cidade);
                         $ctrlEnderecos++;
                     }
                     return true;

@@ -6,17 +6,19 @@
         public $produtos_empacotados = array();
         public $ctrl_produtos_empacotados = 0;
         
-        public function add_produto($id, $title, $preco, $comprimento, $largura, $altura, $peso_produto){
-            $this->produtos[$this->produtos_configurados] = array();
-            $this->produtos[$this->produtos_configurados]["id"] = $id;
-            $this->produtos[$this->produtos_configurados]["title"] = $title;
-            $this->produtos[$this->produtos_configurados]["preco"] = $preco;
-            $this->produtos[$this->produtos_configurados]["comprimento"] = $this->custom_number_format($comprimento);
-            $this->produtos[$this->produtos_configurados]["largura"] = $this->custom_number_format($largura);
-            $this->produtos[$this->produtos_configurados]["altura"] = $this->custom_number_format($altura);
-            $this->produtos[$this->produtos_configurados]["peso"] = $this->custom_number_format($peso_produto);
-            $this->produtos[$this->produtos_configurados]["empacotado"] = false;            
-            $this->produtos_configurados++;
+        public function add_produto($id, $title, $preco, $comprimento, $largura, $altura, $peso_produto, $quantidade = 1){
+            for($i = 1; $i <= $quantidade; $i++){
+                $this->produtos[$this->produtos_configurados] = array();
+                $this->produtos[$this->produtos_configurados]["id"] = $id;
+                $this->produtos[$this->produtos_configurados]["title"] = $title;
+                $this->produtos[$this->produtos_configurados]["preco"] = $preco;
+                $this->produtos[$this->produtos_configurados]["comprimento"] = $this->custom_number_format($comprimento);
+                $this->produtos[$this->produtos_configurados]["largura"] = $this->custom_number_format($largura);
+                $this->produtos[$this->produtos_configurados]["altura"] = $this->custom_number_format($altura);
+                $this->produtos[$this->produtos_configurados]["peso"] = $this->custom_number_format($peso_produto);
+                $this->produtos[$this->produtos_configurados]["empacotado"] = false;            
+                $this->produtos_configurados++;
+            }
         }
         
         public function configurar(){

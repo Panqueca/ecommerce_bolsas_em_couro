@@ -44,7 +44,7 @@
         public function montar_endereco($condicao){
             $tabela_enderecos = $this->global_vars["tabela_enderecos"];
             $condicao = str_replace("where", "", $condicao);
-            $getIdEndereco = $this->query_endereco($tabela_enderecos, $condicao);
+            $getIdEndereco = $this->query_endereco($condicao);
             if($getIdEndereco != false){
                 $query = mysqli_query($this->conexao(), "select * from $tabela_enderecos where $condicao");
                 $info = mysqli_fetch_array($query);
