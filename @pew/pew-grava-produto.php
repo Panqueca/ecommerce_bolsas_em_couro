@@ -138,8 +138,6 @@
             /*INSERE CORES DE PRODUTOS RELACIONADOS*/
             if($coresRelacionadas != ""){
                 foreach($coresRelacionadas as $idProdutoRelacionado){
-                    $status = 1;
-                    $condicaoCoresRelacionadas = "id_produto = '$idProduto' and id_relacao = '$idProdutoRelacionado'";
                     mysqli_query($conexao, "insert into $tabela_cores_relacionadas (id_produto, id_relacionado, data_controle, status) values ('$idProduto', '$idProdutoRelacionado', '$dataAtual', 1");
                     mysqli_query($conexao, "insert into $tabela_cores_relacionadas (id_produto, id_relacionado, data_controle, status) values ('$idProdutoRelacionado', '$idProduto', '$dataAtual', 1");
                 }

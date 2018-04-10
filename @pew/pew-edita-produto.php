@@ -864,15 +864,13 @@
                 
                 $selectedCoresRelacionadas = array();
                 $ctrlCoresRelacionadas = 0;
-                if($relacionadosProdutos != false){
+                if($relacionadosCores != false){
                     foreach($relacionadosCores as $infoRelacionados){
                         $idRelacionado = $infoRelacionados["id_relacao"];
                         $selectedCoresRelacionadas[$idRelacionado] = true;
                         $ctrlCoresRelacionadas++;
                     }
                 }
-                
-                print_r($relacionadosCores);
                 /*END SET DADOS PRODUTO*/
         ?>
         <section class="conteudo-painel">
@@ -1206,8 +1204,8 @@
                                     $idProdutoRelacionado = $infoRelacionados["id"];
                                     $nomeProdutoRelacionado = $infoRelacionados["nome"];
                                     $checked = "";
-                                    foreach($selectedProdutosRelacionados as $prodRelacionado){
-                                        if($idProdutoRelacionado == $prodRelacionado){
+                                    foreach($selectedProdutosRelacionados as $idRel => $info){
+                                        if($idProdutoRelacionado == $idRel){
                                             $checked = "checked";
                                         }
                                     }
@@ -1250,8 +1248,8 @@
                                     $idProdutoRelacionado = $infoRelacionados["id"];
                                     $nomeProdutoRelacionado = $infoRelacionados["nome"];
                                     $checked = "";
-                                    foreach($selectedCoresRelacionadas as $prodRelacionado){
-                                        if($idProdutoRelacionado == $prodRelacionado){
+                                    foreach($selectedCoresRelacionadas as $idRel => $info){
+                                        if($idProdutoRelacionado == $idRel){
                                             $checked = "checked";
                                         }
                                     }
