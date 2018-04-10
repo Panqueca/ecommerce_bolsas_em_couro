@@ -122,7 +122,7 @@
             .main-content .display-carrinho .endereco-alternativo{
                 display: none;
             }
-            .main-content .display-carrinho .endereco{
+            .main-content .display-carrinho .msg-endereco{
                 margin: 0px 0px 10px 15px;
                 font-weight: normal;
             }
@@ -203,19 +203,27 @@
                 console.log("Página carregada");
                 
                 /*CALCULO DE FRETE*/
-                var inputFrete = $(".input-frete");
-                var botaoCalculoFrete = $(".botao-calculo-frete");
                 var displayResultadoFrete = $(".display-resultados-frete .span-frete");
-                var iconFrete = "<i class='fas fa-truck'></i>";
                 var iconLoading = "<i class='fas fa-spinner fa-spin icone-loading'></i>";
                 var calculandoFrete = false;
                 var infoCalculoFrete = $(".info-frete");
+                var totalCarrinho = $("#totalCarrinho").val();
+                var viewTotalCompra = $(".final-value");
+                var viewCarrinhoFrete = $(".view-frete");
+                
+                // DADOS DA ENTREGA
                 var cepPadrao = $("#cepDestino").val() != "undefined" ? $("#cepDestino").val() : 0;
+                var ruaPadrao = $("#ruaDestino").val() != "undefined" ? $("#ruaDestino").val() : 0;
+                var numeroPadrao = $("#numeroDestino").val() != "undefined" ? $("#numeroDestino").val() : 0;
+                var complementoPadrao = $("#complementoDestino").val() != "undefined" ? $("#complementoDestino").val() : 0;
+                var bairroPadrao = $("#bairroDestino").val() != "undefined" ? $("#bairroDestino").val() : 0;
+                var cidadePadrao = $("#cidadeDestino").val() != "undefined" ? $("#cidadeDestino").val() : 0;
+                var estadoPadrao = $("#estadoDestino").val() != "undefined" ? $("#estadoDestino").val() : 0;
                 var cepAlternativo = false;
                 
+                // INFORMAÇÕES DO PRODUTO
                 var jsonProduto = new Array();
                 var ctrl_array = 0;
-                
                 infoCalculoFrete.each(function(){
                     var idProduto = $(this).children("#freteIdProduto").val();
                     var tituloProduto = $(this).children("#freteTituloProduto").val();
@@ -227,18 +235,26 @@
                     var quantidadeProduto = $(this).children("#freteQuantidadeProduto").val();
                     jsonProduto[ctrl_array] = {"id": idProduto, "titulo": tituloProduto, "preco": precoProduto, "comprimento": comprimentoProduto, "largura": larguraProduto, "altura": alturaProduto, "peso": pesoProduto, "quantidade": quantidadeProduto};
                     ctrl_array++;
-                });                
+                });
+                
+                
+                /*MAIN FUNCTIONS*/
+                function guardar_compra(){
+                    mensagemAlerta("Sua compra foi finalizada com sucesso", false, "limegreen");
+                }
                                 
                 function calcular_frete(){
                     if(!calculandoFrete){
+                        set_view_preco(totalCarrinho, "0.00");
                         var urlFrete = "frete-correios/@trigger-calculo.php";
                         var cepDestino = typeof $("#cepDestino").val() != "undefined" ? $("#cepDestino").val() : 0;
                         var codigosServico = ["41106", "40010", "40215", "40290"];
                         displayResultadoFrete.html(iconLoading + " Calculando frete");
                         
+                        cepDestino = cepDestino.length == 9 ? cepDestino.replace("-", "") : cepDestino;
+                        
                         if(cepDestino.length == 8){
                             
-                            botaoCalculoFrete.html(iconLoading);
                             calculandoFrete = true;
                             var mensagemFinal = [];
                             var ctrlExec = 0;
@@ -271,7 +287,6 @@
                                     data: JSON.stringify(dados),
                                     contentType: "application/json",
                                     error: function(){
-                                        botaoCalculoFrete.html(iconFrete);
                                         displayResultadoFrete.html("Ocorreu um erro ao calcular o frete. Recarregue a página e tente novamente.");
                                     },
                                     success: function(resultado){
@@ -294,7 +309,6 @@
                                         ctrlExec++;
                                         
                                         if(ctrlExec == codigosServico.length && mensagemFinal.length > 0){
-                                            botaoCalculoFrete.html(iconFrete);
                                             calculandoFrete = false;
                                             var mensagem = "";
                                             mensagemFinal.forEach(function(msg){
@@ -317,10 +331,109 @@
                     }
                 }
                 
-                calcular_frete();
+                function set_destino(cep, rua, numero, complemento, bairro, cidade, estado){
+                    $("#cepDestino").val(cep);
+                    $("#ruaDestino").val(rua);
+                    $("#numeroDestino").val(numero);
+                    $("#complementoDestino").val(complemento);
+                    $("#bairroDestino").val(bairro);
+                    $("#cidadeDestino").val(cidade);
+                    $("#estadoDestino").val(estado);
+                    $(".msg-endereco").html("Enviando para: <b>" + rua + ", " + numero + ", " + complemento +"</b>");
+                }
                 
-                var totalCarrinho = $("#totalCarrinho").val();
-                var viewTotalCompra = $(".final-value");
+                var carrinho = $("#carrinhoFinalizar").val();
+                var finalizandoCompra = false;
+                function finalizarCompra(){
+                    
+                    if(!finalizandoCompra){
+                        finalizarCompra = true;
+                        var botaoFinalizar = $("#botaoFinalizarCompra");
+                        var opcaoFrete = $(".opcao-frete");
+                        var viewCarrinhoFrete = $(".view-frete");
+                        var checkOption = false;
+                        
+                        botaoFinalizar.html("Validando " + iconLoading);
+                        
+                        opcaoFrete.each(function(){
+                            var input = $(this);
+                            var value = input.val();
+                            var frete = input.attr("price-frete");
+                            var checked = input.prop("checked");
+                            if(checked){
+                                checkOption = value;
+                            }
+                        });
+
+                        if(checkOption != false){
+
+                            var dados = {
+                                cep_destino: $("#cepDestino").val(),
+                                rua_destino: $("#ruaDestino").val(),
+                                numero_destino: $("#numeroDestino").val(),
+                                complemento_destino: $("#complementoDestino").val(),
+                                bairro_destino: $("#bairroDestino").val(),
+                                estado_destino: $("#estadoDestino").val(),
+                                cidade_destino: $("#cepDestino").val(),
+                                produtos: carrinho,
+                                codigo_correios: checkOption,
+                            }
+
+                            $.ajax({
+                                type: "POST",
+                                url: "@valida-finaliza-compra.php",
+                                data: JSON.stringify(dados),
+                                contentType: "application/json",
+                                error: function(){
+                                    mensagemAlerta("Ocorreu um erro ao finalizar sua compra");
+                                    botaoFinalizar.html("Recarregar página");
+                                    botaoFinalizar.off().on("click", function(){
+                                        window.location.reload();
+                                    });
+                                },
+                                success: function(resposta){
+                                    console.log(resposta)
+                                    if(resposta != "false"){
+                                        PagSeguroLightbox({
+                                            code: resposta
+                                            }, {
+                                            success: function(transactionCode) {
+                                                guardar_compra();
+                                            },
+                                            abort: function() {
+                                                mensagemAlerta("Ocorreu um erro ao finalizar a compra. Tente novamente.", false, false, "finalizar-compra.php");
+                                                botaoFinalizar.html("Recarregar página");
+                                                botaoFinalizar.off().on("click", function(){
+                                                    window.location.reload();
+                                                });
+                                            }
+                                        });
+                                    }else{
+                                        mensagemAlerta("Ocorreu um erro ao finalizar sua compra");
+                                    }
+                                }
+                            });
+                        }else{
+                            mensagemAlerta("Selecione uma opção de frete");
+                        }
+                    }
+                    
+                }
+                
+                function set_view_preco(total, frete){
+                    if(typeof total != "undefined"){
+                        viewTotalCompra.html(total);
+                    }
+                    if(typeof frete != "undefined"){
+                        viewCarrinhoFrete.html("R$ " + frete);
+                    }
+                }
+                
+                /*END MAIN FUNCTIONS*/
+                calcular_frete(); // Primeiro calculo de frete
+                
+                
+                // FUNCAO SELECT DA OPCAO FRETE
                 setInterval(function(){
                     var opcaoFrete = $(".opcao-frete");
                     var viewCarrinhoFrete = $(".view-frete");
@@ -333,15 +446,91 @@
                                 $(this).prop("checked", false); 
                             });
                             input.prop("checked", true);
-                            viewCarrinhoFrete.html("R$ " + frete);
                             var total = parseFloat(totalCarrinho) + parseFloat(frete);
                             total = total.toFixed(2);
-                            viewTotalCompra.html(total);
+                            set_view_preco(total, frete);
                         });
                     });
                 }, 500);
+                
+                // FUNCAO RECALCULA FRETE ENDERECO ALTERNATIVO
+                var objEnderecoAlternativo = $(".endereco-alternativo");
+                var objCheckboxEndereco = $("#enderecoDiferente");
+                var botaoSalvar = $(".salvar-new-endereco");
+                objCheckboxEndereco.off().on("change", function(){
+                    var checkbox = $(this);
+                    var checked = checkbox.prop("checked");
+                    if(checked){
+                        objEnderecoAlternativo.css({
+                            display: "block", 
+                        });
+                        
+                        $("#newCep").on("blur", function(){
+                            var cep = $("#newCep").val();
+                            var objRua = $("#newRua");
+                            var objBairro = $("#newBairro");
+                            var objEstado = $("#newEstado");
+                            var objCidade = $("#newCidade");
+                            if(cep.length == 9){
+                                var cepF = cep.replace("-", "");
+                                buscarCEP(cepF, objRua, objEstado, objCidade, objBairro);
+                            }else{
+                                objRua.val("");
+                                objBairro.val("");
+                                objEstado.val("");
+                                objCidade.val("");
+                            }
+                        });
+                        
+                        botaoSalvar.off().on("click", function(){
+                            var cep = $("#newCep").val();
+                            var rua = $("#newRua").val();
+                            var numero = $("#newNumero").val();
+                            var complemento = $("#newComplemento").val();
+                            var bairro = $("#newBairro").val();
+                            var cidade = $("#newCidade").val();
+                            var estado = $("#newEstado").val();
+                            
+                            
+                            if(IsCEP(cep) == false){
+                                mensagemAlerta("O campo CEP deve ser preenchido corretamente");
+                                return false;
+                            }
+
+                            if(rua.length == 0){
+                                mensagemAlerta("Certifique-se de que o CEP esteja preenchido corretamente");
+                                return false;
+                            }
+
+                            if(numero.length == 0){
+                                mensagemAlerta("O campo número deve conter no mínimo 1 caracter");
+                                return false;
+                            }
+                            
+                            cepAlternativo = true;
+                            $("#cepDestino").val(cep);
+                            $("#ruaDestino").val(rua);
+                            $("#numeroDestino").val(numero);
+                            $("#complementoDestino").val(complemento);
+                            $("#bairroDestino").val(bairro);
+                            $("#cidadeDestino").val(cidade);
+                            $("#estadoDestino").val(estado);
+                            set_destino(cep, rua, numero, complemento, bairro, cidade, estado);
+                            calcular_frete();
+                        });
+                    }else{
+                        cepAlternativo = false;
+                        set_destino(cepPadrao, ruaPadrao, numeroPadrao, complementoPadrao, bairroPadrao, cidadePadrao, estadoPadrao);
+                        calcular_frete();
+                        objEnderecoAlternativo.css({
+                            display: "none", 
+                        });
+                    }
+                });
+                
                 /*END CALCULO DE FRETE*/
                 
+                /*FUNCOES DO CARRINHO*/
                 var cartItem = $(".view-subtotal-produto");
                 cartItem.each(function(){
                     var item = $(this);
@@ -418,62 +607,7 @@
                         }
                     });
                 });
-                
-                var carrinho = $("#carrinhoFinalizar").val();
-                var cepDestino = $("#cepDestino").val();
-                var idEndereco = $("#idEndereco").val();
-                function finalizarCompra(){
-                    var opcaoFrete = $(".opcao-frete");
-                    var viewCarrinhoFrete = $(".view-frete");
-                    var checkOption = false;
-                    opcaoFrete.each(function(){
-                        var input = $(this);
-                        var value = input.val();
-                        var frete = input.attr("price-frete");
-                        var checked = input.prop("checked");
-                        if(checked){
-                            checkOption = value;
-                        }
-                    });
-                    
-                    if(checkOption != false){
-                        var dados = {
-                            cep_destino: cepDestino,
-                            produtos: carrinho,
-                            codigo_correios: checkOption,
-                            id_endereco: idEndereco
-                        }
-                        
-                        $.ajax({
-                            type: "POST",
-                            url: "@valida-finaliza-compra.php",
-                            data: JSON.stringify(dados),
-                            contentType: "application/json",
-                            error: function(){
-                                mensagemAlerta("Ocorreu um erro ao finalizar sua compra");
-                            },
-                            success: function(resposta){
-                                console.log(resposta)
-                                if(resposta != "false"){
-                                    PagSeguroLightbox({
-                                        code: resposta
-                                        }, {
-                                        success: function(transactionCode) {
-                                            mensagemAlerta("Sua compra foi finalizada com sucesso", false, "limegreen");
-                                        },
-                                        abort: function() {
-                                            mensagemAlerta("Ocorreu um erro ao finalizar a compra. Tente novamente.", false, false, "finalizar-compra.php");
-                                        }
-                                    });
-                                }else{
-                                    mensagemAlerta("Ocorreu um erro ao finalizar sua compra");
-                                }
-                            }
-                        });
-                    }else{
-                        mensagemAlerta("Selecione uma opção de frete");
-                    }
-                }
+                /*END FUNCOES DO CARRINHO*/
                 
                 if(document.getElementById("botaoLoginCompra") != null){
                     document.getElementById("botaoLoginCompra").addEventListener("click", function(){
@@ -486,70 +620,6 @@
                         finalizarCompra();
                     });
                 }
-                
-                var objEnderecoAlternativo = $(".endereco-alternativo");
-                var objCheckboxEndereco = $("#enderecoDiferente");
-                var botaoSalvar = $(".salvar-new-endereco");
-                objCheckboxEndereco.off().on("change", function(){
-                    var checkbox = $(this);
-                    var checked = checkbox.prop("checked");
-                    if(checked){
-                        objEnderecoAlternativo.css({
-                            display: "block", 
-                        });
-                        
-                        $("#newCep").on("blur", function(){
-                            var cep = $("#newCep").val();
-                            var objRua = $("#newRua");
-                            var objBairro = $("#newBairro");
-                            var objEstado = $("#newEstado");
-                            var objCidade = $("#newCidade");
-                            if(cep.length == 9){
-                                var cepF = cep.replace("-", "");
-                                buscarCEP(cepF, objRua, objEstado, objCidade, objBairro);
-                            }else{
-                                objRua.val("");
-                                objBairro.val("");
-                                objEstado.val("");
-                                objCidade.val("");
-                            }
-                        });
-                        
-                        botaoSalvar.off().on("click", function(){
-                            var cep = $("#newCep").val();
-                            var rua = $("#newRua").val();
-                            var numero = $("#newNumero").val();
-                            
-                            
-                            if(IsCEP(cep) == false){
-                                mensagemAlerta("O campo CEP deve ser preenchido corretamente");
-                                return false;
-                            }
-
-                            if(rua.length == 0){
-                                mensagemAlerta("Certifique-se de que o CEP esteja preenchido corretamente");
-                                return false;
-                            }
-
-                            if(numero.length == 0){
-                                mensagemAlerta("O campo número deve conter no mínimo 1 caracter");
-                                return false;
-                            }
-                            
-                            cepAlternativo = true;
-                            $("#cepDestino").val(cep);
-                            calcular_frete();
-                        });
-                    }else{
-                        cepAlternativo = false;
-                        $("#cepDestino").val(cepPadrao);
-                        calcular_frete();
-                        objEnderecoAlternativo.css({
-                            display: "none", 
-                        });
-                    }
-                });
-                
             });
             
         </script>
@@ -581,9 +651,9 @@
                     echo "<input type='hidden' value='$carrinho_json' id='carrinhoFinalizar'>";
                 
                     $dirImagens = "imagens/produtos";
-                    if(count($carrinho_finalizar) > 0){
+                    if(count($carrinho_finalizar["itens"]) > 0){
                         $totalItens = 0;
-                        foreach($carrinho_finalizar as $indice => $item_carrinho){
+                        foreach($carrinho_finalizar["itens"] as $indice => $item_carrinho){
                             $idProduto = $item_carrinho["id"];
                             $nome = $item_carrinho["nome"];
                             $preco = $item_carrinho["preco"];
@@ -648,8 +718,10 @@
                                     $cepConta = $enderecos["cep"];
                                     $rua = $enderecos["rua"];
                                     $numero = $enderecos["numero"];
-                                    $complemento = $enderecos["complemento"] != "" ? ", {$enderecos["complemento"]}." : "";
-                                    echo "<h5 class='endereco'>Enviando para: <b>$rua, $numero $complemento</b></h5>";
+                                    $complemento = $enderecos["complemento"] != "" ? $enderecos["complemento"] : "";
+                                    $bairro = $enderecos["bairro"];
+                                    $cidade = $enderecos["cidade"];
+                                    $estado = $enderecos["estado"];
                                     echo "<label class='label-edita-endereco'>";
                                         echo "<input type='checkbox' name='endereco_diferente' id='enderecoDiferente'> Enviar para outro endereço";
                                     echo "</label>";
@@ -695,9 +767,15 @@
                                         </div>
                                     <?php
                                     echo "</div>";
+                                    echo "<h5 class='msg-endereco'>Enviando para: <b>$rua, $numero $complemento</b></h5>";
                                     echo "<div class='span-frete'></div>";
                                     echo "<input type='hidden' id='cepDestino' value='$cepConta'>";
-                                    echo "<input type='hidden' id='idEndereco' value='$idEndereco'>";
+                                    echo "<input type='hidden' id='ruaDestino' value='$rua'>";
+                                    echo "<input type='hidden' id='numeroDestino' value='$numero'>";
+                                    echo "<input type='hidden' id='complementoDestino' value='$complemento'>";
+                                    echo "<input type='hidden' id='bairroDestino' value='$bairro'>";
+                                    echo "<input type='hidden' id='estadoDestino' value='$estado'>";
+                                    echo "<input type='hidden' id='cidadeDestino' value='$cidade'>";
                                 }else{
                                     echo "<h6 style='margin: 0px 0px 0px 15px; font-weight: normal;'>Entre com sua conta para calcular</h6>";
                                 }

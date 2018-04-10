@@ -2,13 +2,25 @@
     $jsonData = json_decode(file_get_contents('php://input'), true);
     if($jsonData != null){
         $codigoCorreios = isset($jsonData["codigo_correios"]) ? $jsonData["codigo_correios"] : null;
+        
         $cepDestino = isset($jsonData["cep_destino"]) ? $jsonData["cep_destino"] : null;
+        $ruaDestino = isset($jsonData["rua_destino"]) ? $jsonData["rua_destino"] : null;
+        $numeroDestino = isset($jsonData["numero_destino"]) ? $jsonData["numero_destino"] : null;
+        $complementoDestino = isset($jsonData["complemento_destino"]) ? $jsonData["complemento_destino"] : null;
+        $bairroDestino = isset($jsonData["bairro_destino"]) ? $jsonData["bairro_destino"] : null;
+        $cidadeDestino = isset($jsonData["cidade_destino"]) ? $jsonData["cidade_destino"] : null;
+        $estadoDestino = isset($jsonData["estado_destino"]) ? $jsonData["estado_destino"] : null;
+        
         $produtos = isset($jsonData["produtos"]) ? json_decode($jsonData["produtos"]) : null;
-        $idEndereco = isset($jsonData["id_endereco"]) ? $jsonData["id_endereco"] : null;
         
         if($cepDestino != null && $produtos != null){
             $_POST["cep_destino"] = $cepDestino;
-            $_POST["id_endereco"] = $idEndereco;
+            $_POST["rua_destino"] = $ruaDestino;
+            $_POST["numero_destino"] = $numeroDestino;
+            $_POST["complemento_destino"] = $complementoDestino;
+            $_POST["bairro_destino"] = $bairroDestino;
+            $_POST["cidade_destino"] = $cidadeDestino;
+            $_POST["estado_destino"] = $estadoDestino;
             $_POST["produtos"] = array();
             $i = 0;
             foreach($produtos as $objItem){
@@ -31,7 +43,7 @@
         if($codigoCorreios != null) $_POST["codigo_correios"] = $codigoCorreios;
     }
 
-    $post_fields = array("cep_destino", "produtos", "id_endereco");
+    $post_fields = array("cep_destino", "produtos");
     $invalid_fileds = array();
     $finalizar = true;
     $i = 0;
@@ -50,8 +62,13 @@
         $codigoCorreios = isset($_POST["codigo_correios"]) ? $_POST["codigo_correios"] : "41106";
         
         $cepDestino = str_replace("-", "", $_POST["cep_destino"]);
+        $ruaDestino = isset($_POST["rua_destino"]) ? $_POST["rua_destino"] : null;
+        $numeroDestino = isset($_POST["numero_destino"]) ? $_POST["numero_destino"] : null;
+        $complementoDestino = isset($_POST["complemento_destino"]) ? $_POST["complemento_destino"] : null;
+        $bairroDestino = isset($_POST["bairro_destino"]) ? $_POST["bairro_destino"] : null;
+        $cidadeDestino = isset($_POST["cidade_destino"]) ? $_POST["cidade_destino"] : null;
+        $estadoDestino = isset($_POST["estado_destino"]) ? $_POST["estado_destino"] : null;
         
-        $idEndereco = $_POST["id_endereco"];
         
         $declararValor = isset($_POST["declarar_valor"]) ? $_POST["declarar_valor"] : false;
 
@@ -80,32 +97,19 @@
                 $emailConta = isset($sessaoConta["email"]) ? $sessaoConta["email"] : null;
                 $senhaConta = isset($sessaoConta["senha"]) ? $sessaoConta["senha"] : null;
                 require_once "@classe-minha-conta.php";
-                require_once "@classe-enderecos.php";
                 $loginConta = new MinhaConta();
                 if($loginConta->auth($emailConta, $senhaConta) == true){
-                    $idConta = $loginConta->query_minha_conta("md5(email) = '$emailConta' and senha = '$senhaConta'");
-                    $loginConta->montar_minha_conta($idConta);
-                    $infoConta = $loginConta->montar_array();
-                    $endereco = new Enderecos();
-                    $endereco->montar_endereco("id = '$idEndereco'");
-                    $infoEndereco = $endereco->montar_array();
                     
-                    $cep = $infoEndereco["cep"];
-                    $rua = $infoEndereco["rua"];
-                    $numero = $infoEndereco["numero"];
-                    $complemento = $infoEndereco["complemento"];
-                    $bairro = $infoEndereco["bairro"];
-                    $estado = $infoEndereco["estado"];
-                    $cidade = $infoEndereco["cidade"];
+                    $idConta = $loginConta->query_minha_conta("md5(email) = '$emailConta' and senha = '$senhaConta'");   
                     
                     $dadosCompra = [
-                        'cep' => $cep,
-                        'rua' => $rua,
-                        'complemento' => $complemento,
-                        'numero' => $numero,
-                        'bairro' => $bairro,
-                        'cidade' => $cidade,
-                        'estado' => $estado,
+                        'cep' => $cepDestino,
+                        'rua' => $ruaDestino,
+                        'complemento' => $complementoDestino,
+                        'numero' => $numeroDestino,
+                        'bairro' => $bairroDestino,
+                        'cidade' => $cidadeDestino,
+                        'estado' => $estadoDestino,
                         'codigo_correios' => $codigoCorreios,
                         'valor_frete' => $valorFrete,
                         'carrinho' => http_build_query($produtos),
@@ -123,7 +127,8 @@
 
                     $response = curl_exec($ch);
                     
-                    echo $response;
+                    echo $response; // RESPOSTA DO CODIGO PAGSEGURO
+                    
                 }else{
                     echo "false";
                 }   
@@ -132,7 +137,7 @@
             echo "false";
         }
     }else{
-        //print_r($invalid_fileds);
-        echo "false";
+        print_r($invalid_fileds);
+        //echo "false";
     }
 ?>

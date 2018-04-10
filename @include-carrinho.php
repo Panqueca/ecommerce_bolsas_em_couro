@@ -40,6 +40,7 @@
                             adicionandoCarrinho = false;
                         },
                         success: function(resposta){
+                            console.log(resposta)
                             if(resposta == "true"){
                                 notificacaoPadrao("<i class='fas fa-plus'></i> Produto adicionado", "success");
                             }else if(resposta == "sem_estoque"){
