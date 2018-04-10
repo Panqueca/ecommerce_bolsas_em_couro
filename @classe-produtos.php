@@ -290,6 +290,7 @@
             }
             return $return;
         }
+            
         public function get_cores_relacionadas(){
             $condicao = "id_produto = '".$this->id."'";
             $tabela_produtos = $this->global_vars["tabela_produtos"];
@@ -312,6 +313,7 @@
             }
             return $return;
         }
+        
         public function get_visualizacoes_produto(){
             return $this->visualizacoes;
         }

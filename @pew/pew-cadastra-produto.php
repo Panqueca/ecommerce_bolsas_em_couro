@@ -386,10 +386,10 @@
 
                 /*END PRODUTOS RELACIONADOS*/
                 
-                /*CORES RELACIONADAS*/
-                var botaoCoresRelacionadas = $(".btn-relacionados");
-                var displayRelacionados = $(".display-relacionados");
-                var background = $(".background-interatividade");
+                 /*PRODUTOS RELACIONADOS*/
+                var botaoProdutosRelacionados = $("#btn-produtos-relacionados");
+                var displayRelacionados = $("#display-produtos-relacionados");
+                var backgroundProdutos = $(".background-interatividade");
                 var botaoSalvarRelacionados = $(".btn-salvar-relacionados");
                 var botaoCleanRelacionados = $(".limpar-todos-relacionados");
                 var barraBusca = $(".busca-relacionados");
@@ -431,20 +431,20 @@
                 }
                 function resetAllInputs(){
                     var onlyActives = checkOnlyActives.prop("checked");
-                    var ctrlView = 0;
-                    $(".label-relacionados").each(function(){
+                    var ctrlViewProduto = 0;
+                    $("#label-produtos-relacionados").each(function(){
                         var label = $(this);
                         var input = label.children("input");
                         if(onlyActives && input.prop("checked") == true){
                             label.css("display", "inline-block").removeClass("last-search");
-                            ctrlView++;
+                            ctrlViewProduto++;
                         }else if(!onlyActives){
                             label.css("display", "inline-block").removeClass("last-search");
-                            ctrlView++;
+                            ctrlViewProduto++;
                         }
                     });
                     if(onlyActives){
-                        setMessageRelacionados("Resultados encontrados: "+ctrlView);
+                        setMessageRelacionados("Resultados encontrados: "+ctrlViewProduto);
                     }else{
                         resetMessageRelacionados();
                     }
@@ -452,7 +452,7 @@
                 function listLastSearch(){
                     var onlyActives = checkOnlyActives.prop("checked");
                     var ctrlQtd = 0;
-                    $(".label-relacionados").each(function(){
+                    $("#label-produtos-relacionados").each(function(){
                         var label = $(this);
                         var input = label.children("input");
                         if(onlyActives && label.hasClass("last-search") && input.prop("checked") == true){
@@ -472,7 +472,7 @@
                 }
                 function contarProdutosSelecionados(){
                     var contagem = 0;
-                    $(".label-relacionados").each(function(){
+                    $("#label-produtos-relacionados").each(function(){
                         var label = $(this);
                         var input = label.children("input");
                         if(input.prop("checked") == true){
@@ -482,7 +482,7 @@
                     return contagem;
                 }
                 function clearRelacionados(){
-                    $(".label-relacionados").each(function(){
+                    $("#label-produtos-relacionados").each(function(){
                         var label = $(this);
                         var input = label.children("input");
                         if(label.css("display") != "none"){
@@ -491,68 +491,75 @@
                     });
                 }
                 /*OPEN AND CLOSE*/
+                var produtosAbertos = false;
                 function abrirRelacionados(){
-                    background.css("display", "block");
-                    displayRelacionados.css({
-                        visibility: "visible",
-                        opacity: "1"
-                    });
-                    /*SEARCH TRIGGRES*/
-                    barraBusca.on("keyup", function(){
-                        buscarProdutos();
-                    });
-                    barraBusca.on("search", function(){
-                        buscarProdutos();
-                    });
-                    /*END SEARCH TRIGGRES*/
-                    /*BOTAO SOMENTE SELECIONADOS*/
-                    checkOnlyActives.off().on("change", function(){
-                        var checked = $(this).prop("checked");
-                        var buscaAtiva = barraBusca.val().length > 0 ? true : false;
-                        if(checked && !buscaAtiva){
-                            var ctrlQtd = 0;
-                            $(".label-relacionados").each(function(){
-                                var label = $(this);
-                                var input = label.children("input");
-                                var selecionado = input.prop("checked");
-                                if(!selecionado){
-                                    label.css("display", "none");
-                                }else{
-                                    ctrlQtd++;
-                                }
-                            });
-                            botaoCleanRelacionados.css("visibility", "visible");
-                            setMessageRelacionados("Resultados encontrados: "+ctrlQtd);
-                        }else if(buscaAtiva){
-                            lastSearchString = null;
+                    if(!produtosAbertos){
+                        produtosAbertos = true;
+                        backgroundProdutos.css("display", "block");
+                        displayRelacionados.css({
+                            visibility: "visible",
+                            opacity: "1"
+                        });
+                        /*SEARCH TRIGGRES*/
+                        barraBusca.on("keyup", function(){
                             buscarProdutos();
-                            if(checked){
+                        });
+                        barraBusca.on("search", function(){
+                            buscarProdutos();
+                        });
+                        /*END SEARCH TRIGGRES*/
+                        /*BOTAO SOMENTE SELECIONADOS*/
+                        checkOnlyActives.off().on("change", function(){
+                            var checked = $(this).prop("checked");
+                            var buscaAtiva = barraBusca.val().length > 0 ? true : false;
+                            if(checked && !buscaAtiva){
+                                var ctrlQtd = 0;
+                                $("#label-produtos-relacionados").each(function(){
+                                    var label = $(this);
+                                    var input = label.children("input");
+                                    var selecionado = input.prop("checked");
+                                    if(!selecionado){
+                                        label.css("display", "none");
+                                    }else{
+                                        ctrlQtd++;
+                                    }
+                                });
                                 botaoCleanRelacionados.css("visibility", "visible");
+                                setMessageRelacionados("Resultados encontrados: "+ctrlQtd);
+                            }else if(buscaAtiva){
+                                lastSearchString = null;
+                                buscarProdutos();
+                                if(checked){
+                                    botaoCleanRelacionados.css("visibility", "visible");
+                                }else{
+                                    botaoCleanRelacionados.css("visibility", "hidden");
+                                }
                             }else{
+                                /*LISTA TODOS OS PRODUTOS*/
+                                resetAllInputs();
                                 botaoCleanRelacionados.css("visibility", "hidden");
                             }
-                        }else{
-                            /*LISTA TODOS OS PRODUTOS*/
-                            resetAllInputs();
-                            botaoCleanRelacionados.css("visibility", "hidden");
-                        }
-                    });
-                    /*END BOTAO SOMENTE SELECIONADOS*/
-                    /*LIMPAR RELACIONADOS*/
-                    botaoCleanRelacionados.off().on("click", function(){
-                        clearRelacionados();
-                    });
+                        });
+                        /*END BOTAO SOMENTE SELECIONADOS*/
+                        /*LIMPAR RELACIONADOS*/
+                        botaoCleanRelacionados.off().on("click", function(){
+                            clearRelacionados();
+                        });
+                    }
                 }
                 function fecharRelacionados(){
-                    displayRelacionados.css({
-                        visibility: "hidden",
-                        opacity: "0"
-                    });
-                    setTimeout(function(){
-                        background.css("display", "none");
-                    }, 200);
-                    var totalSelecionados = contarProdutosSelecionados();
-                    botaoCoresRelacionadas.text("Produtos Selecionados ("+totalSelecionados+")");
+                    if(produtosAbertos){
+                        displayRelacionados.css({
+                            visibility: "hidden",
+                            opacity: "0"
+                        });
+                        produtosAbertos = false;
+                        setTimeout(function(){
+                            backgroundProdutos.css("display", "none");
+                        }, 200);
+                        var totalSelecionados = contarProdutosSelecionados();
+                        botaoProdutosRelacionados.text("Produtos Relacionados ("+totalSelecionados+")");
+                    }
                 }
                 /*END OPEN AND CLOSE*/
                 /*END !IMPORTANT FUNCTIONS*/
@@ -593,14 +600,13 @@
                                 notificacaoPadrao("Ocorreu um erro ao buscar o produto.");
                             },
                             success: function(resposta){
-                                console.log(resposta);
                                 setTimeout(function(){
                                     buscandoProduto = false;
                                 }, 500);
                                 var selectedProdutos = [];
                                 var ctrlVQtdView = 0;
                                 function listarOpcoes(){
-                                    $(".label-relacionados").each(function(){
+                                    $("#label-produtos-relacionados").each(function(){
                                         var label = $(this);
                                         var input = label.children("input");
                                         var inputIdProduto = input.val();
@@ -657,20 +663,32 @@
                     }
                 }
                 /*END MAIN SEARCH FUNCTION*/
-
+                
+                var triggerAtivado = false;
                 /*TRIGGERS*/
-                botaoCoresRelacionadas.off().on("click", function(){
-                    abrirRelacionados();
-                });
-                botaoSalvarRelacionados.off().on("click", function(){
-                    fecharRelacionados();
-                });
-                background.off().on("click", function(){
-                    fecharRelacionados();
-                });
+                if(!triggerAtivado){
+                    botaoProdutosRelacionados.off().on("click", function(){
+                        if(!produtosAbertos){
+                            abrirRelacionados();
+                        }
+                        triggerAtivado = true;
+                    });
+                    botaoSalvarRelacionados.off().on("click", function(){
+                        if(produtosAbertos){
+                            fecharRelacionados();
+                        }
+                        triggerAtivado = true;
+                    });
+                    backgroundProdutos.off().on("click", function(){
+                        if(produtosAbertos){
+                            fecharRelacionados();
+                        }
+                        triggerAtivado = true;
+                    });
+                }
                 /*END TRIGGERS*/
 
-                /*END CORES RELACIONADAS*/
+                /*END PRODUTOS RELACIONADOS*/
             });
         </script>
         <!--THIS PAGE CSS-->
@@ -1325,11 +1343,11 @@
                     <h3 class="label-title">Iframe Vídeo</h3>
                     <input type="text" class="label-input" name="url_video" placeholder="<iframe></iframe>" value="<?php echo $urlVideoProduto; ?>">
                 </div>
-                <div class="half" align=left>
+                <div class="small" align=left>
                     <!--PRODUTOS RELACIONADOS-->
                     <h3 class="label-title">Produtos Relacionados</h3>
-                    <a class="btn-relacionados">Produtos Selecionados <?php echo "(".$ctrlRelacionados.")";?></a>
-                    <div class="display-relacionados">
+                    <a class="btn-relacionados" id="btn-produtos-relacionados">Produtos Selecionados <?php echo "(".$ctrlRelacionados.")";?></a>
+                    <div class="display-relacionados" id="display-produtos-relacionados">
                         <div class="header-relacionados">
                             <h3 class="title-relacionados">Produtos relacionados</h3>
                             <!--<h5 class="descricao-relacionados">Selecione os produtos relacionados</h5>-->
@@ -1355,7 +1373,7 @@
                                             $checked = "checked";
                                         }
                                     }
-                                    echo "<label class='label-relacionados'><input type='checkbox' name='produtos_relacionados[]' value='$idProdutoRelacionado' $checked> $nomeProdutoRelacionado</label>";
+                                    echo "<label class='label-relacionados' id='label-produtos-relacionados'><input type='checkbox' name='produtos_relacionados[]' value='$idProdutoRelacionado' $checked> $nomeProdutoRelacionado</label>";
                                 }
                             }else{
                                 echo "<h4 class='full'>Nenhum produto encontrado</h4>";
