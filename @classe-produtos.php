@@ -290,6 +290,28 @@
             }
             return $return;
         }
+        public function get_cores_relacionadas(){
+            $condicao = "id_produto = '".$this->id."'";
+            $tabela_produtos = $this->global_vars["tabela_produtos"];
+            $tabela_cores_relacionadas = $this->global_vars["tabela_cores_relacionadas"];
+            $totalCoresRelacionadas = $this->pew_functions->contar_resultados($tabela_cores_relacionadas, $condicao);
+            $return = false;
+            if($totalCoresRelacionadas > 0){
+                $return = array();
+                $ctrlCoresRelacionadas = 0;
+                $queryRelacionados = mysqli_query($this->conexao(), "select id_relacao from $tabela_cores_relacionadas where $condicao");
+                while($infoRelacionado = mysqli_fetch_array($queryRelacionados)){
+                    $condition = "id_relacao = '{$infoRelacionado["id_relacao"]}'";
+                    $totalProdRelacionado = $this->pew_functions->contar_resultados($tabela_cores_relacionadas, $condition);
+                    if($totalProdRelacionado > 0){
+                        $return[$ctrlCoresRelacionadas] = array();
+                        $return[$ctrlCoresRelacionadas]["id_relacao"] = $infoRelacionado["id_relacao"];
+                        $ctrlCoresRelacionadas++;
+                    }
+                }
+            }
+            return $return;
+        }
         public function get_visualizacoes_produto(){
             return $this->visualizacoes;
         }

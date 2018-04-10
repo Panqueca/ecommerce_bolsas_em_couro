@@ -41,10 +41,15 @@
                 color: #fff;
                 font-size: 1vw;
             }
+            .main-content .box .breadcrumb a{
+                color: inherit;
+                text-decoration: none;
+            }
             .main-content .display{
                 width: 75vw;
                 margin: 10vh auto;
                 color: #aaa;
+                text-align: center;
             }
         </style>
         <!--END PAGE CSS-->
@@ -69,26 +74,50 @@
             <!--GET = titulo, ref-->
             <?php
                 $getNome = isset($_GET["titulo"]) ? $_GET["titulo"] : "Produto não encontrado";
-                $getToken = isset($_GET["token"]) ? $_GET["token"] : "Produto não encontrado";
+                $selectedId = isset($_GET["id_dica"]) ? $_GET["id_dica"] : "Produto não encontrado";
                 
+				require_once "@pew/pew-system-config.php";
+				$tabela_dicas = $pew_custom_db->tabela_dicas;
+				
+				$dirImagens = "imagens/dicas";
+                
+                $condicao = "id = $selectedId and status = 1";
+                $contar = mysqli_query($conexao, "select count(id) as total from $tabela_dicas where $condicao");
+                $contagem = mysqli_fetch_assoc($contar);
+                $total = $contagem["total"];
+            
+				if($total > 0){
+					$queryDicas = mysqli_query($conexao, "select * from $tabela_dicas where $condicao");
+					while($dicas = mysqli_fetch_array($queryDicas)){
+						$imagem = $dicas["imagem"];
+						$titulo = $dicas["titulo"];
+						$subtitulo = $dicas["subtitulo"];
+						$video = $dicas["video"];
+						$refDica = $dicas["ref"];
+						$descricaoCurta = $dicas["descricao_curta"];
+						$descricaoLonga = $dicas["descricao_longa"];
+                        $imagem = $dicas["imagem"];
+						$srcImagem = file_exists($dirImagens."/".$imagem) && $imagem != "" ? $dirImagens."/".$imagem : $dirImagens."/"."banner-padrao.png";
+                        
+                        echo "<div class='box'>";  
+                            echo "<img src='$srcImagem' title='' alt=''>";
+                            echo "<div class='breadcrumb'>";
+                                echo "<h4><a href='index.php'>Página Inicial > </a><a href='dicas.php'>Dicas > </a>$titulo</h4>";
+                                echo "<h1>$titulo</h1>";
+                                echo "<h2>$subtitulo</h2>";
+                            echo "</div>";
+                        echo "</div>";  
+                        echo "<div class='display'>";
+                            if($video){
+                                echo $video;
+                            }
+                            echo "<article>$descricaoLonga</article>";
+                        echo "</div>";
+                    }
+				}
+				
+            
             ?>
-            <div class="box">
-                <img title='' src='imagens/dicas/banner-interno.png' alt=''>
-                <div class='breadcrumb'>
-                    <h4>Página inicial > Dicas > Cuidados com o Couro</h4>
-                    <h1>CUIDADOS COM O COURO</h1>
-                    <h2>subtitulo</h2>
-                </div>
-            </div>
-            <div class='display'>
-                <article class="descricao">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris aliquet malesuada feugiat. Curabitur fermentum bibendum nulla, non dictum ipsum tincidunt non. Quisque convallis pharetra tempor. Donec id pretium leo. Pellentesque luctus massa non elit viverra pellentesque. Cras vitae neque molestie, rhoncus ipsum sit amet, lobortis dui. Fusce in urna sem. Vivamus vehicula dignissim augue et scelerisque. Etiam quam nisi, molestie ac dolor in, tincidunt tincidunt arcu. Praesent sed justo finibus, fringilla velit quis, porta erat. Donec blandit metus ut arcu iaculis iaculis. Cras nec dolor fringilla justo ullamcorper auctor. Aliquam eget pretium velit. Morbi urna justo, pulvinar id lobortis in, aliquet placerat orci.<br><br>
-                    
-                    Etiam nisi turpis, eleifend nec tellus id, efficitur pellentesque dolor. Proin vitae massa a augue sagittis vulputate. Duis vel fringilla magna, sit amet vestibulum enim. Fusce laoreet accumsan nisl eu sagittis. Morbi hendrerit sapien eget efficitur imperdiet. Aenean vitae nisl id est placerat congue a et nisi. Suspendisse vitae quam ipsum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Suspendisse eu risus lacus. Ut tristique libero eget est dictum, commodo malesuada orci elementum. Proin molestie eu mi in tempus.<br><br>
-                    
-                    In hac habitasse platea dictumst. Cras augue nisl, cursus mattis mattis id, lacinia nec augue. Integer nec augue non metus interdum rhoncus. Proin non imperdiet ante. Sed mollis, justo ac dapibus auctor, tellus mi congue nisl, nec commodo ex justo ut eros. Etiam fringilla porta dolor vitae gravida. Nulla facilisi. Nam dui eros, mattis ut turpis at, eleifend accumsan odio. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed id ultrices erat, vehicula viverra ante. Etiam sit amet dignissim tellus, ac laoreet ligula. Aenean fringilla sodales lorem, ac maximus est hendrerit in.
-                </article>
-            </div>
         </div>
         <!--END THIS PAGE CONTENT-->
         <?php

@@ -50,10 +50,11 @@
             move_uploaded_file($_FILES["imagem"]["tmp_name"], $dirImagens.$imagem);
         }
         if($thumb != ""){
+            echo "kk";
             $refImg = substr(md5(uniqid()), 0, 4);
             $ext = pathinfo($thumb, PATHINFO_EXTENSION);
             $thumb = $nomeImagem."-dicathumb-ref$refImg.".$ext;
-            move_uploaded_file($_FILES["imagem"]["tmp_name"], $dirImagens.$thumb);
+            move_uploaded_file($_FILES["thumbnail"]["tmp_name"], $dirImagens.$thumb);
         }
 
         mysqli_query($conexao, "insert into $tabela_dica (titulo, subtitulo, ref, descricao_curta, descricao_longa, imagem, thumb, video, data_controle, status) values ('$titulo', '$subtitulo', '$refDicas', '$descricaoCurta', '$descricaoLonga','$nomeImagem', '$thumb', '$video','$data', '$status')");

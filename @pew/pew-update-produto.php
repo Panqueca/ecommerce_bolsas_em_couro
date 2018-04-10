@@ -49,6 +49,7 @@
         $categoriasProduto = isset($_POST["categorias"]) ? $_POST["categorias"] : "";
         $especificacoes = isset($_POST["especicacao_produto"]) ? $_POST["especicacao_produto"] : "";
         $produtosRelacionados = isset($_POST["produtos_relacionados"]) ? $_POST["produtos_relacionados"] : "";
+        $coresRelacionadas = isset($_POST["cores_relacionadas"]) ? $_POST["cores_relacionadas"] : "";
         $subcategoriasProduto = isset($_POST["subcategorias"]) ? $_POST["subcategorias"] : "";
         $statusProduto = intval($_POST["status"]) == 1 ? 1 : 0;
         $urlVideoProduto = addslashes($_POST["url_video"]);
@@ -76,6 +77,7 @@
         $tabela_categorias_produtos = $pew_custom_db->tabela_categorias_produtos;
         $tabela_subcategorias_produtos = $pew_custom_db->tabela_subcategorias_produtos;
         $tabela_produtos_relacionados = $pew_custom_db->tabela_produtos_relacionados;
+        $tabela_cores_relacionadas = $pew_custom_db->tabela_cores_relacionadas;
         $tabela_especificacoes_produtos = $pew_custom_db->tabela_especificacoes_produtos;
         /*END SET TABLES*/
 
@@ -242,8 +244,38 @@
                 mysqli_query($conexao, "delete from $tabela_produtos_relacionados where id_produto = '$idProduto'");
             }
             /*FIM ATUALIZA PRODUTOS RELACIONADOS*/
-
-            echo "<script>window.location.href='pew-edita-produto.php?msg=Produto atualizado com sucesso&msgType=success&id_produto=$idProduto';</script>";
+            
+            /*ATUALIZA CORES DE PRODUTOS RELACIONADOS*/
+            if($coresRelacionadas != ""){
+                $queryCoresRelacionadas = mysqli_query($conexao, "select * from $tabela_cores_relacionadas where id_produto = '$idProduto' group by id_relacao");
+                while($infoCorRelacionada = mysqli_fetch_array($queryCoresRelacionadas)){   
+                    $idSelectedCorRelacionada = $infoCorRelacionada["id_relacao"];
+                    $excluirCorRelacionada = true;
+                    foreach($coresRelacionadas as $idProdutoRelacionado){
+                        if($idProdutoRelacionado == $idSelectedCorRelacionada){
+                            $excluirCorRelacionada = false;
+                        }
+                    }
+                    if($excluirCorRelacionada){
+                        $condicaoCoresRelacionadas = "id_produto = '$idProduto' and id_relacao = '$idProdutoRelacionado'";
+                        mysqli_query($conexao, "delete from $tabela_cores_relacionadas where $condicaoCoresRelacionadas");
+                    }
+                }
+                $condicaoCoresRelacionadas = "id_produto = '$idProduto' and id_relacao = '$idProdutoRelacionado'";
+                $totalCoresRelacionadas = $pew_functions->contar_resultados($tabela_cores_relacionadas, $condicaoCoresRelacionadas) > 0 ? true : false;
+                if(!$totalCoresRelacionadas){
+                    foreach($coresRelacionadas as $idProdutoRelacionado){
+                        mysqli_query($conexao, "insert into $tabela_cores_relacionadas (id_produto, id_relacao, data_controle, status) values ('$idProduto', '$idProdutoRelacionado', '$dataAtual', '$statusProduto')");
+                        mysqli_query($conexao, "insert into $tabela_cores_relacionadas (id_produto, id_relacao, data_controle, status) values ('$idProdutoRelacionado', '$idProduto', '$dataAtual', '$statusProduto')");
+                    }
+                }
+            }else{
+                mysqli_query($conexao, "delete from $tabela_cores_relacionadas where id_produto = '$idProduto' and id_relacao = '$idProdutoRelacionado'");
+                mysqli_query($conexao, "delete from $tabela_cores_relacionadas where id_produto = '$idProdutoRelacionado' and id_relacao = '$idProduto'");
+            }            
+            /*END ATUALIZA CORES DE PRODUTOS RELACIONADOS*/
+            
+            //echo "<script>window.location.href='pew-edita-produto.php?msg=Produto atualizado com sucesso&msgType=success&id_produto=$idProduto';</script>";
         }else{
             echo "<script>window.location.href='pew-edita-produto.php?erro=validacao_do_produto&msg=Não foi possível atualizar o produto&msgType=error&id_produto=$idProduto';</script>";
         }

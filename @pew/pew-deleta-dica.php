@@ -15,14 +15,14 @@
             $imagem = mysqli_fetch_array($queryImagem);
             $nomeImagem = $imagem["imagem"];
             $nomeThumb = $imagem["thumb"];
-
+            
             if(file_exists($dirImagens.$nomeImagem) && $nomeImagem != ""){
                 unlink($dirImagens.$nomeImagem);
             }
             if(file_exists($dirImagens.$nomeThumb) && $nomeThumb != ""){
                 unlink($dirImagens.$nomeThumb);
             }
-
+            
             mysqli_query($conexao, "delete from $tabela_dicas where id = '$idDica'");
             
             header("location: pew-dicas.php");
