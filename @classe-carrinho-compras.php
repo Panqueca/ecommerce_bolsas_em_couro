@@ -39,7 +39,7 @@
             if(!isset($_SESSION["carrinho"])) $_SESSION["carrinho"] = array(); $_SESSION["carrinho"]["itens"] = array();
             
             if(!isset($_SESSION["carrinho"]["token"]) || $_SESSION["carrinho"]["token"] == null){
-                $this->set_token();   
+                $this->set_token();
             }
         }
         

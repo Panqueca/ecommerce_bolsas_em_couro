@@ -871,6 +871,8 @@
                         $ctrlCoresRelacionadas++;
                     }
                 }
+                
+                print_r($relacionadosCores);
                 /*END SET DADOS PRODUTO*/
         ?>
         <section class="conteudo-painel">
