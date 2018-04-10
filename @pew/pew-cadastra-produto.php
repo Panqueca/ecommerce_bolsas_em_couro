@@ -925,7 +925,7 @@
             /*END SET TABLES*/
 
             /*DEFAULT VARS*/
-            $idProduto = isset($_GET["id_produto"]) ? pew_string_format($_GET["id_produto"]) : 0;
+            $idProduto = isset($_GET["id_produto"]) ? $pew_functions->url_format($_GET["id_produto"]) : 0;
             $dirImagensProdutos = "../imagens/produtos";
             /*END DEFAULT VARS*/
 
@@ -939,9 +939,9 @@
                     $skuProduto = $infoProduto["sku"];
                     $nomeProduto = $infoProduto["nome"];
                     $precoProduto = $infoProduto["preco"];
-                    $precoProduto = pew_number_format($precoProduto);
+                    $precoProduto = $pew_functions->custom_number_format($precoProduto);
                     $precoPromocaoProduto = $infoProduto["preco_promocao"];
-                    $precoPromocaoProduto = pew_number_format($precoPromocaoProduto);
+                    $precoPromocaoProduto = $pew_functions->custom_number_format($precoPromocaoProduto);
                     $promocaoAtiva = $infoProduto["promocao_ativa"];
                     $marcaProduto = $infoProduto["marca"];
                     $estoqueProduto = $infoProduto["estoque"];
@@ -994,7 +994,7 @@
                     $ctrlRelacionados = 0;
                     if($relacionadosProdutos != false){
                         foreach($relacionadosProdutos as $infoRelacionados){
-                            $idEspecificacao = $infoEspecificacao["id_relacionado"];
+                            $idEspecificacao = $infoRelacionados["id_relacionado"];
                             $selectedProdutosRelacionados[$idEspecificacao] = true;
                             $ctrlRelacionados++;
                         }
@@ -1277,7 +1277,7 @@
                     <div class="display-especificacoes">
                         <!--ESPECIFICACOES ADICIONADAS-->
                         <?php
-                            $totalEspecificacoes = isset($especificacoesProduto) ? count($especificacoesProduto) : 0;
+                            $totalEspecificacoes = isset($especificacoesProduto) && is_array($especificacoesProduto) ? count($especificacoesProduto) : 0;
                             if($totalEspecificacoes > 0 && $especificacoesProduto != null){
                                 foreach($especificacoesProduto as $infoEspecificacao){
                                     $idEspec = $infoEspecificacao["id"];

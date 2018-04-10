@@ -18,6 +18,7 @@
         "tabela_especificacoes" => $pew_custom_db->tabela_especificacoes,
         "tabela_especificacoes_produtos" => $pew_custom_db->tabela_especificacoes_produtos,
         "tabela_produtos_relacionados" => $pew_custom_db->tabela_produtos_relacionados,
+        "tabela_cores_relacionadas" => $pew_custom_db->tabela_cores_relacionadas,
         "tabela_minha_conta" => $pew_custom_db->tabela_minha_conta,
         "tabela_enderecos" => $pew_custom_db->tabela_enderecos,
     );

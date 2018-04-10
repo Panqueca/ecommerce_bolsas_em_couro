@@ -778,6 +778,7 @@
             $tabela_marcas = $pew_custom_db->tabela_marcas;
             $tabela_cores = $pew_custom_db->tabela_cores;
             $tabela_produtos_relacionados = $pew_custom_db->tabela_produtos_relacionados;
+            $tabela_cores_relacionadas = $pew_custom_db->tabela_cores_relacionadas;
             $tabela_especificacoes = $pew_custom_db->tabela_especificacoes;
             $tabela_especificacoes_produtos = $pew_custom_db->tabela_especificacoes_produtos;
             $tabela_departamentos = $pew_custom_db->tabela_departamentos;
@@ -821,7 +822,7 @@
                 $subcategoriasProduto = $produto->get_subcategorias_produto();
                 $especificacoesProduto = $produto->get_especificacoes_produto();
                 $relacionadosProdutos = $produto->get_relacionados_produto();
-                $coresRelacionadas = $produto->get_cores_relacionadas();
+                $relacionadosCores = $produto->get_cores_relacionadas();
                 
                 $selectedDepartamentos = array();
                 if($departamentosProduto != false){
@@ -858,6 +859,16 @@
                         $idRelacionado = $infoRelacionados["id_relacionado"];
                         $selectedProdutosRelacionados[$idRelacionado] = true;
                         $ctrlRelacionados++;
+                    }
+                }
+                
+                $selectedCoresRelacionadas = array();
+                $ctrlCoresRelacionadas = 0;
+                if($relacionadosProdutos != false){
+                    foreach($relacionadosCores as $infoRelacionados){
+                        $idRelacionado = $infoRelacionados["id_relacao"];
+                        $selectedCoresRelacionadas[$idRelacionado] = true;
+                        $ctrlCoresRelacionadas++;
                     }
                 }
                 /*END SET DADOS PRODUTO*/
@@ -1237,6 +1248,11 @@
                                     $idProdutoRelacionado = $infoRelacionados["id"];
                                     $nomeProdutoRelacionado = $infoRelacionados["nome"];
                                     $checked = "";
+                                    foreach($selectedCoresRelacionadas as $prodRelacionado){
+                                        if($idProdutoRelacionado == $prodRelacionado){
+                                            $checked = "checked";
+                                        }
+                                    }
                                     echo "<label class='label-relacionados label-cores-relacionadas'><input type='checkbox' name='cores_relacionadas[]' value='$idProdutoRelacionado' $checked> $nomeProdutoRelacionado</label>";
                                 }
                             }else{
