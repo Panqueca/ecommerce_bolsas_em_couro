@@ -247,6 +247,20 @@
             
             /*ATUALIZA CORES DE PRODUTOS RELACIONADOS*/
             if($coresRelacionadas != ""){
+                $queryCoresRelacionadas = mysqli_query($conexao, "select * from $tabela_cores_relacionadas where id_produto = '$idProduto' group by id_relacao");
+                while($infoCorRelacionada = mysqli_fetch_array($queryCoresRelacionadas)){   
+                    $idSelectedCorRelacionada = $infoCorRelacionada["id_relacao"];
+                    $excluirCorRelacionada = true;
+                    foreach($coresRelacionadas as $idProdutoRelacionado){
+                        if($idProdutoRelacionado == $idSelectedCorRelacionada){
+                            $excluirCorRelacionada = false;
+                        }
+                    }
+                    if($excluirCorRelacionada){
+                        $condicaoCoresRelacionadas = "id_produto = '$idProduto' and id_relacao = '$idProdutoRelacionado'";
+                        mysqli_query($conexao, "delete from $tabela_cores_relacionadas where $condicaoCoresRelacionadas");
+                    }
+                }
                 $condicaoCoresRelacionadas = "id_produto = '$idProduto' and id_relacao = '$idProdutoRelacionado'";
                 $totalCoresRelacionadas = $pew_functions->contar_resultados($tabela_cores_relacionadas, $condicaoCoresRelacionadas) > 0 ? true : false;
                 if(!$totalCoresRelacionadas){
@@ -261,7 +275,7 @@
             }            
             /*END ATUALIZA CORES DE PRODUTOS RELACIONADOS*/
             
-            echo "<script>window.location.href='pew-edita-produto.php?msg=Produto atualizado com sucesso&msgType=success&id_produto=$idProduto';</script>";
+            //echo "<script>window.location.href='pew-edita-produto.php?msg=Produto atualizado com sucesso&msgType=success&id_produto=$idProduto';</script>";
         }else{
             echo "<script>window.location.href='pew-edita-produto.php?erro=validacao_do_produto&msg=Não foi possível atualizar o produto&msgType=error&id_produto=$idProduto';</script>";
         }

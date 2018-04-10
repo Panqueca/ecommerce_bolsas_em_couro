@@ -137,11 +137,25 @@
             
             /*INSERE CORES DE PRODUTOS RELACIONADOS*/
             if($coresRelacionadas != ""){
+                $condicaoCoresRelacionadas = "id_produto = '$idProduto' and id_relacao = '$idProdutoRelacionado'";
                 foreach($coresRelacionadas as $idProdutoRelacionado){
-                    mysqli_query($conexao, "insert into $tabela_cores_relacionadas (id_produto, id_relacionado, $dataAtual, $statusProduto) values ('$idProduto', '$idProdutoRelacionado')");
+                    mysqli_query($conexao, "insert into $tabela_cores_relacionadas (id_produto, id_relacionado, $dataAtual, $statusProduto) values ('$idProduto', '$idProdutoRelacionado') WHERE $condicaoCoresRelacionadas");
                 }
             }
             
+            if($coresRelacionadas != ""){
+                $condicaoCoresRelacionadas = "id_produto = '$idProduto' and id_relacao = '$idProdutoRelacionado'";
+                $totalCoresRelacionadas = $pew_functions->contar_resultados($tabela_cores_relacionadas, $condicaoCoresRelacionadas) > 0 ? true : false;
+                if(!$totalCoresRelacionadas){
+                    foreach($coresRelacionadas as $idProdutoRelacionado){
+                        mysqli_query($conexao, "insert into $tabela_cores_relacionadas (id_produto, id_relacao, data_controle, status) values ('$idProduto', '$idProdutoRelacionado', '$dataAtual', '$statusProduto')");
+                        mysqli_query($conexao, "insert into $tabela_cores_relacionadas (id_produto, id_relacao, data_controle, status) values ('$idProdutoRelacionado', '$idProduto', '$dataAtual', '$statusProduto')");
+                    }
+                }
+            }else{
+                mysqli_query($conexao, "delete from $tabela_cores_relacionadas where id_produto = '$idProduto' and id_relacao = '$idProdutoRelacionado'");
+                mysqli_query($conexao, "delete from $tabela_cores_relacionadas where id_produto = '$idProdutoRelacionado' and id_relacao = '$idProduto'");
+            }
             
             /*INSERE IMAGENS*/
             $maxImagens = isset($_POST["maximo_imagens"]) && (int)$_POST["maximo_imagens"] ? (int)$_POST["maximo_imagens"] : 4;

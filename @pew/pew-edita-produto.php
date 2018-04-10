@@ -1226,7 +1226,7 @@
                 <div class="small" align=left>
                     <!--PRODUTOS RELACIONADOS-->
                     <h3 class="label-title">Produtos com Cores Relacionadas</h3>
-                    <a class="btn-relacionados" id="btn-cores-relacionadas">Produtos Selecionados <?php echo "(".$ctrlRelacionados.")";?></a>
+                    <a class="btn-relacionados" id="btn-cores-relacionadas">Produtos Selecionados <?php echo "(".$ctrlCoresRelacionadas.")";?></a>
                     <div class="display-relacionados" id="display-cores-relacionadas">
                         <div class="header-relacionados">
                             <h3 class="title-relacionados">Cores relacionadas</h3>

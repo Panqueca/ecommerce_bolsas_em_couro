@@ -991,6 +991,7 @@
                     }
 
                     $selectedProdutosRelacionados = array();
+                    $ctrlCoresRelacionadas = 0;
                     $ctrlRelacionados = 0;
                     if($relacionadosProdutos != false){
                         foreach($relacionadosProdutos as $infoRelacionados){
@@ -1025,6 +1026,7 @@
                     $selectedCategorias = array();
                     $selectedSubcategorias = array();
                     $ctrlRelacionados = 0;
+                    $ctrlCoresRelacionadas = 0;
                     $selectedProdutosRelacionados = array();
                 }
         ?>
@@ -1366,22 +1368,23 @@
                     </div>
                     <!--END PRODUTOS RELACIONADOS-->
                 </div>
-                <div class="half" align=left>
+                <script type="text/javascript" src="asas.js"></script>
+                <div class="small" align=left>
                     <!--PRODUTOS RELACIONADOS-->
-                    <h3 class="label-title">Cores Relacionadas</h3>
-                    <a class="btn-relacionados">Cores Selecionadas <?php echo "(".$ctrlRelacionados.")";?></a>
-                    <div class="display-relacionados display-cores-relacionadas">
+                    <h3 class="label-title">Produtos com Cores Relacionadas</h3>
+                    <a class="btn-relacionados" id="btn-cores-relacionadas">Produtos Selecionados <?php echo "(".$ctrlCoresRelacionadas.")";?></a>
+                    <div class="display-relacionados" id="display-cores-relacionadas">
                         <div class="header-relacionados">
                             <h3 class="title-relacionados">Cores relacionadas</h3>
                             <!--<h5 class="descricao-relacionados">Selecione os produtos relacionados</h5>-->
-                            <input type="search" class="busca-relacionados" name="busca_relacionados" placeholder="Busque categoria, nome, marca, id, ou sku" form="busca_produto">
-                            <label title="Listar somente os produtos que já foram selecionados"><input type="checkbox" id="checkOnlyActives"> Somente os selecionados</label>
+                            <input type="search" class="busca-relacionados" id="busca-relacionados" name="busca_relacionados" placeholder="Busque categoria, nome, marca, id, ou sku" form="busca_produto">
+                            <label title="Listar somente os produtos que já foram selecionados"><input type="checkbox" id="checkCoresOnlyActives"> Somente os selecionados</label>
                         </div>
-                        <div class="lista-relacionados">
+                        <div class="lista-relacionados" id="lista-relacionados">
                             <div class="loading-background">
                                 <h4 class="loading-message"><i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i></h4>
                             </div>
-                            <div class="lista-relacionados-msg"><h4>Exibindo todos os produtos:</h4><a class="link-padrao limpar-todos-relacionados" title="Limpar todos os produtos listados abaixo e que foram selecionados">Limpar todos</a></div>
+                            <div class="lista-relacionados-msg" id="lista-relacionados-msg"><h4>Exibindo todos os produtos:</h4><a class="link-padrao limpar-todos-relacionados" title="Limpar todos os produtos listados abaixo e que foram selecionados" id="limpar-todos-relacionados">Limpar todos</a></div>
                         <?php
                             $condicaoRelacionados = "id != '$idProduto' and status = 1";
                             $totalRelacionados = $pew_functions->contar_resultados($tabela_produtos, $condicaoRelacionados);
@@ -1391,12 +1394,7 @@
                                     $idProdutoRelacionado = $infoRelacionados["id"];
                                     $nomeProdutoRelacionado = $infoRelacionados["nome"];
                                     $checked = "";
-                                    foreach($selectedProdutosRelacionados as $prodRelacionado){
-                                        if($idProdutoRelacionado == $prodRelacionado){
-                                            $checked = "checked";
-                                        }
-                                    }
-                                    echo "<label class='label-relacionados'><input type='checkbox' name='produtos_relacionados[]' value='$idProdutoRelacionado' $checked> $nomeProdutoRelacionado</label>";
+                                    echo "<label class='label-relacionados label-cores-relacionadas'><input type='checkbox' name='cores_relacionadas[]' value='$idProdutoRelacionado' $checked> $nomeProdutoRelacionado</label>";
                                 }
                             }else{
                                 echo "<h4 class='full'>Nenhum produto encontrado</h4>";
@@ -1404,7 +1402,7 @@
                         ?>
                         </div>
                         <div class="bottom-relacionados">
-                            <a class="btn-salvar-relacionados">Salvar</a>
+                            <a id="btn-salvar-relacionados" class="btn-salvar-relacionados">Salvar</a>
                         </div>
                     </div>
                     <!--END PRODUTOS RELACIONADOS-->
