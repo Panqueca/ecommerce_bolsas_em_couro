@@ -26,7 +26,7 @@
             return $this->global_vars["conexao"];
         }
 
-        private function vitrine_standard($condicao = 1){
+        private function vitrine_standard($arrayProdutos = null){
             $tabela_cores = $this->global_vars["tabela_cores"];
             $conexao = $this->global_vars["conexao"];
             $functions = $this->pew_functions;
@@ -126,15 +126,15 @@
                     echo "<article class='descricao-vitrine'>".$this->descricao_vitrine."</article>";
                 }
                 echo "<div class='display-produtos'>";
-                $except_ids = "";
                 $ctrlProdutos = 0;
-                for($i = 1; $i <= $this->limite_produtos; $i++){
-                    $produto = new Produtos();
-                    $idProduto = $produto->query_produto("status = 1 $except_ids");
-                    if($idProduto != false){
-                        $except_ids .= " and id != '$idProduto'"; # Exeto os produtos já selecionados #
-                        listar_produto($idProduto);
-                        $ctrlProdutos++;
+                foreach($arrayProdutos as $idProduto){
+                    if($ctrlProdutos < $this->limite_produtos){
+                        $produto = new Produtos();
+                        $idProduto = $produto->query_produto("status = 1 and id = '$idProduto'");
+                        if($idProduto != false){
+                            listar_produto($idProduto);
+                            $ctrlProdutos++;
+                        }
                     }
                 }
                 if($ctrlProdutos == 0){
@@ -319,20 +319,20 @@
             /*END DISPLAY TODOS PRODUTO DA VITRINE*/
         }
 
-        public function montar_vitrine($condicao = ""){
+        public function montar_vitrine($arrayProdutos = ""){
             $tipoVitrine = $this->tipo;
             switch($tipoVitrine){
                 case "categorias":
-                    $this->vitrine_categorias($condicao);
+                    $this->vitrine_categorias($arrayProdutos);
                     break;
                 case "carrossel":
-                    $this->vitrine_carrossel($condicao);
+                    $this->vitrine_carrossel($arrayProdutos);
                     break;
                 case "interna-produto":
-                    $this->vitrine_interna($condicao);
+                    $this->vitrine_interna($arrayProdutos);
                     break;
                 case "standard":
-                    $this->vitrine_standard($condicao);
+                    $this->vitrine_standard($arrayProdutos);
                     break;
                 default:
                     $this->tipo = "INDEFINIDO";

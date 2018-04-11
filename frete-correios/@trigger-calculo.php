@@ -49,7 +49,7 @@
         $produtos[0]["peso"] = ".3";
         */
         
-        $url_correios_api = 'localhost/xampp/github/ecommerce_bolsas_em_couro/frete-correios/ws-correios.php';
+        $url_correios_api = 'localhost/GitHub/ecommerce_bolsas_em_couro/frete-correios/ws-correios.php';
         
         $infoFrete = frete($produtos, $codigoCorreios, $cepDestino, $declararValor, $url_correios_api);
         if($infoFrete != false && $produtos != false){
