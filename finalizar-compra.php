@@ -277,12 +277,7 @@
                             mensagemAlerta("Ocorreu um erro ao finalizar seu pedido. Recarregue a página e tente novamente.");
                         },
                         success: function(resposta){
-                            console.log(resposta);
-                            if(resposta == "true"){
-                                mensagemAlerta("Sua compra foi finalizada com sucesso", false, "limegreen", "finalizar-compra.php");
-                            }else{
-                                mensagemAlerta("Ocorreu um erro ao finalizar seu pedido. Recarregue a página e tente novamente.");
-                            }
+                            //console.log(resposta);
                         }
                     });
                 }
@@ -440,11 +435,15 @@
                                         resposta = JSON.parse(resposta);
                                         var confirmationCode = resposta.code;
                                         var reference = resposta.reference;
+                                        var transactionCode = "0";
+                                        
+                                        guardar_compra(confirmationCode, transactionCode, transportCode, reference);
+                                        
                                         PagSeguroLightbox({
                                             code: confirmationCode
                                             }, {
-                                            success: function(transactionCode) {
-                                                guardar_compra(confirmationCode, transactionCode, transportCode, reference);
+                                            success: function(transactionCode){
+                                                mensagemAlerta("Sua compra foi finalizada com sucesso", false, "limegreen", "finalizar-compra.php");
                                             },
                                             abort: function() {
                                                 mensagemAlerta("Ocorreu um erro ao finalizar a compra. Tente novamente.", false, false, "finalizar-compra.php");
