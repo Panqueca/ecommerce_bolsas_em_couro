@@ -121,7 +121,7 @@
                     
                     $dadosCompra = http_build_query($dadosCompra);
                     
-                    $url_api_pagseguro = "localhost/xampp/github/ecommerce_bolsas_em_couro/@ws-pagseguro.php";
+                    $url_api_pagseguro = "localhost/xampp/github/ecommerce_bolsas_em_couro/pagseguro/ws-pagseguro.php";
 
                     $ch = curl_init();
                     curl_setopt($ch, CURLOPT_URL, $url_api_pagseguro);
@@ -131,7 +131,7 @@
 
                     $response = curl_exec($ch);
                     
-                    echo $response; // RESPOSTA DO CODIGO PAGSEGURO
+                    echo $response; // RESPOSTA DO CODIGO PAGSEGURO E REFERENCIA PEDIDO
                     
                 }else{
                     echo "false";
