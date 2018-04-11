@@ -1082,7 +1082,7 @@
                 $titulo = $slink["titulo"];
                 $url = $slink["url"];
                 $subsublinks = isset($slink["subsublinks"]) ? $slink["subsublinks"] : null;
-                $totalSubsub = count($subsublinks);
+                $totalSubsub = is_array($subsublinks) ? count($subsublinks) : 0;
                 $link_nav[$countLinks]->add_sublink($countLinks, $titulo, $url);
                 if($totalSubsub > 0){
                     foreach($subsublinks as $sublink){

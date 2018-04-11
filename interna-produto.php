@@ -572,7 +572,6 @@
                         $ctrlImagens = 0;
                         $imagemPrincipal = null;
                         if(is_array($imagensProduto) && count($imagensProduto) > 0){
-                            print_r($imagensProduto);
                             foreach($imagensProduto as $infoImagem){
                                 $srcImagem = $infoImagem["src"];
                                 $ctrlImagens++;

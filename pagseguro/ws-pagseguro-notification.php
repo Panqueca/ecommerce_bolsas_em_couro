@@ -1,10 +1,15 @@
 <?php
 
-    if(isset($_POST["codigo_notificacao"])){
+    if(isset($_POST["notificationCode"])){
         require_once "ws-pagseguro-config.php";
+        
+        $fp = fopen("log-pagseguro.txt", "a");
+        $escreve = fwrite($fp, "boaaa");
+        fclose($fp);
+        
         $token = $pagseguro_config->get_token();
         $email = $pagseguro_config->get_email();
-        $codigo_notificacao = $_POST["codigo_notificacao"];
+        $codigo_notificacao = $_POST["notificationCode"];
         
         $urlBusca = "https://ws.pagseguro.uol.com.br/v2/transactions/notifications/$codigo_notificacao?email=$email&token=$token";
         
@@ -37,4 +42,10 @@
         $tabela_pedidos = $pew_custom_db->tabela_pedidos;
         
         mysqli_query($conexao, "update $tabela_pedidos set codigo_transacao = '$codigoTransacao', codigo_pagamento = '$codigoPagamento' where referencia = '$referencia'");
+        
+        
+    }else{
+        $fp = fopen("log-pagseguro.txt", "a");
+        $escreve = fwrite($fp, "FEIJAO");
+        fclose($fp);
     }
