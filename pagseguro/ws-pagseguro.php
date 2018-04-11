@@ -1,8 +1,9 @@
 <?php
 
+require_once "ws-pagseguro-config.php";
 // AUTENTICACAO DO PAGSEGURO
-$data['token'] ='B6A5347FD62240238E529A5770A3FF79';
-$data['email'] = 'reyrogerio@hotmail.com';
+$data['token'] = $pagseguro_config->get_token();
+$data['email'] = $pagseguro_config->get_email();
 //END  AUTENTICACAO DO PAGSEGURO
 
 $data['currency'] = 'BRL'; // MONEY
