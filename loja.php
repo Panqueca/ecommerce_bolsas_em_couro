@@ -241,7 +241,6 @@
             
             $condicaoFinal = "";
             $ctrl = 0;
-            print_r($selectedProdutos);
             foreach($selectedProdutos as $idProduto){
                 $condicaoFinal .= $ctrl == 0 ? "id = '$idProduto'" : " or id = '$idProduto'";
                 $ctrl++;

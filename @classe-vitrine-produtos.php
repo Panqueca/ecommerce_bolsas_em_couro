@@ -127,13 +127,15 @@
                 }
                 echo "<div class='display-produtos'>";
                 $ctrlProdutos = 0;
-                foreach($arrayProdutos as $idProduto){
-                    if($ctrlProdutos < $this->limite_produtos){
-                        $produto = new Produtos();
-                        $idProduto = $produto->query_produto("status = 1 and id = '$idProduto'");
-                        if($idProduto != false){
-                            listar_produto($idProduto);
-                            $ctrlProdutos++;
+                if(is_array($arrayProdutos) && count($arrayProdutos) > 0){
+                    foreach($arrayProdutos as $idProduto){
+                        if($ctrlProdutos < $this->limite_produtos){
+                            $produto = new Produtos();
+                            $idProduto = $produto->query_produto("status = 1 and id = '$idProduto'");
+                            if($idProduto != false){
+                                listar_produto($idProduto);
+                                $ctrlProdutos++;
+                            }
                         }
                     }
                 }
