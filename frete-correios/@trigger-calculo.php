@@ -29,6 +29,10 @@
 
     if($calcular){
         require_once "calcular-frete.php";
+        
+        /*$baseSite = "https://www.efectusdigital.com.br/bolsas/";*/
+        $baseSite = "localhost/xampp/github/ecommerce_bolsas_em_couro/";
+        $pastaCorreios = "frete-correios/ws-correios.php";
 
         $codigoCorreios = isset($_POST["codigo_correios"]) ? $_POST["codigo_correios"] : "41106";
         
@@ -49,7 +53,7 @@
         $produtos[0]["peso"] = ".3";
         */
         
-        $url_correios_api = 'localhost/xampp/github/ecommerce_bolsas_em_couro/frete-correios/ws-correios.php';
+        $url_correios_api = $baseSite.$pastaCorreios;
         
         $infoFrete = frete($produtos, $codigoCorreios, $cepDestino, $declararValor, $url_correios_api);
         if($infoFrete != false && $produtos != false){

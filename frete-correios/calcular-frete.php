@@ -60,7 +60,7 @@ function frete($produtos = null, $codigo_correios = "41106", $cep_destino = null
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
                 $response = curl_exec($ch);
-
+                
                 if($response != "false"){
                     $split_response = explode(",", $response);
                     $ctrlItens = 0;
@@ -78,7 +78,7 @@ function frete($produtos = null, $codigo_correios = "41106", $cep_destino = null
 
                         $array = array();
                         $array[$chave] = $valor;
-
+                        
                         $frete_caixas[$ctrlFrete][$chave] = $valor;
 
                         $ctrlItens++;

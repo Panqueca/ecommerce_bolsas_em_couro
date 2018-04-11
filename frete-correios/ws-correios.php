@@ -41,14 +41,34 @@ if($calcular){
     $data['nCdServico'] = $codigoServico;
     $data = http_build_query($data);
 
-    $url = 'http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx';
 
     $curl = curl_init($url . '?' . $data);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    
+    $url = "http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?$data";
+    $charset = 'UTF-8';
+    
+    $options = array(
+        CURLOPT_URL => $url,
+        CURLOPT_HTTPHEADER => array(
+            "Content-Type: application/x-www-form-urlencoded; charset=" . $charset
+        ),
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER => false,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_CONNECTTIMEOUT => 20,
+        CURLOPT_POST => false,
+        CURLOPT_POSTFIELDS => http_build_query($data),
+    );
 
-    $result = curl_exec($curl);
-    $result = simplexml_load_string($result);
-    foreach($result -> cServico as $row){
+    curl_setopt_array($curl, $options);
+    
+    $xml = curl_exec($curl);
+    
+    curl_close($curl);
+    
+    $xml = simplexml_load_string($xml);
+    
+    foreach($xml -> cServico as $row){
         $row->Valor = str_replace(",", ".", $row->Valor);
         $row->ValorSemAdicionais = str_replace(",", ".", $row->ValorSemAdicionais);
         $row->ValorMaoPropria = str_replace(",", ".", $row->ValorMaoPropria);

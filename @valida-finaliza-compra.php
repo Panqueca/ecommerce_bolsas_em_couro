@@ -62,6 +62,11 @@
     if($finalizar){
         require_once "@classe-system-functions.php";
         require_once "frete-correios/calcular-frete.php";
+        
+        /*$baseSite = "https://www.efectusdigital.com.br/bolsas/";*/
+        $baseSite = "localhost/xampp/github/ecommerce_bolsas_em_couro/";
+        $pastaCorreios = "frete-correios/ws-correios.php";
+        $pastaPagseguro = "pagseguro/ws-pagseguro.php";
 
         $codigoCorreios = isset($_POST["codigo_correios"]) ? $_POST["codigo_correios"] : "41106";
         
@@ -78,7 +83,7 @@
 
         $produtos = is_array($_POST["produtos"]) ? $_POST["produtos"] : array();
         
-        $url_correios_api = 'localhost/xampp/github/ecommerce_bolsas_em_couro/frete-correios/ws-correios.php';
+        $url_correios_api = $baseSite.$pastaCorreios;
         
         $infoFrete = frete($produtos, $codigoCorreios, $cepDestino, $declararValor, $url_correios_api);
         if($infoFrete != false && $produtos != false){
@@ -119,19 +124,37 @@
                         'carrinho' => http_build_query($produtos),
                     ];
                     
-                    $dadosCompra = http_build_query($dadosCompra);
-                    
-                    $url_api_pagseguro = "localhost/xampp/github/ecommerce_bolsas_em_couro/pagseguro/ws-pagseguro.php";
+                    $url_api_pagseguro = $baseSite.$pastaPagseguro;
 
-                    $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_URL, $url_api_pagseguro);
-                    curl_setopt($ch, CURLOPT_POST, true);
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, $dadosCompra);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-                    $response = curl_exec($ch);
+                    $charset = "UTF-8";
                     
-                    echo $response; // RESPOSTA DO CODIGO PAGSEGURO E REFERENCIA PEDIDO
+                    $curl = curl_init();
+                    $options = array(
+                        CURLOPT_URL => $url_api_pagseguro,
+                        CURLOPT_HTTPHEADER => array(
+                            "Content-Type: application/x-www-form-urlencoded; charset=" . $charset
+                        ),
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_HEADER => false,
+                        CURLOPT_SSL_VERIFYPEER => false,
+                        CURLOPT_CONNECTTIMEOUT => 20,
+                        CURLOPT_POST => false,
+                        CURLOPT_POSTFIELDS => http_build_query($dadosCompra),
+                    );
+                    
+                    curl_setopt_array($curl, $options);
+
+                    $response = curl_exec($curl);
+                    $total = count(json_decode($response));
+                    
+                    if($total > 0){
+                        
+                        echo $response; // RESPOSTA DO CODIGO PAGSEGURO E REFERENCIA PEDIDO
+                        
+                    }else{
+                        echo $response;
+                    }
+                    
                     
                 }else{
                     echo "false";

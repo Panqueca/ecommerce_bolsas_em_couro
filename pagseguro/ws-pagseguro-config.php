@@ -1,21 +1,22 @@
 <?php
 
     class PagSeguroConfig{
-        public $email = null;
         public $token = null;
+        public $email = null;
         
-        function __construct($email, $token){
-            $this->email = $email;
+        function __construct($token, $email){
             $this->token = $token;
+            $this->email = $email;
+        }
+        
+        function get_token(){
+            return $this->token;
         }
         
         function get_email(){
             return $this->email;
         }
         
-        function get_token(){
-            return $this->token;
-        }
     }
 
     $pagseguro_config = new PagSeguroConfig("B6A5347FD62240238E529A5770A3FF79", "reyrogerio@hotmail.com");

@@ -58,8 +58,8 @@
         
         mysqli_query($conexao, "insert into $tabela_pedidos (codigo_confirmacao, codigo_transacao, codigo_transporte, codigo_pagamento, referencia, token_carrinho, id_cliente, nome_cliente, cpf_cliente, email_cliente, cep, rua, numero, complemento, bairro, cidade, estado, data_controle, status) values ('{$_POST["codigo_confirmacao"]}', '{$_POST["codigo_transacao"]}', '{$_POST["codigo_transporte"]}', '$codigoPagamento', '{$_POST["referencia"]}', '{$_POST["token_carrinho"]}', '{$_POST["id_cliente"]}', '{$_POST["nome_cliente"]}', '{$_POST["cpf_cliente"]}', '{$_POST["email_cliente"]}', '{$_POST["cep"]}', '{$_POST["rua"]}', '{$_POST["numero"]}', '{$_POST["complemento"]}', '{$_POST["bairro"]}', '{$_POST["cidade"]}', '{$_POST["estado"]}', '$dataAtual', 0)");
         
-        session_start();
-        unset($_SESSION["carrinho"]);
+        //session_start();
+        //unset($_SESSION["carrinho"]);
         
         echo "true";
     }else{

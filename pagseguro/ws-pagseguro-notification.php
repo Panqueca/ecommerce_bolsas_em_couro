@@ -30,7 +30,7 @@
         
         $referencia = $response->reference;
         $codigoTransacao = $response->code;
-        $codigoPagamento = $response->reference->paymentMethod->code;
+        $codigoPagamento = $response->paymentMethod->code;
         
         // CONFIGURAVEL DE ACORDO COM O SISTEMA
         require_once "../@pew/pew-system-config.php";

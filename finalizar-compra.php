@@ -134,6 +134,12 @@
                 line-height: 20px;
                 cursor: pointer;
             }
+            .main-content .display-carrinho .label-frete{
+                cursor: pointer;
+            }
+            .main-content .display-carrinho .label-frete:hover{
+                background-color: #eee;   
+            }
             .main-content .display-carrinho .display-resultados-frete{
                 width: calc(40% - 20px);
             }
@@ -337,7 +343,7 @@
                                                 var jsonData = JSON.parse(resultado);
                                                 var valor = jsonData.valor.toFixed(2);
                                                 var prazo = jsonData.prazo;
-                                                var msgPadrao = "<input type='checkbox' name='metodo_envio[]' class='opcao-frete' value='" + codigo + "' price-frete='" + valor + "'>" + tituloServico + ": <b>R$" + valor + "</b> em até <b>" + prazo + "</b>";
+                                                var msgPadrao = "<label class='label-frete'><input type='checkbox' name='metodo_envio[]' class='opcao-frete' value='" + codigo + "' price-frete='" + valor + "'>" + tituloServico + ": <b>R$" + valor + "</b> em até <b>" + prazo + "</b></label>";
                                                 mensagemFinal[ctrlExec] = "<br>" + msgPadrao + "<br>";
                                             }else{
                                                 mensagemFinal[ctrlExec] = "<br>" + tituloServico + ": Localidade insdisponível<br>";
@@ -392,7 +398,6 @@
                         var viewCarrinhoFrete = $(".view-frete");
                         var transportCode = false;
                         
-                        botaoFinalizar.html("Validando " + iconLoading);
                         
                         opcaoFrete.each(function(){
                             var input = $(this);
@@ -406,6 +411,7 @@
 
                         if(transportCode != false){
 
+                            botaoFinalizar.html("Validando " + iconLoading);
                             var dados = {
                                 cep_destino: $("#cepDestino").val(),
                                 rua_destino: $("#ruaDestino").val(),
@@ -431,7 +437,8 @@
                                     });
                                 },
                                 success: function(resposta){
-                                    if(resposta != "false"){
+                                    //console.log(resposta);
+                                    if(resposta != "false" && resposta != "Unauthorized"){
                                         resposta = JSON.parse(resposta);
                                         var confirmationCode = resposta.code;
                                         var reference = resposta.reference;
@@ -446,8 +453,8 @@
                                                 mensagemAlerta("Sua compra foi finalizada com sucesso", false, "limegreen", "finalizar-compra.php");
                                             },
                                             abort: function() {
-                                                mensagemAlerta("Ocorreu um erro ao finalizar a compra. Tente novamente.", false, false, "finalizar-compra.php");
-                                                botaoFinalizar.html("Recarregar página");
+                                                mensagemAlerta("Ocorreu um erro ao finalizar a compra. Tente novamente.", false, false);
+                                                botaoFinalizar.html("<i class='fas fa-sync'></i> Recarregar página");
                                                 botaoFinalizar.off().on("click", function(){
                                                     window.location.reload();
                                                 });
@@ -455,10 +462,15 @@
                                         });
                                     }else{
                                         mensagemAlerta("Ocorreu um erro ao finalizar sua compra");
+                                        botaoFinalizar.html("<i class='fas fa-sync'></i> Recarregar página");
+                                        botaoFinalizar.off().on("click", function(){
+                                            window.location.reload();
+                                        });
                                     }
                                 }
                             });
                         }else{
+                            finalizandoCompra = false;
                             mensagemAlerta("Selecione uma opção de frete");
                         }
                     }

@@ -115,9 +115,16 @@ if($enviarDados){
     
     $xml = simplexml_load_string($xml);
     
-    $confirmationCode = $xml->code;
+    if(count($xml->errors) == 0){
+        
+        $confirmationCode = $xml->code;
+
+        echo '{"reference": "'.$data['reference'].'", "code": "'.$confirmationCode.'"}'; // RETORNO EM JSON
+        
+    }else{
+        echo "false";
+    }
     
-    echo '{"reference": "'.$data['reference'].'", "code": "'.$confirmationCode.'"}'; // RETORNO EM JSON
 }else{
     echo "false";
 }
