@@ -87,14 +87,13 @@
                                     $queryCor = mysqli_query($conexao, "SELECT * FROM pew_cores where id = '$idCor' and status = 1");
                                     $functions = new systemFunctions();
                                     $totalCores = $functions->contar_resultados("pew_cores", "id = '$idCor' and status = 1");
-                                    
                                     $urlProdutoRelacao = "interna-produto.php?id_produto=$idRelacao";
                                     $dirImagens = "imagens/cores";
                                     if($totalCores > 0){
                                         while($infoCor = mysqli_fetch_assoc($queryCor)){
                                             $nomeCor = $infoCor["cor"];
                                             $imagemCor = $infoCor["imagem"];
-                                            echo "<a href='$urlProdutoRelacao'><div class='cor' title='$nomeCor'><img src='$dirImagens/$imagemCor'></div></a>";
+                                            echo "<a href='$urlProdutoRelacao'><img class='cor' title='$nomeCor' src='$dirImagens/$imagemCor'></a>";
                                         }
                                     }
                                 }
@@ -215,8 +214,13 @@
         }
 
         public function vitrine_carrossel(){
+            $tabela_cores = $this->global_vars["tabela_cores"];
+            $conexao = $this->global_vars["conexao"];
+            $functions = $this->pew_functions;
+            
             if(!function_exists("listar_produto")){
                 function listar_produto($idProduto){
+                    global $conexao, $tabela_cores, $functions;
                     /*STANDARD VARS*/
                     $nomeLoja = "BOLSAS EM COURO";
                     $dirImagensProdutos = "imagens/produtos";
@@ -225,7 +229,7 @@
                     $produto = new Produtos();
                     $produto->montar_produto($idProduto);
                     $infoProduto = $produto->montar_array();
-
+                    $infoCoresRelacionadas = $produto->get_cores_relacionadas();
                     /*VARIAVEIS DO PRODUTO*/
                     $imagens = $infoProduto["imagens"];
                     $qtdImagens = count($imagens);
@@ -258,8 +262,27 @@
                         echo "<h4 class='preco-produto'>$priceField ou <span class='view-parcelas'>$txtParcelas R$". number_format($precoParcela, 2, ",", ".") ."</span></h4>";
                         echo "<a href='$urlProduto' class='call-to-action'>COMPRAR</a>";
                         echo "<div class='display-cores'>";
-                            echo "<div class='cor' title='Titulo da cor'></div>";
-                            echo "<div class='cor' title='Titulo da cor'></div>";
+                            if(is_array($infoCoresRelacionadas) and count($infoCoresRelacionadas) > 0){
+                                foreach($infoCoresRelacionadas as $id => $info){
+                                    $idRelacao = $info["id_relacao"];
+                                    $produtoRelacao = new Produtos();
+                                    $produtoRelacao->montar_produto($idRelacao);
+                                    $infoProduto = $produtoRelacao->montar_array();
+                                    $idCor = $infoProduto["id_cor"];
+                                    $queryCor = mysqli_query($conexao, "SELECT * FROM pew_cores where id = '$idCor' and status = 1");
+                                    $functions = new systemFunctions();
+                                    $totalCores = $functions->contar_resultados("pew_cores", "id = '$idCor' and status = 1");
+                                    $urlProdutoRelacao = "interna-produto.php?id_produto=$idRelacao";
+                                    $dirImagens = "imagens/cores";
+                                    if($totalCores > 0){
+                                        while($infoCor = mysqli_fetch_assoc($queryCor)){
+                                            $nomeCor = $infoCor["cor"];
+                                            $imagemCor = $infoCor["imagem"];
+                                            echo "<a href='$urlProdutoRelacao'><img class='cor' title='$nomeCor' src='$dirImagens/$imagemCor'></a>";
+                                        }
+                                    }
+                                }
+                            }
                         echo "</div>";
                     echo "</div>";
                     /*END DISPLAY DO PRODUTO*/
@@ -279,7 +302,7 @@
                     $produto = new Produtos();
                     $idProduto = $produto->query_produto("status = 1 $except_ids");
                     if($idProduto != false){
-                        //$except_ids .= " and id != '$idProduto'"; # Exeto os produtos já selecionados #
+                        $except_ids .= " and id != '$idProduto'"; # Exeto os produtos já selecionados #
                         listar_produto($idProduto);
                         $ctrlProdutos++;
                     }

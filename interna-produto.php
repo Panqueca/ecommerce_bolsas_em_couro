@@ -166,14 +166,17 @@
                 display: flex;
                 height: 35px;
                 margin: 25px 0px 25px 0px;
-                padding: 0px 0px 10px 0px;
+                padding: 0px 10px 10px 0px;
                 overflow: auto;
                 justify-content: flex-end;
+            }
+            .section-produto .display-info-produto .display-cores img{
+                border-radius: 50%;
             }
             .display-cores::-webkit-scrollbar-button:hover{
                 background-color: #AAA;
             }
-            .display-cores::-webkit-scrollbar-thumb{
+/*            .display-cores::-webkit-scrollbar-thumb{
                 background-color: #ccc;
             }
             .display-cores::-webkit-scrollbar-thumb:hover{
@@ -184,7 +187,7 @@
             }
             .display-cores::-webkit-scrollbar-track:hover{
                 background-color: #efefef;
-            }
+            }*/
             .display-cores::-webkit-scrollbar{
                 width: 5px;
                 height: 5px;
@@ -568,11 +571,19 @@
                     <?php
                         $ctrlImagens = 0;
                         $imagemPrincipal = null;
-                        foreach($imagensProduto as $infoImagem){
-                            $srcImagem = $infoImagem["src"];
-                            $ctrlImagens++;
-                            $imagemPrincipal = $ctrlImagens == 1 ? $srcImagem : $imagemPrincipal;
-                            echo "<div class='box-miniaturas'><img src='$dirImagensProduto/$srcImagem' alt='$nomeEmpresa - $nomeProduto - Imagem $ctrlImagens' class='miniatura'></div>";
+                        if(is_array($imagensProduto) && count($imagensProduto) > 0){
+                            print_r($imagensProduto);
+                            foreach($imagensProduto as $infoImagem){
+                                $srcImagem = $infoImagem["src"];
+                                $ctrlImagens++;
+                                $imagemPrincipal = $ctrlImagens == 1 ? $srcImagem : $imagemPrincipal;
+                                if(file_exists($dirImagens."/".$srcImagem) && $srcImagem != ""){
+                                    $imagemPrincipal = "produto-padrao.png";
+                                }
+                                echo "<div class='box-miniaturas'><img src='$dirImagensProduto/$srcImagem' alt='$nomeEmpresa - $nomeProduto - Imagem $ctrlImagens' class='miniatura'></div>";
+                            }
+                        }else{
+                            echo "<div class='box-miniaturas'><img src='$dirImagensProduto/produto-padrao.png' alt='$nomeEmpresa - $nomeProduto - Imagem $ctrlImagens' class='miniatura'></div>";
                         }
                 
                         if($urlVideo != null){
@@ -583,7 +594,11 @@
                 </div>
                 <div class="display-imagem-principal">
                     <?php
+                        if($imagemPrincipal == ""){
+                            $imagemPrincipal = "produto-padrao.png";
+                        }
                         echo "<img src='$dirImagensProduto/$imagemPrincipal' alt='$nomeEmpresa - $nomeProduto - Imagem principal' class='imagem-principal'>";
+                        
                     ?>
                 </div>
                 <div class="display-info-produto">
@@ -594,11 +609,30 @@
                         echo $viewDisponibilidadadeField;
                     ?>
                     <div class="display-cores">
-                        <div class="box-cor"></div>
-                        <div class="box-cor"></div>
-                        <div class="box-cor"></div>
-                        <div class="box-cor"></div>
-                        <div class="box-cor"></div>
+                        <?php
+                            $infoCoresRelacionadas = $produto->get_cores_relacionadas();
+                            if(is_array($infoCoresRelacionadas) and count($infoCoresRelacionadas) > 0){
+                                foreach($infoCoresRelacionadas as $id => $info){
+                                    $idRelacao = $info["id_relacao"];
+                                    $produtoRelacao = new Produtos();
+                                    $produtoRelacao->montar_produto($idRelacao);
+                                    $infoProduto = $produtoRelacao->montar_array();
+                                    $idCor = $infoProduto["id_cor"];
+                                    $queryCor = mysqli_query($conexao, "SELECT * FROM pew_cores where id = '$idCor' and status = 1");
+                                    $functions = new systemFunctions();
+                                    $totalCores = $functions->contar_resultados("pew_cores", "id = '$idCor' and status = 1");
+                                    $urlProdutoRelacao = "interna-produto.php?id_produto=$idRelacao";
+                                    $dirImagens = "imagens/cores";
+                                    if($totalCores > 0){
+                                        while($infoCor = mysqli_fetch_assoc($queryCor)){
+                                            $nomeCor = $infoCor["cor"];
+                                            $imagemCor = $infoCor["imagem"];
+                                            echo "<div class='box-cor'><a href='$urlProdutoRelacao'><img title='$nomeCor' src='$dirImagens/$imagemCor'></a></div>";
+                                        }
+                                    }
+                                }
+                            }
+                        ?>
                     </div>
                     <div class="display-comprar">
                         <?php echo $viewBotaoComprar; ?>

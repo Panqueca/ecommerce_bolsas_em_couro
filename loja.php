@@ -87,7 +87,47 @@
         </div>
         <div class="main-content">
         <?php
-            $iconArrow = "<i class='fas fa-angle-right icon'></i>";
+            $buscarDepartamento = isset($_GET["departamento"]) ? true : false;
+            $buscarCategoria = isset($_GET["categoria"]) ? true : false;
+            $buscarSubcategoria = isset($_GET["subcategoria"]) ? true : false;
+
+            function buscarDepartamento($selectedDepartamento){
+                global $globalVars, $pew_functions;
+                $tabela_departamentos = $globalVars["tabela_departamentos"];
+                $totalDepartamentos = $pew_functions->contar_resultados($tabela_departamentos, "ref = '$selectedDepartamento'");
+                if($totalDepartamentos > 0){
+                    $tabela_departamentos_produtos = $globalVars["tabela_departamentos_produtos"];
+                    $query = "SELECT "
+                }else{
+                    
+                }
+            }
+            
+            function buscarCategoria($selectedCategoria){
+                global $globalVars, $pew_functions;
+                $tabela_categorias = $globalVars["tabela_categorias"];
+                $totalCategorias = $pew_functions->contar_resultados($tabela_categorias, "ref = '$selectedCategoria'");
+            }
+            
+            function buscarSubcategoria($selectedSubcategoria){
+                global $globalVars, $pew_functions;
+                $tabela_subcategorias = $globalVars["tabela_subcategorias"];
+                $totalSubcategorias = $pew_functions->contar_resultados($tabela_subcategorias, "ref = '$selectedSubcategoria'");
+            }
+            
+            if($buscarSubcategoria){
+                $get = $_GET["subcategoria"];
+                buscarSubcategoria($get);
+            }else if($buscarCategoria){
+                $get = $_GET["categoria"];
+                buscarCategoria($get);
+            }else if($buscarDepartamento){
+                $get = $_GET["departamento"];
+                buscarDepartamento($get);
+            }else{
+                header("location: index.php");
+            }
+            $iconArrow = "<i class='fas fa-angle-right icon'></i>"; 
             $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='#'>Feminino</a></a></div>";
             echo $navigationTree;
             require_once "@classe-vitrine-produtos.php";
