@@ -270,13 +270,13 @@
         transition: .3s;
     }
     .header-principal .nav-header .top-bar .display-header-conta .box-header-conta li{
-        padding: 15px;
         margin: 0px;
         line-height: 15px;
         text-align: left;
         cursor: pointer;
     }
     .header-principal .nav-header .top-bar .display-header-conta .box-header-conta li a{
+        padding: 15px;
         color: #666;
         text-decoration: none;
         display: block;
@@ -289,7 +289,7 @@
     .header-principal .nav-header .top-nav{
         position: relative;
         width: 100%;
-        margin-top: 50px;
+        margin-top: 60px;
         height: 100px;
         border-bottom: 1px solid #333;
         display: -webkit-box;
@@ -1277,7 +1277,8 @@
 <?php
     if(isset($_SESSION["minha_conta"])){
         require_once "@include-minha-conta.php";
+    }else{
+        require_once "@include-cadastra-conta.php";
+        require_once "@include-login.php";
     }
-    require_once "@include-cadastra-conta.php";
-    require_once "@include-login.php";
 ?>
