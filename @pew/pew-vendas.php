@@ -248,9 +248,9 @@
                         
                     }else{
                         if($strBusca == ""){
-                            echo "<br><h3 align='center'>Nenhum Pedido foi feito encontrado.</h3>";
+                            echo "<br><h3 align='center'>Nenhum Pedido foi feito ainda.</h3>";
                         }else{
-                            echo "<br><h3 align='center'>Nenhum pedido foi feito ainda.</h3>";
+                            echo "<br><h3 align='center'>Nenhum pedido foi encontrado.</h3>";
                         }
                     }
                 ?>
