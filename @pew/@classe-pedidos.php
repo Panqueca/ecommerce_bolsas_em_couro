@@ -66,7 +66,7 @@
 
                 $valorTotal = 0;
 
-                $queryValorTotal = mysqli_query($conexao, "select preco_produto from $tabela_carrinhos where token_carrinho = '$tokenCarrinho'");
+                $queryValorTotal = mysqli_query($conexao, "select preco_produto, quantidade_produto from $tabela_carrinhos where token_carrinho = '$tokenCarrinho'");
                 while($info = mysqli_fetch_array($queryValorTotal)){
                     $valorTotal += $info["preco_produto"] * $info["quantidade_produto"];
                 }

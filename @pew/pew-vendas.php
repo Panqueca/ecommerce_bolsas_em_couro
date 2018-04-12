@@ -51,18 +51,6 @@
                 -moz-box-shadow: 0px 0px 15px 8px rgba(0, 0, 0, .1);
                 box-shadow: 0px 0px 15px 8px rgba(0, 0, 0, .1); 
             }
-            .box-produto .imagem{
-                width: 100%;
-                background-color: #fff;
-                border-bottom: 1px solid #ccc;
-            }
-            .box-produto .imagem:hover{
-                opacity: .9;   
-            }
-            .box-produto .imagem img{
-                width: 100%;
-                border-radius: 10px;
-            }
             .box-produto .informacoes{
                 width: calc(100%);
                 padding: 0px;
@@ -71,7 +59,7 @@
             .box-produto .informacoes .nome-produto{
                 text-align: left;
                 font-size: 18px;
-                margin: 10px 0px 10px 15px;
+                margin: 10px 15px 10px 15px;
             }
             .box-produto .informacoes .nome-produto a{
                 text-decoration: none;
