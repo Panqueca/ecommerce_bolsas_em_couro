@@ -241,11 +241,11 @@
 <div class="section-login">
     <div class="display-login">
         <h3 class="titulo">ENTRE COM SUA CONTA</h3>
-        <h5 class="descricao-cadastre">
+        <article class="descricao-cadastre">
             <p>
                 É um fato conhecido de todos que um leitor se distrairá com o conteúdo de texto legível de uma página quando estiver examinando sua diagramação.
             </p>
-        </h5>
+        </article>
         <div class="display-confirmacao"></div>
         <div class="display-formularios">
                 <div class="background-loading">
