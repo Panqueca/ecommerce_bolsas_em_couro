@@ -1256,8 +1256,10 @@
                 if(botaoNavMobile.hasClass("active-botao")){
                     botaoNavMobile.removeClass("active-botao");
                 }
+                $(".link-principal").css("transition", ".4s");
                 if(navHeader.hasClass("nav-header-mobile")){
                     navHeader.removeClass("nav-header-mobile");
+                    $(".link-principal").css("transition", "0s");
                     topNav.css("margin-bottom", "0px");
                 }
             }

@@ -564,7 +564,7 @@
         }
         
         function mensagemConfirmaEmail(email){
-            var mensagem = "Foi enviando um e-mail para <b>" + email + "</b>  com um <b>link de confirmação</b>.<br><br>Clique no link para ativar sua conta e começar a aproveitar as ofertas e promoções da nossa loja!";
+            var mensagem = "Foi enviando um e-mail para <b>" + email + "</b>  com um <b>link de confirmação</b>.<br><br>Clique no link para ativar sua conta e começar a aproveitar as ofertas e promoções da nossa loja!<br><br><a href='javascript:window.location.reload()' class='link-padrao'>Recarregar página</a>";
             displayFormularios.hide();
             displayConfirmacao.html(mensagem).css({
                 display: "block",
@@ -1048,6 +1048,8 @@
                                 var formData = new FormData(formularioCadastraConta.get(0));
                                 var msgErro = "Desculpe, ocorreu um erro ao enviar os dados. Recarregue a página e tente novamente";
                                 var msgSucesso = "Seu cadastro foi feito com sucesso!";
+                                
+                                alert(objSenha.val());
                                 $.ajax({
                                     type: "POST",
                                     data: formData,
