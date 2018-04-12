@@ -234,6 +234,56 @@
         opacity: .4;
         visibility: visible;
     }
+    .header-principal .nav-header .top-bar .display-header-conta{
+        position: relative;
+        height: 50px;
+        align-items: center;
+        justify-content: center;
+        flex-flow: row wrap;
+        line-height: 50px;
+        text-align: center;
+    }
+    .header-principal .nav-header .top-bar .display-header-conta:hover .botao-minha-conta{
+        border-bottom: 1px solid #111;
+    }
+    .header-principal .nav-header .top-bar .display-header-conta .botao-minha-conta{
+        width: 100%;
+        margin: 0px;
+    }
+    .header-principal .nav-header .top-bar .display-header-conta:hover .box-header-conta{
+        visibility: visible;
+        opacity: 1;
+    }
+    .header-principal .nav-header .top-bar .display-header-conta .box-header-conta{
+        position: absolute;
+        top: 52px;
+        min-width: 150px;
+        margin: 0 auto;
+        right: 0px;
+        background-color: #f5f5f5;
+        text-align: center;
+        list-style: none;
+        padding: 0px;
+        z-index: 150;
+        visibility: hidden;
+        opacity: 0;
+        transition: .3s;
+    }
+    .header-principal .nav-header .top-bar .display-header-conta .box-header-conta li{
+        padding: 15px;
+        margin: 0px;
+        line-height: 15px;
+        text-align: left;
+        cursor: pointer;
+    }
+    .header-principal .nav-header .top-bar .display-header-conta .box-header-conta li a{
+        color: #666;
+        text-decoration: none;
+        display: block;
+    }
+    .header-principal .nav-header .top-bar .display-header-conta .box-header-conta li:hover{
+        background-color: #ddd;   
+    }
     /*END TOP BAR CART AND LOGIN CSS*/
     /*NAV TOP FIELD, SEARCH BAR, LOGO, SOCIAL MEDIA*/
     .header-principal .nav-header .top-nav{
@@ -817,7 +867,13 @@
                         $infoConta = $loginConta->montar_array();
                         $nomeCompleto = $infoConta["usuario"];
                         $splitNome = explode(" ", $nomeCompleto);
-                        echo "<a class='link-padrao botao-minha-conta'><i class='far fa-user'></i> Olá, $splitNome[0]</a>";
+                        echo "<div class='display-header-conta'>";
+                            echo "<a class='link-padrao botao-minha-conta'><i class='far fa-user'></i> Olá, $splitNome[0]</a>";
+                            echo "<ul class='box-header-conta'>";
+                                echo "<li class='link-conta'><a href=''>Minha conta</a></li>";
+                                echo "<li class='link-conta'><a href='deslogar-conta.php'>Sair</a></li>";
+                            echo "</ul>";
+                        echo "</div>";
                     }else{
                         $loginConta->reset_session();
                         botoes_login();

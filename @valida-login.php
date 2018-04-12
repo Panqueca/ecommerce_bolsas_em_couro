@@ -40,7 +40,6 @@ if($validar){
         if($iniciarLogin){
             $minhaConta = new MinhaConta();
             $minhaConta->logar(addslashes($_POST["email"]), addslashes($_POST["senha"]));
-            print_r($_SESSION);
         }
         
         $return = "true";
