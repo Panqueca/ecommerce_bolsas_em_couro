@@ -576,7 +576,7 @@
                                 $srcImagem = $infoImagem["src"];
                                 $ctrlImagens++;
                                 $imagemPrincipal = $ctrlImagens == 1 ? $srcImagem : $imagemPrincipal;
-                                if(file_exists($dirImagens."/".$srcImagem) && $srcImagem != ""){
+                                if(!file_exists($dirImagensProduto."/".$srcImagem) || $srcImagem == ""){
                                     $imagemPrincipal = "produto-padrao.png";
                                 }
                                 echo "<div class='box-miniaturas'><img src='$dirImagensProduto/$srcImagem' alt='$nomeEmpresa - $nomeProduto - Imagem $ctrlImagens' class='miniatura'></div>";
