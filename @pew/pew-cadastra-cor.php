@@ -5,7 +5,7 @@
         <input type='text' class='label-input' placeholder='Título da cor' name='titulo' id='titulo' maxlength='35'>
     </div>
     <div class='label full'>
-        <h3 class='label-title'>Imagem (100px : 100px)</h3>
+        <h3 class='label-title'>Imagem (40px : 40px)</h3>
         <input type='file' class='label-input' name='imagem' accept='image/*'>
     </div>
     <div class='label small clear'>

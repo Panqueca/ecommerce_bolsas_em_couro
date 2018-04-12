@@ -53,12 +53,12 @@
                     echo "</div>";
                 }else{
                     echo "<div class='label full'>";
-                        echo "<h3 class='label-title'>Imagem (100px : 100px)</h3>";
+                        echo "<h3 class='label-title'>Imagem (40px : 40px)</h3>";
                         echo "<input type='file' class='label-input' name='imagem' accept='image/*'>";
                     echo "</div>";
                 }
                 echo "<div class='label half'>";
-                    echo "<h3 class='label-title'>Alterar imagem (100px : 100px)</h3>";
+                    echo "<h3 class='label-title'>Alterar imagem (40px : 40px)</h3>";
                     echo "<input type='file' class='label-input' name='imagem' accept='image/*'>";
                 echo "</div>";
                 echo "<div class='label small'>";

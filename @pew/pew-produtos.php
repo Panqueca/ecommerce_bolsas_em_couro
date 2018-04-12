@@ -40,7 +40,7 @@
                 position: relative;
                 width: calc(25% - 22px);
                 padding: 10px 0px 40px 0px;
-                margin: 0px 20px 0px 0px;
+                margin: 0px 20px 40px 0px;
                 background-color: #fff;
                 border: 1px solid #ccc;
                 transition: .2s;

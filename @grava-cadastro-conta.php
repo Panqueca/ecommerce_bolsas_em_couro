@@ -48,7 +48,7 @@
         $minhaConta = new MinhaConta();
         $cadastro = $minhaConta->cadastrar_conta($nome, $email, $senha, $celular, $telefone, $cpf, $sexo, $dataNascimento, $enderecos);
         if($cadastro == true){
-            echo $senha;
+            echo "true";
         }else{
             echo "false";
         }

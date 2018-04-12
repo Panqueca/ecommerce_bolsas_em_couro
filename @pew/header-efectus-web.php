@@ -284,7 +284,7 @@
                 /*Terceiro Link*/
                 $linksPrincipais[3]["titulo_link"] = "Dicas";
                 $linksPrincipais[3]["url_link"] = "pew-dicas.php";
-                $linksPrincipais[3]["sub_link"][0]["titulo_sub_link"] = "<i class='fas fa-info-circle' aria-hidden='true'></i> Listar Dicas";
+                $linksPrincipais[3]["sub_link"][0]["titulo_sub_link"] = "<i class='fas fa-newspaper'></i> Listar Dicas";
                 $linksPrincipais[3]["sub_link"][0]["url_sub_link"] = "pew-dicas.php";
                 /*Quarto Link*/
                 $linksPrincipais[4]["titulo_link"] = "Vitrine";

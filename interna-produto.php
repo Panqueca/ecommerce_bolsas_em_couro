@@ -523,7 +523,7 @@
             $nomeProduto = $infoProduto["nome"];
             $precoProduto = $infoProduto["preco"];
             $precoPromocaoProduto = $infoProduto["preco_promocao"];
-            $promocaoAtiva = $infoProduto["promocao_ativa"] == true && $precoPromocaoProduto > 0 && $precoPromocaoProduto < $precoProduto;
+            $promocaoAtiva = $infoProduto["promocao_ativa"] == 1 && $precoPromocaoProduto > 0 && $precoPromocaoProduto < $precoProduto ? true : false;
             $precoFinal = $promocaoAtiva == true ? $precoPromocaoProduto : $precoProduto;
             $precoBoleto = $precoFinal - ($precoFinal * 0.05);
             $qtdParcelas = 6;
@@ -544,9 +544,9 @@
             /*HTML VIEW*/
             $viewPriceField = null;
             if($promocaoAtiva){
-                $viewPriceField = "<h3 class='preco-produto'>De <span class='promo-price'>R$".number_format($precoProduto, 2, ",", ".")."</span> por <span class='final-price'>R$".number_format($precoPromocaoProduto, 2, ",", ".")."</span></h3>";
+                $viewPriceField = "<h3 class='preco-produto'>De <span class='promo-price'>R$".number_format($precoProduto, 2, ",", ".")."</span> por <span class='final-price'>R$".number_format($precoFinal, 2, ",", ".")."</span></h3>";
             }else{
-                $viewPriceField = "<h3 class='preco-produto'><span class='final-price'>R$".number_format($precoPromocaoProduto, 2, ",", ".")."</span></h3>";
+                $viewPriceField = "<h3 class='preco-produto'><span class='final-price'>R$".number_format($precoFinal, 2, ",", ".")."</span></h3>";
             }
 
             $viewParcelasField = null;
