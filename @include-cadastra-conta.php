@@ -883,7 +883,7 @@
                         ctrlInvalid++;
                     }
 
-                    if(maiorIdade(objDataNascimento) == false || validaData(objDataNascimento) == false){
+                    if(maiorIdade(objDataNascimento) == false){
                         invalidFields[ctrlInvalid] = objDataNascimento;
                         ctrlInvalid++;
                     }

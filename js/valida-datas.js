@@ -7,7 +7,7 @@ function getIdade(data) {
     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
     var diffAnos = diffDays / 365;
     
-    return diffDays;
+    return diffAnos;
 }
 
 function maiorIdade(objData){
