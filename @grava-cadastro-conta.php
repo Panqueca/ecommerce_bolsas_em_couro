@@ -33,7 +33,6 @@
         
         // REQUIRES
         require_once "@classe-minha-conta.php";
-        require_once "@pew/pew-system-config.php";
         // END REQUIRES
         
         $enderecos = array();
@@ -49,7 +48,7 @@
         $minhaConta = new MinhaConta();
         $cadastro = $minhaConta->cadastrar_conta($nome, $email, $senha, $celular, $telefone, $cpf, $sexo, $dataNascimento, $enderecos);
         if($cadastro == true){
-            echo "true";
+            echo $senha;
         }else{
             echo "false";
         }

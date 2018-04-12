@@ -186,7 +186,6 @@
             $tabela_minha_conta = $this->global_vars["tabela_minha_conta"];
             $alreadySubscribed = $this->pew_functions->contar_resultados($tabela_minha_conta, "email = '".$this->email."' or cpf = '".$this->cpf."'");
             if($alreadySubscribed == 0){
-                $this->senha = md5($this->senha);
                 mysqli_query($this->conexao(), "insert into $tabela_minha_conta (usuario, email, senha, celular, telefone, cpf, data_nascimento, sexo, data_cadastro, data_controle, status) values ('".$this->usuario."', '".$this->email."', '".$this->senha."', '".$this->celular."', '".$this->telefone."', '".$this->cpf."', '".$this->data_nascimento."', '".$this->sexo."', '".$this->data_cadastro."', '".$this->data_controle."', 1)");
                 $selectID = mysqli_query($this->conexao(), "select last_insert_id()");
                 $selectedID = mysqli_fetch_assoc($selectID);

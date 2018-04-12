@@ -1049,7 +1049,6 @@
                                 var msgErro = "Desculpe, ocorreu um erro ao enviar os dados. Recarregue a página e tente novamente";
                                 var msgSucesso = "Seu cadastro foi feito com sucesso!";
                                 
-                                alert(objSenha.val());
                                 $.ajax({
                                     type: "POST",
                                     data: formData,
@@ -1062,7 +1061,7 @@
                                         finish();
                                     },
                                     success: function(resposta){
-                                        console.log(resposta);
+                                        //console.log(resposta);
                                         if(resposta == "true"){
                                             mensagemAlerta(msgSucesso, false, "limegreen");
                                             mensagemConfirmaEmail(objEmail.val());
