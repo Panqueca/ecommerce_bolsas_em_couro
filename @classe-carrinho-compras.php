@@ -200,6 +200,11 @@
             }else{
                 echo "false";
             }
+        }else if($acao == "get_quantidade"){
+            $carrinho = $cls_carrinho->get_carrinho();
+            $itens = $carrinho["itens"];
+            $total = is_array($itens) ? count($itens) : 0;
+            echo $total;
         }
     }
 

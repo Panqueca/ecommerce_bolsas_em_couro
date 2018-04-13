@@ -63,6 +63,29 @@
         -ms-flex-pack: end;
         justify-content: flex-end;
     }
+    .header-principal .nav-header .top-bar .header-cart .view-quantidade-carrinho{
+        width: 20px;   
+        height: 20px;   
+        line-height: 20px;
+        color: #111;
+        background-color: #11f848;
+        position: absolute;
+        border-radius: 50%;
+        bottom: 10px;
+        right: 5px;
+        z-index: 300;
+        transition: .4s;
+        opacity: 0;
+        text-align: center;
+        font-weight: bold;
+        font-size: 10px;
+    }
+    .header-principal .nav-header .top-bar .header-cart .show-quantidade-carrinho{
+        opacity: 1;
+        width: 15px;   
+        height: 15px;
+        line-height: 15px;
+    }
     .header-principal .nav-header .top-bar .header-cart .cart-button{
         position: relative;
         font-size: 26px;
@@ -884,6 +907,7 @@
                 }
             ?>
             <div class="header-cart">
+                <div class="view-quantidade-carrinho"></div>
                 <div class="cart-button"><i class="fas fa-shopping-bag"></i></div>
                 <div class="cart-display">
                     <h4 class="cart-title">Sua Bolsa</h4>

@@ -48,6 +48,7 @@
                             }else{
                                 notificacaoPadrao("Ocorreu um erro ao adicionar o produto ao carrinho");
                             }
+                            get_quantidade();
                         }
                         
                     });
@@ -78,10 +79,29 @@
                     success: function(resposta){
                         displayCart.html(resposta);
                         carregandoCarrinho = false;
+                        get_quantidade();
                     }
                 });
              }
         });
+        
+        var displayQuantidade = $(".view-quantidade-carrinho");
+        var quantidadeAnterior = null;
+        function get_quantidade(){
+            $.ajax({
+                type: "POST",
+                url: "@classe-carrinho-compras.php",
+                data: {acao_carrinho: "get_quantidade"},
+                success: function(quantidade){
+                    if(quantidadeAnterior != quantidade){
+                        displayQuantidade.removeClass("show-quantidade-carrinho");
+                        displayQuantidade.html(quantidade);
+                        displayQuantidade.addClass("show-quantidade-carrinho");
+                    }
+                }
+            });
+        }
+        get_quantidade();
         
         setInterval(function(){
             var cartItem = $(".cart-item");
@@ -109,6 +129,7 @@
                                 }else{
                                     notificacaoPadrao("Ocorreu um erro ao remover o produto");
                                 }
+                                get_quantidade();
                             }
 
                         });
