@@ -55,26 +55,27 @@
         width: 3px;
         height: 3px;
     }
-    .section-minha-conta .display-paineis .background-loading{
+    .section-minha-conta .background-loading{
         position: absolute;
-        width: 100%;
-        height: 55vh;
+        width: 100vw;
+        height: 100vh;
         background-color: rgba(255, 255, 255, .5);
         top: 0px;
+        left: 0;
         margin: 0px;
         opacity: 0;
         transition: .3s;
         visibility: hidden;
-        z-index: 80;
+        z-index: 150;
         text-align: center;
         display: flex;
         overflow: hidden;
     }
-    .section-minha-conta .display-paineis .background-loading .icone-loading{
+    .section-minha-conta .background-loading .icone-loading{
         position: absolute;
         font-size: 46px;
         color: #6abd45;
-        top: 20vh;
+        top: 50vh;
         align-self: center;
         width: 100%;
     }
@@ -221,95 +222,10 @@ if($listar){
 <section class="section-minha-conta">
     <h3 class="titulo">Minha conta</h3>
     <article class="descricao">É um fato conhecido de todos que um leitor se distrairá com o conteúdo de texto legível de uma página quando estiver examinando sua diagramação.</article>
-    <div class="display-paineis">
-        <div class="background-loading">
-            <i class="fas fa-spinner fa-spin icone-loading"></i>
-        </div>
-        <div class="display-buttons">
-            <button class="top-buttons selected-button" id="Painel1"><i class="fas fa-shopping-cart"></i> PEDIDOS</button>
-            <button class="top-buttons" id="Painel2"><i class="far fa-address-card"></i> MEUS DADOS</button>
-            <button class="top-buttons" id="Painel3"><i class="fas fa-truck"></i> ENDEREÇOS DE ENTREGA</button>
-        </div>
-        <div class="painel painel-active" id="displayPainel1">
-            Painel 1
-        </div>
-        <div class="painel" id="displayPainel2">
-            <?php
-                $nome = $infoConta["usuario"];
-                $email = $infoConta["email"];
-                $celular = $infoConta["celular"];
-                $telefone = $infoConta["telefone"];
-                $cpf = $infoConta["cpf"];
-                $sexo = $infoConta["sexo"];
-                $dataNascimento = $infoConta["data_nascimento"];
-            ?>
-            <form class="formulario-atualiza-conta">
-                <div class="half label">
-                    <input type="hidden" name="id_conta" id="idConta" value="<?php echo $idConta; ?>">
-                    <input type="hidden" name="acao_conta" value="update_conta">
-                    <h4 class="input-title">Nome Completo</h4>
-                    <input type="text" class='input-standard' placeholder="Nome Completo" name="nome" id="nome" value="<?php echo $nome; ?>">
-                    <h6 class="msg-input"></h6>
-                </div>
-                <div class="small label">
-                    <h4 class="input-title">E-mail</h4>
-                    <input type="text" class='input-standard' placeholder="contato@bolsasemcouro.com.br" name="email" id="email" value="<?php echo $email; ?>">
-                    <h6 class="msg-input"></h6>
-                </div>
-                <div class="small label">
-                    <h4 class="input-title">CPF</h4>
-                    <input type="text" class='input-standard mascara-cpf-conta' placeholder="000.000.000.00" name="cpf" id="cpf" value="<?php echo $cpf; ?>">
-                    <h6 class="msg-input"></h6>
-                </div>
-                <div class="small label">
-                    <h4 class="input-title">Celular</h4>
-                    <input type="text" class='input-standard mascara-numero-conta' placeholder="(41) 9999-9999" name="celular" id="celular" value="<?php echo $celular; ?>">
-                    <h6 class="msg-input"></h6>
-                </div>
-                <div class="small label">
-                    <h4 class="input-title">Telefone</h4>
-                    <input type="text" class='input-standard mascara-numero-conta' placeholder="(41) 3030-3030" name="telefone" id="telefone" value="<?php echo $telefone; ?>">
-                    <h6 class="msg-input"></h6>
-                </div>
-                <div class="small label">
-                    <h4 class="input-title">Sexo</h4>
-                    <select name="sexo" id="sexo" class="input-standard">
-                        <option value="">- Selecione -</option>
-                        <option value="masculino" <?php if($sexo == "masculino") echo "selected"; ?>>Masculino</option>
-                        <option value="feminino" <?php if($sexo == "feminino") echo "selected"; ?>>Feminino</option>
-                    </select>
-                    <h6 class="msg-input msg-input-sexo"></h6>
-                </div>
-                <div class="small label">
-                    <h4 class="input-title">Data de nascimento</h4>
-                    <input type="date" name="data_nascimento" id="dataNascimento" class="input-standard" value="<?php echo $dataNascimento; ?>">
-                    <h6 class="msg-input"></h6>
-                </div>
-                <br class='clear'>
-                <div class="small label">
-                    <h4 class="input-title">Senha atual</h4>
-                    <input type="password" class='input-standard' placeholder="Senha" name="senha_atual" id="senhaAtual">
-                    <h6 class="msg-input"></h6>
-                </div>
-                <div class="small label">
-                    <h4 class="input-title">Nova senha</h4>
-                    <input type="password" class='input-standard' placeholder="Senha" name="senha_nova" id="senhaNova">
-                    <h6 class="msg-input"></h6>
-                </div>
-                <div class="small label">
-                    <h4 class="input-title">Confirmar nova senha</h4>
-                    <input type="password" class='input-standard' placeholder="Senha" name="confirma_senha_nova" id="confirmaSenhaNova">
-                    <h6 class="msg-input"></h6>
-                </div>
-                <div class="small label">
-                    <button class="botao-continuar" type="button" id="botaoAtualizarConta">ATUALIZAR <i class="fas fa-check icone"></i></button>
-                </div>
-            </form>
-        </div>
-        <div class="painel" id="displayPainel3">
-            Painel 3
-        </div>
+    <div class="background-loading">
+        <i class="fas fa-spinner fa-spin icone-loading"></i>
     </div>
+    <div class="display-paineis"><!--LOAD @INTERNA-MINHA-CONTA.PHP--></div>
     <div class="bottom">
         <button class="botao-voltar botao-voltar-conta" title="Voltar para a página"><i class="fas fa-chevron-circle-left"></i></button>
     </div>
@@ -325,28 +241,9 @@ if($listar){
         var botaoAtualizar = $("#botaoAtualizarConta");
         var backgroundLoading = $(".section-minha-conta .background-loading");
         
-        function mudarPainel(obj){
-            paineis.each(function(){
-                $(this).removeClass("painel-active");
-            });
-            obj.addClass("painel-active");
-        }
-        
-        botoes.each(function(){
-            var botao = $(this);
-            var idBotao = botao.prop("id");
-            var objPainel = $("#display"+idBotao);
-            botao.off().on("click", function(){
-                botoes.each(function(){
-                    $(this).removeClass("selected-button"); 
-                });
-                botao.addClass("selected-button");
-                mudarPainel(objPainel); 
-            });
-        });
-        
-        /*UPDATE*/
-        var is_updating = false;
+        phone_mask(".mascara-numero-conta");
+        input_mask(".mascara-cpf-conta", "999.999.999.99");
+        input_mask(".mascara-cep-conta", "99999-999");
         
         var formUpdateConta = $(".formulario-atualiza-conta");
         var objIdConta = $("#idConta");
@@ -360,6 +257,95 @@ if($listar){
         var objCpf = $("#cpf");
         var objSexo = $("#sexo");
         var objDataNascimento = $("#dataNascimento");
+        
+        function reload_display_dom(){
+            displayPaineis = $(".section-minha-conta .display-paineis");
+            botoes = $(".section-minha-conta .top-buttons");
+            paineis = displayPaineis.children(".painel");
+            botaoAtualizar = $("#botaoAtualizarConta");
+            backgroundLoading = $(".section-minha-conta .background-loading");
+            
+            botoes.each(function(){
+                var botao = $(this);
+                var idBotao = botao.prop("id");
+                var objPainel = $("#display"+idBotao);
+                botao.off().on("click", function(){
+                    botoes.each(function(){
+                        $(this).removeClass("selected-button"); 
+                    });
+                    botao.addClass("selected-button");
+                    mudarPainel(objPainel); 
+                });
+            });
+            
+            botaoAtualizar.off().on("click", function(){
+                 if(!is_updating){
+                    valida_update();
+                 }
+            });
+            
+            /*VARS*/
+            formUpdateConta = $(".formulario-atualiza-conta");
+            objIdConta = $("#idConta");
+            idConta = objIdConta.val();
+            objNome = $("#nome");
+            objEmail = $("#email");
+            objSenhaAtual = $("#senhaAtual");
+            objSenhaNova = $("#senhaNova");
+            objConfirmaSenhaNova = $("#confirmaSenhaNova");
+            objCelular = $("#celular");
+            objCpf = $("#cpf");
+            objSexo = $("#sexo");
+            objDataNascimento = $("#dataNascimento");
+        }
+        
+        var sectionConta = $(".section-minha-conta");
+        var minhaContaOpen = false;
+        function toggleMinhaConta(){
+            reload_display_dom();
+            
+            if(!minhaContaOpen){
+                minhaContaOpen = true;
+                sectionConta.css({
+                    visibility: "visible",
+                    left: "0px",
+                    opacity: "1",
+                });
+                toggleLoading();
+                $("body").css("overflow-y", "hidden");
+                displayPaineis.load("@interna-minha-conta.php", function(){
+                    if(loadingAberto) toggleLoading();
+                    
+                    reload_display_dom();
+                });
+            }else{
+                minhaContaOpen = false;
+                sectionConta.css({
+                    visibility: "hidden",
+                    left: "100%",
+                    opacity: "0",
+                });
+                $("body").css("overflow-y", "auto");
+            }
+        }
+        
+        $(".btn-open-minha-conta").off().on("click", function(){
+            toggleMinhaConta(); 
+        });
+        
+        $(".botao-voltar-conta").off().on("click", function(){
+            toggleMinhaConta(); 
+        });
+        
+        function mudarPainel(obj){
+            paineis.each(function(){
+                $(this).removeClass("painel-active");
+            });
+            obj.addClass("painel-active");
+        }
+        
+        /*UPDATE*/
+        var is_updating = false;
         var lastValidationAtiva = false;
         
         /*DEFAULT FUNCTIONS*/
@@ -520,7 +506,6 @@ if($listar){
                                 opacity: "0"
                             });
                             break;
-
                     }
                 }
             });
@@ -724,48 +709,6 @@ if($listar){
             ajaxValidation(); // Vai chamar o callback da segunda parte da validação
             toggleLoading();
         }
-        
-        
-        botaoAtualizar.off().on("click", function(){
-             if(!is_updating){
-                valida_update();
-             }
-        });
         /*END UPDATE*/
-        
-      
-        phone_mask(".mascara-numero-conta");
-        input_mask(".mascara-cpf-conta", "999.999.999.99");
-        input_mask(".mascara-cep-conta", "99999-999");
-        
-        var sectionConta = $(".section-minha-conta");
-        var minhaContaOpen = false;
-        function toggleMinhaConta(){
-            if(!minhaContaOpen){
-                minhaContaOpen = true;
-                sectionConta.css({
-                    visibility: "visible",
-                    left: "0px",
-                    opacity: "1",
-                });
-                $("body").css("overflow-y", "hidden");
-            }else{
-                minhaContaOpen = false;
-                sectionConta.css({
-                    visibility: "hidden",
-                    left: "100%",
-                    opacity: "0",
-                });
-                $("body").css("overflow-y", "auto");
-            }
-        }
-        
-        $(".btn-open-minha-conta").off().on("click", function(){
-            toggleMinhaConta(); 
-        });
-        
-        $(".botao-voltar-conta").off().on("click", function(){
-            toggleMinhaConta(); 
-        });
     });
 </script>

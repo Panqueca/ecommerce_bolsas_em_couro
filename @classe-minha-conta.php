@@ -187,10 +187,19 @@
             $tabela_minha_conta = $this->global_vars["tabela_minha_conta"];
             $alreadySubscribed = $this->pew_functions->contar_resultados($tabela_minha_conta, "email = '".$this->email."' or cpf = '".$this->cpf."'");
             if($alreadySubscribed == 0){
-                mysqli_query($this->conexao(), "insert into $tabela_minha_conta (usuario, email, senha, celular, telefone, cpf, data_nascimento, sexo, data_cadastro, data_controle, status) values ('".$this->usuario."', '".$this->email."', '".$this->senha."', '".$this->celular."', '".$this->telefone."', '".$this->cpf."', '".$this->data_nascimento."', '".$this->sexo."', '".$this->data_cadastro."', '".$this->data_controle."', 1)");
+                mysqli_query($this->conexao(), "insert into $tabela_minha_conta (usuario, email, senha, celular, telefone, cpf, data_nascimento, sexo, data_cadastro, data_controle, status) values ('".$this->usuario."', '".$this->email."', '".$this->senha."', '".$this->celular."', '".$this->telefone."', '".$this->cpf."', '".$this->data_nascimento."', '".$this->sexo."', '".$this->data_cadastro."', '".$this->data_controle."', 0)");
                 $selectID = mysqli_query($this->conexao(), "select last_insert_id()");
                 $selectedID = mysqli_fetch_assoc($selectID);
                 $selectedID = $selectedID["last_insert_id()"];
+                
+                $this->verify_session_start();
+                
+                $email = $this->email;
+                $senha = $this->senha;
+                $_SESSION["minha_conta"] = array();
+                $_SESSION["minha_conta"]["email"] = md5($email);
+                $_SESSION["minha_conta"]["senha"] = $senha;
+                
                 return $selectedID;
             }else{
                 return false;
@@ -209,6 +218,7 @@
                 $senha = $senha != null && strlen($senha) > 5 ? $senha : $infoConta["senha"]; // Já em md5
                 
                 $this->verify_session_start();
+                $_SESSION["minha_conta"] = array();
                 $_SESSION["minha_conta"]["senha"] = $senha;
                 $_SESSION["minha_conta"]["email"] = md5($email);
                 
@@ -261,6 +271,28 @@
                 }
             }else{
                 return $validacao;
+            }
+        }
+        
+        function confirmar_conta($idConta){
+            $tabela_minha_conta = $this->global_vars["tabela_minha_conta"];
+            
+            $total = $this->pew_functions->contar_resultados($tabela_minha_conta, "id = '$idConta'");
+            
+            $totalConfirmed = $this->pew_functions->contar_resultados($tabela_minha_conta, "id = '$idConta' and status =  1");
+            
+            if($total > 0){
+                $return = "true";
+                
+                if($totalConfirmed == 0){
+                    mysqli_query($this->conexao(), "update $tabela_minha_conta set status = 1 where id = '$idConta'");
+                }else{
+                    $return = "already";
+                }
+                
+                return $return;
+            }else{
+                return false;
             }
         }
         

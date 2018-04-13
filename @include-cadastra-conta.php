@@ -368,7 +368,7 @@
                         <h6 class="msg-input"></h6>
                     </div>
                     <div class="small">
-                        <h4 class="input-title">Telefone</h4>
+                        <h4 class="input-title">Telefone (opcional)</h4>
                         <input type="text" placeholder="(41) 3030-3030" name="telefone" id="telefone" class="mascara-numero">
                         <h6 class="msg-input"></h6>
                     </div>
@@ -564,12 +564,16 @@
         }
         
         function mensagemConfirmaEmail(email){
-            var mensagem = "Foi enviando um e-mail para <b>" + email + "</b>  com um <b>link de confirmação</b>.<br><br>Clique no link para ativar sua conta e começar a aproveitar as ofertas e promoções da nossa loja!<br><br><a href='javascript:window.location.reload()' class='link-padrao'>Recarregar página</a>";
+            /*var mensagem = "Foi enviando um e-mail para <b>" + email + "</b>  com um <b>link de confirmação</b>.<br><br>Clique no link para ativar sua conta e começar a aproveitar as ofertas e promoções da nossa loja!<br><br><a href='javascript:window.location.reload()' class='link-padrao'>Recarregar página</a>";
             displayFormularios.hide();
             displayConfirmacao.html(mensagem).css({
                 display: "block",
                 opacity: "1"
-            });
+            });*/
+            mensagemAlerta("Cadastro feito com sucesso!", false, "limegreen");
+            setTimeout(function(){
+                window.location.reload();
+            }, 400);
         }
         
         /*END DEFAULT FUNCTIONS*/
@@ -1061,7 +1065,7 @@
                                         finish();
                                     },
                                     success: function(resposta){
-                                        //console.log(resposta);
+                                        console.log(resposta);
                                         if(resposta == "true"){
                                             mensagemAlerta(msgSucesso, false, "limegreen");
                                             mensagemConfirmaEmail(objEmail.val());

@@ -35,16 +35,15 @@ if($validar){
     $loginValidado = $totalLogin == 1 ? true : false;
     
     $return = "email_incorreto"; // Se não existir o email validado
-    if($loginValidado && !$confirmacaoPendente){
+    if($loginValidado){
         
         if($iniciarLogin){
             $minhaConta = new MinhaConta();
-            $minhaConta->logar(addslashes($_POST["email"]), addslashes($_POST["senha"]));
+            $return = $minhaConta->logar(addslashes($_POST["email"]), addslashes($_POST["senha"])) == true ? "true" : "senha_email_incorretos";
         }
         
-        $return = "true";
     }else if($confirmacaoPendente){
-        $return = "confirmar_email";
+        $return = "true"; // Era "confirmar_email"
     }else if($totalEmail > 0){
         $return = "senha_incorreta";
     }

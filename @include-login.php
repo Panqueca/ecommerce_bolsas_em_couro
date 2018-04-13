@@ -340,6 +340,7 @@
             var erroEmail = "email_incorreto";
             var erroSenha = "senha_incorreta";
             var erroConfirmacaoPendente = "confirmar_email";
+            var erroSenhaEmail = "senha_email_incorretos";
             
             function setInputMessages(fields){
                 fields.forEach(function(field){
@@ -379,6 +380,19 @@
                             break;
                         case erroConfirmacaoPendente:
                             var msg = "Seu e-mail ainda não foi validado. Favor verificar em sua caixa de e-mails o link de validação.";
+                            objEmail.addClass("wrong-input");
+                            objEmail.next(".msg-input").html(msg).css({
+                                visibility: "visible",
+                                opacity: "1"
+                            });
+                            break;
+                        case erroSenhaEmail:
+                            var msg = "E-mail ou senha incorretos";
+                            objSenha.addClass("wrong-input");
+                            objSenha.next(".msg-input").html(msg).css({
+                                visibility: "visible",
+                                opacity: "1"
+                            });
                             objEmail.addClass("wrong-input");
                             objEmail.next(".msg-input").html(msg).css({
                                 visibility: "visible",
@@ -495,6 +509,9 @@
                                 ctrlIncorretos++;
                             }else if(resposta == erroConfirmacaoPendente){
                                 incorretos[ctrlIncorretos] = erroConfirmacaoPendente;
+                                ctrlIncorretos++;
+                            }else if(resposta == erroSenhaEmail){
+                                incorretos[ctrlIncorretos] = erroSenhaEmail;
                                 ctrlIncorretos++;
                             }
                             ctrlValidations++;
