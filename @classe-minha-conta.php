@@ -200,15 +200,17 @@
         public function update_conta($idConta, $nome, $email, $senha, $celular, $telefone, $cpf, $sexo, $data_nascimento){
             $tabela_minha_conta = $this->global_vars["tabela_minha_conta"];
             if($this->montar_minha_conta($idConta) == true){
+                
+                $infoConta = $this->montar_array();
+                
                 $dataAtual = date("Y-m-d h:i:s");
                 
-                if($senha != null && strlen($senha) > 5){
-                    $this->verify_session_start();
-                    $_SESSION["minha_conta"]["senha"] = $senha;
-                    $_SESSION["minha_conta"]["email"] = md5($email);
-                }else{
-                    $senha = $this->senha;
-                }
+                $email = $email != null && strlen($email) > 0 ? $email : $infoConta["email"];
+                $senha = $senha != null && strlen($senha) > 5 ? $senha : $infoConta["senha"];
+                
+                $this->verify_session_start();
+                $_SESSION["minha_conta"]["senha"] = $senha;
+                $_SESSION["minha_conta"]["email"] = $email;
                 
                 mysqli_query($this->conexao(), "update $tabela_minha_conta set usuario = '$nome', email = '$email', senha = '$senha', celular = '$celular', telefone = '$telefone', cpf = '$cpf', data_nascimento = '$data_nascimento', sexo = '$sexo', data_controle = '$dataAtual' where id = '$idConta'");
                 
@@ -291,6 +293,7 @@
                 $return = $total > 0 ? true : false;
                 return $return;
             }else{
+                unset($_SESSION["minha_conta"]);
                 return false;
             }
         }
@@ -310,10 +313,10 @@
         $cls_conta->verify_session_start();
         
         if($acao == "update_conta" && isset($_SESSION["minha_conta"])){
-            $email = $_SESSION["minha_conta"]["email"];
-            $senha = $_SESSION["minha_conta"]["senha"];
+            $emailSessao = $_SESSION["minha_conta"]["email"];
+            $senhaSessao = $_SESSION["minha_conta"]["senha"];
             
-            if($cls_conta->auth($email, $senha)){
+            if($cls_conta->auth($emailSessao, $senhaSessao)){
                 
                 $post_fields = array("nome", "email", "senha_nova", "celular", "telefone", "cpf", "data_nascimento");
                 $invalid_fields = array();
@@ -328,10 +331,15 @@
                 
                     $senhaAtual = $_POST["senha_atual"] != null ? md5($_POST["senha_atual"]) : null;
                     
-                    $idConta = $cls_conta->query_minha_conta("md5(email) = '$email' and senha = '$senhaAtual'");
+                    if($senhaAtual != null){
+                        $idConta = $cls_conta->query_minha_conta("md5(email) = '$emailSessao' and senha = '$senhaAtual'");
+                    }else{
+                        $idConta = $cls_conta->query_minha_conta("md5(email) = '$emailSessao' and senha = '$senhaSessao'");
+                    }
+                    
                     
                     if($idConta != false){
-                        $senha = $_POST["senha_nova"] != null ? md5($_POST["senha_nova"]) : null;
+                        $novaSenha = $_POST["senha_nova"] != null ? md5($_POST["senha_nova"]) : null;
                         $nome = addslashes($_POST["nome"]);
                         $email = addslashes($_POST["email"]);
                         $celular = addslashes($_POST["celular"]);
@@ -341,7 +349,7 @@
                         $dataNascimento = addslashes($_POST["data_nascimento"]);
                         $sexo = addslashes($_POST["sexo"]);
 
-                        $cls_conta->update_conta($idConta, $nome, $email, $senha, $celular, $telefone, $cpf, $sexo, $dataNascimento);
+                        $cls_conta->update_conta($idConta, $nome, $email, $novaSenha, $celular, $telefone, $cpf, $sexo, $dataNascimento);
                     }else{
                         echo "false";
                     }

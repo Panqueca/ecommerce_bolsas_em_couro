@@ -702,7 +702,7 @@ if($listar){
                                 ctrlValidations++;
                             },
                             success: function(resposta){
-                                console.log(resposta)
+                                //console.log(resposta)
                                 if(resposta == "duplicado"){
                                     duplicados[ctrlDuplicados] = field;
                                     ctrlDuplicados++;

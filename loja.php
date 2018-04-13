@@ -166,7 +166,7 @@
                 }
             }
             
-            function buscarSubcategoria($selectedSubcategoria, $adicionarProduto = true){
+            function buscarSubcategoria($selectedSubcategoria){
                 global $globalVars, $pew_functions, $selectedProdutos, $ctrlProdutos;
                 $tabela_subcategorias = $globalVars["tabela_subcategorias"];
                 $totalSubcategorias = $pew_functions->contar_resultados($tabela_subcategorias, "ref = '$selectedSubcategoria'");
@@ -184,19 +184,27 @@
 
                     $tituloSubcategoria = null;
                     $refSubcategoria = null;
+                    
+                    $infoRetorno = array();
+                    $selectedProd = array();
+                    $count = 0;
+                    
                     while($info = mysqli_fetch_array($query)){
-                        if($adicionarProduto){
-                            $selectedProdutos[$ctrlProdutos] = $info["idProduto"];
-                            $ctrlProdutos++;
-                        }
                         $tituloSubcategoria = $tituloSubcategoria == null ? $info["nomeSubcategoria"] : $tituloSubcategoria;
                         $refSubcategoria = $refSubcategoria == null ? $info["refSubcategoria"] : $refSubcategoria;
+                        
+                        $idProduto = $info["idProduto"];
+                        if($count == 0){
+                            $infoRetorno["subcategoria"] = array();
+                            $infoRetorno["subcategoria"]["titulo"] = $tituloSubcategoria;
+                            $infoRetorno["subcategoria"]["ref"] = $refSubcategoria;
+                        }
+                        
+                        $infoRetorno["produtos"][$count] = $idProduto;
+                        $count++;
                     }
-                    $retorno = array();
-                    $retorno["titulo"] = $tituloSubcategoria;
-                    $retorno["ref"] = $refSubcategoria;
 
-                    return $retorno;
+                    return $infoRetorno;
                 }else{
                     return false;
                 }
@@ -206,14 +214,36 @@
             
             $iconArrow = "<i class='fas fa-angle-right icon'></i>"; 
             $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='#'>Feminino</a></a></div>";
+            
+            $tituloVitrine = "Ocorreu um erro. Contate um administrador!";
+            
             if($buscarSubcategoria){
-                $get = $_GET["subcategoria"];
-
-                $beleza = buscarSubcategoria($get);
                 
-                $nome = $beleza["titulo"];
-                $ref = $beleza["ref"];
-                $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='#'> $nome</a></a></div>";
+                $getRefSub = $_GET["subcategoria"];
+                $getRefDepart = isset($_GET["departamento"]) ? $_GET["departamento"] : null;
+                $getRefCategoria = isset($_GET["categoria"]) ? $_GET["categoria"] : null;
+
+                $infoBusca = buscarSubcategoria($getRefSub);
+                
+                
+                $nomeSub = $infoBusca["subcategoria"]["titulo"];
+                $refSub = $infoBusca["subcategoria"]["ref"];
+                $produtos = $infoBusca["produtos"];
+                
+                foreach($produtos as $idProduto){
+                    $selectedProdutos[$ctrlProdutos] = $idProduto;
+                    $ctrlProdutos++;
+                }
+                
+                $urlDepartamento = "loja.php?departamento=$getRefDepart";
+                $urlCategoria = "loja.php?departamento=$getRefDepart&categoria=$getRefCategoria";
+                $urlFinal = "loja.php?departamento=$getRefDepart&categoria=$getRefCategoria&subcategoria=$refSub";
+                
+                $tituloVitrine = $nomeSub;
+                
+                
+                $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='$urlDepartamento'> $nomeSub</a> $iconArrow <a href='$urlCategoria'> $nomeSub</a> $iconArrow <a href='$urlFinal'> $nomeSub</a></div>";
+                
             }else if($buscarCategoria){
                 $get = $_GET["categoria"];
                 
@@ -246,7 +276,7 @@
                 $ctrl++;
             }
 
-            $vitrineProdutos[0] = new VitrineProdutos("standard", 20, "<h1>$nome</h1>", "Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica e de impressos, e vem sendo utilizado desde o século XVI, quando um impressor desconhecido pegou uma bandeja de tipos e os embaralhou para fazer um livro de modelos de tipos.");
+            $vitrineProdutos[0] = new VitrineProdutos("standard", 20, "<h1>$tituloVitrine</h1>", "Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica e de impressos, e vem sendo utilizado desde o século XVI, quando um impressor desconhecido pegou uma bandeja de tipos e os embaralhou para fazer um livro de modelos de tipos.");
             $vitrineProdutos[0]->montar_vitrine($selectedProdutos);
         ?>
         </div>
