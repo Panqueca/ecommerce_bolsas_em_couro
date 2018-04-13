@@ -387,8 +387,9 @@
         position: relative;
         width: 30px;
         height: 30px;
-        text-align: center;
-        line-height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         font-size: 18px;
         margin: 10px;
         color: #fff;
