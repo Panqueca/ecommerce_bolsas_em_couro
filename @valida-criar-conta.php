@@ -44,17 +44,20 @@ if($validar){
                 $contagem = mysqli_fetch_array($contar);
                 $total = $contagem["total"];
                 
-                switch($collun){
-                    case "email":
-                        $return = "true";
-                        break;
-                    case "senha":
-                        $return = "true";
-                        break;
-                    case "cpf":
-                        $return = "true";
-                        break;
+                if($total > 0){
+                    switch($collun){
+                        case "email":
+                            $return = "true";
+                            break;
+                        case "senha":
+                            $return = "true";
+                            break;
+                        case "cpf":
+                            $return = "true";
+                            break;
+                    }
                 }
+                
             }else{
                 if($collun == "senha"){
                     $return = "duplicado";

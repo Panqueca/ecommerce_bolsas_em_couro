@@ -206,11 +206,11 @@
                 $dataAtual = date("Y-m-d h:i:s");
                 
                 $email = $email != null && strlen($email) > 0 ? $email : $infoConta["email"];
-                $senha = $senha != null && strlen($senha) > 5 ? $senha : $infoConta["senha"];
+                $senha = $senha != null && strlen($senha) > 5 ? $senha : $infoConta["senha"]; // Já em md5
                 
                 $this->verify_session_start();
                 $_SESSION["minha_conta"]["senha"] = $senha;
-                $_SESSION["minha_conta"]["email"] = $email;
+                $_SESSION["minha_conta"]["email"] = md5($email);
                 
                 mysqli_query($this->conexao(), "update $tabela_minha_conta set usuario = '$nome', email = '$email', senha = '$senha', celular = '$celular', telefone = '$telefone', cpf = '$cpf', data_nascimento = '$data_nascimento', sexo = '$sexo', data_controle = '$dataAtual' where id = '$idConta'");
                 
@@ -348,8 +348,14 @@
                         $cpf = str_replace(".", "", $cpf);
                         $dataNascimento = addslashes($_POST["data_nascimento"]);
                         $sexo = addslashes($_POST["sexo"]);
+                        
+                        if($cls_conta->query_minha_conta("email = '$email' and id != '$idConta'") == false){
+                            // Se não houver outros cadastros com o email informado
+                            $cls_conta->update_conta($idConta, $nome, $email, $novaSenha, $celular, $telefone, $cpf, $sexo, $dataNascimento);
+                        }else{
+                            echo "false";
+                        }
 
-                        $cls_conta->update_conta($idConta, $nome, $email, $novaSenha, $celular, $telefone, $cpf, $sexo, $dataNascimento);
                     }else{
                         echo "false";
                     }
