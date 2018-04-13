@@ -870,7 +870,7 @@
                         echo "<div class='display-header-conta'>";
                             echo "<a class='link-padrao botao-minha-conta'><i class='far fa-user'></i> Olá, $splitNome[0]</a>";
                             echo "<ul class='box-header-conta'>";
-                                echo "<li class='link-conta'><a href=''>Minha conta</a></li>";
+                                echo "<li class='link-conta'><a class='btn-open-minha-conta'>Minha conta</a></li>";
                                 echo "<li class='link-conta'><a href='deslogar-conta.php'>Sair</a></li>";
                             echo "</ul>";
                         echo "</div>";

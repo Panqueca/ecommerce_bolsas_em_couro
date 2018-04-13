@@ -72,6 +72,7 @@
                 $this->enderecos = $infoEndereco;
                 $this->quantidade_enderecos = count($infoEndereco);
                 $this->minha_conta_montada = true;
+                return true;
             }else{
                 $this->minha_conta_montada = false;
                 return false;
@@ -196,6 +197,27 @@
             }
         }
         
+        public function update_conta($idConta, $nome, $email, $senha, $celular, $telefone, $cpf, $sexo, $data_nascimento){
+            $tabela_minha_conta = $this->global_vars["tabela_minha_conta"];
+            if($this->montar_minha_conta($idConta) == true){
+                $dataAtual = date("Y-m-d h:i:s");
+                
+                if($senha != null && strlen($senha) > 5){
+                    $this->verify_session_start();
+                    $_SESSION["minha_conta"]["senha"] = $senha;
+                    $_SESSION["minha_conta"]["email"] = md5($email);
+                }else{
+                    $senha = $this->senha;
+                }
+                
+                mysqli_query($this->conexao(), "update $tabela_minha_conta set usuario = '$nome', email = '$email', senha = '$senha', celular = '$celular', telefone = '$telefone', cpf = '$cpf', data_nascimento = '$data_nascimento', sexo = '$sexo', data_controle = '$dataAtual' where id = '$idConta'");
+                
+                echo  "true";
+            }else{
+                echo "false";
+            }
+        }
+        
         public function cadastrar_conta($usuario, $email, $senha, $celular, $telefone, $cpf, $sexo, $data_nascimento, $enderecos){
             $this->id = null;
             $this->usuario = $usuario;
@@ -278,6 +300,60 @@
             if(isset($_SESSION["minha_conta"])){
                 unset($_SESSION["minha_conta"]); // Caso já houvesse alguma sessão iniciada
             }
+        }
+    }
+
+    if(isset($_POST["acao_conta"])){
+        $acao = $_POST["acao_conta"];
+        
+        $cls_conta = new MinhaConta();
+        $cls_conta->verify_session_start();
+        
+        if($acao == "update_conta" && isset($_SESSION["minha_conta"])){
+            $email = $_SESSION["minha_conta"]["email"];
+            $senha = $_SESSION["minha_conta"]["senha"];
+            
+            if($cls_conta->auth($email, $senha)){
+                
+                $post_fields = array("nome", "email", "senha_nova", "celular", "telefone", "cpf", "data_nascimento");
+                $invalid_fields = array();
+
+                $validar = true;
+                $i = 0;
+                foreach($post_fields as $post_name){
+                    if(!isset($_POST[$post_name])) $validar = false; $invalid_fields[$i] = $post_name; $i++;
+                }
+
+                if($validar){
+                
+                    $senhaAtual = $_POST["senha_atual"] != null ? md5($_POST["senha_atual"]) : null;
+                    
+                    $idConta = $cls_conta->query_minha_conta("md5(email) = '$email' and senha = '$senhaAtual'");
+                    
+                    if($idConta != false){
+                        $senha = $_POST["senha_nova"] != null ? md5($_POST["senha_nova"]) : null;
+                        $nome = addslashes($_POST["nome"]);
+                        $email = addslashes($_POST["email"]);
+                        $celular = addslashes($_POST["celular"]);
+                        $telefone = addslashes($_POST["telefone"]);
+                        $cpf = addslashes($_POST["cpf"]);
+                        $cpf = str_replace(".", "", $cpf);
+                        $dataNascimento = addslashes($_POST["data_nascimento"]);
+                        $sexo = addslashes($_POST["sexo"]);
+
+                        $cls_conta->update_conta($idConta, $nome, $email, $senha, $celular, $telefone, $cpf, $sexo, $dataNascimento);
+                    }else{
+                        echo "false";
+                    }
+                    
+                    
+                }
+                
+            }else{
+                echo "false";
+            }
+        }else{
+            echo "false";
         }
     }
 ?>

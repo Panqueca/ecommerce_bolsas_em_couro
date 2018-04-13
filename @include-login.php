@@ -252,20 +252,20 @@
                     <i class="fas fa-spinner fa-spin icone-loading"></i>
                 </div>
             <form class="formulario-login" name="formulario_login" id="formularioLogin">
-                <div class="label-full">
+                <div class="full">
                     <h3 class="input-title">E-mail</h3>
                     <input type="text" name="email" id="emailLogin" autocomplete="off">
                     <h6 class="msg-input"></h6>
                 </div>
-                <div class="label-full">
+                <div class="full">
                     <h3 class="input-title">Senha</h3>
                     <input type="password" name="senha" id="senhaLogin">
                     <h6 class="msg-input"></h6>
                 </div>
-                <div class="label-full label-submit">
+                <div class="full submit">
                     <button class="botao-submit" type="submit" id="botaoSubmit">ENTRAR <i class="fas fa-unlock-alt icone"></i></button>
                 </div>
-                <div class="label-full">
+                <div class="full">
                     <a href="esqueci-minha-senha.php" class="link-padrao" target="_blank">Esqueci minha senha</a><br>
                     <h6>Não tem conta? Então <a class='link-padrao' id="botaoAlternaCadastre">cadastre-se</a></h6>
                 </div>

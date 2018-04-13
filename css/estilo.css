@@ -66,39 +66,51 @@ button{
     }
 }
 /*FORMS STYLES*/
-.label-xsmall{
+.xsmall{
     width: calc((100%/6) - 30.23px);
     margin: 5px 15px 5px 15px;
     float: left;
 }
-.label-small{
+.small{
     width: calc((100%/4) - 30px);
     margin: 5px 15px 5px 15px;
     float: left;
 }
-.label-medium{
+.medium{
     width: calc((100%/3) - 30px);
     margin: 5px 15px 5px 15px;
     float: left;
 }
-.label-half{
+.half{
     width: calc((100%/2) - 30px);
     margin: 5px 15px 5px 15px;
     float: left;
 }
-.label-large{
+.large{
     width: calc((100%/1.5) - 30px);
     margin: 5px 15px 5px 15px;
     float: left;
 }
-.label-xlarge{
+.xlarge{
     width: calc((100%/1.335) - 30px);
     margin: 5px 15px 5px 15px;
     float: left;
 }
-.label-full{
+.full{
     width: calc(100% - 30px);
     margin: 5px 15px 5px 15px;
+}
+.label{
+    position: relative;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.group{
+    width: 100%;
+    clear: both;
+}
+.clear{
+    clear: both;
 }
 .input-standard{
     width: calc(100% - 10px);
