@@ -13,7 +13,7 @@
         transition: .4s all ease;
         opacity: 1;
         overflow: hidden;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
     .section-minha-conta .titulo{
         font-size: 32px;   
@@ -748,6 +748,7 @@ if($listar){
                     left: "0px",
                     opacity: "1",
                 });
+                $("body").css("overflow-y", "hidden");
             }else{
                 minhaContaOpen = false;
                 sectionConta.css({
@@ -755,6 +756,7 @@ if($listar){
                     left: "100%",
                     opacity: "0",
                 });
+                $("body").css("overflow-y", "auto");
             }
         }
         

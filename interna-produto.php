@@ -193,12 +193,18 @@
                 height: 5px;
             }
             .section-produto .display-info-produto .display-cores .box-cor{
-                width: 35px;
-                height: 35px;
-                flex: 0 0 35px;
+                width: 30px;
+                height: 30px;
+                flex: 0 0 30px;
                 background-color: #eee;
                 margin: 0px 0px 0px 10px;
                 border-radius: 50%;
+            }
+            .section-produto .display-info-produto .display-cores .box-cor:hover{
+                opacity: .7;   
+            }
+            .section-produto .display-info-produto .display-cores .box-cor img{
+                width: 100%;   
             }
             .section-produto .display-info-produto .display-comprar{
                 display: flex;
@@ -607,6 +613,7 @@
                         echo $viewParcelasField;
                         echo $viewDisponibilidadadeField;
                     ?>
+                    <h6 style="margin: 25px 0px -15px 0px; font-weight: normal;">Outras cores</h6>
                     <div class="display-cores">
                         <?php
                             $infoCoresRelacionadas = $produto->get_cores_relacionadas();
