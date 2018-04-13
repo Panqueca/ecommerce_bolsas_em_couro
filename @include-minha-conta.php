@@ -630,7 +630,7 @@ if($listar){
                             if(resposta == "true"){
                                 mensagemAlerta(msgSucesso, false, "limegreen");
                                 setTimeout(function(){
-                                    //window.location.reload();
+                                    window.location.reload();
                                 }, 400);
                             }else{
                                 mensagemAlerta(msgErro, false, "limegreen");
