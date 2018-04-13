@@ -209,7 +209,9 @@
                         $return[$ctrlDepartamentos]["id"] = $infoDepartamentoProd["id_departamento"];
                         $return[$ctrlDepartamentos]["titulo"] = $infoDepartamento["departamento"];
                         $return[$ctrlDepartamentos]["ref"] = $infoDepartamento["ref"];
+                        echo $return[$ctrlDepartamentos]["ref"];
                         $ctrlDepartamentos++;
+                        
                     }
                 }
             }

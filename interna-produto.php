@@ -26,6 +26,13 @@
     }else{
         $infoProduto = null;
     }
+    
+    $infoDepartamentos = $produto->get_departamentos_produto();
+    $totalDepartamentos = is_array($infoDepartamentos) ? count($infoDepartamentos) : 0;
+    if($totalDepartamentos){
+        $breadCrumbDepartamento = $infoDepartamentos[0]["titulo"];
+        $breadCrumbRefDepartamento = $infoDepartamentos[0]["ref"];
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -579,7 +586,7 @@
             /*END HTML VIEW*/
                 
             $iconArrow = "<i class='fas fa-angle-right icon'></i>";
-            $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='#'>Departamento</a> $iconArrow <a href='#'>$nomeProduto</a></a></div>";
+            $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='loja.php?departamento=$breadCrumbRefDepartamento'>$breadCrumbDepartamento</a> $iconArrow <a href='#'>$nomeProduto</a></a></div>";
             echo $navigationTree;
                 
             ?>
