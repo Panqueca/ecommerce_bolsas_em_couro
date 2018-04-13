@@ -148,17 +148,24 @@
 
                     $tituloCategoria = null;
                     $refCategoria = null;
+                    
+                    $infoRetorno = array();
+                    $selectedProd = array();
+                    $count = 0;
                     while($info = mysqli_fetch_array($query)){
-                        if($adicionarProduto){
-                            $selectedProdutos[$ctrlProdutos] = $info["idProduto"];
-                            $ctrlProdutos++;
-                        }
                         $tituloCategoria = $tituloCategoria == null ? $info["nomeCategoria"] : $tituloCategoria;
                         $refCategoria = $refCategoria == null ? $info["refCategoria"] : $refCategoria;
+                        
+                        $idProduto = $info["idProduto"];
+                        if($count == 0){
+                            $infoRetorno["subcategoria"] = array();
+                            $infoRetorno["subcategoria"]["titulo"] = $tituloCategoria;
+                            $infoRetorno["subcategoria"]["ref"] = $refCategoria;
+                        }
+                        
+                        $infoRetorno["produtos"][$count] = $idProduto;
+                        $count++;
                     }
-                    $retorno = array();
-                    $retorno["titulo"] = $tituloCategoria;
-                    $retorno["ref"] = $refCategoria;
 
                     return $retorno;
                 }else{
@@ -210,21 +217,17 @@
                 }
             }
             
-            
-            
             $iconArrow = "<i class='fas fa-angle-right icon'></i>"; 
             $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='#'>Feminino</a></a></div>";
             
             $tituloVitrine = "Ocorreu um erro. Contate um administrador!";
             
             if($buscarSubcategoria){
-                
                 $getRefSub = $_GET["subcategoria"];
                 $getRefDepart = isset($_GET["departamento"]) ? $_GET["departamento"] : null;
                 $getRefCategoria = isset($_GET["categoria"]) ? $_GET["categoria"] : null;
 
                 $infoBusca = buscarSubcategoria($getRefSub);
-                
                 
                 $nomeSub = $infoBusca["subcategoria"]["titulo"];
                 $refSub = $infoBusca["subcategoria"]["ref"];
@@ -241,17 +244,31 @@
                 
                 $tituloVitrine = $nomeSub;
                 
-                
                 $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='$urlDepartamento'> $nomeSub</a> $iconArrow <a href='$urlCategoria'> $nomeSub</a> $iconArrow <a href='$urlFinal'> $nomeSub</a></div>";
                 
             }else if($buscarCategoria){
                 $get = $_GET["categoria"];
+                $getRefDepart = isset($_GET["departamento"]) ? $_GET["departamento"] : null;
+                $getRefCategoria = isset($_GET["categoria"]) ? $_GET["categoria"] : null;
                 
                 $beleza = buscarCategoria($get);
                 
-                $nome = $beleza["titulo"];
-                $ref = $beleza["ref"];
-                $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='#'> $nome</a></a></div>";
+                $nomeSub = $infoBusca["categoria"]["titulo"];
+                $refSub = $infoBusca["categoria"]["ref"];
+                $produtos = $infoBusca["produtos"];
+                
+                foreach($produtos as $idProduto){
+                    $selectedProdutos[$ctrlProdutos] = $idProduto;
+                    $ctrlProdutos++;
+                }
+                
+                $urlDepartamento = "loja.php?departamento=$getRefDepart";
+                $urlCategoria = "loja.php?departamento=$getRefDepart&categoria=$getRefCategoria";
+                $urlFinal = "loja.php?departamento=$getRefDepart&categoria=$getRefCategoria&subcategoria=$refSub";
+                
+                $tituloVitrine = $nomeSub;
+                
+                $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='$urlDepartamento'> $nomeSub</a> $iconArrow <a href='$urlCategoria'> $nomeSub</a> $iconArrow <a href='$urlFinal'> $nomeSub</a></div>";
             }else if($buscarDepartamento){
                 $get = $_GET["departamento"];
                 
