@@ -1257,9 +1257,11 @@
                     botaoNavMobile.removeClass("active-botao");
                 }
                 $(".link-principal").css("transition", ".4s");
+                $(".display-links .sub-menu").css("transition", ".2s");
                 if(navHeader.hasClass("nav-header-mobile")){
-                    navHeader.removeClass("nav-header-mobile");
+                    $(".display-links .sub-menu").css("transition", "0s");
                     $(".link-principal").css("transition", "0s");
+                    navHeader.removeClass("nav-header-mobile");
                     topNav.css("margin-bottom", "0px");
                 }
             }
