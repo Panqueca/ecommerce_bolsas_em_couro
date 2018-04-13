@@ -319,8 +319,8 @@ if($listar){
 ?>
 <script>
     $(document).ready(function(){
-        var displayPaineis = $(".display-paineis");
-        var botoes = $(".top-buttons");
+        var displayPaineis = $(".section-minha-conta .display-paineis");
+        var botoes = $(".section-minha-conta .top-buttons");
         var paineis = displayPaineis.children(".painel");
         var botaoAtualizar = $("#botaoAtualizarConta");
         var backgroundLoading = $(".section-minha-conta .background-loading");

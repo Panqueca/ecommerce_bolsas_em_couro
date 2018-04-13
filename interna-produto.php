@@ -805,8 +805,8 @@
         </style>
         <script>
             $(document).ready(function(){
-                var displayPaineis = $(".display-paineis");
-                var botoes = $(".top-buttons");
+                var displayPaineis = $(".section-bottom .display-paineis");
+                var botoes = $(".section-bottom .top-buttons");
                 var paineis = displayPaineis.children(".painel");
 
                 function mudarPainel(obj){
