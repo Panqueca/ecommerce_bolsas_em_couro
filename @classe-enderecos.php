@@ -119,6 +119,17 @@
             return $this->status;
         }
         
+        function switch_relacionado($type){
+            switch($type){
+                case "cliente":
+                    $type = 1;
+                    break;
+                default:
+                    $type = 1;
+            }
+            return $type;
+        }
+        
         public function montar_array(){
             if($this->endereco_montado == true){
                 $infoEndereco = array();
@@ -168,13 +179,7 @@
         
         public function cadastra_endereco($id_relacionado, $ref_relacionado, $cep, $rua, $numero, $complemento, $bairro, $estado, $cidade){
             $this->id = null;
-            switch($ref_relacionado){
-                case "cliente":
-                    $ref_relacionado = 1;
-                    break;
-                default:
-                    $ref_relacionado = 1;
-            }
+            $ref_relacionado = $this->switch_relacionado($ref_relacionado);
             $this->id_relacionado = $id_relacionado;
             $this->ref_relacionado = $ref_relacionado;
             $this->cep = $cep;
@@ -201,6 +206,23 @@
             if($this->pew_functions->contar_resultados($tabela_enderecos, "id = '$idEndereco'") > 0){
                 mysqli_query($this->conexao(), "delete from $tabela_enderecos where id = '$idEndereco'");
                 return true;
+            }else{
+                return false;
+            }
+        }
+        
+        public function update_endereco($id_endereco, $id_relacionado, $ref_relacionado, $cep, $rua, $numero, $complemento, $bairro, $estado, $cidade){
+            $tabela_enderecos = $this->global_vars["tabela_enderecos"];
+            $dataAtual = date("Y-m-d h:i:s");
+            
+            $ref_relacionado = $this->switch_relacionado($ref_relacionado);
+            
+            if($this->query_endereco("id = '$id_endereco'") != false){
+                
+                mysqli_query($this->conexao(), "update $tabela_enderecos set id_relacionado = '$id_relacionado', ref_relacionado = '$ref_relacionado', cep = '$cep', rua = '$rua', numero = '$numero', complemento = '$complemento', bairro = '$bairro', estado = '$estado', cidade = '$cidade', data_controle = '$dataAtual' where id = '$id_endereco'");
+
+                return true;
+                
             }else{
                 return false;
             }

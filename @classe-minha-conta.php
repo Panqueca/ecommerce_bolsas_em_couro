@@ -338,7 +338,10 @@
         }
     }
 
+
     if(isset($_POST["acao_conta"])){
+        require_once "@pew/pew-system-config.php";
+        
         $acao = $_POST["acao_conta"];
         
         $cls_conta = new MinhaConta();
@@ -398,6 +401,36 @@
             }else{
                 echo "false";
             }
+        }else if($acao == "update_endereco"){
+            $idConta = isset($_POST["id_conta"]) ? $_POST["id_conta"] : 0;
+            
+            if($idConta > 0){
+                $tabela_enderecos = $pew_custom_db->tabela_enderecos;
+                
+                $idEndereco = isset($_POST["id_endereco"]) ? $_POST["id_endereco"] : 0; 
+                
+                $total = $pew_functions->contar_resultados($tabela_enderecos, "id = '$idEndereco' and id_relacionado = '$idConta'");
+                
+                if($total > 0){
+                    $cep = str_replace("-", "", $_POST["cep"]);
+                    $rua = $_POST["rua"];
+                    $numero = $_POST["numero"];
+                    $complemento = $_POST["complemento"];
+                    $bairro = $_POST["bairro"];
+                    $estado = $_POST["estado"];
+                    $cidade = $_POST["cidade"];
+                    
+                    $cls_endereco = new Enderecos();
+                    $updateEndereco = $cls_endereco->update_endereco($idEndereco, $idConta, "cliente", $cep, $rua, $numero, $complemento, $bairro, $estado, $cidade);
+                    
+                    if($updateEndereco){
+                        echo "true";
+                    }else{
+                        echo "false";
+                    }
+                }
+            }
+            
         }else{
             echo "false";
         }

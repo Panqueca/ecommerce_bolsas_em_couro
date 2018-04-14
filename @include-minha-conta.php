@@ -185,8 +185,8 @@
     }
     .msg-input{
         position: absolute;
-        left: 5px;
-        bottom: -50px;
+        left: 2px;
+        top: 30px;
         visibility: hidden;
         opacity: 0;
         transition: .2s;
@@ -238,12 +238,9 @@ if($listar){
         var displayPaineis = $(".section-minha-conta .display-paineis");
         var botoes = $(".section-minha-conta .top-buttons");
         var paineis = displayPaineis.children(".painel");
-        var botaoAtualizar = $("#botaoAtualizarConta");
+        var botaoAtualizarConta = $("#botaoAtualizarConta");
+        var botaoAtualizarEndereco = $("#botaoAtualizarEndereco");
         var backgroundLoading = $(".section-minha-conta .background-loading");
-        
-        phone_mask(".mascara-numero-conta");
-        input_mask(".mascara-cpf-conta", "999.999.999.99");
-        input_mask(".mascara-cep-conta", "99999-999");
         
         var formUpdateConta = $(".formulario-atualiza-conta");
         var objIdConta = $("#idConta");
@@ -258,11 +255,21 @@ if($listar){
         var objSexo = $("#sexo");
         var objDataNascimento = $("#dataNascimento");
         
+        var objIdEndereco = $("#idEnderecoConta");
+        var objCep = $("#cepConta");
+        var objRua = $("#ruaConta");
+        var objNumero = $("#numeroConta");
+        var objComplemento = $("#complementoConta");
+        var objBairro = $("#bairroConta");
+        var objEstado = $("#estadoConta");
+        var objCidade = $("#cidadeConta");
+        
         function reload_display_dom(){
             displayPaineis = $(".section-minha-conta .display-paineis");
             botoes = $(".section-minha-conta .top-buttons");
             paineis = displayPaineis.children(".painel");
-            botaoAtualizar = $("#botaoAtualizarConta");
+            botaoAtualizarConta = $("#botaoAtualizarConta");
+            botaoAtualizarEndereco = $("#botaoAtualizarEndereco");
             backgroundLoading = $(".section-minha-conta .background-loading");
             
             botoes.each(function(){
@@ -278,15 +285,22 @@ if($listar){
                 });
             });
             
-            botaoAtualizar.off().on("click", function(){
+            botaoAtualizarConta.off().on("click", function(){
                  if(!is_updating){
                     valida_update();
+                 }
+            });
+            
+            botaoAtualizarEndereco.off().on("click", function(){
+                 if(!is_updating){
+                    valida_endereco();
                  }
             });
             
             /*VARS*/
             formUpdateConta = $(".formulario-atualiza-conta");
             objIdConta = $("#idConta");
+            objIdEndereco = $("#idEnderecoConta");
             idConta = objIdConta.val();
             objNome = $("#nome");
             objEmail = $("#email");
@@ -297,6 +311,35 @@ if($listar){
             objCpf = $("#cpf");
             objSexo = $("#sexo");
             objDataNascimento = $("#dataNascimento");
+            
+            objCep = $("#cepConta");
+            objRua = $("#ruaConta");
+            objNumero = $("#numeroConta");
+            objComplemento = $("#complementoConta");
+            objBairro = $("#bairroConta");
+            objEstado = $("#estadoConta");
+            objCidade = $("#cidadeConta");
+            
+            phone_mask(".mascara-numero-conta");
+            input_mask(".mascara-cpf-conta", "999.999.999.99");
+            input_mask(".mascara-cep-conta", "99999-999");
+            
+            /*BUSCA ENDERECO*/
+            objCep.off().on("blur", function(){
+                var cep = $(this).val();
+                
+                // ENDERECO
+                if(cep.length == 9){
+                    var cepF = cep.replace("-", "");
+                    buscarCEP(cepF, objRua, objEstado, objCidade, objBairro);
+                }else{
+                    objRua.val("");
+                    objBairro.val("");
+                    objEstado.val("");
+                    objCidade.val("");
+                }
+            });
+            /*BUSCA ENDERECO*/
         }
         
         var sectionConta = $(".section-minha-conta");
@@ -470,7 +513,7 @@ if($listar){
             });
         }
 
-        function finishValidation(errors, errorFields, thisStep, nextStep){
+        function finishValidation(errors, errorFields){
             validandoDados = false;
             var closeLoading = true;
 
@@ -478,14 +521,13 @@ if($listar){
                 setInputMessages(errorFields); // Se ocorreu erros, mostra as mensagens de erro
             }
 
-            if(closeLoading){
+            if(closeLoading && loadingAberto){
                 toggleLoading();
             }
-            
 
         }
 
-        function prepareErrors(ctrlInvalid, allFields, invalidFields, thisStep, nextStep){
+        function prepareErrors(ctrlInvalid, allFields, invalidFields){
 
             allFields.forEach(function(field){
                 if(field.hasClass("wrong-input")){
@@ -511,7 +553,7 @@ if($listar){
             });
 
             setTimeout(function(){
-                finishValidation(ctrlInvalid, invalidFields, thisStep, nextStep);
+                finishValidation(ctrlInvalid, invalidFields);
             }, 300);
 
         }
@@ -548,8 +590,6 @@ if($listar){
             var allFields = [objNome, objEmail, objSenhaNova, objConfirmaSenhaNova, objCelular, objCpf, objSexo, objDataNascimento];
             var invalidFields = [];
             var ctrlInvalid = 0;
-            var thisStep = 1;
-            var nextStep = 2;
 
             function standardValidation(){
                 if(nome.length < 3){
@@ -593,7 +633,7 @@ if($listar){
 
                 // Trigger das mensagens de erro
                 if(ctrlInvalid > 0){
-                    prepareErrors(ctrlInvalid, allFields, invalidFields, thisStep, nextStep);
+                    prepareErrors(ctrlInvalid, allFields, invalidFields);
                     return false;
                 }else{
                     var formData = new FormData(formUpdateConta.get(0));
@@ -616,7 +656,7 @@ if($listar){
                                 mensagemAlerta(msgSucesso, false, "limegreen");
                                 setTimeout(function(){
                                     window.location.reload();
-                                }, 400);
+                                }, 1000);
                             }else{
                                 mensagemAlerta(msgErro, false, "limegreen");
                             }
@@ -710,5 +750,79 @@ if($listar){
             toggleLoading();
         }
         /*END UPDATE*/
+        
+        /*UPDATE ENDERECO*/
+        function valida_endereco(){
+            var idEndereco = objIdEndereco.val();
+            cep = objCep.val();
+            rua = objRua.val();
+            numero = objNumero.val();
+            complemento = objComplemento.val();
+            bairro = objBairro.val();
+            cidade = objCidade.val();
+            estado = objEstado.val();
+            var allFields = [objCep, objRua, objNumero];
+            var invalidFields = [];
+            var ctrlInvalid = 0;
+            
+            toggleLoading();
+
+            if(IsCEP(cep) == false){
+                invalidFields[ctrlInvalid] = objCep;
+                ctrlInvalid++;
+            }
+
+            if(rua.length == 0){
+                invalidFields[ctrlInvalid] = objRua;
+                ctrlInvalid++;
+            }
+
+            if(numero.length == 0){
+                invalidFields[ctrlInvalid] = objNumero;
+                ctrlInvalid++;
+            }
+
+            prepareErrors(ctrlInvalid, allFields, invalidFields); // Trigger das mensagens de erro
+            
+            if(ctrlInvalid == 0){
+                
+                toggleLoading();
+                
+                var dados = {
+                    acao_conta: "update_endereco",
+                    id_conta: idConta,
+                    id_endereco: idEndereco,
+                    cep: cep,
+                    rua: rua,
+                    numero: numero,
+                    complemento: complemento,
+                    bairro: bairro,
+                    cidade: cidade,
+                    estado: estado,
+                }
+                
+                $.ajax({
+                    type: "POST",
+                    url: "@classe-minha-conta.php",
+                    data: dados,
+                    error: function(){
+                        mensagemAlerta("Ocorreu um erro ao atualizar o endereço. Atualize a página e tente novamente.");
+                    },
+                    success: function(resposta){
+                        //console.log(resposta);
+                        if(resposta == "true"){
+                            toggleLoading();
+                            mensagemAlerta("Seu endereço foi atualizado com sucesso!", false, "limegreen");
+                            setTimeout(function(){
+                                window.location.reload();
+                            }, 1000);
+                        }else{
+                            mensagemAlerta("Ocorreu um erro ao atualizar o endereço. Atualize a página e tente novamente.");
+                        }
+                    }
+                });
+            }
+        }
+        /*END UPDATE ENDERECO*/
     });
 </script>

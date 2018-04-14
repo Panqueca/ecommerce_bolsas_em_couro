@@ -479,25 +479,6 @@
         input_mask(".mascara-cep", "99999-999");
         /*END SET MASCARAS*/
         
-        /*BUSCA ENDERECO*/
-        $("#cep").off().on("blur", function(){
-            var cep = $(this).val();
-            var objRua = $("#rua");
-            var objBairro = $("#bairro");
-            var objEstado = $("#estado");
-            var objCidade = $("#cidade");
-            if(cep.length == 9){
-                var cepF = cep.replace("-", "");
-                buscarCEP(cepF, objRua, objEstado, objCidade, objBairro);
-            }else{
-                objRua.val("");
-                objBairro.val("");
-                objEstado.val("");
-                objCidade.val("");
-            }
-        });
-        /*BUSCA ENDERECO*/
-        
         /*SET PASSOS*/
         var displayPassos = [];
         displayPassos[0] = $(".display-info-contato");

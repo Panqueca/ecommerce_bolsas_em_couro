@@ -1,28 +1,28 @@
 <?php
-    require_once "@classe-minha-conta.php";
+require_once "@classe-minha-conta.php";
 
-    $cls_conta = new MinhaConta();
-    
-    $listar = true;
+$cls_conta = new MinhaConta();
 
-    $cls_conta->verify_session_start();
-    
-    if(isset($_SESSION["minha_conta"])){
-        $sessao_conta = $_SESSION["minha_conta"];
-        $email = $sessao_conta["email"];
-        $senha = $sessao_conta["senha"];
-        
-        if($cls_conta->auth($email, $senha) == false){
-            $listar = false;
-        }else{
-            $idConta = $cls_conta->query_minha_conta("md5(email) = '$email' and senha = '$senha'");
-            $cls_conta->montar_minha_conta($idConta);
-            $infoConta = $cls_conta->montar_array();
-        }
-        
-    }else{
+$listar = true;
+
+$cls_conta->verify_session_start();
+
+if(isset($_SESSION["minha_conta"])){
+    $sessao_conta = $_SESSION["minha_conta"];
+    $email = $sessao_conta["email"];
+    $senha = $sessao_conta["senha"];
+
+    if($cls_conta->auth($email, $senha) == false){
         $listar = false;
+    }else{
+        $idConta = $cls_conta->query_minha_conta("md5(email) = '$email' and senha = '$senha'");
+        $cls_conta->montar_minha_conta($idConta);
+        $infoConta = $cls_conta->montar_array();
     }
+
+}else{
+    $listar = false;
+}
 
 
 if($listar){
@@ -44,10 +44,10 @@ if($listar){
     $cpf = $infoConta["cpf"];
     $sexo = $infoConta["sexo"];
     $dataNascimento = $infoConta["data_nascimento"];
-    
+
     if($infoConta["status"] == 0){
         echo "<div class='label full'>";
-            echo "<font class='text warning'>Sua conta ainda não foi confirmada. Para ter mais segurança confirme seu e-mail. <a href='@envia-link-confirmacao.php' class='link-padrao'>Reenviar link de confirmação</a></font>";
+        echo "<font class='text warning'>Sua conta ainda não foi confirmada. Para ter mais segurança confirme seu e-mail. <a href='@envia-link-confirmacao.php' class='link-padrao'>Reenviar link de confirmação</a></font>";
         echo "</div>";
     }
     ?>
@@ -115,7 +115,58 @@ if($listar){
     </form>
 </div>
 <div class="painel" id="displayPainel3">
-    Painel 3
+    <form class="formulario-atualiza-endereco">
+        <?php
+            $infoEndeco = $infoConta["enderecos"];
+    
+            $idEndereco = $infoEndeco["id"];
+            $cep = $infoEndeco["cep"];
+            $rua = $infoEndeco["rua"];
+            $numero = $infoEndeco["numero"];
+            $complemento = $infoEndeco["complemento"];
+            $bairro = $infoEndeco["bairro"];
+            $cidade = $infoEndeco["cidade"];
+            $estado = $infoEndeco["estado"];
+            $cidade = $infoEndeco["cidade"];
+        ?>
+        <input type="hidden" name="id_endereco" value="<?php echo $idEndereco; ?>" id="idEnderecoConta">
+        <input type="hidden" name="id_relacionado" value="<?php echo $idConta; ?>">
+        <div class="small label">
+            <h4 class="input-title">CEP</h4>
+            <input class='input-standard mascara-cep-conta' type="text" placeholder="00000-000" name="cep" id="cepConta" tabindex="1" value="<?php echo $cep; ?>">
+            <h6 class="msg-input"></h6>
+        </div>
+        <div class="xlarge label">
+            <h4 class="input-title">Rua</h4>
+            <input class='input-standard input-nochange' type="text" placeholder="Rua" name="rua" id="ruaConta" value="<?php echo $rua; ?>" readonly>
+            <h6 class="msg-input"></h6>
+        </div>
+        <div class="xsmall label">
+            <h4 class="input-title">Número</h4>
+            <input class='input-standard' type="text" placeholder="Numero" name="numero" id="numeroConta" value="<?php echo $numero; ?>" tabindex="2">
+            <h6 class="msg-input"></h6>
+        </div>
+        <div class="medium label">
+            <h4 class="input-title">Complemento</h4>
+            <input class='input-standard' type="text" placeholder="Complemento" name="complemento" id="complementoConta" value="<?php echo $complemento; ?>" tabindex="3">
+            <h6 class="msg-input"></h6>
+        </div>
+        <div class="xsmall label">
+            <h4 class="input-title">Bairro</h4>
+            <input class='input-standard input-nochange' type="text" placeholder="Bairro" name="bairro" id="bairroConta" value="<?php echo $bairro; ?>" readonly>
+        </div>
+        <div class="xsmall label">
+            <h4 class="input-title">Estado</h4>
+            <input class='input-standard input-nochange' type="text" placeholder="Estado" name="estado" id="estadoConta" value="<?php echo $estado; ?>" readonly>
+        </div>
+        <div class="xsmall label">
+            <h4 class="input-title">Cidade</h4>
+            <input class='input-standard input-nochange' type="text" placeholder="Cidade" name="cidade" id="cidadeConta" value="<?php echo $cidade; ?>" readonly>
+        </div>
+        <div class="clear full label">
+            <button class="botao-continuar" id="botaoAtualizarEndereco" type="button">ATUALIZAR <i class="fas fa-check icone"></i></button>
+        </div>
+    </form>
 </div>
 <?php
 }else{
