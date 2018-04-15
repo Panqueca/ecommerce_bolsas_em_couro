@@ -688,8 +688,34 @@
         </div>
         <section class="produtos-relacionados">
             <?php
-                $vitrineProdutos[0] = new VitrineProdutos("carrossel", 15, "COMPRE JUNTO COM DESCONTO");
-                $vitrineProdutos[0]->montar_vitrine();
+                
+                require_once "@pew/pew-system-config.php";
+                
+                function get_relacionados($id_produto){
+                    global $tabela_produtos_relacionados, $conexao;
+                    $condicao = "id_produto = '$id_produto'";
+                    $selected = array();
+                    $i = 0;
+                    $return = false;
+                    
+                    $query = mysqli_query($conexao, "select id_relacionado from $tabela_produtos_relacionados where $condicao");
+                    while($array = mysqli_fetch_array($query)){
+                        $selected[$i] = $array["id_relacionado"];
+                        $i++;
+                    }
+                    
+                    $return = is_array($selected) && count($selected) > 0 ? $selected : false;
+                    
+                    return $return;
+                }
+                
+                $selectedProdutosRelacionados = get_relacionados($idProduto);
+                
+                if($selectedProdutosRelacionados != false){
+                    $vitrineProdutos[0] = new VitrineProdutos("carrossel", 15, "COMPRE JUNTO COM DESCONTO");
+                    $vitrineProdutos[0]->montar_vitrine($selectedProdutosRelacionados);
+                }
+                
             ?>
         </section>
         <style>
@@ -732,15 +758,6 @@
             .section-bottom .display-paineis .descricao{
                 text-align: justify;
                 color: #6d6d6d;
-            }
-            .section-bottom .display-paineis table{
-                margin: 0 auto;
-            }
-            .section-bottom .display-paineis thead{
-                text-align: center;
-            }
-            .section-bottom .display-paineis td{
-                padding: 0px 20px;
             }
             .section-bottom .display-paineis .background-loading{
                 position: absolute;
@@ -796,7 +813,7 @@
                 width: calc(100% - 80px);
                 height: calc(50vh - 80px);
                 padding: 40px;
-                z-index: 50;
+                z-index: 0;
                 text-align: left;
                 top: 100%;
                 left: 0;
@@ -815,6 +832,21 @@
                 display: block;
                 visibility: visible;
                 opacity: 1;
+            }
+            .section-bottom .tabela-especificacoes{
+                width: 60%;
+                margin: 0px;
+            }
+            .section-bottom .tabela-especificacoes tbody td{
+                background-color: #fafafa;
+                padding: 8px;
+                transition: .2s;
+                color: #555;
+            }
+            .section-bottom .tabela-especificacoes tbody td:hover{
+                background-color: #eee;
+                color: #333;
+                font-weight: bold;
             }
         </style>
         <script>
@@ -856,22 +888,21 @@
                     ?>
                 </div>
                 <div class="painel" id="infoProdutoDiv2">
+                    <h3 class="info-titulo">Mais informações</h3>
                     <?php
                         $infoEspecificacoesTecnicas = $produto->get_especificacoes_produto();
                         if(is_array($infoEspecificacoesTecnicas) && count($infoEspecificacoesTecnicas) > 0){
-                            echo "<table>";
-                            echo "<thead>";
-                            echo "<th>Titulo</th>";
-                            echo "<th>Descricao</th>";
-                            echo "</thead>";
-                            foreach($infoEspecificacoesTecnicas as $id => $info){
-                                $titulo = $info["titulo"];
-                                $decricao = $info["descricao"];
-                                echo "<tr>";
-                                echo "<td>$titulo</td>";
-                                echo "<td>$decricao</td>";
-                                echo "</tr>";
-                            }
+                            echo "<table class='tabela-especificacoes'>";
+                                echo "<tbody>";
+                                foreach($infoEspecificacoesTecnicas as $id => $info){
+                                    $titulo = $info["titulo"];
+                                    $decricao = $info["descricao"];
+                                    echo "<tr>";
+                                        echo "<td>$titulo</td>";
+                                        echo "<td>$decricao</td>";
+                                    echo "</tr>";
+                                }
+                                echo "</tbody>";
                             echo "</table>";
                         }else{
                             echo "Nenhuma especificação foi encontrada";

@@ -9,6 +9,7 @@
         -ms-flex-pack: center;
         justify-content: center;
         margin-bottom: 20px;
+        z-index: 100;
     }
     .header-principal .nav-header{
         position: relative;

@@ -45,6 +45,8 @@
                 CKEDITOR.replace("descricaoLonga");
                 var listCategorias = $(".list-categorias");
                 var boxCategorias = listCategorias.children(".box-categoria");
+                
+
                 boxCategorias.each(function(){
                     var box = $(this);
                     var label = box.children("label");
@@ -203,10 +205,10 @@
                 /*END ESPECIFICACOES TECNICAS*/
 
                 /*PRODUTOS RELACIONADOS*/
-                var botaoProdutosRelacionados = $("#btn-produtos-relacionados");
+                var botaoProdutosRelacionados = $("#btnProdRelacionados");
                 var displayRelacionados = $("#display-produtos-relacionados");
                 var backgroundProdutos = $(".background-interatividade");
-                var botaoSalvarRelacionados = $(".btn-salvar-relacionados");
+                var botaoSalvarRelacionados = $("#btnSalvarProdutosRelacionados");
                 var botaoCleanRelacionados = $(".limpar-todos-relacionados");
                 var barraBusca = $(".busca-relacionados");
                 var checkOnlyActives = $("#checkOnlyActives");
@@ -248,7 +250,7 @@
                 function resetAllInputs(){
                     var onlyActives = checkOnlyActives.prop("checked");
                     var ctrlViewProduto = 0;
-                    $("#label-produtos-relacionados").each(function(){
+                    $(".label-produtos-relacionados").each(function(){
                         var label = $(this);
                         var input = label.children("input");
                         if(onlyActives && input.prop("checked") == true){
@@ -268,7 +270,7 @@
                 function listLastSearch(){
                     var onlyActives = checkOnlyActives.prop("checked");
                     var ctrlQtd = 0;
-                    $("#label-produtos-relacionados").each(function(){
+                    $(".label-produtos-relacionados").each(function(){
                         var label = $(this);
                         var input = label.children("input");
                         if(onlyActives && label.hasClass("last-search") && input.prop("checked") == true){
@@ -288,7 +290,7 @@
                 }
                 function contarProdutosSelecionados(){
                     var contagem = 0;
-                    $("#label-produtos-relacionados").each(function(){
+                    $(".label-produtos-relacionados").each(function(){
                         var label = $(this);
                         var input = label.children("input");
                         if(input.prop("checked") == true){
@@ -298,7 +300,7 @@
                     return contagem;
                 }
                 function clearRelacionados(){
-                    $("#label-produtos-relacionados").each(function(){
+                    $(".label-produtos-relacionados").each(function(){
                         var label = $(this);
                         var input = label.children("input");
                         if(label.css("display") != "none"){
@@ -330,7 +332,7 @@
                             var buscaAtiva = barraBusca.val().length > 0 ? true : false;
                             if(checked && !buscaAtiva){
                                 var ctrlQtd = 0;
-                                $("#label-produtos-relacionados").each(function(){
+                                $(".label-produtos-relacionados").each(function(){
                                     var label = $(this);
                                     var input = label.children("input");
                                     var selecionado = input.prop("checked");
@@ -422,7 +424,7 @@
                                 var selectedProdutos = [];
                                 var ctrlVQtdView = 0;
                                 function listarOpcoes(){
-                                    $("#label-produtos-relacionados").each(function(){
+                                    $(".label-produtos-relacionados").each(function(){
                                         var label = $(this);
                                         var input = label.children("input");
                                         var inputIdProduto = input.val();
@@ -1182,7 +1184,7 @@
                 <div class="small" align=left>
                     <!--PRODUTOS RELACIONADOS-->
                     <h3 class="label-title">Produtos Relacionados</h3>
-                    <a class="btn-relacionados" id="btn-produtos-relacionados">Produtos Selecionados <?php echo "(".$ctrlRelacionados.")";?></a>
+                    <a class="btn-relacionados" id="btnProdRelacionados">Produtos Selecionados <?php echo "(".$ctrlRelacionados.")";?></a>
                     <div class="display-relacionados" id="display-produtos-relacionados">
                         <div class="header-relacionados">
                             <h3 class="title-relacionados">Produtos relacionados</h3>
@@ -1209,7 +1211,7 @@
                                             $checked = "checked";
                                         }
                                     }
-                                    echo "<label class='label-relacionados' id='label-produtos-relacionados'><input type='checkbox' name='produtos_relacionados[]' value='$idProdutoRelacionado' $checked> $nomeProdutoRelacionado</label>";
+                                    echo "<label class='label-relacionados label-produtos-relacionados'><input type='checkbox' name='produtos_relacionados[]' value='$idProdutoRelacionado' $checked> $nomeProdutoRelacionado</label>";
                                 }
                             }else{
                                 echo "<h4 class='full'>Nenhum produto encontrado</h4>";
@@ -1217,12 +1219,12 @@
                         ?>
                         </div>
                         <div class="bottom-relacionados">
-                            <a class="btn-salvar-relacionados">Salvar</a>
+                            <a class="btn-salvar-relacionados" id="btnSalvarProdutosRelacionados">Salvar</a>
                         </div>
                     </div>
                     <!--END PRODUTOS RELACIONADOS-->
                 </div>
-                <script type="text/javascript" src="asas.js"></script>
+                <script type="text/javascript" src="js/include-cores-relacionadas.js"></script>
                 <div class="small" align=left>
                     <!--PRODUTOS RELACIONADOS-->
                     <h3 class="label-title">Produtos com Cores Relacionadas</h3>
@@ -1261,7 +1263,7 @@
                         ?>
                         </div>
                         <div class="bottom-relacionados">
-                            <a id="btn-salvar-relacionados" class="btn-salvar-relacionados">Salvar</a>
+                            <a id="btnSalvarCoresRelacionadas" class="btn-salvar-relacionados">Salvar</a>
                         </div>
                     </div>
                     <!--END PRODUTOS RELACIONADOS-->
