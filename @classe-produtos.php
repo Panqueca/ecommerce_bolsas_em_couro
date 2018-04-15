@@ -57,7 +57,95 @@
                 return false;
             }
         }
-
+        
+        function get_titulo_relacionado($type = null, $condicao = 1){
+            $tabela_departamentos = $this->global_vars["tabela_departamentos"];
+            $tabela_categorias = $this->global_vars["tabela_categorias"];
+            $tabela_subcategorias = $this->global_vars["tabela_subcategorias"];
+            
+            $retorno = false;
+            
+            switch($type){
+                case "departamento":
+                    $query = mysqli_query($this->conexao(), "select departamento from $tabela_departamentos where $condicao");
+                    $info = mysqli_fetch_array($query);
+                    $retorno = $info["departamento"];
+                    break;
+                case "categoria":
+                    $query = mysqli_query($this->conexao(), "select categoria from $tabela_categorias where $condicao");
+                    $info = mysqli_fetch_array($query);
+                    $retorno = $info["categoria"];
+                    break;
+                case "subcategoria":
+                    $query = mysqli_query($this->conexao(), "select subcategoria from $tabela_subcategorias where $condicao");
+                    $info = mysqli_fetch_array($query);
+                    $retorno = $info["subcategoria"];
+                    break;
+            }
+            
+            return $retorno;
+        }
+        
+        function search_departamentos_produtos($condicao){
+            $tabela_departamentos = $this->global_vars["tabela_departamentos"];
+            $tabela_departamentos_produtos = $this->global_vars["tabela_departamentos_produtos"];
+            
+            $condicao = str_replace("where", "", $condicao);
+            $query = mysqli_query($this->conexao(), "select id from $tabela_departamentos where $condicao");
+            $selectedProdutos = array();
+            $ctrl = 0;
+            while($array = mysqli_fetch_array($query)){
+                $idDepatamento = $array["id"];
+                $queryProds = mysqli_query($this->conexao(), "select id_produto from $tabela_departamentos_produtos where id_departamento = '$idDepatamento'");
+                while($info = mysqli_fetch_array($queryProds)){
+                    $selectedProdutos[$ctrl] = $info["id_produto"];
+                    $ctrl++;
+                }
+            }
+            
+            return $selectedProdutos;
+        }
+        
+        function search_categorias_produtos($condicao){
+            $tabela_categorias = $this->global_vars["tabela_categorias"];
+            $tabela_categorias_produtos = $this->global_vars["tabela_categorias_produtos"];
+            
+            $condicao = str_replace("where", "", $condicao);
+            $query = mysqli_query($this->conexao(), "select id from $tabela_categorias where $condicao");
+            $selectedProdutos = array();
+            $ctrl = 0;
+            while($array = mysqli_fetch_array($query)){
+                $idCategoria = $array["id"];
+                $queryProds = mysqli_query($this->conexao(), "select id_produto from $tabela_categorias_produtos where id_categoria = '$idCategoria'");
+                while($info = mysqli_fetch_array($queryProds)){
+                    $selectedProdutos[$ctrl] = $info["id_produto"];
+                    $ctrl++;
+                }
+            }
+            
+            return $selectedProdutos;
+        }
+        
+        function search_subcategorias_produtos($condicao){
+            $tabela_subcategorias = $this->global_vars["tabela_subcategorias"];
+            $tabela_subcategorias_produtos = $this->global_vars["tabela_subcategorias_produtos"];
+            
+            $condicao = str_replace("where", "", $condicao);
+            $query = mysqli_query($this->conexao(), "select id from $tabela_subcategorias where $condicao");
+            $selectedProdutos = array();
+            $ctrl = 0;
+            while($array = mysqli_fetch_array($query)){
+                $idSubcategoria = $array["id"];
+                $queryProds = mysqli_query($this->conexao(), "select id_produto from $tabela_subcategorias_produtos where id_categoria = '$idSubcategoria'");
+                while($info = mysqli_fetch_array($queryProds)){
+                    $selectedProdutos[$ctrl] = $info["id_produto"];
+                    $ctrl++;
+                }
+            }
+            
+            return $selectedProdutos;
+        }
+        
         public function montar_produto($idProduto){
             $tabela_produtos = $this->global_vars["tabela_produtos"];
             $tabela_imagens_produtos = $this->global_vars["tabela_imagens_produtos"];
@@ -209,9 +297,7 @@
                         $return[$ctrlDepartamentos]["id"] = $infoDepartamentoProd["id_departamento"];
                         $return[$ctrlDepartamentos]["titulo"] = $infoDepartamento["departamento"];
                         $return[$ctrlDepartamentos]["ref"] = $infoDepartamento["ref"];
-                        echo $return[$ctrlDepartamentos]["ref"];
                         $ctrlDepartamentos++;
-                        
                     }
                 }
             }

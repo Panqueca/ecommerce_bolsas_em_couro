@@ -30,8 +30,15 @@
     $infoDepartamentos = $produto->get_departamentos_produto();
     $totalDepartamentos = is_array($infoDepartamentos) ? count($infoDepartamentos) : 0;
     if($totalDepartamentos){
-        $breadCrumbDepartamento = $infoDepartamentos[0]["titulo"];
+        $breadCrumbDepartamento = ucwords(strtolower($infoDepartamentos[0]["titulo"]));
         $breadCrumbRefDepartamento = $infoDepartamentos[0]["ref"];
+    }
+
+    $infoCategorias = $produto->get_categorias_produto();
+    $totalCategorias = is_array($infoCategorias) ? count($infoCategorias) : 0;
+    if($totalCategorias){
+        $breadCrumbCategoria = ucwords(strtolower($infoCategorias[0]["titulo"]));
+        $breadCrumbRefCategoria = $infoCategorias[0]["ref"];
     }
 ?>
 <!DOCTYPE html>
@@ -586,7 +593,7 @@
             /*END HTML VIEW*/
                 
             $iconArrow = "<i class='fas fa-angle-right icon'></i>";
-            $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='loja.php?departamento=$breadCrumbRefDepartamento'>$breadCrumbDepartamento</a> $iconArrow <a href='#'>$nomeProduto</a></a></div>";
+            $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='loja.php?departamento=$breadCrumbRefDepartamento'>$breadCrumbDepartamento</a> $iconArrow <a href='loja.php?departamento=$breadCrumbRefDepartamento&categoria=$breadCrumbRefCategoria'>$breadCrumbCategoria</a> $iconArrow <a href='#'>$nomeProduto</a></div>";
             echo $navigationTree;
                 
             ?>

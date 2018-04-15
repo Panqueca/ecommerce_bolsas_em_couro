@@ -1,5 +1,5 @@
 <!--STANDARDS-->
-<script src="js/standard.js"></script>
+<script src="js/standard.js" async></script>
 <script src="js/valida-datas.js" async></script>
 <script src="js/valida-cpf.js" async></script>
 <script src="js/valida-cep.js" async></script>
@@ -15,5 +15,5 @@
 <!--END CARRINHO-->
 
 <script type="text/javascript"
-src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js">
+src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js" async>
 </script>
