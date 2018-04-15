@@ -332,6 +332,7 @@
 .vitrine-carrossel .display-produtos .box-produto{
     position: relative;
     width: 160px;
+    height: 285px;
     margin: 10px 10px 50px 15px;
     padding: 10px;
     transition: all .3s ease;
@@ -364,6 +365,7 @@
     font-size: .7em;
     color: #666;
     margin: 10px 0px 10px 0px;
+    height: 30px;
 }
 .vitrine-carrossel .display-produtos .box-produto .preco-produto span{
     white-space: nowrap;
