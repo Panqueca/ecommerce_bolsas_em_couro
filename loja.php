@@ -116,6 +116,7 @@
             }
             
             $tituloVitrine = "Ocorreu um erro. Contate um administrador!";
+            $descricaoVitrine = "Ocorreu um erro. Contate um administrador!";
             
             if($buscarSubcategoria){
                 $selected = array();
@@ -123,14 +124,14 @@
                 $selectedFinal = array();
                 $ctrlSelectedFinal = 0;
                 
-                $tituloVitrine = $cls_produtos->get_titulo_relacionado("subcategoria", "ref = '$getSubcategoria'");
+                $infoVitrine = $cls_produtos->get_referencias("subcategoria", "ref = '$getSubcategoria'");
+                $tituloVitrine = $infoVitrine["titulo"];
+                $descricaoVitrine = $infoVitrine["descricao"];
                 
                 if($buscarDepartamento && $buscarCategoria){
-                    
                     $selectedDepartamento = $cls_produtos->search_departamentos_produtos("ref = '$getDepartamento'");
                     $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
                     $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
-                    
                     
                     foreach($selectedCategoria as $idProduto){
                         if(array_search($idProduto, $selectedDepartamento) != ""){
@@ -138,16 +139,13 @@
                             $ctrlSelected++;
                         }
                     }
-                    
                     foreach($selectedSubcategoria as $idProduto){
                         if(array_search($idProduto, $selected) != ""){
                             $selectedFinal[$ctrlSelectedFinal] = $idProduto;
                             $ctrlSelectedFinal++;
                         }
                     }
-                    
                 }else if($buscarCategoria){
-                    
                     $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
                     $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
                     
@@ -157,24 +155,73 @@
                             $ctrlSelectedFinal++;
                         }
                     }
-                    
                 }else{
                     $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
-                    
                     foreach($selectedSubcategoria as $idProduto){
                         $selectedFinal[$ctrlSelectedFinal] = $idProduto;
                         $ctrlSelectedFinal++;
                     }
                 }
-                
                 foreach($selectedFinal as $id){
                     add_produto($id);
                 }
-                
             }else if($buscarCategoria){
+                $selected = array();
+                $ctrlSelected = 0;
+                $selectedFinal = array();
+                $ctrlSelectedFinal = 0;
                 
+                $infoVitrine = $cls_produtos->get_referencias("categoria", "ref = '$getCategoria'");
+                $tituloVitrine = $infoVitrine["titulo"];
+                $descricaoVitrine = $infoVitrine["descricao"];
+                
+                if($buscarDepartamento && $buscarCategoria){
+                    $selectedDepartamento = $cls_produtos->search_departamentos_produtos("ref = '$getDepartamento'");
+                    $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
+                    
+                    foreach($selectedDepartamento as $idProduto){
+                        if(array_search($idProduto, $selectedCategoria) != ""){
+                            $selectedFinal[$ctrlSelectedFinal] = $idProduto;
+                            $ctrlSelectedFinal++;
+                        }
+                    }
+                }else{
+                    $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
+                    foreach($selectedCategoria as $idProduto){
+                        $selectedFinal[$ctrlSelectedFinal] = $idProduto;
+                        $ctrlSelectedFinal++;
+                    }
+                }
+                foreach($selectedFinal as $id){
+                    add_produto($id);
+                }
             }else if($buscarDepartamento){
+                $selected = array();
+                $ctrlSelected = 0;
+                $selectedFinal = array();
+                $ctrlSelectedFinal = 0;
                 
+                $infoVitrine = $cls_produtos->get_referencias("departamento", "ref = '$getDepartamento'");
+                $tituloVitrine = $infoVitrine["titulo"];
+                $descricaoVitrine = $infoVitrine["descricao"];
+                
+                if($buscarDepartamento){
+                    $selectedDepartamento = $cls_produtos->search_departamentos_produtos("ref = '$getDepartamento'");
+                    if(empty($selectedDepartamento)){
+                        $tituloVitrine = "Não encontramos nenhum produto.";
+                        $descricaoVitrine = "Desculpas.";
+                    }
+                    foreach($selectedDepartamento as $idProduto){
+                        $selectedFinal[$ctrlSelectedFinal] = $idProduto;
+                        $ctrlSelectedFinal++;
+                    }
+                }else{
+                    $tituloVitrine = "Não encontramos nenhum produto.";
+                    $descricaoVitrine = "Desculpas.";
+                }
+                foreach($selectedFinal as $id){
+                    add_produto($id);
+                }
             }
             
             //print_r($selectedProdutos); // Produtos que foram filtrados
@@ -182,8 +229,8 @@
             
             $iconArrow = "<i class='fas fa-angle-right icon'></i>"; 
             $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='#'>Feminino</a></a></div>";
-
-            $vitrineProdutos[0] = new VitrineProdutos("standard", 20, "<h1>$tituloVitrine</h1>", "Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica e de impressos, e vem sendo utilizado desde o século XVI, quando um impressor desconhecido pegou uma bandeja de tipos e os embaralhou para fazer um livro de modelos de tipos.");
+            
+            $vitrineProdutos[0] = new VitrineProdutos("standard", 20, "<h1>$tituloVitrine</h1>", "$descricaoVitrine");
             $vitrineProdutos[0]->montar_vitrine($selectedProdutos);
         ?>
         </div>
