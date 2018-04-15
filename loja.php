@@ -80,6 +80,8 @@
             require_once "@classe-system-functions.php";
             require_once "@include-header-principal.php";
             require_once "@include-interatividade.php";
+            require_once "@classe-vitrine-produtos.php";
+            require_once "@classe-produtos.php";
         ?>
         <!--THIS PAGE CONTENT-->
         <div class="background-loja">
@@ -91,207 +93,95 @@
             $buscarCategoria = isset($_GET["categoria"]) ? true : false;
             $buscarSubcategoria = isset($_GET["subcategoria"]) ? true : false;
             
+            $getDepartamento = $buscarDepartamento == true ? addslashes($_GET["departamento"]) : null;
+            $getCategoria = $buscarCategoria == true ? addslashes($_GET["categoria"]) : null;
+            $getSubcategoria = $buscarSubcategoria == true ? addslashes($_GET["subcategoria"]) : null;
+            
             $selectedProdutos = array();
             $ctrlProdutos = 0;
-
-            function buscarDepartamento($selectedDepartamento, $adicionarProduto = true){
-                global $globalVars, $pew_functions, $selectedProdutos, $ctrlProdutos;
-                $tabela_departamentos = $globalVars["tabela_departamentos"];
-                $totalDepartamentos = $pew_functions->contar_resultados($tabela_departamentos, "ref = '$selectedDepartamento'");
-                
-                if($totalDepartamentos > 0){
-                    $tabela_departamentos_produtos = $globalVars["tabela_departamentos_produtos"];
-                    $sql = "SELECT pew_departamentos.ref AS refDepartamento, pew_departamentos.departamento AS nomeDepartamento, pew_produtos.id AS idProduto, pew_produtos.nome AS nomeProduto\n"
-                    . "FROM pew_departamentos\n"
-                    . "INNER JOIN pew_departamentos_produtos\n"
-                    . "on pew_departamentos_produtos.id_departamento = pew_departamentos.id\n"
-                    . "INNER JOIN pew_produtos\n"
-                    . "on pew_produtos.id = pew_departamentos_produtos.id_produto\n"
-                    . "WHERE ref = '$selectedDepartamento'";    
-                    $query = mysqli_query($globalVars["conexao"], "$sql");
-                    
-                    $tituloDepartamento = null;
-                    $refDepartamento = null;
-                    while($info = mysqli_fetch_array($query)){
-                        if($adicionarProduto){
-                            $selectedProdutos[$ctrlProdutos] = $info["idProduto"];
-                            $ctrlProdutos++;
-                        }
-                        $tituloDepartamento = $tituloDepartamento == null ? $info["nomeDepartamento"] : $tituloDepartamento;
-                        $refDepartamento = $refDepartamento == null ? $info["refDepartamento"] : $refDepartamento;
-                    }
-                    $retorno = array();
-                    $retorno["titulo"] = $tituloDepartamento;
-                    $retorno["ref"] = $refDepartamento;
-
-                    return $retorno;
-                }else{
-                    return false;
-                }
+            
+            $cls_produtos = new Produtos();
+            
+            function valida_array($array){
+                $retorno = is_array($array) && count($array) > 0 ? true : false;
+                return $retorno;
             }
             
-            function buscarCategoria($selectedCategoria, $adicionarProduto = true){
-                global $globalVars, $pew_functions, $selectedProdutos, $ctrlProdutos;
-                $tabela_categorias = $globalVars["tabela_categorias"];
-                $totalCategorias = $pew_functions->contar_resultados($tabela_categorias, "ref = '$selectedCategoria'");
-                
-                if($totalCategorias > 0){
-                    $tabela_categorias_produtos = $globalVars["tabela_categorias_produtos"];
-                    $sql = "SELECT pew_categorias.ref AS refCategoria, pew_categorias.categoria AS nomeCategoria, pew_produtos.id AS idProduto, pew_produtos.nome AS nomeProduto\n"
-                    . "FROM pew_categorias\n"
-                    . "INNER JOIN pew_categorias_produtos\n"
-                    . "on pew_categorias_produtos.id_categoria = pew_categorias.id\n"
-                    . "INNER JOIN pew_produtos\n"
-                    . "on pew_produtos.id = pew_categorias_produtos.id_produto\n"
-                    . "WHERE ref = '$selectedCategoria'";
-                    $query = mysqli_query($globalVars["conexao"], "$sql");
-
-                    $tituloCategoria = null;
-                    $refCategoria = null;
-                    
-                    $infoRetorno = array();
-                    $selectedProd = array();
-                    $count = 0;
-                    while($info = mysqli_fetch_array($query)){
-                        $tituloCategoria = $tituloCategoria == null ? $info["nomeCategoria"] : $tituloCategoria;
-                        $refCategoria = $refCategoria == null ? $info["refCategoria"] : $refCategoria;
-                        
-                        $idProduto = $info["idProduto"];
-                        if($count == 0){
-                            $infoRetorno["subcategoria"] = array();
-                            $infoRetorno["subcategoria"]["titulo"] = $tituloCategoria;
-                            $infoRetorno["subcategoria"]["ref"] = $refCategoria;
-                        }
-                        
-                        $infoRetorno["produtos"][$count] = $idProduto;
-                        $count++;
-                    }
-
-                    return $retorno;
-                }else{
-                    return false;
+            function add_produto($id){
+                global $selectedProdutos, $ctrlProdutos;
+                if(array_search($id, $selectedProdutos) == ""){
+                    $selectedProdutos[$ctrlProdutos] = $id;
+                    $ctrlProdutos++;
                 }
             }
-            
-            function buscarSubcategoria($selectedSubcategoria){
-                global $globalVars, $pew_functions, $selectedProdutos, $ctrlProdutos;
-                $tabela_subcategorias = $globalVars["tabela_subcategorias"];
-                $totalSubcategorias = $pew_functions->contar_resultados($tabela_subcategorias, "ref = '$selectedSubcategoria'");
-                
-                if($totalSubcategorias > 0){
-                    $tabela_subcategorias_produto = $globalVars["tabela_subcategorias_produtos"];
-                    $sql = "SELECT pew_subcategorias.ref AS refSubcategoria, pew_subcategorias.subcategoria AS nomeSubcategoria, pew_produtos.id AS idProduto, pew_produtos.nome AS nomeProduto\n"
-                    . "FROM pew_subcategorias\n"
-                    . "INNER JOIN pew_subcategorias_produtos\n"
-                    . "on pew_subcategorias_produtos.id_subcategoria = pew_subcategorias.id\n"
-                    . "INNER JOIN pew_produtos\n"
-                    . "on pew_produtos.id = pew_subcategorias_produtos.id_produto\n"
-                    . "WHERE ref = '$selectedSubcategoria'";
-                    $query = mysqli_query($globalVars["conexao"], "$sql");
-
-                    $tituloSubcategoria = null;
-                    $refSubcategoria = null;
-                    
-                    $infoRetorno = array();
-                    $selectedProd = array();
-                    $count = 0;
-                    
-                    while($info = mysqli_fetch_array($query)){
-                        $tituloSubcategoria = $tituloSubcategoria == null ? $info["nomeSubcategoria"] : $tituloSubcategoria;
-                        $refSubcategoria = $refSubcategoria == null ? $info["refSubcategoria"] : $refSubcategoria;
-                        
-                        $idProduto = $info["idProduto"];
-                        if($count == 0){
-                            $infoRetorno["subcategoria"] = array();
-                            $infoRetorno["subcategoria"]["titulo"] = $tituloSubcategoria;
-                            $infoRetorno["subcategoria"]["ref"] = $refSubcategoria;
-                        }
-                        
-                        $infoRetorno["produtos"][$count] = $idProduto;
-                        $count++;
-                    }
-
-                    return $infoRetorno;
-                }else{
-                    return false;
-                }
-            }
-            
-            $iconArrow = "<i class='fas fa-angle-right icon'></i>"; 
-            $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='#'>Feminino</a></a></div>";
             
             $tituloVitrine = "Ocorreu um erro. Contate um administrador!";
             
             if($buscarSubcategoria){
-                $getRefSub = $_GET["subcategoria"];
-                $getRefDepart = isset($_GET["departamento"]) ? $_GET["departamento"] : null;
-                $getRefCategoria = isset($_GET["categoria"]) ? $_GET["categoria"] : null;
-
-                $infoBusca = buscarSubcategoria($getRefSub);
+                $selected = array();
+                $ctrlSelected = 0;
+                $selectedFinal = array();
+                $ctrlSelectedFinal = 0;
                 
-                $nomeSub = $infoBusca["subcategoria"]["titulo"];
-                $refSub = $infoBusca["subcategoria"]["ref"];
-                $produtos = $infoBusca["produtos"];
+                $tituloVitrine = $cls_produtos->get_titulo_relacionado("subcategoria", "ref = '$getSubcategoria'");
                 
-                foreach($produtos as $idProduto){
-                    $selectedProdutos[$ctrlProdutos] = $idProduto;
-                    $ctrlProdutos++;
+                if($buscarDepartamento && $buscarCategoria){
+                    
+                    $selectedDepartamento = $cls_produtos->search_departamentos_produtos("ref = '$getDepartamento'");
+                    $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
+                    $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
+                    
+                    
+                    foreach($selectedCategoria as $idProduto){
+                        if(array_search($idProduto, $selectedDepartamento) != ""){
+                            $selected[$ctrlSelected] = $idProduto;
+                            $ctrlSelected++;
+                        }
+                    }
+                    
+                    foreach($selectedSubcategoria as $idProduto){
+                        if(array_search($idProduto, $selected) != ""){
+                            $selectedFinal[$ctrlSelectedFinal] = $idProduto;
+                            $ctrlSelectedFinal++;
+                        }
+                    }
+                    
+                }else if($buscarCategoria){
+                    
+                    $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
+                    $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
+                    
+                    foreach($selectedSubcategoria as $idProduto){
+                        if(array_search($idProduto, $selectedCategoria) != ""){
+                            $selectedFinal[$ctrlSelectedFinal] = $idProduto;
+                            $ctrlSelectedFinal++;
+                        }
+                    }
+                    
+                }else{
+                    $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
+                    
+                    foreach($selectedSubcategoria as $idProduto){
+                        $selectedFinal[$ctrlSelectedFinal] = $idProduto;
+                        $ctrlSelectedFinal++;
+                    }
                 }
                 
-                $urlDepartamento = "loja.php?departamento=$getRefDepart";
-                $urlCategoria = "loja.php?departamento=$getRefDepart&categoria=$getRefCategoria";
-                $urlFinal = "loja.php?departamento=$getRefDepart&categoria=$getRefCategoria&subcategoria=$refSub";
-                
-                $tituloVitrine = $nomeSub;
-                
-                $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='$urlDepartamento'> $nomeSub</a> $iconArrow <a href='$urlCategoria'> $nomeSub</a> $iconArrow <a href='$urlFinal'> $nomeSub</a></div>";
+                foreach($selectedFinal as $id){
+                    add_produto($id);
+                }
                 
             }else if($buscarCategoria){
-                $get = $_GET["categoria"];
-                $getRefDepart = isset($_GET["departamento"]) ? $_GET["departamento"] : null;
-                $getRefCategoria = isset($_GET["categoria"]) ? $_GET["categoria"] : null;
                 
-                $beleza = buscarCategoria($get);
-                
-                $nomeSub = $infoBusca["categoria"]["titulo"];
-                $refSub = $infoBusca["categoria"]["ref"];
-                $produtos = $infoBusca["produtos"];
-                
-                foreach($produtos as $idProduto){
-                    $selectedProdutos[$ctrlProdutos] = $idProduto;
-                    $ctrlProdutos++;
-                }
-                
-                $urlDepartamento = "loja.php?departamento=$getRefDepart";
-                $urlCategoria = "loja.php?departamento=$getRefDepart&categoria=$getRefCategoria";
-                $urlFinal = "loja.php?departamento=$getRefDepart&categoria=$getRefCategoria&subcategoria=$refSub";
-                
-                $tituloVitrine = $nomeSub;
-                
-                $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='$urlDepartamento'> $nomeSub</a> $iconArrow <a href='$urlCategoria'> $nomeSub</a> $iconArrow <a href='$urlFinal'> $nomeSub</a></div>";
             }else if($buscarDepartamento){
-                $get = $_GET["departamento"];
                 
-                $beleza = buscarDepartamento($get);
-                
-                $nome = $beleza["titulo"];
-                $ref = $beleza["ref"];
-                $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='#'> $nome</a></a></div>";
-            }else{
-                header("location: index.php");
             }
             
-            echo $navigationTree;
-            
-            require_once "@classe-vitrine-produtos.php";
+            //print_r($selectedProdutos); // Produtos que foram filtrados
             
             
-            $condicaoFinal = "";
-            $ctrl = 0;
-            foreach($selectedProdutos as $idProduto){
-                $condicaoFinal .= $ctrl == 0 ? "id = '$idProduto'" : " or id = '$idProduto'";
-                $ctrl++;
-            }
+            $iconArrow = "<i class='fas fa-angle-right icon'></i>"; 
+            $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='#'>Feminino</a></a></div>";
 
             $vitrineProdutos[0] = new VitrineProdutos("standard", 20, "<h1>$tituloVitrine</h1>", "Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica e de impressos, e vem sendo utilizado desde o século XVI, quando um impressor desconhecido pegou uma bandeja de tipos e os embaralhou para fazer um livro de modelos de tipos.");
             $vitrineProdutos[0]->montar_vitrine($selectedProdutos);
