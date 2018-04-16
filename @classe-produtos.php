@@ -58,28 +58,32 @@
             }
         }
         
-        function get_titulo_relacionado($type = null, $condicao = 1){
+        function get_referencias($type = null, $condicao = 1){
             $tabela_departamentos = $this->global_vars["tabela_departamentos"];
             $tabela_categorias = $this->global_vars["tabela_categorias"];
             $tabela_subcategorias = $this->global_vars["tabela_subcategorias"];
             
             $retorno = false;
+            $retorno = array();
             
             switch($type){
                 case "departamento":
-                    $query = mysqli_query($this->conexao(), "select departamento from $tabela_departamentos where $condicao");
+                    $query = mysqli_query($this->conexao(), "select departamento, descricao from $tabela_departamentos where $condicao");
                     $info = mysqli_fetch_array($query);
-                    $retorno = $info["departamento"];
+                    $retorno["titulo"] = $info["departamento"];
+                    $retorno["descricao"] = $info["descricao"];
                     break;
                 case "categoria":
-                    $query = mysqli_query($this->conexao(), "select categoria from $tabela_categorias where $condicao");
+                    $query = mysqli_query($this->conexao(), "select categoria, descricao from $tabela_categorias where $condicao");
                     $info = mysqli_fetch_array($query);
-                    $retorno = $info["categoria"];
+                    $retorno["titulo"] = $info["categoria"];
+                    $retorno["descricao"] = $info["descricao"];
                     break;
                 case "subcategoria":
-                    $query = mysqli_query($this->conexao(), "select subcategoria from $tabela_subcategorias where $condicao");
+                    $query = mysqli_query($this->conexao(), "select subcategoria, descricao from $tabela_subcategorias where $condicao");
                     $info = mysqli_fetch_array($query);
-                    $retorno = $info["subcategoria"];
+                    $retorno["titulo"] = $info["subcategoria"];
+                    $retorno["descricao"] = $info["descricao"];
                     break;
             }
             
