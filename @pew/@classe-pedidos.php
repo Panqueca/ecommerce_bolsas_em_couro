@@ -209,22 +209,22 @@
         
         function get_pagamento_string($codigo){
             switch($codigo){
-                case 1:
+                case "1":
                     $str = "Cartão de crédito";
                     break;
-                case 2:
+                case "2":
                     $str = "Boleto";
                     break;
-                case 3:
+                case "3":
                     $str = "Débito online";
                     break;
-                case 4:
+                case "4":
                     $str = "Saldo PagSeguro";
                     break;
-                case 5:
+                case "5":
                     $str = "Oi Paggo";
                     break;
-                case 6:
+                case "6":
                     $str = "Depósito em conta";
                     break;
                 default:

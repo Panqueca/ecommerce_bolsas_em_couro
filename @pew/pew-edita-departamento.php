@@ -49,7 +49,7 @@
                     echo "<input type='text' class='label-input' placeholder='Título do departamento' name='titulo' id='tituloDepartamento' value='$titulo' maxlength='35'>";
                 echo "</div>";
             ?>
-            <div class="half">
+            <div class="medium">
                 <div class="select-categorias">
                     <h3 class="titulo">Selecione as categorias para o menu</h3>
                     <ul class="list-categorias">
@@ -73,11 +73,10 @@
                 </div>
             </div>
             <?php
-                echo "<div class='label half'>";
+                echo "<div class='half'>";
                     echo "<h3 class='label-title'>Descrição (opcional)</h3>";
                     echo "<textarea class='label-textarea' placeholder='Descrição do departamento' name='descricao' id='descricaoDepartamento' rows=5>$descricao</textarea>";
                 echo "</div>";
-                echo "<br class='clear'>";
                 echo "<br class='clear'>";
                 echo "<div class='label medium'>";
                     echo "<h3 class='label-title'>Posição</h3>";

@@ -51,6 +51,7 @@ if(isset($_POST["carrinho"]) && $_POST["carrinho"] != null){
     $data["itemId$i"] = 0;
     $data["itemQuantity$i"] = 1;
     $data["itemDescription$i"] = "Transporte: $tituloTransporte";
+    $valorFrete = "0.00";
     $data["itemAmount$i"] = $valorFrete;
     
 }else{
@@ -111,7 +112,7 @@ if($enviarDados){
 
     curl_close($curl);
     
-    //echo $xml; exit; // Depuracao caso precise
+    echo $xml; exit; // Depuracao caso precise
     
     $xml = simplexml_load_string($xml);
     

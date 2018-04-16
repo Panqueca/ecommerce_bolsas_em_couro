@@ -456,7 +456,7 @@
                                     });
                                 },
                                 success: function(resposta){
-                                    //console.log(resposta);
+                                    console.log(resposta);
                                     if(resposta != "false" && resposta != "Unauthorized"){
                                         resposta = JSON.parse(resposta);
                                         var confirmationCode = resposta.code;
