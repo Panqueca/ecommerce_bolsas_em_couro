@@ -3,7 +3,7 @@
     $console = isset($_POST["console"]) && $_POST["console"] == true ? true : false;
     $codigoReferencia = isset($_POST["codigo_referencia"]) ? $_POST["codigo_referencia"] : null;
     if($codigoReferencia != null){
-        require_once "ws-pagseguro-config.php";
+        require "ws-pagseguro-config.php";
         
         $token = $pagseguro_config->get_token();
         $email = $pagseguro_config->get_email();
@@ -43,8 +43,8 @@
         $statusPagseguro = $obj->status;
         
         // CONFIGURAVEL DE ACORDO COM O SISTEMA
-        require_once "../@pew/pew-system-config.php";
-        require_once "../@pew/@include-global-vars.php";
+        require "../@pew/pew-system-config.php";
+        require "../@pew/@include-global-vars.php";
         global $globalVars;
         $tabela_pedidos = $globalVars{"tabela_pedidos"};
         

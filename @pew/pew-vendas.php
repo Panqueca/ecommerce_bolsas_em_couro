@@ -32,9 +32,6 @@
                 width: calc(100% - 30px);
                 margin: 40px 15px 40px 15px;
                 padding-top: 50px;
-                display: flex;
-                flex-flow: row wrap;
-                justify-content: left;
             }
             .box-produto{
                 position: relative;
@@ -45,6 +42,7 @@
                 border: 1px solid #ccc;
                 transition: .2s;
                 color: #666;
+                float: left;
             }
             .box-produto:hover{
                 -webkit-box-shadow: 0px 0px 15px 8px rgba(0, 0, 0, .1);
@@ -265,7 +263,7 @@
                         $strBusca = "";
                     }
                 
-                    $condicaoPedidos = "codigo_confirmacao != '0'";
+                    $condicaoPedidos = "codigo_confirmacao != '0' order by id desc";
                     $totalPedidos = $pew_functions->contar_resultados($tabela_pedidos, $condicaoPedidos);
                     
                     if($totalPedidos > 0){

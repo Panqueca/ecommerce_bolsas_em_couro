@@ -65,7 +65,7 @@
                 
                 $_POST["console"] = false;
                 $_POST["codigo_referencia"] = $info["referencia"];
-                require_once "../pagseguro/ws-pagseguro-consulta-referencia.php"; // Retorna o $statusPagseguro
+                require "../pagseguro/ws-pagseguro-consulta-referencia.php"; // Retorna o $statusPagseguro
                 
                 if($statusPagseguro != $info["status"]){
                     mysqli_query($conexao, "update $tabela_pedidos set status = '$statusPagseguro' where id = '{$info["id"]}'");
@@ -235,7 +235,7 @@
         }
         
         function get_transporte_string(){
-            switch($this->status){
+            switch($this->codigo_transporte){
                 case "40010":
                     $str = "Correios - SEDEX";
                     break;
@@ -275,7 +275,7 @@
                     
                     echo "<div class='box-produto' id='boxProduto$id'>";
                         echo "<div class='informacoes'>";
-                            echo "<h3 class='nome-produto'><a href=''>{$this->nome_cliente}</a></h3>";
+                            echo "<h3 class='nome-produto'><a>{$this->nome_cliente}</a></h3>";
                             echo "<div class='half box-info'>";
                                 echo "<h4 class='titulo'><i class='fas fa-clipboard'></i> Status</h4>";
                                 echo "<h3 class='descricao'>$statusStr</h3>";
@@ -331,30 +331,29 @@
                         echo "</div>";
                         // Informações adicionais
                         echo "<div class='display-info-pedido' id='infoPedido$id'>";
-                                echo "<div class='informacoes'>";
-                                    echo "<div class='half box-info'>";
-                                        echo "<h4 class='titulo'><i class='fas fa-credit-card'></i> Pagamento</h4>";
-                                        echo "<h3 class='descricao'>$pagamentoStr</h3>";
-                                    echo "</div>";
-                                    echo "<div class='half box-info'>";
-                                        echo "<h4 class='titulo'><i class='fas fa-id-card'></i> CPF</h4>";
-                                        echo "<h3 class='descricao'>{$this->pew_functions->mask($this->cpf_cliente, "###.###.###-##")}</h3>";
-                                    echo "</div>";
-                                    echo "<div class='full clear box-info'>";
-                                        echo "<h4 class='titulo'><i class='far fa-envelope'></i> E-mail</h4>";
-                                        echo "<h3 class='descricao'>{$this->email_cliente}</h3>";
-                                    echo "</div>";
-                                    echo "<div class='full box-info'>";
-                                        echo "<h4 class='titulo'><i class='fas fa-map-marker'></i> Endereço entrega</h4>";
-                                        echo "<h3 class='descricao'>$enderecoFinal</h3>";
-                                    echo "</div>";
-                                    echo "<div class='half box-info'>";
-                                        echo "<h4 class='titulo'><i class='far fa-clock'></i> Hora</h4>";
-                                        echo "<h3 class='descricao'>$horario</h3>";
-                                    echo "</div>";
+                            echo "<div class='informacoes'>";
+                                echo "<div class='half box-info'>";
+                                    echo "<h4 class='titulo'><i class='fas fa-credit-card'></i> Pagamento</h4>";
+                                    echo "<h3 class='descricao'>$pagamentoStr</h3>";
                                 echo "</div>";
-                                echo "<button class='btn-voltar btn-voltar-info' id-pedido='infoPedido$id'>Voltar</button>";
+                                echo "<div class='half box-info'>";
+                                    echo "<h4 class='titulo'><i class='fas fa-id-card'></i> CPF</h4>";
+                                    echo "<h3 class='descricao'>{$this->pew_functions->mask($this->cpf_cliente, "###.###.###-##")}</h3>";
+                                echo "</div>";
+                                echo "<div class='full clear box-info'>";
+                                    echo "<h4 class='titulo'><i class='far fa-envelope'></i> E-mail</h4>";
+                                    echo "<h3 class='descricao'>{$this->email_cliente}</h3>";
+                                echo "</div>";
+                                echo "<div class='full box-info'>";
+                                    echo "<h4 class='titulo'><i class='fas fa-map-marker'></i> Endereço entrega</h4>";
+                                    echo "<h3 class='descricao'>$enderecoFinal</h3>";
+                                echo "</div>";
+                                echo "<div class='half box-info'>";
+                                    echo "<h4 class='titulo'><i class='far fa-clock'></i> Hora</h4>";
+                                    echo "<h3 class='descricao'>$horario</h3>";
+                                echo "</div>";
                             echo "</div>";
+                            echo "<button class='btn-voltar btn-voltar-info' id-pedido='infoPedido$id'>Voltar</button>";
                         echo "</div>";
                     echo "</div>";
                 }
