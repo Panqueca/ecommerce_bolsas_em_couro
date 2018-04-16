@@ -35,7 +35,7 @@
         $precoProduto = $pew_functions->custom_number_format($precoProduto);
         $precoPromocaoProduto = $_POST["preco_promocao"];
         $precoPromocaoProduto = $pew_functions->custom_number_format($precoPromocaoProduto);
-        $descontoRelacionado = $_POST["desconto_relacionado"];
+        $descontoRelacionado = isset($_POST["desconto_relacionado"]) && $_POST["desconto_relacionado"] ? $_POST["desconto_relacionado"] : 0;
         $descontoRelacionado = $pew_functions->custom_number_format($descontoRelacionado);
         $promocaoAtiva = intval($_POST["promocao_ativa"]) == 1 ? 1 : 0;
         $estoqueProduto = (int)$_POST["estoque"] != "" ? (int)$_POST["estoque"] : 0;
