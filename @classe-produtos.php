@@ -141,7 +141,7 @@
             $ctrl = 0;
             while($array = mysqli_fetch_array($query)){
                 $idSubcategoria = $array["id"];
-                $queryProds = mysqli_query($this->conexao(), "select id_produto from $tabela_subcategorias_produtos where id_categoria = '$idSubcategoria'");
+                $queryProds = mysqli_query($this->conexao(), "select id_produto from $tabela_subcategorias_produtos where id_subcategoria = '$idSubcategoria'");
                 while($info = mysqli_fetch_array($queryProds)){
                     $selectedProdutos[$ctrl] = $info["id_produto"];
                     $ctrl++;

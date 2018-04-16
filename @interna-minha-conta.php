@@ -33,7 +33,7 @@ if($listar){
     <button class="top-buttons" id="Painel3"><i class="fas fa-truck"></i> ENDEREÇO DE ENTREGA</button>
 </div>
 <div class="painel painel-active" id="displayPainel1">
-    Painel 1
+    Em manutenção ...
 </div>
 <div class="painel" id="displayPainel2">
     <?php

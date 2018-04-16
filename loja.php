@@ -157,6 +157,7 @@
                     }
                 }else{
                     $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
+                    
                     foreach($selectedSubcategoria as $idProduto){
                         $selectedFinal[$ctrlSelectedFinal] = $idProduto;
                         $ctrlSelectedFinal++;
