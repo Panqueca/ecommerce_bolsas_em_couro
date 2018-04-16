@@ -57,11 +57,11 @@ if(isset($_POST["carrinho"]) && $_POST["carrinho"] != null){
     $enviarDados = false;
 }
 
-$_POST["cliente"] = array();
+/*$_POST["cliente"] = array();
 $_POST["cliente"]["nome"] = "Rogerio Mendes";
 $_POST["cliente"]["codigo_area"] = "41";
 $_POST["cliente"]["telefone"] = "997536262";
-$_POST["cliente"]["email"] = "reyrogerio@hotmail.com";
+$_POST["cliente"]["email"] = "reyrogerio@hotmail.com";*/
 
 if(isset($_POST["cliente"])){
     $infoCliente = $_POST["cliente"];

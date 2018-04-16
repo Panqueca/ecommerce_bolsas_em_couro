@@ -46,15 +46,6 @@
             }
         }
         
-        function atualizar_carrinho(){
-            $this->verify_session();
-            $carrinho = $_SESSION["carrinho"]["itens"];
-            $totalCarrinho = 0;
-            foreach($carrinho as $infoProdutos){
-                $totalCarrinho += $infoProduto["preco"];
-            }
-        }
-        
         function add_produto($idProduto, $quantidade = 1){
             $tabela_produtos = $this->global_vars["tabela_produtos"];
             $total = $this->pew_functions->contar_resultados($tabela_produtos, "id = '$idProduto'");
@@ -112,6 +103,20 @@
             }else{
                 return "false";
             }
+            
+            $this->reordenar_carrinho();
+        }
+        
+        function remover_produto($idRemover){
+            $this->verify_session();
+            
+            foreach($_SESSION["carrinho"]["itens"] as $indice => $item){
+                $id = $item["id"];
+                if($idRemover == $id){
+                    unset($_SESSION["carrinho"]["itens"][$indice]);
+                    $this->reordenar_carrinho();
+                }
+            }
         }
         
         function get_token_carrinho(){
@@ -124,6 +129,7 @@
             $carrinho = array();
             $carrinho["itens"] = array();
             $carrinho["token"] = $_SESSION["carrinho"]["token"];
+            
             
             $ctrl = 0;
             
@@ -155,14 +161,12 @@
                 
                 if($is_compre_junto){
                     $infoPrecoRelacionado = $this->classe_produtos->get_preco_relacionado($idProduto);
-                    $carrinho["itens"][$ctrl]["preco"] = $infoPrecoRelacionado["valor"];
+                    $carrinho["itens"][$ctrl]["preco"] = $this->pew_functions->custom_number_format($infoPrecoRelacionado["valor"]);
                     $carrinho["itens"][$ctrl]["desconto"] = $infoPrecoRelacionado["desconto"];
                 }
                     
                 $ctrl++;
             }
-            
-            //print_r($_SESSION["carrinho"]);
             
             return $carrinho;
         }
@@ -170,6 +174,23 @@
         function reset_carrinho(){
             $this->verify_session();
             unset($_SESSION["carrinho"]);
+        }
+        
+        function reordenar_carrinho(){
+            $this->verify_session();
+            $carrinho = $_SESSION["carrinho"]["itens"];
+            
+            $reorderedCarrinho = array();
+            $ctrl = 0;
+            
+            foreach($carrinho as $item){
+                $reorderedCarrinho[$ctrl] = $item;
+                $ctrl++;
+            }
+            
+            $_SESSION["carrinho"]["itens"] = $reorderedCarrinho;
+            
+            return true;
         }
     }
 
@@ -237,13 +258,9 @@
         }else if($acao == "remover_produto"){
             $idProduto = isset($_POST["id_produto"]) ? (int)$_POST["id_produto"] : 0;
             if($idProduto > 0){
-                $carrinho = $cls_carrinho->get_carrinho();
-                foreach($carrinho["itens"] as $indice => $item){
-                    $id = $item["id"];
-                    if($idProduto == $id){
-                        unset($_SESSION["carrinho"]["itens"][$indice]);
-                    }
-                }
+                
+                $cls_carrinho->remover_produto($idProduto);
+                
                 echo "true";
             }else{
                 echo "false";

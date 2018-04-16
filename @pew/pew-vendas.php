@@ -126,16 +126,10 @@
                 visibility: hidden;
                 opacity: 0;
             }
-            .display-produtos-pedido .titulo{
-                font-size: 16px;
-                font-weight: normal;
-                margin: 20px;
-            }
             .display-produtos-pedido .box{
                 width: 100%;
+                margin: 10px 0px 10px 0px;
                 display: flex;
-                height: 30px;
-                line-height: 30px;
             }
             .display-produtos-pedido .box:hover{
                 background-color: #eee;
@@ -152,7 +146,50 @@
                 width: 30%;
                 text-align: center;
             }
-            .display-produtos-pedido .btn-voltar{
+            .bottom-buttons .btn-status-produto:hover, .bottom-buttons .btn-alterar-produto:hover{
+                background-color: #f0f0f0;
+                transform: scale(1);
+            }
+            .display-info-pedido{
+                position: absolute;
+                width: 100%;
+                padding-bottom: 30px;
+                height: 0%;
+                bottom: 0;
+                left: 0;
+                background-color: #fff;
+                transition: .3s;
+                visibility: hidden;
+                overflow: hidden;
+                overflow-y: auto;
+                opacity: 0;
+            }
+            .display-info-pedido::-webkit-scrollbar-button:hover{
+                background-color: #AAA;
+            }
+            .display-info-pedido::-webkit-scrollbar-thumb{
+                background-color: #ccc;
+            }
+            .display-info-pedido::-webkit-scrollbar-thumb:hover{
+                background-color: #999;
+            }
+            .display-info-pedido::-webkit-scrollbar-track{
+                background-color: #efefef;
+            }
+            .display-info-pedido::-webkit-scrollbar-track:hover{
+                background-color: #efefef;
+            }
+            .display-info-pedido::-webkit-scrollbar{
+                width: 3px;
+                height: 3px;
+            }
+            .titulo-info{
+                font-size: 16px;
+                line-height: 20px;
+                font-weight: normal;
+                margin: 16px;
+            }
+            .btn-voltar{
                 position: absolute;
                 bottom: 10px;
                 right: 10px;
@@ -164,13 +201,14 @@
                 cursor: pointer;
                 font-size: 14px;
             }
-            .display-produtos-pedido .btn-voltar:hover{
+            .btn-voltar:hover{
                 background-color: #dfdfdf;   
             }
-            .bottom-buttons .btn-status-produto:hover, .bottom-buttons .btn-alterar-produto:hover{
-                background-color: #f0f0f0;
-                transform: scale(1);
-            }
+            /*.display-info-pedido .btn-voltar{
+                position: relative;
+                top: 20px;
+                margin: 0px 0px 0px auto;
+            }*/
         </style>
         <!--FIM THIS PAGE CSS-->
     </head>
@@ -226,12 +264,14 @@
                     }else{
                         $strBusca = "";
                     }
-                    $totalPedidos = $pew_functions->contar_resultados($tabela_pedidos, "codigo_confirmacao != 0");
+                
+                    $condicaoPedidos = "codigo_confirmacao != '0'";
+                    $totalPedidos = $pew_functions->contar_resultados($tabela_pedidos, $condicaoPedidos);
                     
                     if($totalPedidos > 0){
                         
                         $cls_pedido = new Pedidos();
-                        $selectedPedidos = $cls_pedido->buscar_pedidos("codigo_confirmacao != 0");
+                        $selectedPedidos = $cls_pedido->buscar_pedidos($condicaoPedidos);
                         $cls_pedido->listar_pedidos($selectedPedidos);
                         
                     }else{
@@ -249,7 +289,9 @@
     <script>
         $(document).ready(function(){
             var botaoVerProdutos = $(".botao-ver-produtos");
-            var botaoVoltar = $(".display-produtos-pedido .btn-voltar");
+            var botaoVerInfo = $(".botao-ver-info");
+            var botaoVoltar = $(".display-produtos-pedido .btn-voltar-produtos");
+            var botaoVoltarInfo = $(".display-info-pedido .btn-voltar-info");
             
             function toggleVerProdutos(id){
                 var obj = $("#"+id);
@@ -271,14 +313,44 @@
                 }
             }
             
+            function toggleInfoPedido(id){
+                var obj = $("#"+id);
+                
+                if(obj.css("opacity") == "0"){
+                    obj.css({
+                        visibility: "visible",
+                        opacity: "1",
+                        height: "calc(100% - 30px)"
+                    });
+                    obj.addClass("active");
+                }else{
+                    obj.css({
+                        visibility: "hidden",
+                        opacity: "0",
+                        height: "0%"
+                    });
+                    obj.removeClass("active");
+                }
+            }
+            
             botaoVerProdutos.off().on("click", function(){
                 var id = $(this).attr("id-pedido");
                 toggleVerProdutos(id);
             });
             
+            botaoVerInfo.off().on("click", function(){
+                var id = $(this).attr("id-pedido");
+                toggleInfoPedido(id);
+            });
+            
             botaoVoltar.off().on("click", function(){
                 var id = $(this).attr("id-pedido");
                 toggleVerProdutos(id);
+            });
+            
+            botaoVoltarInfo.off().on("click", function(){
+                var id = $(this).attr("id-pedido");
+                toggleInfoPedido(id);
             });
         });
     </script>

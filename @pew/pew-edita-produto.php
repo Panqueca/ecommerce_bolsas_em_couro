@@ -1046,12 +1046,13 @@
                                         echo "<li class='box-categoria'><label><i class='fas fa-folder icone'></i>$categoria<input type='checkbox' value='$idCategoria' class='check-categorias' name='categorias[]' $checkedCategoria></label>";
                                         if($totalSubcategorias > 0){
                                             echo "<ul class='list-subcategorias $classeSub' $styleSub>";
-                                            $querySubcategorias = mysqli_query($conexao, "select subcategoria, id from $tabela_subcategorias where $condicaoSubcategorias");
+                                            $querySubcategorias = mysqli_query($conexao, "select subcategoria, id, ref from $tabela_subcategorias where $condicaoSubcategorias");
                                             while($subcategorias = mysqli_fetch_array($querySubcategorias)){
                                                 $idSubcategoria = $subcategorias["id"];
                                                 $subcategoria = $subcategorias["subcategoria"];
+                                                $refSubcategoria = $subcategorias["ref"];
                                                 $checkedSub = isset($selectedSubcategorias[$idSubcategoria]) == true ? "checked" : "";
-                                                echo "<li class='box-subcategoria'><label><i class='fas fa-folder icone'></i> $subcategoria<input type='checkbox' value='$subcategoria||$idSubcategoria' class='check-subcategorias' $checkedSub name='subcategorias[]'></label></li>";
+                                                echo "<li class='box-subcategoria'><label><i class='fas fa-folder icone'></i> $subcategoria<input type='checkbox' value='$refSubcategoria||$idCategoria' class='check-subcategorias' $checkedSub name='subcategorias[]'></label></li>";
                                             }
                                             echo "</ul>";
                                         }

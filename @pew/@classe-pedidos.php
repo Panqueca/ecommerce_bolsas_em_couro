@@ -22,6 +22,7 @@
         private $estado = "PR";
         private $valor_total = 0;
         private $data_controle;
+        private $status_transporte = 0;
         private $status = 0;
         public $global_vars;
         public $pew_functions;
@@ -59,7 +60,17 @@
                 $this->cidade = $info["cidade"];
                 $this->estado = $info["estado"];
                 $this->data_controle = $info["data_controle"];
+                $this->status_transporte = $info["status_transporte"];
                 $this->status = $info["status"];
+                
+                $_POST["console"] = false;
+                $_POST["codigo_referencia"] = $info["referencia"];
+                require_once "../pagseguro/ws-pagseguro-consulta-referencia.php"; // Retorna o $statusPagseguro
+                
+                if($statusPagseguro != $info["status"]){
+                    mysqli_query($conexao, "update $tabela_pedidos set status = '$statusPagseguro' where id = '{$info["id"]}'");
+                    $this->status = $statusPagseguro;
+                }
                 
                 $tokenCarrinho = $info["token_carrinho"];
                 
@@ -150,8 +161,8 @@
             }
         }
         
-        function get_status_string(){
-            switch($this->status){
+        function get_status_string($status){
+            switch($status){
                 case 1:
                     $str = "Aguardando pagamento";
                     break;
@@ -179,6 +190,50 @@
             return $str;
         }
         
+        function get_status_transporte_string($status){
+            switch($status){
+                case 1:
+                    $str = "Enviado";
+                    break;
+                case 2:
+                    $str = "Entregue";
+                    break;
+                case 3:
+                    $str = "Cancelado";
+                    break;
+                default:
+                    $str = "Confirmar pagamento";
+            }
+            return $str;
+        }
+        
+        function get_pagamento_string($codigo){
+            switch($codigo){
+                case 1:
+                    $str = "Cartão de crédito";
+                    break;
+                case 2:
+                    $str = "Boleto";
+                    break;
+                case 3:
+                    $str = "Débito online";
+                    break;
+                case 4:
+                    $str = "Saldo PagSeguro";
+                    break;
+                case 5:
+                    $str = "Oi Paggo";
+                    break;
+                case 6:
+                    $str = "Depósito em conta";
+                    break;
+                default:
+                    $str = "Não especificado";
+            }
+            
+            return $str;
+        }
+        
         function get_transporte_string(){
             switch($this->status){
                 case "40010":
@@ -203,7 +258,9 @@
                 if($listar){
                     $infoProduto = $this->montar_array();
                     
-                    $statusStr = $this->get_status_string();
+                    $statusStr = $this->get_status_string($this->status);
+                    $statusTransporteStr = $this->get_status_transporte_string($this->status_transporte);
+                    $pagamentoStr = $this->get_pagamento_string($this->codigo_pagamento);
                     $transporteStr = $this->get_transporte_string();
                     
                     $data = substr($this->data_controle, 0, 10);
@@ -211,6 +268,10 @@
                     $horario = substr($this->data_controle, 10);
                     
                     $valor = $this->pew_functions->custom_number_format($this->valor_total);
+                    
+                    $txtComplemento = $this->complemento != "" ? ", ".$this->complemento : "";
+                    
+                    $enderecoFinal = $this->rua . ", ". $this->numero . $txtComplemento . " - " . $this->cep . " - " . $this->cidade . " | " . $this->estado;
                     
                     echo "<div class='box-produto' id='boxProduto$id'>";
                         echo "<div class='informacoes'>";
@@ -228,28 +289,29 @@
                                 echo "<h3 class='descricao'>$data</h3>";
                             echo "</div>";
                             echo "<div class='half box-info'>";
-                                echo "<h4 class='titulo'><i class='far fa-clock'></i> Hora</h4>";
-                                echo "<h3 class='descricao'>$horario</h3>";
+                                echo "<h4 class='titulo'><i class='fas fa-dollar-sign'></i> Valor</h4>";
+                                echo "<h3 class='descricao'>R$ $valor</h3>";
                             echo "</div>";
                             echo "<div class='half box-info clear'>";
                                 echo "<h4 class='titulo'><i class='fas fa-truck'></i> Transporte</h4>";
                                 echo "<h3 class='descricao'>$transporteStr</h3>";
                             echo "</div>";
                             echo "<div class='half box-info'>";
-                                echo "<h4 class='titulo'><i class='fas fa-dollar-sign'></i> Valor</h4>";
-                                echo "<h3 class='descricao'>R$ $valor</h3>";
+                                echo "<h4 class='titulo'><i class='fas fa-parachute-box'></i> Entrega</h4>";
+                                echo "<h3 class='descricao'>$statusTransporteStr</h3>";
                             echo "</div>";
                             echo "<div class='bottom-buttons group clear'>";
                                 echo "<div class='box-button' style='margin: 0px;'>";
                                     echo "<a class='btn-alterar btn-alterar-produto botao-ver-produtos' title='Clique para fazer alterações no produto' id-pedido='idPedido$id'>Ver produtos</a>";;
                                 echo "</div>";
                                 echo "<div class='box-button' style='margin: 0px;'>";
-                                    echo "<a class='btn-alterar btn-alterar-produto' title='Mais informações'>Mais informações</a>";
+                                    echo "<a class='btn-alterar btn-alterar-produto botao-ver-info' title='Mais informações' id-pedido='infoPedido$id'>Mais informações</a>";
                                 echo "</div>";
                             echo "</div>";
                         echo "</div>";
+                        // Produtos da compra
                         echo "<div class='display-produtos-pedido' id='idPedido$id'>";
-                            echo "<h3 class='titulo'>Produtos do pedido: <b>{$this->referencia}</b></h3>";
+                            echo "<h3 class='titulo-info'>Produtos do pedido: <b>{$this->referencia}</b></h3>";
                             $selectedProdutos = $this->get_produtos_pedido();
                             if(is_array($selectedProdutos)){
                                 foreach($selectedProdutos as $infoProduto){
@@ -264,8 +326,35 @@
                                         echo "<div class='subtotal'>$subtotal</div>";
                                     echo "</div>";
                                 }
-                                echo "<button class='btn-voltar' id-pedido='idPedido$id'>Voltar</button>";
+                                echo "<button class='btn-voltar btn-voltar-produtos' id-pedido='idPedido$id'>Voltar</button>";
                             }
+                        echo "</div>";
+                        // Informações adicionais
+                        echo "<div class='display-info-pedido' id='infoPedido$id'>";
+                                echo "<div class='informacoes'>";
+                                    echo "<div class='half box-info'>";
+                                        echo "<h4 class='titulo'><i class='fas fa-credit-card'></i> Pagamento</h4>";
+                                        echo "<h3 class='descricao'>$pagamentoStr</h3>";
+                                    echo "</div>";
+                                    echo "<div class='half box-info'>";
+                                        echo "<h4 class='titulo'><i class='fas fa-id-card'></i> CPF</h4>";
+                                        echo "<h3 class='descricao'>{$this->pew_functions->mask($this->cpf_cliente, "###.###.###-##")}</h3>";
+                                    echo "</div>";
+                                    echo "<div class='full clear box-info'>";
+                                        echo "<h4 class='titulo'><i class='far fa-envelope'></i> E-mail</h4>";
+                                        echo "<h3 class='descricao'>{$this->email_cliente}</h3>";
+                                    echo "</div>";
+                                    echo "<div class='full box-info'>";
+                                        echo "<h4 class='titulo'><i class='fas fa-map-marker'></i> Endereço entrega</h4>";
+                                        echo "<h3 class='descricao'>$enderecoFinal</h3>";
+                                    echo "</div>";
+                                    echo "<div class='half box-info'>";
+                                        echo "<h4 class='titulo'><i class='far fa-clock'></i> Hora</h4>";
+                                        echo "<h3 class='descricao'>$horario</h3>";
+                                    echo "</div>";
+                                echo "</div>";
+                                echo "<button class='btn-voltar btn-voltar-info' id-pedido='infoPedido$id'>Voltar</button>";
+                            echo "</div>";
                         echo "</div>";
                     echo "</div>";
                 }

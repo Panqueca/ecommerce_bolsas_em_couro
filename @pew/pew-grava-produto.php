@@ -101,22 +101,19 @@
             /*INSERE CATEGORIAS*/
             if($categoriasProduto != ""){
                 foreach($categoriasProduto as $idCategoria){
-                    $queryCategoria = mysqli_query($conexao, "select categoria from $tabela_categorias where id = '$idCategoria'");
-                    $arrayCategoria = mysqli_fetch_array($queryCategoria);
-                    $tituloCategoria = addslashes($arrayCategoria["categoria"]);
-                    mysqli_query($conexao, "insert into $tabela_categorias_produtos (id_produto, id_categoria, titulo_categoria) values ('$idProduto', '$idCategoria', '$tituloCategoria')");
+                    mysqli_query($conexao, "insert into $tabela_categorias_produtos (id_produto, id_categoria) values ('$idProduto', '$idCategoria')");
                 }
             }
             /*INSERE SUBCATEGORIAS*/
             if($subcategoriasProduto != ""){
                 foreach($subcategoriasProduto as $infoSubcategoria){
                     $info = explode("||", $infoSubcategoria);
-                    $tituloSubcategoria = addslashes($info[0]);
+                    $refSubcategoria = addslashes($info[0]);
                     $idCategoriaPrincipal = $info[1];
-                    $querySubcategoria = mysqli_query($conexao, "select id from $tabela_subcategorias where subcategoria = '$tituloSubcategoria'");
+                    $querySubcategoria = mysqli_query($conexao, "select id from $tabela_subcategorias where ref = '$refSubcategoria'");
                     $arraySubcategoria = mysqli_fetch_array($querySubcategoria);
                     $idSubcategoria = $arraySubcategoria["id"];
-                    mysqli_query($conexao, "insert into $tabela_subcategorias_produtos (id_produto, id_categoria, id_subcategoria, titulo_subcategoria) values ('$idProduto', '$idCategoriaPrincipal', '$idSubcategoria', '$tituloSubcategoria')");
+                    mysqli_query($conexao, "insert into $tabela_subcategorias_produtos (id_produto, id_categoria, id_subcategoria) values ('$idProduto', '$idCategoriaPrincipal', '$idSubcategoria')");
                 }
             }
             /*INSERE ESPECIFICAÇÕES PRODUTO*/

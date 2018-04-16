@@ -225,6 +225,8 @@
             $(document).ready(function(){
                 console.log("Página carregada");
                 
+                input_mask(".mascara-cep-finaliza", "99999-999");
+                
                 /*CALCULO DE FRETE*/
                 var displayResultadoFrete = $(".display-resultados-frete .span-frete");
                 var iconLoading = "<i class='fas fa-spinner fa-spin icone-loading icon-button'></i>";
@@ -737,7 +739,7 @@
                             $subtotal = $pew_functions->custom_number_format($subtotal);
                             $totalItens += $subtotal;
                             $condicao = "id_produto = '$idProduto'";
-                            $queryImagem = mysqli_query($conexao, "select * from $tabela_imagens_produtos where $condicao order by posicao desc");
+                            $queryImagem = mysqli_query($conexao, "select * from $tabela_imagens_produtos where $condicao order by posicao asc");
                             $infoImagem = mysqli_fetch_array($queryImagem);
                             $imagem = $infoImagem["imagem"];
                             if(!file_exists($dirImagens."/".$imagem) || $imagem == ""){
@@ -804,42 +806,42 @@
                                     echo "</label>";
                                     echo "<div class='endereco-alternativo'>";
                                     ?>
-                                        <div class='label-medium'>
+                                        <div class='label medium'>
                                             <h4 class='input-title'>CEP</h4>
-                                            <input type='text' placeholder='00000-000' name='cep' id='newCep' tabindex='1' class='mascara-cep input-standard'>
+                                            <input type='text' placeholder='00000-000' name='cep' id='newCep' tabindex='1' class='mascara-cep-finaliza input-standard'>
                                             <h6 class='msg-input'></h6>
                                         </div>
-                                        <div class='label-large'>
+                                        <div class='label large'>
                                             <h4 class='input-title'>Rua</h4>
                                             <input type='text' placeholder='Rua' name='rua' id='newRua' class='input-nochange input-standard' readonly>
                                             <h6 class='msg-input'></h6>
                                         </div>
                                         <br style='clear: both'>
-                                        <div class='label-medium'>
+                                        <div class='label medium'>
                                             <h4 class='input-title'>Número</h4>
                                             <input type='text' placeholder='Numero' name='numero' id='newNumero' tabindex='2' class='input-standard'>
                                             <h6 class='msg-input'></h6>
                                         </div>
-                                        <div class='label-medium'>
+                                        <div class='label medium'>
                                             <h4 class='input-title'>Complemento</h4>
                                             <input type='text' placeholder='Complemento' name='complemento' id='newComplemento' tabindex='3' class='input-standard'>
                                             <h6 class='msg-input'></h6>
                                         </div>
-                                        <div class='label-medium'>
+                                        <div class='label medium'>
                                             <h4 class='input-title'>Bairro</h4>
                                             <input type='text' placeholder='Bairro' name='bairro' id='newBairro' class='input-nochange input-standard' readonly>
                                         </div>
                                         <div class='group'>
-                                            <div class='label-medium'>
+                                            <div class='label medium'>
                                                 <h4 class='input-title'>Estado</h4>
                                                 <input type='text' placeholder='Estado' name='estado' id='newEstado' class='input-nochange input-standard' readonly>
                                             </div>
-                                            <div class='label-medium'>
+                                            <div class='label medium'>
                                                 <h4 class='input-title'>Cidade</h4>
                                                 <input type='text' placeholder='Cidade' name='cidade' id='newCidade' class='input-nochange input-standard' readonly>
                                             </div>
                                         </div>
-                                        <div class='label-full clear'>
+                                        <div class='label full clear'>
                                             <button class='botao-salvar salvar-new-endereco' type='button'>SALVAR</button>
                                         </div>
                                     <?php

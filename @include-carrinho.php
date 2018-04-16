@@ -142,6 +142,7 @@
                                 adicionandoCarrinho = false;
                             },
                             success: function(resposta){
+                                console.log(resposta);
                                 if(resposta == "true"){
                                     notificacaoPadrao("<i class='fas fa-times'></i> Produto removido", "success");
                                 }else{
