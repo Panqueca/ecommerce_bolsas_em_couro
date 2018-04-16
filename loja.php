@@ -134,13 +134,13 @@
                     $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
                     
                     foreach($selectedCategoria as $idProduto){
-                        if(array_search($idProduto, $selectedDepartamento) >= 0){
+                        if(array_search($idProduto, $selectedDepartamento) >= 0 && array_search($idProduto, $selectedDepartamento) != null){
                             $selected[$ctrlSelected] = $idProduto;
                             $ctrlSelected++;
                         }
                     }
                     foreach($selectedSubcategoria as $idProduto){
-                        if(array_search($idProduto, $selected) >= 0){
+                        if(array_search($idProduto, $selected) >= 0 && array_search($idProduto, $selected) != null){
                             $selectedFinal[$ctrlSelectedFinal] = $idProduto;
                             $ctrlSelectedFinal++;
                         }
@@ -150,7 +150,7 @@
                     $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
                     
                     foreach($selectedSubcategoria as $idProduto){
-                        if(array_search($idProduto, $selectedCategoria) >= 0){
+                        if(array_search($idProduto, $selectedCategoria) >= 0 && array_search($idProduto, $selectedCategoria) != null){
                             $selectedFinal[$ctrlSelectedFinal] = $idProduto;
                             $ctrlSelectedFinal++;
                         }
@@ -178,7 +178,7 @@
                     $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
                     
                     foreach($selectedCategoria as $idProduto){
-                        if(array_search($idProduto, $selectedDepartamento) >= 0){
+                        if(array_search($idProduto, $selectedDepartamento) >= 0 && array_search($idProduto, $selectedDepartamento) != null){
                             $selectedFinal[$ctrlSelectedFinal] = $idProduto;
                             $ctrlSelectedFinal++;
                         }
