@@ -1,5 +1,5 @@
 <?php
-    $post_fields = array("id_produto", "sku", "nome", "marca", "id_cor", "preco", "preco_promocao", "promocao_ativa", "estoque", "estoque_baixo", "tempo_fabricacao", "descricao_curta", "descricao_longa", "url_video", "peso", "comprimento", "largura", "altura", "status");
+    $post_fields = array("id_produto", "sku", "nome", "marca", "id_cor", "preco", "preco_promocao", "promocao_ativa", "desconto_relacionado","estoque", "estoque_baixo", "tempo_fabricacao", "descricao_curta", "descricao_longa", "url_video", "peso", "comprimento", "largura", "altura", "status");
     $file_fields = array();
     $invalid_fields = array();
     $gravar = true;
@@ -35,6 +35,8 @@
         $precoProduto = $pew_functions->custom_number_format($precoProduto);
         $precoPromocaoProduto = $_POST["preco_promocao"];
         $precoPromocaoProduto = $pew_functions->custom_number_format($precoPromocaoProduto);
+        $descontoRelacionado = isset($_POST["desconto_relacionado"]) && $_POST["desconto_relacionado"] ? $_POST["desconto_relacionado"] : 0;
+        $descontoRelacionado = $pew_functions->custom_number_format($descontoRelacionado);
         $promocaoAtiva = intval($_POST["promocao_ativa"]) == 1 ? 1 : 0;
         $estoqueProduto = (int)$_POST["estoque"] != "" ? (int)$_POST["estoque"] : 0;
         $estoqueBaixoProduto = (int)$_POST["estoque_baixo"] != "" ? (int)$_POST["estoque_baixo"] : 1;
@@ -87,7 +89,7 @@
             $condicaoCor = "id = '$idCor'";
             $idCor = $pew_functions->contar_resultados($tabela_cores, $condicaoCor) > 0 ? $idCor : null;
             
-            mysqli_query($conexao, "update $tabela_produtos set sku = '$skuProduto', nome = '$nomeProduto', marca = '$marcaProduto', id_cor = '$idCor', preco = '$precoProduto', preco_promocao = '$precoPromocaoProduto', promocao_ativa = '$promocaoAtiva', estoque = '$estoqueProduto', estoque_baixo = '$estoqueBaixoProduto', tempo_fabricacao = '$tempoFabricacaoProduto', descricao_curta = '$descricaoCurtaProduto', descricao_longa = '$descricaoLongaProduto', url_video = '$urlVideoProduto', peso = '$pesoProduto', comprimento = '$comprimentoProduto', largura = '$larguraProduto', altura = '$alturaProduto', data = '$dataAtual', status = '$statusProduto' where id = '$idProduto'");
+            mysqli_query($conexao, "update $tabela_produtos set sku = '$skuProduto', nome = '$nomeProduto', marca = '$marcaProduto', id_cor = '$idCor', preco = '$precoProduto', preco_promocao = '$precoPromocaoProduto', promocao_ativa = '$promocaoAtiva', desconto_relacionado = '$descontoRelacionado', estoque = '$estoqueProduto', estoque_baixo = '$estoqueBaixoProduto', tempo_fabricacao = '$tempoFabricacaoProduto', descricao_curta = '$descricaoCurtaProduto', descricao_longa = '$descricaoLongaProduto', url_video = '$urlVideoProduto', peso = '$pesoProduto', comprimento = '$comprimentoProduto', largura = '$larguraProduto', altura = '$alturaProduto', data = '$dataAtual', status = '$statusProduto' where id = '$idProduto'");
 
             /*ATUALIZA DEPARTAMENTOS*/
             if($departamentosProduto != ""){

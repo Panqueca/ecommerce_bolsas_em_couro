@@ -960,6 +960,8 @@
                     $precoProduto = $pew_functions->custom_number_format($precoProduto);
                     $precoPromocaoProduto = $infoProduto["preco_promocao"];
                     $precoPromocaoProduto = $pew_functions->custom_number_format($precoPromocaoProduto);
+                    $descontoRelacionado = $infoProduto["desconto_relacionado"];
+                    $descontoRelacionado = $pew_functions->custom_number_format($descontoRelacionado);
                     $promocaoAtiva = $infoProduto["promocao_ativa"];
                     $marcaProduto = $infoProduto["marca"];
                     $estoqueProduto = $infoProduto["estoque"];
@@ -1025,7 +1027,7 @@
                     $precoProduto = null;
                     $precoProduto = null;
                     $precoPromocaoProduto = null;
-                    $precoPromocaoProduto = null;
+                    $descontoRelacionado = null;
                     $promocaoAtiva = null;
                     $marcaProduto = null;
                     $estoqueProduto = 1;
@@ -1346,8 +1348,12 @@
                 </div>
                 <div class="small" align=left>
                     <!--PRODUTOS RELACIONADOS-->
+                    <div class="label medium">
+                        <h2 class='label-title'>% Desconto</h2>
+                        <input type="number" step="any" name="desconto_relacionado" id="descontoRelacionado" placeholder="30%" class="label-input" value="<?php echo $descontoRelacionado;?>">
+                    </div>
                     <h3 class="label-title">Produtos Relacionados</h3>
-                    <a class="btn-relacionados" id="btn-produtos-relacionados">Produtos Selecionados <?php echo "(".$ctrlRelacionados.")";?></a>
+                    <a class="btn-relacionados" id="btn-produtos-relacionados" style="float: left;">Produtos Selecionados <?php echo "(".$ctrlRelacionados.")";?></a>
                     <div class="display-relacionados" id="display-produtos-relacionados">
                         <div class="header-relacionados">
                             <h3 class="title-relacionados">Produtos relacionados</h3>
