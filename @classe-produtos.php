@@ -8,6 +8,7 @@
         private $preco;
         private $preco_promocao;
         private $promocao_ativa;
+        private $desconto_relacionado;
         private $marca;
         private $id_cor;
         private $estoque;
@@ -163,6 +164,7 @@
                 $this->preco = $this->pew_functions->custom_number_format($info["preco"]);
                 $this->preco_promocao = $this->pew_functions->custom_number_format($info["preco_promocao"]);
                 $this->promocao_ativa = $this->pew_functions->custom_number_format($info["promocao_ativa"]);
+                $this->desconto_relacionado = $this->pew_functions->custom_number_format($info["desconto_relacionado"]);
                 $this->marca = $info["marca"];
                 $this->id_cor = $info["id_cor"];
                 $this->estoque = $info["estoque"];
@@ -212,6 +214,9 @@
         }
         public function get_promocao_ativa(){
             return $this->promocao_ativa;
+        }
+        public function get_desconto_relacionado(){
+            return $this->desconto_relacionado;
         }
         public function get_marca_produto(){
             return $this->marca;
@@ -454,6 +459,7 @@
                 $infoProduto["preco"] = $this->get_preco_produto();
                 $infoProduto["preco_promocao"] = $this->get_preco_promocao_produto();
                 $infoProduto["promocao_ativa"] = $this->get_promocao_ativa();
+                $infoProduto["desconto_relacionado"] = $this->get_desconto_relacionado();
                 $infoProduto["marca"] = $this->get_marca_produto();
                 $infoProduto["id_cor"] = $this->get_id_cor_produto();
                 $infoProduto["estoque"] = $this->get_estoque_produto();

@@ -1342,16 +1342,12 @@
                 <br style="clear: both;">
                 <br style="clear: both;">
                 <!--LINHA 7-->
-                <div class="label half" align="left">
+                <div class="label medium" align="left">
                     <h3 class="label-title">Iframe Vídeo</h3>
                     <input type="text" class="label-input" name="url_video" placeholder="<iframe></iframe>" value="<?php echo $urlVideoProduto; ?>">
                 </div>
                 <div class="small" align=left>
                     <!--PRODUTOS RELACIONADOS-->
-                    <div class="label medium">
-                        <h2 class='label-title'>% Desconto</h2>
-                        <input type="number" step="any" name="desconto_relacionado" id="descontoRelacionado" placeholder="30%" class="label-input" value="<?php echo $descontoRelacionado;?>">
-                    </div>
                     <h3 class="label-title">Produtos Relacionados</h3>
                     <a class="btn-relacionados" id="btn-produtos-relacionados" style="float: left;">Produtos Selecionados <?php echo "(".$ctrlRelacionados.")";?></a>
                     <div class="display-relacionados" id="display-produtos-relacionados">
@@ -1392,6 +1388,10 @@
                         </div>
                     </div>
                     <!--END PRODUTOS RELACIONADOS-->
+                </div>
+                <div class="label xsmall">
+                    <h2 class='label-title'>% Desconto</h2>
+                    <input type="number" step="any" name="desconto_relacionado" id="descontoRelacionado" placeholder="0" class="label-input" value="<?php echo $descontoRelacionado;?>">
                 </div>
                 <script type="text/javascript" src="js/include-cores-relacionadas.js"></script>
                 <div class="small" align=left>
