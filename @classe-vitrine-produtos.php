@@ -215,14 +215,16 @@
             }
         }
 
-        public function vitrine_carrossel(){
+        public function vitrine_carrossel($arrayProdutos = array()){
             $tabela_cores = $this->global_vars["tabela_cores"];
             $conexao = $this->global_vars["conexao"];
             $functions = $this->pew_functions;
             
+            $ctrlProdutos = 0;
+            
             if(!function_exists("listar_produto")){
                 function listar_produto($idProduto){
-                    global $conexao, $tabela_cores, $functions;
+                    global $conexao, $tabela_cores, $functions, $ctrlProdutos;
                     /*STANDARD VARS*/
                     $nomeLoja = "BOLSAS EM COURO";
                     $dirImagensProdutos = "imagens/produtos";
@@ -249,20 +251,34 @@
                     $nomeEllipses = strlen(str_replace(" ", "", $nome)) > $maxCaracteres ? trim(substr($nome, 0, $maxCaracteres))."..." : $nome;
                     $qtdParcelas = 6;
                     $txtParcelas = $qtdParcelas."x";
+                    
+                    $intPorcentoDesconto = 5;
+                    $multiplicador = $intPorcentoDesconto * 0.01;
                     $preco = $infoProduto["preco"];
                     $precoPromocao = $infoProduto["preco_promocao"];
+                    
                     $promoAtiva = $precoPromocao > 0 && $precoPromocao < $preco ? true : false;
                     $precoParcela = $promoAtiva == true ? $precoPromocao / $qtdParcelas : $preco / $qtdParcelas;
-                    $priceField = $promoAtiva == true ? "<span class='view-preco'>De <span class='promo-price'>R$".number_format($preco, 2, ",", ".")."</span></span> por <span class='view-preco'><span class='price'>R$".number_format($precoPromocao, 2, ",", ".")."</span></span>" : "<span class='view-preco'><span class='price'>R$ ". number_format($preco, 2, ",", ".")."</span></span>";
+                    
+                    if($promoAtiva){
+                        $desconto = $precoPromocao * $multiplicador;
+                        $precoCompreJunto = $preco - $desconto;
+                    }else{
+                        $desconto = $preco * $multiplicador;
+                        $precoCompreJunto = $preco - $desconto;
+                    }
+                    $priceField = "<span class='view-preco'>De <span class='promo-price'>R$".number_format($preco, 2, ",", ".")."</span></span> por <span class='view-preco'><span class='price'>R$".number_format($precoCompreJunto, 2, ",", ".")."</span></span>";
                     $urlProduto = "interna-produto.php?id_produto=$idProduto";
                     /*END VARIAVEIS DO PRODUTO*/
+                    
 
                     /*DISPLAY DO PRODUTO*/
                     echo "<div class='box-produto'>";
+                        echo "<div class='promo-tag'>-$intPorcentoDesconto%</div>";
                         echo "<a href='$urlProduto'><img src='$dirImagensProdutos/$srcImagem' title='$nome' alt='$nome - $nomeLoja'></a>";
                         echo "<a href='$urlProduto' class='title-link'><h3 class='titulo-produto' title='$nome'>$nomeEllipses</h3></a>";
                         echo "<h4 class='preco-produto'>$priceField ou <span class='view-parcelas'>$txtParcelas R$". number_format($precoParcela, 2, ",", ".") ."</span></h4>";
-                        echo "<a href='$urlProduto' class='call-to-action'>COMPRAR</a>";
+                        echo "<a class='call-to-action botao-add-compre-junto' carrinho-id-produto='$idProduto'>Adicionar</a>";
                         echo "<div class='display-cores'>";
                             if(is_array($infoCoresRelacionadas) and count($infoCoresRelacionadas) > 0){
                                 foreach($infoCoresRelacionadas as $id => $info){
@@ -288,6 +304,7 @@
                         echo "</div>";
                     echo "</div>";
                     /*END DISPLAY DO PRODUTO*/
+                    $ctrlProdutos++;
                 }
             }
 
@@ -298,17 +315,14 @@
                     echo "<article class='descricao-vitrine'>".$this->descricao_vitrine."</article>";
                 }
                 echo "<div class='display-produtos'>";
-                $except_ids = "";
-                $ctrlProdutos = 0;
-                for($i = 1; $i <= $this->limite_produtos; $i++){
-                    $produto = new Produtos();
-                    $idProduto = $produto->query_produto("status = 1 $except_ids");
-                    if($idProduto != false){
-                        $except_ids .= " and id != '$idProduto'"; # Exeto os produtos já selecionados #
+                
+                if(count($arrayProdutos) > 0){
+                    foreach($arrayProdutos as $idProduto){
                         listar_produto($idProduto);
-                        $ctrlProdutos++;
                     }
                 }
+                    
+            
                 if($ctrlProdutos == 0){
                     echo "<h3 class='mensagem-no-result'><i class='fas fa-search'></i> Nenhum produto foi encontrado</h3>";
                 }

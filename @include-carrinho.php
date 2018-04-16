@@ -15,6 +15,41 @@
         // PAGINA INTERNA DO PRODUTO
         var botaoComprar = $("#addProdutoCarrinho");
         var adicionandoCarrinho = false;
+        
+        var botaoCompreJunto = $(".botao-add-compre-junto");
+        
+        function add_produto(idProduto, quantidade){
+            if(idProduto != "undefined" && idProduto > 0){
+                adicionandoCarrinho = true;
+                quantidade = quantidade <= 0 ? 1 : quantidade;
+                $.ajax({
+                    type: "POST",
+                    url: "@classe-carrinho-compras.php",
+                    data: {acao_carrinho: "adicionar_produto", id_produto: idProduto, quantidade: quantidade},
+                    error: function(){
+                        notificacaoPadrao("Ocorreu um erro ao adicionar o produto ao carrinho");
+                        adicionandoCarrinho = false;
+                    },
+                    success: function(resposta){
+                        console.log(resposta)
+                        if(resposta == "true"){
+                            notificacaoPadrao("<i class='fas fa-plus'></i> Produto adicionado", "success");
+                        }else if(resposta == "sem_estoque"){
+                            notificacaoPadrao("<i class='fas fa-exclamation-circle'></i> Produto sem estoque");
+                        }else if(resposta > 0){
+                            notificacaoPadrao("<i class='fas fa-exclamation-circle'></i> Estoque insuficiente + " + resposta + " adicionados", "success");
+                        }else{
+                            notificacaoPadrao("Ocorreu um erro ao adicionar o produto ao carrinho");
+                        }
+                        get_quantidade();
+                    }
+
+                });
+            }else{
+                notificacaoPadrao("Ocorreu um erro ao adicionar o produto ao carrinho");
+            }
+        }
+        
         if(typeof botaoComprar != "undefined"){
             var idProduto = botaoComprar.attr("carrinho-id-produto");
             botaoComprar.off().on("click", function(){
@@ -22,41 +57,24 @@
                 var quantidade = 1;
                 if(objQuantidade.val() == 0 || objQuantidade.val() == "" && typeof objQuantidade != "undefined"){
                     objQuantidade.val("1");
-                    quantidade = 1;
                 }else if(typeof objQuantidade == "undefined"){
                     quantidade = 1;
                 }else{
                     quantidade = objQuantidade.val();
                 }
-                if(idProduto != "undefined" && idProduto > 0){
-                    adicionandoCarrinho = true;
-                    var quantidade = objQuantidade.val();
-                    $.ajax({
-                        type: "POST",
-                        url: "@classe-carrinho-compras.php",
-                        data: {acao_carrinho: "adicionar_produto", id_produto: idProduto, quantidade: quantidade},
-                        error: function(){
-                            notificacaoPadrao("Ocorreu um erro ao adicionar o produto ao carrinho");
-                            adicionandoCarrinho = false;
-                        },
-                        success: function(resposta){
-                            console.log(resposta)
-                            if(resposta == "true"){
-                                notificacaoPadrao("<i class='fas fa-plus'></i> Produto adicionado", "success");
-                            }else if(resposta == "sem_estoque"){
-                                notificacaoPadrao("<i class='fas fa-exclamation-circle'></i> Produto sem estoque");
-                            }else{
-                                notificacaoPadrao("Ocorreu um erro ao adicionar o produto ao carrinho");
-                            }
-                            get_quantidade();
-                        }
-                        
-                    });
-                }else{
-                    notificacaoPadrao("Ocorreu um erro ao adicionar o produto ao carrinho");
-                }
+                add_produto(idProduto, quantidade);
             });
         }
+        
+        botaoCompreJunto.each(function(){
+            var botao = $(this);
+            var idProduto = botao.attr("carrinho-id-produto");
+            var quantidade = 1;
+            botao.off().on("click", function(){
+                add_produto(idProduto, quantidade);
+            });
+        });
+        
         // END PAGINA INTERNA DO PRODUTO
         
         // CARRINHO HEADER

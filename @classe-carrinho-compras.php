@@ -59,6 +59,7 @@
             $tabela_produtos = $this->global_vars["tabela_produtos"];
             $total = $this->pew_functions->contar_resultados($tabela_produtos, "id = '$idProduto'");
             $quantidade = $quantidade == 0 ? 1 : $quantidade;
+            
             if($total > 0){
                 $this->classe_produtos->montar_produto($idProduto);
                 $infoProduto = $this->classe_produtos->montar_array();
@@ -92,15 +93,19 @@
                     }
                 }
                 
-                if($infoProduto["estoque"] > 0 && $infoProduto["estoque"] >= $quantidade && $is_adicionado == false){
+                
+                if($infoProduto["estoque"] > 0 && $quantidade <= $infoProduto["estoque"] && $is_adicionado == false){
                     set_produto($infoProduto["id"], $infoProduto["nome"], $precoFinal, $infoProduto["estoque"], $quantidade, $infoProduto["comprimento"], $infoProduto["largura"], $infoProduto["altura"], $infoProduto["peso"], $this->ctrl_produtos);
                     $this->ctrl_produtos++;
                     return "true";
                     
-                }else if($is_adicionado == true){
+                }else if($is_adicionado == true && $quantidade <= $infoProduto["estoque"]){
                     set_produto($infoProduto["id"], $infoProduto["nome"], $precoFinal, $infoProduto["estoque"], $quantidade, $infoProduto["comprimento"], $infoProduto["largura"], $infoProduto["altura"], $infoProduto["peso"], $indice_item);
                     return "true";
                     
+                }else if($infoProduto["estoque"] > 0){
+                    set_produto($infoProduto["id"], $infoProduto["nome"], $precoFinal, $infoProduto["estoque"], $infoProduto["estoque"], $infoProduto["comprimento"], $infoProduto["largura"], $infoProduto["altura"], $infoProduto["peso"], $indice_item);
+                    return $infoProduto["estoque"];
                 }else{
                     return "sem_estoque";
                 }
@@ -116,7 +121,50 @@
         
         function get_carrinho(){
             $this->verify_session();
-            return $_SESSION["carrinho"];
+            $carrinho = array();
+            $carrinho["itens"] = array();
+            $carrinho["token"] = $_SESSION["carrinho"]["token"];
+            
+            $ctrl = 0;
+            
+            foreach($_SESSION["carrinho"]["itens"] as $itens){
+                $idProduto = $itens["id"];
+                $selectedRelacionados = $this->classe_produtos->get_relacionados_produto($idProduto, "id_relacionado = '$idProduto'");
+                $is_compre_junto = false;
+                
+                
+                $carrinho["itens"][$ctrl] = $itens;
+                
+                if(is_array($selectedRelacionados)){
+                    $selected = array();
+                    $ctrlInterno = 0;
+                    
+                    foreach($selectedRelacionados as $idRelacionado){
+                        $selected[$ctrlInterno] = $idRelacionado;
+                        $ctrlInterno++;
+                    }
+                    
+                    foreach($_SESSION["carrinho"]["itens"] as $index => $valor){
+                        foreach($selected as $index => $infoRel){
+                            if($valor["id"] == $infoRel["id_produto"]){
+                                $is_compre_junto = true;
+                            }
+                        }
+                    }
+                }
+                
+                if($is_compre_junto){
+                    $infoPrecoRelacionado = $this->classe_produtos->get_preco_relacionado($idProduto);
+                    $carrinho["itens"][$ctrl]["preco"] = $infoPrecoRelacionado["valor"];
+                    $carrinho["itens"][$ctrl]["desconto"] = $infoPrecoRelacionado["desconto"];
+                }
+                    
+                $ctrl++;
+            }
+            
+            //print_r($_SESSION["carrinho"]);
+            
+            return $carrinho;
         }
         
         function reset_carrinho(){
@@ -145,7 +193,7 @@
                             $retorno = "sem_estoque";
                             break;
                         default:
-                            $retorno = "false";
+                            $retorno = $addProduto;
                     }
                     echo $retorno;
                 }else{
@@ -203,7 +251,10 @@
         }else if($acao == "get_quantidade"){
             $carrinho = $cls_carrinho->get_carrinho();
             $itens = $carrinho["itens"];
-            $total = is_array($itens) ? count($itens) : 0;
+            $total = 0;
+            foreach($itens as $produto){
+                $total += $produto["quantidade"];
+            }
             echo $total;
         }
     }

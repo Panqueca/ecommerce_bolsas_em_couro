@@ -356,8 +356,9 @@
             }
             return $return;
         }
-        public function get_relacionados_produto(){
-            $condicao = "id_produto = '".$this->id."'";
+        public function get_relacionados_produto($idProduto = null, $condicao = null){
+            $idProduto = $idProduto == null ? $this->id : $idProduto;
+            $condicao = $condicao == null ? "id_produto = '$idProduto'" : $condicao;
             $tabela_produtos = $this->global_vars["tabela_produtos"];
             $tabela_produtos_relacionados = $this->global_vars["tabela_produtos_relacionados"];
             $totalEspecificacoes = $this->pew_functions->contar_resultados($tabela_produtos_relacionados, $condicao);
@@ -365,13 +366,14 @@
             if($totalEspecificacoes > 0){
                 $return = array();
                 $ctrlEspecificacoes = 0;
-                $queryRelacionados = mysqli_query($this->conexao(), "select id_relacionado from $tabela_produtos_relacionados where $condicao");
+                $queryRelacionados = mysqli_query($this->conexao(), "select id_relacionado, id_produto from $tabela_produtos_relacionados where $condicao");
                 while($infoRelacionado = mysqli_fetch_array($queryRelacionados)){
                     $condition = "id = '".$infoRelacionado["id_relacionado"]."'";
                     $totalProdRelacionado = $this->pew_functions->contar_resultados($tabela_produtos, $condition);
                     if($totalProdRelacionado > 0){
                         $return[$ctrlEspecificacoes] = array();
                         $return[$ctrlEspecificacoes]["id_relacionado"] = $infoRelacionado["id_relacionado"];
+                        $return[$ctrlEspecificacoes]["id_produto"] = $infoRelacionado["id_produto"];
                         $ctrlEspecificacoes++;
                     }
                 }
@@ -400,6 +402,37 @@
                 }
             }
             return $return;
+        }
+        
+        public function get_preco_relacionado($id){
+            $condicao = "id = $id";
+            $tabela_produtos = $this->global_vars["tabela_produtos"];
+            
+            $total = $this->pew_functions->contar_resultados($tabela_produtos, $condicao);
+            if($total > 0){
+                $this->montar_produto($id);
+                
+                $intPorcentoDesconto = 5;
+                $multiplicador = $intPorcentoDesconto * 0.01;
+
+                
+                if($this->promocao_ativa == 1 && $this->preco_promocao > 0 && $this->preco_promocao < $this->preco){
+                    $desconto = $this->preco_promocao * $multiplicador;
+                    $precoCompreJunto = $this->preco_promocao - $desconto;
+                    $retorno = array();
+                    $retorno = $precoCompreJunto;
+                }else{
+                    $desconto = $this->preco * $multiplicador;
+                    $precoCompreJunto = $this->preco - $desconto;
+                    $retorno = array();
+                    $retorno["valor"] = $precoCompreJunto;
+                    $retorno["desconto"] = $intPorcentoDesconto;
+                }
+                
+                return $retorno;
+            }else{
+                return false;
+            }
         }
         
         public function get_visualizacoes_produto(){

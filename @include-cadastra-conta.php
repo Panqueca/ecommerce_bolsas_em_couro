@@ -479,6 +479,43 @@
         input_mask(".mascara-cep", "99999-999");
         /*END SET MASCARAS*/
         
+        // PASSO 1
+        var objNome = $("#nome");
+        var objEmail = $("#email");
+        var objSenha = $("#senha");
+        var objConfirmaSenha = $("#confirmaSenha");
+        var objCelular = $("#celular");
+        var objCpf = $("#cpf");
+        var objSexo = $("#sexo");
+        var objDataNascimento = $("#dataNascimento");
+
+        // PASSO 2
+        var objCep = $("#cep");
+        var objRua = $("#rua");
+        var objNumero = $("#numero");
+        var objComplemento = $("#complemento");
+        var objBairro = $("#bairro");
+        var objCidade = $("#cidade");
+        var objEstado = $("#estado");
+        var objTermos = $("#termos");
+        
+        /*BUSCA ENDERECO*/
+        objCep.off().on("blur", function(){
+            var cep = $(this).val();
+
+            // ENDERECO
+            if(cep.length == 9){
+                var cepF = cep.replace("-", "");
+                buscarCEP(cepF, objRua, objEstado, objCidade, objBairro);
+            }else{
+                objRua.val("");
+                objBairro.val("");
+                objEstado.val("");
+                objCidade.val("");
+            }
+        });
+        /*BUSCA ENDERECO*
+        
         /*SET PASSOS*/
         var displayPassos = [];
         displayPassos[0] = $(".display-info-contato");
@@ -580,22 +617,6 @@
         /*MAIN FUNCTION*/
         function validarDadosConta(){
             /*FORM FIELDS*/
-            
-            // PASSO 1
-            var objNome = $("#nome");
-            var objEmail = $("#email");
-            var objSenha = $("#senha");
-            var objConfirmaSenha = $("#confirmaSenha");
-            var objCelular = $("#celular");
-            var objCpf = $("#cpf");
-            var objSexo = $("#sexo");
-            var objDataNascimento = $("#dataNascimento");
-            
-            // PASSO 2
-            var objCep = $("#cep");
-            var objRua = $("#rua");
-            var objNumero = $("#numero");
-            var objTermos = $("#termos");
             
             // ULTIMO PASSO
             var validacaoPassos = [];

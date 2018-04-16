@@ -14,10 +14,10 @@
     $dirImagensProduto = "imagens/produtos";
     /*END DEFAULT VARS*/
 
-    $idProduto = isset($_GET["id_produto"]) ? (int)$_GET["id_produto"] : 0;
-    $totalProduto = $pew_functions->contar_resultados($tabela_produtos, "id = '$idProduto'");
+    $idInternaProduto = isset($_GET["id_produto"]) ? (int)$_GET["id_produto"] : 0;
+    $totalProduto = $pew_functions->contar_resultados($tabela_produtos, "id = '$idInternaProduto'");
     $produto = new Produtos();
-    $produto->montar_produto($idProduto);
+    $produto->montar_produto($idInternaProduto);
     $infoProduto = $produto->montar_array();
 
     if($totalProduto > 0){
@@ -546,8 +546,7 @@
             <?php
 
             if($infoProduto != null){
-
-
+                
             /*INFO PRODUTO*/
             $nomeProduto = $infoProduto["nome"];
             $precoProduto = $infoProduto["preco"];
@@ -571,6 +570,7 @@
             $alturaProduto = $infoProduto["altura"];
             $pesoProduto = $infoProduto["peso"];
             /*END FRETE VARS*/
+                
 
             /*HTML VIEW*/
             $viewPriceField = null;
@@ -589,7 +589,7 @@
 
             $viewDisponibilidadadeField = $estoqueProduto == 0 ? "<div class='view-disponibilidade indisponivel'><span class='icone-disponibilidade'><i class='fas fa-times'></i></span> SEM ESTOQUE</div>" : "<div class='view-disponibilidade disponivel'><span class='icone-disponibilidade'><i class='fas fa-check'></i></span> EM ESTOQUE</div>";
 
-            $viewBotaoComprar = $estoqueProduto == 0 ? "<button class='botao-comprar sem-estoque'>COMPRAR</button>" : "<input type='number' class='quantidade-produto' value=1 placeholder='Qtd'><button  class='botao-comprar' id='addProdutoCarrinho' carrinho-id-produto='$idProduto'>COMPRAR</button>";
+            $viewBotaoComprar = $estoqueProduto == 0 ? "<button class='botao-comprar sem-estoque'>COMPRAR</button>" : "<input type='number' class='quantidade-produto' value=1 placeholder='Qtd'><button  class='botao-comprar' id='addProdutoCarrinho' carrinho-id-produto='$idInternaProduto'>COMPRAR</button>";
             /*END HTML VIEW*/
                 
             $iconArrow = "<i class='fas fa-angle-right icon'></i>";
@@ -674,7 +674,7 @@
                         <button class="botao-calculo-frete"><i class="fas fa-truck"></i></button>
                         <div class='resultado-frete'></div>
                         <div class="display-info-calculo-frete">
-                            <input type="hidden" id="freteIdProduto" value="<?php echo $idProduto; ?>">
+                            <input type="hidden" id="freteIdProduto" value="<?php echo $idInternaProduto; ?>">
                             <input type="hidden" id="freteTituloProduto" value="<?php echo $nomeProduto; ?>">
                             <input type="hidden" id="fretePrecoProduto" value="<?php echo $precoFrete; ?>">
                             <input type="hidden" id="freteComprimentoProduto" value="<?php echo $comprimentoProduto; ?>">
@@ -709,7 +709,7 @@
                     return $return;
                 }
                 
-                $selectedProdutosRelacionados = get_relacionados($idProduto);
+                $selectedProdutosRelacionados = get_relacionados($idInternaProduto);
                 
                 if($selectedProdutosRelacionados != false){
                     $vitrineProdutos[0] = new VitrineProdutos("carrossel", 15, "COMPRE JUNTO COM DESCONTO");
@@ -725,9 +725,7 @@
             .section-bottom .display-paineis{
                 position: relative;
                 width: 90%;
-                height: 55vh;
                 margin: 0 auto;
-                margin-top: 40px;
                 -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.1);
                 -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.1);
                 box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.1);

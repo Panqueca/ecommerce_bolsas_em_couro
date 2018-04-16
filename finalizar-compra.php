@@ -50,6 +50,7 @@
                 align-items: flex-end;
             }
             .main-content .display-carrinho .item-carrinho{
+                position: relative;
                 width: 100%;
                 display: flex;
                 height: 150px;
@@ -151,6 +152,8 @@
                 font-size: 14px;
             }
             .main-content .display-carrinho .bottom-info{
+                position: relative;
+                padding-bottom: 40px;
                 width: calc(60% - 20px);
                 justify-content: flex-end;
                 text-align: right;
@@ -177,18 +180,32 @@
                 margin: 0px 25px 0px 0px;
             }
             .main-content .display-carrinho .bottom-info .botao-continuar{
+                position: absolute;
+                width: auto;
                 background-color: #6abd45;
                 border: none;
-                padding: 0px 20px 0px 20px;
+                padding: 0px 40px 0px 15px;
                 font-size: 14px;
                 font-weight: bold;
                 color: #fff;
                 height: 30px;
                 outline: none;
                 cursor: pointer;
+                bottom: 0px;
+                right: 0px;
+            }
+            .main-content .display-carrinho .bottom-info .botao-continuar .icon-button{
+                position: absolute;
+                right: 15px;
+                top: 0px;
+                height: 30px;
+                transition: .2s;
             }
             .main-content .display-carrinho .bottom-info .botao-continuar:hover{
                 background-color: #518d36;   
+            }
+            .main-content .display-carrinho .bottom-info .botao-continuar:hover .icon-button{
+                right: 8px;
             }
             .botao-salvar{
                 background: #999;
@@ -210,7 +227,7 @@
                 
                 /*CALCULO DE FRETE*/
                 var displayResultadoFrete = $(".display-resultados-frete .span-frete");
-                var iconLoading = "<i class='fas fa-spinner fa-spin icone-loading'></i>";
+                var iconLoading = "<i class='fas fa-spinner fa-spin icone-loading icon-button'></i>";
                 var calculandoFrete = false;
                 var infoCalculoFrete = $(".info-frete");
                 var totalCarrinho = $("#totalCarrinho").val();
@@ -454,7 +471,7 @@
                                             },
                                             abort: function() {
                                                 mensagemAlerta("Ocorreu um erro ao finalizar a compra. Tente novamente.", false, false);
-                                                botaoFinalizar.html("<i class='fas fa-sync'></i> Recarregar página");
+                                                botaoFinalizar.html("<i class='fas fa-sync icon-button'></i> Recarregar página");
                                                 botaoFinalizar.off().on("click", function(){
                                                     window.location.reload();
                                                 });
@@ -462,7 +479,7 @@
                                         });
                                     }else{
                                         mensagemAlerta("Ocorreu um erro ao finalizar sua compra");
-                                        botaoFinalizar.html("<i class='fas fa-sync'></i> Recarregar página");
+                                        botaoFinalizar.html("<i class='fas fa-sync icon-button'></i> Recarregar página");
                                         botaoFinalizar.off().on("click", function(){
                                             window.location.reload();
                                         });
@@ -733,6 +750,9 @@
                             $altura = $item_carrinho["altura"];
                             $peso = $item_carrinho["peso"];
                             echo "<div class='item-carrinho'>";
+                                if(isset($item_carrinho["desconto"]) && $item_carrinho["desconto"] > 0){
+                                    echo "<div class='promo-tag'>-{$item_carrinho["desconto"]}%</div>";
+                                }
                                 echo "<div class='box-imagem'><img class='imagem' src='$dirImagens/$imagem'></div>";
                                 echo "<div class='information'>";
                                     echo "<h2 class='titulo'>$nome</h2>";
@@ -854,19 +874,19 @@
                                     $idCliente = $loginConta->query_minha_conta("md5(email) = '$emailConta' and senha = '$senhaConta'");
                                     $loginConta->montar_minha_conta($idCliente);
                                     $infoCliente = $loginConta->montar_array();
-                                    echo "<div class='dados-compra'>";
+                                    echo "<span class='dados-compra'>";
                                         echo "<input type='hidden' id='tokenCarrinho' value='{$_SESSION["carrinho"]["token"]}'>";
                                         echo "<input type='hidden' id='idCliente' value='{$infoCliente["id"]}'>";
                                         echo "<input type='hidden' id='nomeCliente' value='{$infoCliente["usuario"]}'>";
                                         echo "<input type='hidden' id='cpfCliente' value='{$infoCliente["cpf"]}'>";
                                         echo "<input type='hidden' id='emailCliente' value='{$infoCliente["email"]}'>";
-                                    echo "</div>";
-                                    echo "<button type='button' class='botao-continuar botao-finalizar-compra' id='botaoFinalizarCompra'>Finalizar <i class='fas fa-check'></i></button>";
+                                    echo "</span>";
+                                    echo "<button type='button' class='botao-continuar botao-finalizar-compra' id='botaoFinalizarCompra'>Finalizar <i class='fas fa-check icon-button'></i></button>";
                                 }else{
-                                    echo "<button type='button' class='botao-continuar botao-login-compra' id='botaoLoginCompra'><i class='fas fa-lock'></i> Faça login para continuar</button>";
+                                    echo "<button type='button' class='botao-continuar botao-login-compra' id='botaoLoginCompra'><i class='fas fa-lock icon-button'></i> Faça login para continuar</button>";
                                 }
                             }else{
-                                echo "<button type='button' class='botao-continuar botao-login-compra' id='botaoLoginCompra'><i class='fas fa-lock'></i> Faça login para continuar</button>";
+                                echo "<button type='button' class='botao-continuar botao-login-compra' id='botaoLoginCompra'><i class='fas fa-lock icon-button'></i> Faça login para continuar</button>";
                             }
                         echo "</div>";
                     }else{
