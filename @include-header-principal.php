@@ -1160,18 +1160,20 @@
             $link_nav[$countLinks] = new NavLinks($tituloLink, $urlLink);
             $sublinks = isset($link_departamento["sublinks"]) ? $link_departamento["sublinks"] : null;
             $totalSublinks = count($sublinks);
-            foreach($sublinks as $indice => $slink){
-                $titulo = $slink["titulo"];
-                $url = $slink["url"];
-                $subsublinks = isset($slink["subsublinks"]) ? $slink["subsublinks"] : null;
-                $totalSubsub = is_array($subsublinks) ? count($subsublinks) : 0;
-                $link_nav[$countLinks]->add_sublink($countLinks, $titulo, $url);
-                if($totalSubsub > 0){
-                    foreach($subsublinks as $sublink){
-                        $tituloSub = $sublink["titulo"];
-                        $urlSub = $sublink["url"];
-                        $boxDestaque = isset($sublink["box_destaque"]) && $sublink["box_destaque"] != "" ? $sublink["box_destaque"] : false;
-                        $link_nav[$countLinks]->add_sub_sublink($countLinks, $tituloSub, $urlSub, $boxDestaque);
+            if(is_array($sublinks) && count($sublinks) > 0){
+                foreach($sublinks as $indice => $slink){
+                    $titulo = $slink["titulo"];
+                    $url = $slink["url"];
+                    $subsublinks = isset($slink["subsublinks"]) ? $slink["subsublinks"] : null;
+                    $totalSubsub = is_array($subsublinks) ? count($subsublinks) : 0;
+                    $link_nav[$countLinks]->add_sublink($countLinks, $titulo, $url);
+                    if($totalSubsub > 0){
+                        foreach($subsublinks as $sublink){
+                            $tituloSub = $sublink["titulo"];
+                            $urlSub = $sublink["url"];
+                            $boxDestaque = isset($sublink["box_destaque"]) && $sublink["box_destaque"] != "" ? $sublink["box_destaque"] : false;
+                            $link_nav[$countLinks]->add_sub_sublink($countLinks, $tituloSub, $urlSub, $boxDestaque);
+                        }
                     }
                 }
             }

@@ -33,7 +33,50 @@ if($listar){
     <button class="top-buttons" id="Painel3"><i class="fas fa-truck"></i> ENDEREÇO DE ENTREGA</button>
 </div>
 <div class="painel painel-active" id="displayPainel1">
-    Em manutenção ...
+    <?php
+        
+        $_POST["diretorio"] = " ";
+        $_POST["diretorio_db"] = "@pew/";
+    
+        require_once "@pew/@classe-pedidos.php";
+    
+        $cls_pedidos = new Pedidos();
+    
+        $pedidosCliente = $cls_pedidos->buscar_pedidos("id_cliente = '$idConta'");
+        
+        if($pedidosCliente != false){
+            foreach($pedidosCliente as $idPedido){
+                $cls_pedidos->montar($idPedido);
+                $infoPedido = $cls_pedidos->montar_array();
+                echo "<div class='box-pedido'>";
+                    echo "<h3 class='titulo'>Pedido: {$infoPedido["referencia"]}</h3>";
+                        echo "<div class='half box-info'>";
+                            echo "<h4 class='titulo'><i class='fas fa-credit-card'></i> Pagamento</h4>";
+                            echo "<h3 class='descricao'>$pagamentoStr</h3>";
+                        echo "</div>";
+                        echo "<div class='half box-info'>";
+                            echo "<h4 class='titulo'><i class='fas fa-id-card'></i> CPF</h4>";
+                            echo "<h3 class='descricao'>{$this->pew_functions->mask($this->cpf_cliente, "###.###.###-##")}</h3>";
+                        echo "</div>";
+                        echo "<div class='full clear box-info'>";
+                            echo "<h4 class='titulo'><i class='far fa-envelope'></i> E-mail</h4>";
+                            echo "<h3 class='descricao'>{$this->email_cliente}</h3>";
+                        echo "</div>";
+                        echo "<div class='full box-info'>";
+                            echo "<h4 class='titulo'><i class='fas fa-map-marker'></i> Endereço entrega</h4>";
+                            echo "<h3 class='descricao'>$enderecoFinal</h3>";
+                        echo "</div>";
+                        echo "<div class='half box-info'>";
+                            echo "<h4 class='titulo'><i class='far fa-clock'></i> Hora</h4>";
+                            echo "<h3 class='descricao'>$horario</h3>";
+                        echo "</div>";
+                    echo "</div>";
+                echo "</div>";
+            }
+        }else{
+            echo "<h3 style='font-size: 16px; font-weight: normal;'>Você não fez nenhum pedido ainda! <a href='index.php' class='link-padrao'>Voltar as compras</a></h3>";
+        }
+    ?>
 </div>
 <div class="painel" id="displayPainel2">
     <?php

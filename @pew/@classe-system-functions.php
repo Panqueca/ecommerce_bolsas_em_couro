@@ -1,133 +1,140 @@
 <?php
-    class systemFunctions{
-        protected $global_vars;
+    if(!class_exists("systemFunctions")){
+        class systemFunctions{
+            protected $global_vars;
 
-        function __construct(){
-            global $globalVars;
-            $this->global_vars = $globalVars;
-        }
+            function __construct(){
+                global $globalVars;
+                $this->global_vars = $globalVars;
+            }
 
-        private function conexao(){
-            return $this->global_vars["conexao"];
-        }
+            private function conexao(){
+                return $this->global_vars["conexao"];
+            }
 
-        public function contar_resultados($table, $condicao = ""){
-            $condicao = str_replace("where", "", $condicao);
-            $contar = mysqli_query($this->conexao(), "select count(id) as total from $table where $condicao") or die("Não foi possível buscar os dados");
-            $contagem = mysqli_fetch_assoc($contar);
-            $total = $contagem["total"];
-            return $total;
-        }
+            public function contar_resultados($table, $condicao = ""){
+                $condicao = str_replace("where", "", $condicao);
+                $contar = mysqli_query($this->conexao(), "select count(id) as total from $table where $condicao") or die("Não foi possível buscar os dados");
+                $contagem = mysqli_fetch_assoc($contar);
+                $total = $contagem["total"];
+                return $total;
+            }
 
-        public function custom_number_format($val, $sep = "."){
-            $prepareStr = str_replace(" ", "", $val);
-            $prepareStr = str_replace(",", ".", $prepareStr);
-            $totalCaracteres = strlen($prepareStr);
-            $cleanedVal = floatval(str_replace(".", "", $prepareStr));
-            $temPonto = strlen($cleanedVal) < $totalCaracteres ? true : false;
-            if($temPonto){
-                $explodedVal = explode(".", $prepareStr);
-                $totalExplodes = count($explodedVal);
-                $indiceLastExplode = $totalExplodes - 1;
-                $decimal = strlen($explodedVal[$indiceLastExplode]) <= 2 && strlen($explodedVal[$indiceLastExplode]) > 0 ? true : false;
-                $shortDecimal = strlen($explodedVal[$indiceLastExplode]) == 1 ? true : false;
-                $startingVal = $explodedVal[0];
-                
-                $caracteresStrCleaned = strlen($cleanedVal);
-                $totalCaractesMilhar = $caracteresStrCleaned - 2;
-                $milharVal = substr($cleanedVal, 0, $totalCaractesMilhar);
-                $decimalsVal = substr($cleanedVal, $totalCaractesMilhar, 2);
-                
-                $sepStartVal = preg_split("//", $startingVal, -1, PREG_SPLIT_NO_EMPTY);
-                $somaStart = 0;
-                foreach($sepStartVal as $number){
-                    $somaStart += $number;
-                }
-                $is_under_one = $somaStart == 0 ? true : false;
-                
-                $sep = $sep == "." || $sep ==  "," ? $sep : ".";
-                if($is_under_one){
-                    $formatedVal = "0".$sep.$cleanedVal;
+            public function custom_number_format($val, $sep = "."){
+                $prepareStr = str_replace(" ", "", $val);
+                $prepareStr = str_replace(",", ".", $prepareStr);
+                $totalCaracteres = strlen($prepareStr);
+                $cleanedVal = floatval(str_replace(".", "", $prepareStr));
+                $temPonto = strlen($cleanedVal) < $totalCaracteres ? true : false;
+                if($temPonto){
+                    $explodedVal = explode(".", $prepareStr);
+                    $totalExplodes = count($explodedVal);
+                    $indiceLastExplode = $totalExplodes - 1;
+                    $decimal = strlen($explodedVal[$indiceLastExplode]) <= 2 && strlen($explodedVal[$indiceLastExplode]) > 0 ? true : false;
+                    $shortDecimal = strlen($explodedVal[$indiceLastExplode]) == 1 ? true : false;
+                    $startingVal = $explodedVal[0];
+
+                    $caracteresStrCleaned = strlen($cleanedVal);
+                    $totalCaractesMilhar = $caracteresStrCleaned - 2;
+                    $milharVal = substr($cleanedVal, 0, $totalCaractesMilhar);
+                    $decimalsVal = substr($cleanedVal, $totalCaractesMilhar, 2);
+
+                    $sepStartVal = preg_split("//", $startingVal, -1, PREG_SPLIT_NO_EMPTY);
+                    $somaStart = 0;
+                    foreach($sepStartVal as $number){
+                        $somaStart += $number;
+                    }
+                    $is_under_one = $somaStart == 0 ? true : false;
+
+                    $sep = $sep == "." || $sep ==  "," ? $sep : ".";
+                    if($is_under_one){
+                        if(strlen($cleanedVal) == 2){
+                            $formatedVal = "0".$sep.$cleanedVal;
+                        }else{
+                            $final = strlen($explodedVal[1]) == 2 ? $explodedVal[1] : $explodedVal[1]."0";
+                            $formatedVal = "0".$sep.$final;
+                        }
+                    }else{
+                        switch($decimal){
+                            case true:
+                                if($shortDecimal){
+                                    $ctrlCaracteres = strlen($cleanedVal);
+                                    $decimal = strlen($explodedVal[$totalExplodes - 1]) == 1 ? $explodedVal[$totalExplodes - 1]."0" : $explodedVal[$totalExplodes - 1];
+                                    $formatedVal = substr($cleanedVal, 0, $ctrlCaracteres - 1) . $sep . $decimal;
+                                }else{
+                                    $formatedVal = $milharVal.$sep.$decimalsVal;
+                                }
+                                break;
+                            case false:
+                                $formatedVal = $cleanedVal.$sep."00";
+                                break;
+                        }
+                    }
+
+                    return $formatedVal;
                 }else{
-                    switch($decimal){
-                        case true:
-                            if($shortDecimal){
-                                $ctrlCaracteres = strlen($cleanedVal);
-                                $decimal = strlen($explodedVal[$totalExplodes - 1]) == 1 ? $explodedVal[$totalExplodes - 1]."0" : $explodedVal[$totalExplodes - 1];
-                                $formatedVal = substr($cleanedVal, 0, $ctrlCaracteres - 1) . $sep . $decimal;
-                            }else{
-                                $formatedVal = $milharVal.$sep.$decimalsVal;
-                            }
-                            break;
-                        case false:
-                            $formatedVal = $cleanedVal.$sep."00";
-                            break;
+                    return $cleanedVal.".00";
+                }
+            }
+
+            public function url_format($string){
+                $string = str_replace("Ç", "c", $string);
+                $string = str_replace("ç", "c", $string);
+                $string = preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"), $string);
+                $string = strtolower($string);
+                $string = str_replace("/", "-", $string);
+                $string = str_replace("|", "-", $string);
+                $string = str_replace(" ", "-", $string);
+                $string = str_replace(",", "", $string);
+                return $string;
+            }
+
+            public function sqli_format($string){
+                //remove tudo que contenha sintaxe sql
+                $valCampos = array("'", '"', "update", "from", "select", "insert", "delete", "where", "drop table", "show tables", "#", "*", "--");
+                foreach($valCampos as $validacao){
+                    $string = str_replace($validacao, "", $string);
+                }
+                $string = trim($string);//limpa espaços vazio
+                $string = strip_tags($string);//tira tags html e php
+                return $string;
+            }
+
+            public function inverter_data($data){
+                if(count(explode("-",$data)) > 1){
+                    return implode("/",array_reverse(explode("-",$data)));
+                }elseif(count(explode("/",$data)) > 1){
+                    return implode("-",array_reverse(explode("/",$data)));
+                }
+            }
+
+            public function validar_email($mail){
+                if(preg_match("/^([[:alnum:]_.-]){3,}@([[:lower:][:digit:]_.-]{3,})(.[[:lower:]]{2,3})(.[[:lower:]]{2})?$/", $mail)) {
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+
+            public function mask($val, $mask){
+                $maskared = '';
+                $k = 0;
+                for($i = 0; $i<=strlen($mask)-1; $i++){
+                    if($mask[$i] == '#'){
+
+                        if(isset($val[$k]))
+                        $maskared .= $val[$k++];
+                    }else{
+                        if(isset($mask[$i]))
+                        $maskared .= $mask[$i];
                     }
                 }
-                
-                return $formatedVal;
-            }else{
-                return $cleanedVal.".00";
-            }
-        }
 
-        public function url_format($string){
-            $string = str_replace("Ç", "c", $string);
-            $string = str_replace("ç", "c", $string);
-            $string = preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"), $string);
-            $string = strtolower($string);
-            $string = str_replace("/", "-", $string);
-            $string = str_replace("|", "-", $string);
-            $string = str_replace(" ", "-", $string);
-            $string = str_replace(",", "", $string);
-            return $string;
-        }
+                return $maskared;
+            }
 
-        public function sqli_format($string){
-            //remove tudo que contenha sintaxe sql
-            $valCampos = array("'", '"', "update", "from", "select", "insert", "delete", "where", "drop table", "show tables", "#", "*", "--");
-            foreach($valCampos as $validacao){
-                $string = str_replace($validacao, "", $string);
-            }
-            $string = trim($string);//limpa espaços vazio
-            $string = strip_tags($string);//tira tags html e php
-            return $string;
-        }
-
-        public function inverter_data($data){
-            if(count(explode("-",$data)) > 1){
-                return implode("/",array_reverse(explode("-",$data)));
-            }elseif(count(explode("/",$data)) > 1){
-                return implode("-",array_reverse(explode("/",$data)));
-            }
-        }
-        
-        public function validar_email($mail){
-            if(preg_match("/^([[:alnum:]_.-]){3,}@([[:lower:][:digit:]_.-]{3,})(.[[:lower:]]{2,3})(.[[:lower:]]{2})?$/", $mail)) {
-                return true;
-            }else{
-                return false;
-            }
-        }
-        
-        public function mask($val, $mask){
-            $maskared = '';
-            $k = 0;
-            for($i = 0; $i<=strlen($mask)-1; $i++){
-                if($mask[$i] == '#'){
-                    
-                    if(isset($val[$k]))
-                    $maskared .= $val[$k++];
-                }else{
-                    if(isset($mask[$i]))
-                    $maskared .= $mask[$i];
-                }
-            }
-            
-            return $maskared;
-        }
-
+        }   
     }
+
     $pew_functions = new systemFunctions();
-    global $pew_functions;
 ?>

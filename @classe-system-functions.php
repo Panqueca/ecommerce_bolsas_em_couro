@@ -1,5 +1,4 @@
 <?php
-    require_once "@include-global-vars.php";
     if(!class_exists("systemFunctions")){
         class systemFunctions{
             protected $global_vars;
@@ -49,7 +48,12 @@
 
                     $sep = $sep == "." || $sep ==  "," ? $sep : ".";
                     if($is_under_one){
-                        $formatedVal = "0".$sep.$cleanedVal;
+                        if(strlen($cleanedVal) == 2){
+                            $formatedVal = "0".$sep.$cleanedVal;
+                        }else{
+                            $final = strlen($explodedVal[1]) == 2 ? $explodedVal[1] : $explodedVal[1]."0";
+                            $formatedVal = "0".$sep.$final;
+                        }
                     }else{
                         switch($decimal){
                             case true:
@@ -111,8 +115,26 @@
                     return false;
                 }
             }
-        }
+
+            public function mask($val, $mask){
+                $maskared = '';
+                $k = 0;
+                for($i = 0; $i<=strlen($mask)-1; $i++){
+                    if($mask[$i] == '#'){
+
+                        if(isset($val[$k]))
+                        $maskared .= $val[$k++];
+                    }else{
+                        if(isset($mask[$i]))
+                        $maskared .= $mask[$i];
+                    }
+                }
+
+                return $maskared;
+            }
+
+        }   
     }
+
     $pew_functions = new systemFunctions();
-    global $pew_functions;
 ?>

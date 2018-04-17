@@ -161,8 +161,8 @@
                 
                 if($is_compre_junto){
                     $infoPrecoRelacionado = $this->classe_produtos->get_preco_relacionado($idProduto);
-                    $carrinho["itens"][$ctrl]["preco"] = $this->pew_functions->custom_number_format($infoPrecoRelacionado["valor"]);
-                    $carrinho["itens"][$ctrl]["desconto"] = $infoPrecoRelacionado["desconto"];
+                    $carrinho["itens"][$ctrlInterno]["preco"] = $this->pew_functions->custom_number_format($infoPrecoRelacionado["valor"]);
+                    $carrinho["itens"][$ctrlInterno]["desconto"] = $infoPrecoRelacionado["desconto"];
                 }
                     
                 $ctrl++;
