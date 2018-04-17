@@ -24,11 +24,97 @@
         <!--PAGE CSS-->
         <style>
             .main-content{
-                width: 80%;
+				display: flex;
+				align-items: center;
+				flex-direction: column;
+                position: relative;
+                top: -200px;
+                width: 90%;
                 margin: 0 auto;
+                margin-bottom: -150px;
                 min-height: 300px;
+                background-color: #fff;
+                overflow: hidden;
             }
-        </style>
+			.banner img{
+				width: 100%;
+			}
+			.main-content article{
+				width: 50%;
+				margin-top: 50px;
+				text-align: justify;
+			}
+			form{
+				display: flex;
+				flex-direction: column;
+				width: 50%;
+				margin-top: 100px;
+			}
+			form .box-input{
+				display: flex;
+				justify-content: space-between;
+				width: 100%;
+			}
+			form .box-input input{
+				width: 48%;
+				height: 35px;
+				border: none;
+				background-color: #ccc;
+				padding-left: 5px;
+				outline: none;
+				font-size: inherit;
+				font-family: inherit;
+			}
+			form .box-input input::placeholder{
+				color: #000;
+			}
+			form .box-input2{
+				display: flex;
+				flex-direction: column;
+				width: 100%;
+			}
+			form .box-input2 input{
+				margin: 20px 0 20px 0;
+				height: 35px;
+				border: none;
+				background-color: #ccc;
+				padding-left: 5px;
+				outline: none;
+				font-size: inherit;
+				font-family: inherit;
+			}
+			form .box-input2 input::placeholder{
+				color: #000;
+			}
+			form .box-input2 textarea{
+				resize: none;
+				height: 150px;
+				border: none;
+				background-color: #ccc;
+				padding-left: 5px;
+				outline: none;
+				font-size: inherit;
+				font-family: inherit;
+			}
+			form .box-input2 textarea::placeholder{
+				color: #000;
+				font-weight: normal;
+			}
+			form .btn{
+				display: flex;
+				justify-content: flex-end;
+				width: 100%;
+			}
+			form .btn .btn-enviar{
+				margin: 10px 0 10px 0;
+				height: 35px;
+				border: none;
+				background-color: #ccc;
+				padding: 6px 20px 6px;
+				background-color: #555;
+				color: #fff;
+			}
+		</style>
         <!--END PAGE CSS-->
         <!--PAGE JS-->
         <script>
@@ -47,9 +133,27 @@
             require_once "@include-interatividade.php";
         ?>
         <!--THIS PAGE CONTENT-->
+        <div class="banner">
+        	<img src="imagens/departamentos/banner-contato.png">
+        </div>
         <div class="main-content">
-            <h1 align=center>CONTATO</h1>
+      		<div class="box-title">
+            	<h1>CONTATO</h1>
+            </div>
             <article>Ao contrário do que se acredita, Lorem Ipsum não é simplesmente um texto randômico. Com mais de 2000 anos, suas raízes podem ser encontradas em uma obra de literatura latina. Lorem Ipsum não é simplesmente um texto randômico. Com mais de 2000 anos, suas raízes podem ser encontradas em uma obra de literatura latina.</article>
+            <form method="post">
+            	<div class="box-input">
+					<input type="text" name="nome" placeholder="Nome">
+					<input type="text" name="email" placeholder="Email">
+				</div>
+				<div class="box-input2">
+					<input type="text" name="telefone" placeholder="Telefone">
+					<textarea placeholder="Mensagem"></textarea>
+				</div>
+				<div class="btn">
+					<input class="btn-enviar" type="submit" value="Enviar">
+          		</div>
+            </form>
         </div>
         <!--END THIS PAGE CONTENT-->
         <?php
