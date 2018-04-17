@@ -29,6 +29,8 @@
         <?php
             // STANDARD REQUIRE
             require_once "@include-body.php";
+            require_once "@classe-orcamentos.php";
+        
             if(isset($block_level) && $block_level == true){
                 $pew_session->block_level();
             }
@@ -67,15 +69,19 @@
             <?php
                 $tabela_orcamentos = $pew_custom_db->tabela_orcamentos;
                 if(isset($_GET["busca"]) && $_GET["busca"] != ""){
-                    $busca = pew_string_format($_GET["busca"]);
+                    $busca = $pew_functions->sqli_format($_GET["busca"]);
                     $strBusca = "where nome_cliente like '%".$busca."%' or telefone_cliente like '%".$busca."%' or email_cliente like '%".$busca."%' or rg_cliente like '%".$busca."%' or cpf_cliente like '%".$busca."%'";
                     echo "<div class='full clear'><h3>Exibindo resultados para: $busca</h3></div>";
                 }else{
                     $strBusca = "";
                 }
-                $contarOrcamentos = mysqli_query($conexao, "select count(id) as total from $tabela_orcamentos s");
+                
+                $contarOrcamentos = mysqli_query($conexao, "select count(id) as total from $tabela_orcamentos where 1");
                 $contagemContatos = mysqli_fetch_assoc($contarOrcamentos);
                 $totalOrcamentos = $contagemContatos["total"];
+                
+                $cls_orcamentos = new Orcamentos();
+                
                 if($totalOrcamentos > 0){
                     echo "<thead>";
                         echo "<td>Nome</td>";
@@ -94,7 +100,7 @@
                         $email = $orcamentos["email_cliente"];
                         $telefone = $orcamentos["telefone_cliente"];
                         $cpf = $orcamentos["cpf_cliente"];
-                        $totalOrcamento = $orcamentos["preco_total"];
+                        $totalOrcamento = $cls_orcamentos->get_total_orcamento($id);
                         $status = $orcamentos["status_orcamento"];
                         switch($status){
                             case 1:

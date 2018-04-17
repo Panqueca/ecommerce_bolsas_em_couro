@@ -27,9 +27,17 @@
             $this->set_token();
         }
         
+        function conexao(){
+            return $this->global_vars["conexao"];
+        }
+        
+        function rand_token(){
+            return "CTK" . substr(md5(time()), 0, 10);
+        }
+        
         function set_token(){
             if(!isset($_SESSION["carrinho"]["token"]) || $_SESSION["carrinho"]["token"] == null){
-                $_SESSION["carrinho"]["token"] = "CTK" . substr(md5(time()), 0, 10);
+                $_SESSION["carrinho"]["token"] = $this->rand_token();
             }
         }
         
@@ -191,6 +199,49 @@
             $_SESSION["carrinho"]["itens"] = $reorderedCarrinho;
             
             return true;
+        }
+        
+        function rebuild_carrinho($token){
+            $tabela_carrinhos = $this->global_vars["tabela_carrinhos"];
+            $tabela_orcamentos = $this->global_vars["tabela_orcamentos"];
+            $this->verify_session();
+            
+            $total = $this->pew_functions->contar_resultados($tabela_carrinhos, "token_carrinho = '$token'");
+            if($total > 0){
+                $_SESSION["carrinho"]["token"] = $token;
+                $_SESSION["carrinho"]["itens"] = array();
+                $ctrlProdutos = 0;
+                
+                $is_orcamento = $this->pew_functions->contar_resultados($tabela_orcamentos, "token_carrinho = '$token'") > 0 ? true : false;
+                
+                $cls_produtos = new Produtos();
+                
+                
+                $query = mysqli_query($this->conexao(), "select * from $tabela_carrinhos where token_carrinho = '$token'");
+                
+                while($array = mysqli_fetch_array($query)){
+                    if($cls_produtos->montar_produto($array["id_produto"])){
+                        $infoProduto = $cls_produtos->montar_array();
+                        
+                        $_SESSION["carrinho"]["itens"][$ctrlProdutos] = array();
+                        $_SESSION["carrinho"]["itens"][$ctrlProdutos]["id"] = $array["id_produto"];
+                        $_SESSION["carrinho"]["itens"][$ctrlProdutos]["nome"] = $array["nome_produto"];
+                        $_SESSION["carrinho"]["itens"][$ctrlProdutos]["preco"] = $array["preco_produto"];
+                        $_SESSION["carrinho"]["itens"][$ctrlProdutos]["estoque"] = $infoProduto["estoque"];
+                        $_SESSION["carrinho"]["itens"][$ctrlProdutos]["quantidade"] = $array["quantidade_produto"];
+                        $_SESSION["carrinho"]["itens"][$ctrlProdutos]["comprimento"] = $infoProduto["comprimento"];
+                        $_SESSION["carrinho"]["itens"][$ctrlProdutos]["largura"] = $infoProduto["largura"];
+                        $_SESSION["carrinho"]["itens"][$ctrlProdutos]["altura"] = $infoProduto["altura"];
+                        $_SESSION["carrinho"]["itens"][$ctrlProdutos]["peso"] = $infoProduto["peso"];
+                        $ctrlProdutos++;
+                    }
+                }
+                
+                return true;
+                
+            }else{
+                return false;
+            }
         }
     }
 

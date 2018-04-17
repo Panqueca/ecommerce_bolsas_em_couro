@@ -67,7 +67,7 @@
             <?php
                 $tabela_dicas = $pew_custom_db->tabela_dicas;
                 if(isset($_GET["busca"]) && $_GET["busca"] != ""){
-                    $busca = pew_string_format($_GET["busca"]);
+                    $busca = $pew_functions->sqli_format($_GET["busca"]);
                     $strBusca = "where titulo like '%{$busca}%' or subtitulo like '%{$busca}%' or descricao_curta like '%{$busca}%'";
                     echo "<div class='full clear'><h3>Exibindo resultados para: $busca</h3></div>";
                 }else{

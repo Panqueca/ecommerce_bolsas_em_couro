@@ -87,7 +87,6 @@
         <h1 class="titulos"><?php echo $page_title; ?><a href="pew-orcamentos.php" class="btn-voltar"><i class="fa fa-arrow-left" aria-hidden="true"></i> Voltar</a></h1>
         <section class="conteudo-painel">
             <h3 align=center>Em manutenção</h3>
-            <h3 align=center>Prazo: 26/02/18</h3>
         </section>
     </body>
 </html>

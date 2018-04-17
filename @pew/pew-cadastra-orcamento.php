@@ -220,24 +220,10 @@
         <!--FIM THIS PAGE CSS-->
         <script>
             $(document).ready(function($){
-                var quantidadeMascaras = 1;
-                var nomeInputMascaras = [];
-                nomeInputMascaras[0] = "#telefoneCliente";
-                for(var i = 0; i < quantidadeMascaras; i++){
-                    var nomeInput = nomeInputMascaras[i];
-                    $(nomeInput).mask("(99) 9999-9999?9").focusout(function (event){
-                        var target, phone, element;
-                        target = (event.currentTarget) ? event.currentTarget : event.srcElement;
-                        phone = target.value.replace(/\D/g, '');
-                        element = $(target);
-                        element.unmask();
-                        if(phone.length > 10) {
-                            element.mask("(99) 99999-999?9");
-                        } else {
-                            element.mask("(99) 9999-9999?9");
-                        }
-                    });
-                }
+                phone_mask("#telefoneCliente");
+                input_mask("#rgCliente", "99.999.999-9");
+                input_mask("#cpfCliente", "999.999.999-99");
+                input_mask("#cepCliente", "99999-999");
 
                 /*PRODUTOS RELACIONADOS*/
                 var botaoProdutosRelacionados = $(".btn-produtos-relacionados");
@@ -602,17 +588,11 @@
                         var objNome = $("#nomeCliente");
                         var objTelefone = $("#telefoneCliente");
                         var objEmail = $("#emailCliente");
-                        var objRg = $("#rgCliente");
                         var objCpf = $("#cpfCliente");
-                        var objCep = $("#cepCliente");
-                        var objNumero = $("#numeroRuaCliente");
                         var nome = objNome.val();
                         var telefone = objTelefone.val();
                         var email = objEmail.val();
-                        var rg = objRg.val();
                         var cpf = objCpf.val();
-                        var cep = objCep.val();
-                        var numero = objNumero.val();
                         function validarCampos(){
                             if(nome.length < 2){
                                 mensagemAlerta("O Campo Nome deve conter no mínimo 2 caracteres", objNome);
@@ -626,20 +606,8 @@
                                 mensagemAlerta("O Campo E-mail deve ser preenchido corretamente", objEmail);
                                 return false;
                             }
-                            if(rg.length < 9){
-                                mensagemAlerta("O Campo RG deve conter no mínimo 9 caracteres", objRg);
-                                return false;
-                            }
                             if(cpf.length < 11){
                                 mensagemAlerta("O Campo CPF deve conter no mínimo 11 caracteres", objCpf);
-                                return false;
-                            }
-                            if(cep.length < 8){
-                                mensagemAlerta("O Campo CEP deve conter no mínimo 8 caracteres", objCep);
-                                return false;
-                            }
-                            if(numero.length < 1){
-                                mensagemAlerta("O Campo Número deve conter no mínimo 1 caracter", objNumero);
                                 return false;
                             }
                             return true;
@@ -684,32 +652,11 @@
                         <input type="text" name="email_cliente" id="emailCliente" placeholder="email@dominio.com.br" class="label-input">
                     </label>
                     <label class="label small">
-                        <h3 class="label-title" align=left>RG</h3>
-                        <input type="text" name="rg_cliente" id="rgCliente" placeholder="RG Cliente" class="label-input">
-                    </label>
-                    <label class="label small">
                         <h3 class="label-title" align=left>CPF</h3>
                         <input type="text" name="cpf_cliente" id="cpfCliente" placeholder="CPF Cliente" class="label-input">
                     </label>
                     <br style="clear: both;">
                 </div>
-                <div class="group clear">
-                    <h3 align='left' style="margin: 0px;">Informações de envio</h3>
-                    <label class="label half">
-                        <h3 class="label-title" align=left>CEP</h3>
-                        <input type="text" name="cep_cliente" id="cepCliente" placeholder="CEP" class="label-input">
-                    </label>
-                    <label class="label small">
-                        <h3 class="label-title" align=left>Número</h3>
-                        <input type="text" name="numero_rua_cliente" id="numeroRuaCliente" placeholder="Número" class="label-input">
-                    </label>
-                    <label class="label small">
-                        <h3 class="label-title" align=left>Complemento</h3>
-                        <input type="text" name="complemento_rua_cliente" id="complementoRuaCliente" placeholder="Complemento" class="label-input">
-                    </label>
-                </div>
-                <br style="clear: both;">
-                <br style="clear: both;">
                 <div class="label small">
                     <h3>Produtos para o orçamento:</h3><br>
                     <!--PRODUTOS RELACIONADOS-->
