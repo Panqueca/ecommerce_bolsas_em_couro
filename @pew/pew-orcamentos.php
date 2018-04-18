@@ -99,27 +99,20 @@
                         $nome = $orcamentos["nome_cliente"];
                         $email = $orcamentos["email_cliente"];
                         $telefone = $orcamentos["telefone_cliente"];
-                        $cpf = $orcamentos["cpf_cliente"];
+                        $cpf = $pew_functions->mask($orcamentos["cpf_cliente"], "###.###.###-##");
                         $totalOrcamento = $cls_orcamentos->get_total_orcamento($id);
-                        $status = $orcamentos["status_orcamento"];
-                        switch($status){
-                            case 1:
-                                $status = "Manter contato";
-                                break;
-                            case 2:
-                                $status = "Finalizado";
-                                break;
-                            case 3:
-                                $status = "Cancelado";
-                                break;
-                            default:
-                                $status = "Fazer primeiro contato";
+                        if($totalOrcamento == 0){
+                            $strOrcamento = "ORÇAR";
+                        }else{
+                            $strOrcamento = "R$ $totalOrcamento";
                         }
+                        $status = $cls_orcamentos->get_string_status($orcamentos["status_orcamento"]);
+                        
                         echo "<tr><td>$nome</td>";
                         echo "<td>$email</td>";
                         echo "<td>$telefone</td>";
                         echo "<td>$cpf</td>";
-                        echo "<td>R$ $totalOrcamento</td>";
+                        echo "<td>$strOrcamento</td>";
                         echo "<td>$status</td>";
                         echo "<td align=center><a href='pew-edita-orcamento.php?id_orcamento=$id' class='btn-editar'><i class='fa fa-eye' aria-hidden='true'></i></a></td></tr>";
                     }

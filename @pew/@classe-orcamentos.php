@@ -158,4 +158,24 @@
             
             return $body;
         }
+        
+        function get_string_status($status){
+            switch($status){
+                case 1:
+                    $retorno = "Configurado pelo vendedor";
+                    break;
+                case 2:
+                    $retorno = "Enviado ao cliente";
+                    break;
+                case 3:
+                    $retorno = "Confirmado";
+                    break;
+                case 4:
+                    $retorno = "Cancelado";
+                    break;
+                default:
+                    $retorno = "Enviado pelo cliente";
+            }
+            return $retorno;
+        }
     }

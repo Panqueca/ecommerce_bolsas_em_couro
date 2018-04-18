@@ -73,11 +73,10 @@
             $tempoEntrega = 30; //FAZER INTEGRAÇÃO CORREIOS
             $idVendedor = $totalVendedor > 0 ? $infoVendedor["id"] : 0;
             $dataVencimento = date("Y-m-d", strtotime($dataAtual . "+30 days"));
-            $statusOrcamento = 0;
+            $statusOrcamento = 1;
 
             /*STANDARD FORMAT CLIENT DATA*/
             $cpfCliente = limpaNumberString($cpfCliente);
-            $cepCliente = limpaNumberString($cpfCliente);
 
             //$refOrcamento = substr(md5($dataAtual.$cpfCliente), 0, 16);
             

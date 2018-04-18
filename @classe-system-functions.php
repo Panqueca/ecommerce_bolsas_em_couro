@@ -1,4 +1,6 @@
 <?php
+    require_once "@include-global-vars.php";
+
     if(!class_exists("systemFunctions")){
         class systemFunctions{
             protected $global_vars;
