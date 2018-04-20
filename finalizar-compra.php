@@ -719,11 +719,14 @@
                 <?php
                     require_once "@classe-carrinho-compras.php";
                     $cls_carrinho = new Carrinho();
-                    $carrinho_finalizar = $cls_carrinho->get_carrinho();
                     $tabela_imagens_produtos = $pew_custom_db->tabela_imagens_produtos;
                 
-                    $carrinho_json = json_encode($carrinho_finalizar);
+                    if(isset($_GET["token_carrinho"]) && $_GET["token_carrinho"] != ""){
+                        $cls_carrinho->rebuild_carrinho($_GET["token_carrinho"]);
+                    }
                 
+                    $carrinho_finalizar = $cls_carrinho->get_carrinho();
+                    $carrinho_json = json_encode($carrinho_finalizar);
                     echo "<input type='hidden' value='$carrinho_json' id='carrinhoFinalizar'>";
                 
                     $dirImagens = "imagens/produtos";

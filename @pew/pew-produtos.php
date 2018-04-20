@@ -185,7 +185,7 @@
                     $tabela_categorias_produtos = $pew_custom_db->tabela_categorias_produtos;
                     $tabela_subcategorias_produtos = $pew_custom_db->tabela_subcategorias_produtos;
                     if(isset($_GET["busca"]) && $_GET["busca"] != ""){
-                        $busca = pew_string_format($_GET["busca"]);
+                        $busca = $pew_functions->sqli_format($_GET["busca"]);
                         $strBusca = "where id like '%".$busca."%' or nome like '%".$busca."%' or marca like '%".$busca."%' or descricao_curta like '%".$busca."%' or descricao_longa like '%".$busca."%'";
                         echo "<div class='group clear'><h3>Exibindo resultados para: $busca</h3></div>";
                     }else{
@@ -223,6 +223,7 @@
                             }
                             $dirIMG = "../imagens/produtos/$imagem";
                             if(!file_exists($dirIMG) || $imagem == ""){
+                                
                                 $dirIMG = "../imagens/produtos/produto-padrao.png";
                             }
                             $urlAlteraProd = "pew-edita-produto.php?id_produto=$id";
@@ -311,7 +312,7 @@
                     }
 
                     if(isset($_GET["busca"]) && $_GET["busca"] != ""){
-                        $busca = pew_string_format($_GET["busca"]);
+                        $busca = $pew_functions->sqli_format($_GET["busca"]);
                         /*Buscar categorias*/
                         $buscaCategorias = buscarQuantidadeId($tabela_categorias, "where categoria like '%$busca%'", $tabela_categorias_produtos, "where id_categoria = 'replace_result_id'");
                         if($buscaCategorias != false){

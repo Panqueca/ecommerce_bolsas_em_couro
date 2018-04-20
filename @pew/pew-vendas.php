@@ -158,8 +158,6 @@
                 background-color: #fff;
                 transition: .3s;
                 visibility: hidden;
-                overflow: hidden;
-                overflow-y: auto;
                 opacity: 0;
             }
             .display-info-pedido::-webkit-scrollbar-button:hover{
@@ -209,6 +207,78 @@
             }*/
         </style>
         <!--FIM THIS PAGE CSS-->
+        <script>
+            $(document).ready(function(){
+                var botaoVerProdutos = $(".botao-ver-produtos");
+                var botaoVerInfo = $(".botao-ver-info");
+                var botaoVoltar = $(".display-produtos-pedido .btn-voltar-produtos");
+                var botaoVoltarInfo = $(".display-info-pedido .btn-voltar-info");
+
+                botaoVerProdutos.each(function(){
+
+                });
+
+                function toggleVerProdutos(id){
+                    var obj = $("#"+id);
+
+                    if(obj.css("opacity") == "0"){
+                        obj.css({
+                            visibility: "visible",
+                            opacity: "1",
+                            height: "100%"
+                        });
+                        obj.addClass("active");
+                    }else{
+                        obj.css({
+                            visibility: "hidden",
+                            opacity: "0",
+                            height: "0%"
+                        });
+                        obj.removeClass("active");
+                    }
+                }
+
+                function toggleInfoPedido(id){
+                    var obj = $("#"+id);
+
+                    if(obj.css("opacity") == "0"){
+                        obj.css({
+                            visibility: "visible",
+                            opacity: "1",
+                            height: "calc(100% - 30px)"
+                        });
+                        obj.addClass("active");
+                    }else{
+                        obj.css({
+                            visibility: "hidden",
+                            opacity: "0",
+                            height: "0%"
+                        });
+                        obj.removeClass("active");
+                    }
+                }
+
+                botaoVerProdutos.off().on("click", function(){
+                    var id = $(this).attr("id-pedido");
+                    toggleVerProdutos(id);
+                });
+
+                botaoVerInfo.off().on("click", function(){
+                    var id = $(this).attr("id-pedido");
+                    toggleInfoPedido(id);
+                });
+
+                botaoVoltar.off().on("click", function(){
+                    var id = $(this).attr("id-pedido");
+                    toggleVerProdutos(id);
+                });
+
+                botaoVoltarInfo.off().on("click", function(){
+                    var id = $(this).attr("id-pedido");
+                    toggleInfoPedido(id);
+                });
+            });
+        </script>
     </head>
     <body>
         <?php
@@ -225,7 +295,7 @@
         <h1 class="titulos"><?php echo $page_title; ?></h1>
             <section class="conteudo-painel">
             <div class="group clear">
-                <form action="pew-produtos.php" method="get" class="label half clear">
+                <form action="pew-vendas.php" method="get" class="label half clear">
                     <label class="group">
                         <div class="group">
                             <h3 class="label-title">Busca de pedidos</h3>
@@ -256,7 +326,7 @@
                 <?php
                     $tabela_pedidos = $pew_custom_db->tabela_pedidos;
                     if(isset($_GET["busca"]) && $_GET["busca"] != ""){
-                        $busca = pew_string_format($_GET["busca"]);
+                        $busca = $pew_functions->sqli_format($_GET["busca"]);
                         $strBusca = "where id like '%".$busca."%' or nome like '%".$busca."%' or marca like '%".$busca."%' or descricao_curta like '%".$busca."%' or descricao_longa like '%".$busca."%'";
                         echo "<div class='group clear'><h3>Exibindo resultados para: $busca</h3></div>";
                     }else{
@@ -284,72 +354,4 @@
             <br style="clear: both;">
         </section>
     </body>
-    <script>
-        $(document).ready(function(){
-            var botaoVerProdutos = $(".botao-ver-produtos");
-            var botaoVerInfo = $(".botao-ver-info");
-            var botaoVoltar = $(".display-produtos-pedido .btn-voltar-produtos");
-            var botaoVoltarInfo = $(".display-info-pedido .btn-voltar-info");
-            
-            function toggleVerProdutos(id){
-                var obj = $("#"+id);
-                
-                if(obj.css("opacity") == "0"){
-                    obj.css({
-                        visibility: "visible",
-                        opacity: "1",
-                        height: "100%"
-                    });
-                    obj.addClass("active");
-                }else{
-                    obj.css({
-                        visibility: "hidden",
-                        opacity: "0",
-                        height: "0%"
-                    });
-                    obj.removeClass("active");
-                }
-            }
-            
-            function toggleInfoPedido(id){
-                var obj = $("#"+id);
-                
-                if(obj.css("opacity") == "0"){
-                    obj.css({
-                        visibility: "visible",
-                        opacity: "1",
-                        height: "calc(100% - 30px)"
-                    });
-                    obj.addClass("active");
-                }else{
-                    obj.css({
-                        visibility: "hidden",
-                        opacity: "0",
-                        height: "0%"
-                    });
-                    obj.removeClass("active");
-                }
-            }
-            
-            botaoVerProdutos.off().on("click", function(){
-                var id = $(this).attr("id-pedido");
-                toggleVerProdutos(id);
-            });
-            
-            botaoVerInfo.off().on("click", function(){
-                var id = $(this).attr("id-pedido");
-                toggleInfoPedido(id);
-            });
-            
-            botaoVoltar.off().on("click", function(){
-                var id = $(this).attr("id-pedido");
-                toggleVerProdutos(id);
-            });
-            
-            botaoVoltarInfo.off().on("click", function(){
-                var id = $(this).attr("id-pedido");
-                toggleInfoPedido(id);
-            });
-        });
-    </script>
 </html>

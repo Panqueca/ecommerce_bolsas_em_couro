@@ -220,24 +220,10 @@
         <!--FIM THIS PAGE CSS-->
         <script>
             $(document).ready(function($){
-                var quantidadeMascaras = 1;
-                var nomeInputMascaras = [];
-                nomeInputMascaras[0] = "#telefoneCliente";
-                for(var i = 0; i < quantidadeMascaras; i++){
-                    var nomeInput = nomeInputMascaras[i];
-                    $(nomeInput).mask("(99) 9999-9999?9").focusout(function (event){
-                        var target, phone, element;
-                        target = (event.currentTarget) ? event.currentTarget : event.srcElement;
-                        phone = target.value.replace(/\D/g, '');
-                        element = $(target);
-                        element.unmask();
-                        if(phone.length > 10) {
-                            element.mask("(99) 99999-999?9");
-                        } else {
-                            element.mask("(99) 9999-9999?9");
-                        }
-                    });
-                }
+                phone_mask("#telefoneCliente");
+                input_mask("#rgCliente", "99.999.999-9");
+                input_mask("#cpfCliente", "999.999.999-99");
+                input_mask("#cepCliente", "99999-999");
 
                 /*PRODUTOS RELACIONADOS*/
                 var botaoProdutosRelacionados = $(".btn-produtos-relacionados");
@@ -602,17 +588,11 @@
                         var objNome = $("#nomeCliente");
                         var objTelefone = $("#telefoneCliente");
                         var objEmail = $("#emailCliente");
-                        var objRg = $("#rgCliente");
                         var objCpf = $("#cpfCliente");
-                        var objCep = $("#cepCliente");
-                        var objNumero = $("#numeroRuaCliente");
                         var nome = objNome.val();
                         var telefone = objTelefone.val();
                         var email = objEmail.val();
-                        var rg = objRg.val();
                         var cpf = objCpf.val();
-                        var cep = objCep.val();
-                        var numero = objNumero.val();
                         function validarCampos(){
                             if(nome.length < 2){
                                 mensagemAlerta("O Campo Nome deve conter no mínimo 2 caracteres", objNome);
@@ -626,20 +606,8 @@
                                 mensagemAlerta("O Campo E-mail deve ser preenchido corretamente", objEmail);
                                 return false;
                             }
-                            if(rg.length < 9){
-                                mensagemAlerta("O Campo RG deve conter no mínimo 9 caracteres", objRg);
-                                return false;
-                            }
                             if(cpf.length < 11){
                                 mensagemAlerta("O Campo CPF deve conter no mínimo 11 caracteres", objCpf);
-                                return false;
-                            }
-                            if(cep.length < 8){
-                                mensagemAlerta("O Campo CEP deve conter no mínimo 8 caracteres", objCep);
-                                return false;
-                            }
-                            if(numero.length < 1){
-                                mensagemAlerta("O Campo Número deve conter no mínimo 1 caracter", objNumero);
                                 return false;
                             }
                             return true;
@@ -664,6 +632,39 @@
         
             // SET TABLES
             $tabela_produtos = $pew_custom_db->tabela_produtos;
+            $tabela_orcamentos = $pew_custom_db->tabela_orcamentos;
+            $tabela_carrinhos = $pew_custom_db->tabela_carrinhos;
+        
+            $nomeCliente = null;
+            $telefoneCliente = null;
+            $emailCliente = null;
+            $cpfCliente = null;
+            $desconto = 0;
+            $selectedProdutos = array();
+            $ctrlProdutos = 0;
+        
+            $quantidadesProdutos = array();
+        
+            if(isset($_GET["id_orcamento"]) && $pew_functions->contar_resultados($tabela_orcamentos, "id = '{$_GET["id_orcamento"]}'") > 0){
+                $idOrcamento = $_GET["id_orcamento"];
+                $query = mysqli_query($conexao, "select * from $tabela_orcamentos where id = '$idOrcamento'");
+                $info = mysqli_fetch_array($query);
+                
+                $nomeCliente = $info["nome_cliente"];
+                $telefoneCliente = $info["telefone_cliente"];
+                $emailCliente = $info["email_cliente"];
+                $cpfCliente = $info["cpf_cliente"];
+                $tokenCarrinho = $info["token_carrinho"];
+                $desconto = $info["porcentagem_desconto"];
+                
+                $queryCarrinho = mysqli_query($conexao, "select * from $tabela_carrinhos where token_carrinho = '$tokenCarrinho'");
+                while($infoCarrinho = mysqli_fetch_array($queryCarrinho)){
+                    $idProduto = $infoCarrinho["id_produto"];
+                    $selectedProdutos[$ctrlProdutos] = $idProduto;
+                    $quantidadesProdutos[$idProduto] = $infoCarrinho["quantidade_produto"];
+                    $ctrlProdutos++;
+                }
+            }
         ?>
         <!--PAGE CONTENT-->
         <h1 class="titulos"><?php echo $page_title; ?><a href="pew-orcamentos.php" class="btn-voltar"><i class="fa fa-arrow-left" aria-hidden="true"></i> Voltar</a></h1>
@@ -673,47 +674,26 @@
                     <h3 align='left' style="margin: 0px;">Informações do cliente</h3>
                     <label class="label half">
                         <h3 class="label-title" align=left>Nome</h3>
-                        <input type="text" name="nome_cliente" id="nomeCliente" placeholder="Nome" class="label-input">
+                        <input type="text" name="nome_cliente" id="nomeCliente" placeholder="Nome" class="label-input" value='<?php echo $nomeCliente; ?>'>
                     </label>
                     <label class="label half">
                         <h3 class="label-title" align=left>Telefone</h3>
-                        <input type="text" name="telefone_cliente" id="telefoneCliente" placeholder="(DDD) 99999-9999" class="label-input">
+                        <input type="text" name="telefone_cliente" id="telefoneCliente" placeholder="(DDD) 99999-9999" class="label-input" value='<?php echo $telefoneCliente; ?>'>
                     </label>
                     <label class="label half">
                         <h3 class="label-title" align=left>E-mail</h3>
-                        <input type="text" name="email_cliente" id="emailCliente" placeholder="email@dominio.com.br" class="label-input">
-                    </label>
-                    <label class="label small">
-                        <h3 class="label-title" align=left>RG</h3>
-                        <input type="text" name="rg_cliente" id="rgCliente" placeholder="RG Cliente" class="label-input">
+                        <input type="text" name="email_cliente" id="emailCliente" placeholder="email@dominio.com.br" class="label-input" value='<?php echo $emailCliente; ?>'>
                     </label>
                     <label class="label small">
                         <h3 class="label-title" align=left>CPF</h3>
-                        <input type="text" name="cpf_cliente" id="cpfCliente" placeholder="CPF Cliente" class="label-input">
+                        <input type="text" name="cpf_cliente" id="cpfCliente" placeholder="CPF Cliente" class="label-input" value='<?php echo $cpfCliente; ?>'>
                     </label>
                     <br style="clear: both;">
                 </div>
-                <div class="group clear">
-                    <h3 align='left' style="margin: 0px;">Informações de envio</h3>
-                    <label class="label half">
-                        <h3 class="label-title" align=left>CEP</h3>
-                        <input type="text" name="cep_cliente" id="cepCliente" placeholder="CEP" class="label-input">
-                    </label>
-                    <label class="label small">
-                        <h3 class="label-title" align=left>Número</h3>
-                        <input type="text" name="numero_rua_cliente" id="numeroRuaCliente" placeholder="Número" class="label-input">
-                    </label>
-                    <label class="label small">
-                        <h3 class="label-title" align=left>Complemento</h3>
-                        <input type="text" name="complemento_rua_cliente" id="complementoRuaCliente" placeholder="Complemento" class="label-input">
-                    </label>
-                </div>
-                <br style="clear: both;">
-                <br style="clear: both;">
                 <div class="label small">
                     <h3>Produtos para o orçamento:</h3><br>
                     <!--PRODUTOS RELACIONADOS-->
-                    <a class="btn-produtos-relacionados">Produtos Selecionados (0)</a>
+                    <a class="btn-produtos-relacionados">Produtos Selecionados (<?php echo count($selectedProdutos); ?>)</a>
                     <div class="display-produtos-relacionados">
                         <div class="header-relacionados">
                             <h3 class="title-relacionados">Lista de produtos</h3>
@@ -733,7 +713,15 @@
                                 $nomeProdutoRelacionado = $infoRelacionados["nome"];
                                 $precoProduto = $infoRelacionados["preco"] != "" ? $infoRelacionados["preco"] : "0.00";
                                 $precoProduto = number_format($precoProduto, 2, ".", "");
-                                echo "<label class='label-relacionados'><input type='checkbox' name='produtos_orcamento[]' value='$idProdutoRelacionado||1' pew-id-produto='$idProdutoRelacionado' pew-preco-produto='$precoProduto' class='ctrl-selection-produto'> $nomeProdutoRelacionado [R$ $precoProduto] <span class='view-qtd-produto'>QTD: <input type='number' class='ctrl-quantidade-produto' placeholder='QTD' value='1'></span></label>";
+                                $search = array_search($idProdutoRelacionado, $selectedProdutos);
+                                if($search !== false){
+                                    $checked = "checked";
+                                    $quantidade = $quantidadesProdutos[$idProdutoRelacionado];
+                                }else{
+                                    $checked = "";
+                                    $quantidade = 1;
+                                }
+                                echo "<label class='label-relacionados'><input type='checkbox' name='produtos_orcamento[]' value='$idProdutoRelacionado||$quantidade' pew-id-produto='$idProdutoRelacionado' pew-preco-produto='$precoProduto' class='ctrl-selection-produto' $checked> $nomeProdutoRelacionado [R$ $precoProduto] <span class='view-qtd-produto'>QTD: <input type='number' class='ctrl-quantidade-produto' placeholder='QTD' value='$quantidade'></span></label>";
                             }
                         ?>
                         </div>
@@ -746,7 +734,7 @@
                 </div>
                 <div class="label small">
                     <div class="full">
-                        <h3 class='label-title'>Desconto:&nbsp; <input type="number" class="view-total-desconto label-input" value="0" max="100"> %</h3>
+                        <h3 class='label-title'>Desconto:&nbsp; <input type="number" class="view-total-desconto label-input" value='<?php echo $desconto; ?>' max="100"> %</h3>
                     </div>
                     <div class="full">
                         <h3 class='label-title'>Total: R$ <span class="view-total-orcamento">0.00</span></h3>

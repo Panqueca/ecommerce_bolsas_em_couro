@@ -29,6 +29,8 @@
         <?php
             // STANDARD REQUIRE
             require_once "@include-body.php";
+            require_once "@classe-orcamentos.php";
+        
             if(isset($block_level) && $block_level == true){
                 $pew_session->block_level();
             }
@@ -44,7 +46,7 @@
                         </div>
                         <div class="group">
                             <div class="xlarge" style="margin-left: -5px; margin-right: 0px;">
-                                <input type="search" name="busca" placeholder="Nome, email, telefone, RG ou CPF" class="label-input" title="Buscar">
+                                <input type="search" name="busca" placeholder="Nome, email, telefone ou CPF" class="label-input" title="Buscar">
                             </div>
                             <div class="xsmall" style="margin-left: 0px;">
                                 <button type="submit" class="btn-submit label-input btn-flat" style="margin: 10px;">
@@ -67,17 +69,22 @@
             <?php
                 $tabela_orcamentos = $pew_custom_db->tabela_orcamentos;
                 if(isset($_GET["busca"]) && $_GET["busca"] != ""){
-                    $busca = pew_string_format($_GET["busca"]);
-                    $strBusca = "where nome_cliente like '%".$busca."%' or telefone_cliente like '%".$busca."%' or email_cliente like '%".$busca."%' or rg_cliente like '%".$busca."%' or cpf_cliente like '%".$busca."%'";
+                    $busca = $pew_functions->sqli_format($_GET["busca"]);
+                    $strBusca = "where nome_cliente like '%".$busca."%' or telefone_cliente like '%".$busca."%' or email_cliente like '%".$busca."%' like '%".$busca."%' or cpf_cliente like '%".$busca."%'";
                     echo "<div class='full clear'><h3>Exibindo resultados para: $busca</h3></div>";
                 }else{
                     $strBusca = "";
                 }
-                $contarOrcamentos = mysqli_query($conexao, "select count(id) as total from $tabela_orcamentos s");
+                
+                $contarOrcamentos = mysqli_query($conexao, "select count(id) as total from $tabela_orcamentos where 1");
                 $contagemContatos = mysqli_fetch_assoc($contarOrcamentos);
                 $totalOrcamentos = $contagemContatos["total"];
+                
+                $cls_orcamentos = new Orcamentos();
+                
                 if($totalOrcamentos > 0){
                     echo "<thead>";
+                        echo "<td>Data</td>";
                         echo "<td>Nome</td>";
                         echo "<td>E-mail</td>";
                         echo "<td>Telefone</td>";
@@ -93,27 +100,23 @@
                         $nome = $orcamentos["nome_cliente"];
                         $email = $orcamentos["email_cliente"];
                         $telefone = $orcamentos["telefone_cliente"];
-                        $cpf = $orcamentos["cpf_cliente"];
-                        $totalOrcamento = $orcamentos["preco_total"];
-                        $status = $orcamentos["status_orcamento"];
-                        switch($status){
-                            case 1:
-                                $status = "Manter contato";
-                                break;
-                            case 2:
-                                $status = "Finalizado";
-                                break;
-                            case 3:
-                                $status = "Cancelado";
-                                break;
-                            default:
-                                $status = "Fazer primeiro contato";
+                        $cpf = $pew_functions->mask($orcamentos["cpf_cliente"], "###.###.###-##");
+                        $totalOrcamento = $cls_orcamentos->get_total_orcamento($id);
+                        $dataOrcamento = $orcamentos["data_controle"];
+                        $dataOrcamento = $pew_functions->inverter_data(substr($dataOrcamento, 0, 10));
+                        if($totalOrcamento == 0){
+                            $strOrcamento = "ORÇAR";
+                        }else{
+                            $strOrcamento = "R$ ". $pew_functions->custom_number_format($totalOrcamento);
                         }
-                        echo "<tr><td>$nome</td>";
+                        $status = $cls_orcamentos->get_string_status($orcamentos["status_orcamento"]);
+                        
+                        echo "<tr><td>$dataOrcamento</td>";
+                        echo "<td>$nome</td>";
                         echo "<td>$email</td>";
                         echo "<td>$telefone</td>";
                         echo "<td>$cpf</td>";
-                        echo "<td>R$ $totalOrcamento</td>";
+                        echo "<td>$strOrcamento</td>";
                         echo "<td>$status</td>";
                         echo "<td align=center><a href='pew-edita-orcamento.php?id_orcamento=$id' class='btn-editar'><i class='fa fa-eye' aria-hidden='true'></i></a></td></tr>";
                     }

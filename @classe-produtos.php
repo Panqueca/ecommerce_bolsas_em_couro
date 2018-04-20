@@ -192,6 +192,7 @@
                         $ctrlImagens++;
                     }
                 }
+                return true;
             }else{
                 $this->produto_montado = false;
                 return false;

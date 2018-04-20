@@ -108,6 +108,15 @@
                     $infoConta = null;
                     if($cls_conta->montar_minha_conta($idConta)){
                         $infoConta = $cls_conta->montar_array();
+                        $bodyEmail = $cls_conta->montar_email_confirmacao($infoConta["email"], $infoConta["usuario"]);
+                        
+                        $destinatarios = array();
+                        $destinatarios[0] = array();
+                        $destinatarios[0]["nome"] = $infoConta["usuario"];
+                        $destinatarios[0]["email"] = $infoConta["email"];
+                        
+                        $pew_functions->enviar_email("Confirme sua conta - Rei das Fechaduras", $bodyEmail, $destinatarios);
+                        
                     }else{
                         block();
                     }

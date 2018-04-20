@@ -1,5 +1,5 @@
 <?php
-    $post_fields = array("sku", "nome", "marca", "id_cor", "preco", "preco_promocao", "promocao_ativa", "desconto_relacionado", "estoque", "estoque_baixo", "tempo_fabricacao", "descricao_curta", "descricao_longa", "url_video", "peso", "comprimento", "largura", "altura", "status");
+    $post_fields = array("sku", "nome", "marca", "id_cor", "preco", "preco_ativo", "preco_promocao", "promocao_ativa", "desconto_relacionado", "estoque", "estoque_baixo", "tempo_fabricacao", "descricao_curta", "descricao_longa", "url_video", "peso", "comprimento", "largura", "altura", "status");
     $file_fields = array();
     $invalid_fields = array();
     $gravar = true;
@@ -33,6 +33,7 @@
         $precoProduto = $_POST["preco"];
         $precoProduto = $pew_functions->custom_number_format($precoProduto);
         $precoPromocaoProduto = $_POST["preco_promocao"];
+        $precoAtivo = intval($_POST["preco_ativo"]) == 1 ? 1 : 0;
         $precoPromocaoProduto = $pew_functions->custom_number_format($precoPromocaoProduto);
         $promocaoAtiva = intval($_POST["promocao_ativa"]) == 1 ? 1 : 0;
         $descontoRelacionado = isset($_POST["desconto_relacionado"]) && $_POST["desconto_relacionado"] ? $_POST["desconto_relacionado"] : 0;
@@ -87,7 +88,7 @@
             $idCor = $pew_functions->contar_resultados($tabela_cores, $condicaoCor) > 0 ? $idCor : null;
             
             /*INSERE DADOS PRODUTO*/
-            mysqli_query($conexao, "insert into $tabela_produtos (sku, nome, marca, id_cor, preco, preco_promocao, promocao_ativa, desconto_relacionado, estoque, estoque_baixo, tempo_fabricacao, descricao_curta, descricao_longa, url_video, peso, comprimento, largura, altura, data, status) values ('$skuProduto', '$nomeProduto', '$marcaProduto', '$idCor', '$precoProduto', '$precoPromocaoProduto', '$promocaoAtiva', '$descontoRelacionado', '$estoqueProduto', '$estoqueBaixoProduto', '$tempoFabricacaoProduto', '$descricaoCurtaProduto', '$descricaoLongaProduto', '$urlVideoProduto', '$pesoProduto', '$comprimentoProduto', '$larguraProduto', '$alturaProduto', '$dataAtual', '$statusProduto')");
+            mysqli_query($conexao, "insert into $tabela_produtos (sku, nome, marca, id_cor, preco, preco_ativo, preco_promocao, promocao_ativa, desconto_relacionado, estoque, estoque_baixo, tempo_fabricacao, descricao_curta, descricao_longa, url_video, peso, comprimento, largura, altura, data, status) values ('$skuProduto', '$nomeProduto', '$marcaProduto', '$idCor', '$precoProduto', '$precoAtivo','$precoPromocaoProduto', '$promocaoAtiva', '$descontoRelacionado', '$estoqueProduto', '$estoqueBaixoProduto', '$tempoFabricacaoProduto', '$descricaoCurtaProduto', '$descricaoLongaProduto', '$urlVideoProduto', '$pesoProduto', '$comprimentoProduto', '$larguraProduto', '$alturaProduto', '$dataAtual', '$statusProduto')");
 
             /*PEGA ID PRODUTO INSERIDO*/
             $queryID = mysqli_query($conexao, "select last_insert_id()");

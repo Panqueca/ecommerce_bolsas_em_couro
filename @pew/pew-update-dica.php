@@ -29,13 +29,13 @@
         $tabela_dica = $pew_custom_db->tabela_dicas;
          
         $id = $_POST["idDica"];
-        $titulo = $_POST["titulo"];
-        $subtitulo = $_POST["subtitulo"];
-        $descricaoCurta = $_POST["descricao_curta"];
-        $descricaoLonga = $_POST["descricao_longa"];
+        $titulo = addslashes($_POST["titulo"]);
+        $subtitulo = addslashes($_POST["subtitulo"]);
+        $descricaoCurta = addslashes($_POST["descricao_curta"]);
+        $descricaoLonga = addslashes($_POST["descricao_longa"]);
         $imagem = $_FILES["imagem"]["name"];
         $thumb = $_FILES["thumbnail"]["name"];
-        $video = $_POST["url_video"];
+        $video = addslashes($_POST["url_video"]);
         
         $refDicas = $pew_functions->url_format($titulo);
         $status = (int)$_POST["status"] == 1 ? 1 : 0;
@@ -57,7 +57,7 @@
             move_uploaded_file($_FILES["thumbnail"]["tmp_name"], $dirImagens.$thumb);
         }
 
-        mysqli_query($conexao, "update $tabela_dica set id = '$id', titulo = '$titulo', subtitulo = '$subtitulo', ref = '$refDicas', descricao_curta = '$descricaoCurta', descricao_longa = '$descricaoLonga', imagem = '$nomeImagem', thumb = '$thumb', video = '$video', data_controle = '$data', status = '$status' where id = '$id'");
+        mysqli_query($conexao, "update $tabela_dica set id = '$id', titulo = '$titulo', subtitulo = '$subtitulo', ref = '$refDicas', descricao_curta = '$descricaoCurta', descricao_longa = '$descricaoLonga', imagem = '$imagem', thumb = '$thumb', video = '$video', data_controle = '$data', status = '$status' where id = '$id'");
         
         header("location: pew-dicas.php");
         echo "true";

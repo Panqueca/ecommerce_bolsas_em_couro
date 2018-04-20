@@ -183,6 +183,32 @@
             return "true";
         }
         
+        function montar_email_confirmacao($email, $nome){
+            $codigo = md5(md5($email));
+            
+            $baseSite = "https://efectusdigital.com.br/reidasfechaduras";
+            $dirImagens = "imagens/identidadeVisual/";
+            $logo = "logo-rei-das-fechaduras.png";
+            
+            $body = "";
+            
+            $body .= "<style type='text/css'>@import url('https://fonts.googleapis.com/css?family=Montserrat');</style>";
+            $body .= "<body style='background-color: #eee; font-family: Montserrat, sans-serif;'>";
+            $body .= "<div style='width: 380px; margin: 20px auto 20px auto; padding: 20px; background-color: #fff;'>";
+                $body .= "<div style='width: 100%; height: 100px; line-height: 80px;'>";
+                    $body .= "<img src='$baseSite/$dirImagens/$logo' style='width: 150px; margin-top: 20px; float: left;'>";
+                    $body .= "<h1 style='margin: 0px 0px 0px 180px; font-size: 18px; width: 200px; white-space: nowrap; text-align: right;'>Confirme sua conta</h1>";
+                $body .= "</div>";
+                $body .= "<div class='body'>";
+                    $body .= "<article>Olá {$nome}. Você se cadastrou na loja do Rei das Fechaduras.<br><br>Seu login é: <b>$email</b>.<br><br>Clique no botão para confirmar sua conta</article>";
+                    $body .= "<a href='$baseSite/@envia-link-confirmacao.php?confirm=$codigo' style='background-color: limegreen; color: #fff; padding: 5px 15px 5px 15px; display: inline-block; text-decoration: none; margin-top: 15px; font-size: 14px;' target='_blank'>CONFIRMAR CONTA</a>";
+                $body .= "</div>";
+            $body .= "</div>";
+            $body .= "</body>";
+            
+            return $body;
+        }
+        
         private function grava_conta(){
             $tabela_minha_conta = $this->global_vars["tabela_minha_conta"];
             $alreadySubscribed = $this->pew_functions->contar_resultados($tabela_minha_conta, "email = '".$this->email."' or cpf = '".$this->cpf."'");
