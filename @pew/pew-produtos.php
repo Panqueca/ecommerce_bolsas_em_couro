@@ -223,6 +223,7 @@
                             }
                             $dirIMG = "../imagens/produtos/$imagem";
                             if(!file_exists($dirIMG) || $imagem == ""){
+                                
                                 $dirIMG = "../imagens/produtos/produto-padrao.png";
                             }
                             $urlAlteraProd = "pew-edita-produto.php?id_produto=$id";

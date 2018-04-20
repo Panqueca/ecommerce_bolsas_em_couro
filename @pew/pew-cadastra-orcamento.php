@@ -632,6 +632,39 @@
         
             // SET TABLES
             $tabela_produtos = $pew_custom_db->tabela_produtos;
+            $tabela_orcamentos = $pew_custom_db->tabela_orcamentos;
+            $tabela_carrinhos = $pew_custom_db->tabela_carrinhos;
+        
+            $nomeCliente = null;
+            $telefoneCliente = null;
+            $emailCliente = null;
+            $cpfCliente = null;
+            $desconto = 0;
+            $selectedProdutos = array();
+            $ctrlProdutos = 0;
+        
+            $quantidadesProdutos = array();
+        
+            if(isset($_GET["id_orcamento"]) && $pew_functions->contar_resultados($tabela_orcamentos, "id = '{$_GET["id_orcamento"]}'") > 0){
+                $idOrcamento = $_GET["id_orcamento"];
+                $query = mysqli_query($conexao, "select * from $tabela_orcamentos where id = '$idOrcamento'");
+                $info = mysqli_fetch_array($query);
+                
+                $nomeCliente = $info["nome_cliente"];
+                $telefoneCliente = $info["telefone_cliente"];
+                $emailCliente = $info["email_cliente"];
+                $cpfCliente = $info["cpf_cliente"];
+                $tokenCarrinho = $info["token_carrinho"];
+                $desconto = $info["porcentagem_desconto"];
+                
+                $queryCarrinho = mysqli_query($conexao, "select * from $tabela_carrinhos where token_carrinho = '$tokenCarrinho'");
+                while($infoCarrinho = mysqli_fetch_array($queryCarrinho)){
+                    $idProduto = $infoCarrinho["id_produto"];
+                    $selectedProdutos[$ctrlProdutos] = $idProduto;
+                    $quantidadesProdutos[$idProduto] = $infoCarrinho["quantidade_produto"];
+                    $ctrlProdutos++;
+                }
+            }
         ?>
         <!--PAGE CONTENT-->
         <h1 class="titulos"><?php echo $page_title; ?><a href="pew-orcamentos.php" class="btn-voltar"><i class="fa fa-arrow-left" aria-hidden="true"></i> Voltar</a></h1>
@@ -641,26 +674,26 @@
                     <h3 align='left' style="margin: 0px;">Informações do cliente</h3>
                     <label class="label half">
                         <h3 class="label-title" align=left>Nome</h3>
-                        <input type="text" name="nome_cliente" id="nomeCliente" placeholder="Nome" class="label-input">
+                        <input type="text" name="nome_cliente" id="nomeCliente" placeholder="Nome" class="label-input" value='<?php echo $nomeCliente; ?>'>
                     </label>
                     <label class="label half">
                         <h3 class="label-title" align=left>Telefone</h3>
-                        <input type="text" name="telefone_cliente" id="telefoneCliente" placeholder="(DDD) 99999-9999" class="label-input">
+                        <input type="text" name="telefone_cliente" id="telefoneCliente" placeholder="(DDD) 99999-9999" class="label-input" value='<?php echo $telefoneCliente; ?>'>
                     </label>
                     <label class="label half">
                         <h3 class="label-title" align=left>E-mail</h3>
-                        <input type="text" name="email_cliente" id="emailCliente" placeholder="email@dominio.com.br" class="label-input">
+                        <input type="text" name="email_cliente" id="emailCliente" placeholder="email@dominio.com.br" class="label-input" value='<?php echo $emailCliente; ?>'>
                     </label>
                     <label class="label small">
                         <h3 class="label-title" align=left>CPF</h3>
-                        <input type="text" name="cpf_cliente" id="cpfCliente" placeholder="CPF Cliente" class="label-input">
+                        <input type="text" name="cpf_cliente" id="cpfCliente" placeholder="CPF Cliente" class="label-input" value='<?php echo $cpfCliente; ?>'>
                     </label>
                     <br style="clear: both;">
                 </div>
                 <div class="label small">
                     <h3>Produtos para o orçamento:</h3><br>
                     <!--PRODUTOS RELACIONADOS-->
-                    <a class="btn-produtos-relacionados">Produtos Selecionados (0)</a>
+                    <a class="btn-produtos-relacionados">Produtos Selecionados (<?php echo count($selectedProdutos); ?>)</a>
                     <div class="display-produtos-relacionados">
                         <div class="header-relacionados">
                             <h3 class="title-relacionados">Lista de produtos</h3>
@@ -680,7 +713,15 @@
                                 $nomeProdutoRelacionado = $infoRelacionados["nome"];
                                 $precoProduto = $infoRelacionados["preco"] != "" ? $infoRelacionados["preco"] : "0.00";
                                 $precoProduto = number_format($precoProduto, 2, ".", "");
-                                echo "<label class='label-relacionados'><input type='checkbox' name='produtos_orcamento[]' value='$idProdutoRelacionado||1' pew-id-produto='$idProdutoRelacionado' pew-preco-produto='$precoProduto' class='ctrl-selection-produto'> $nomeProdutoRelacionado [R$ $precoProduto] <span class='view-qtd-produto'>QTD: <input type='number' class='ctrl-quantidade-produto' placeholder='QTD' value='1'></span></label>";
+                                $search = array_search($idProdutoRelacionado, $selectedProdutos);
+                                if($search !== false){
+                                    $checked = "checked";
+                                    $quantidade = $quantidadesProdutos[$idProdutoRelacionado];
+                                }else{
+                                    $checked = "";
+                                    $quantidade = 1;
+                                }
+                                echo "<label class='label-relacionados'><input type='checkbox' name='produtos_orcamento[]' value='$idProdutoRelacionado||$quantidade' pew-id-produto='$idProdutoRelacionado' pew-preco-produto='$precoProduto' class='ctrl-selection-produto' $checked> $nomeProdutoRelacionado [R$ $precoProduto] <span class='view-qtd-produto'>QTD: <input type='number' class='ctrl-quantidade-produto' placeholder='QTD' value='$quantidade'></span></label>";
                             }
                         ?>
                         </div>
@@ -693,7 +734,7 @@
                 </div>
                 <div class="label small">
                     <div class="full">
-                        <h3 class='label-title'>Desconto:&nbsp; <input type="number" class="view-total-desconto label-input" value="0" max="100"> %</h3>
+                        <h3 class='label-title'>Desconto:&nbsp; <input type="number" class="view-total-desconto label-input" value='<?php echo $desconto; ?>' max="100"> %</h3>
                     </div>
                     <div class="full">
                         <h3 class='label-title'>Total: R$ <span class="view-total-orcamento">0.00</span></h3>

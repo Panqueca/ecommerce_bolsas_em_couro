@@ -28,13 +28,13 @@
         
         $tabela_dica = $pew_custom_db->tabela_dicas;
         
-        $titulo = $_POST["titulo"];
-        $subtitulo = $_POST["subtitulo"];
-        $descricaoCurta = $_POST["descricao_curta"];
-        $descricaoLonga = $_POST["descricao_longa"];
+        $titulo = addslashes($_POST["titulo"]);
+        $subtitulo = addslashes($_POST["subtitulo"]);
+        $descricaoCurta = addslashes($_POST["descricao_curta"]);
+        $descricaoLonga = addslashes($_POST["descricao_longa"]);
         $imagem = $_FILES["imagem"]["name"];
         $thumb = $_FILES["thumbnail"]["name"];
-        $video = $_POST["url_video"];
+        $video = addslashes($_POST["url_video"]);
         
         $refDicas = $pew_functions->url_format($titulo);
         $status = (int)$_POST["status"] == 1 ? 1 : 0;
@@ -50,18 +50,16 @@
             move_uploaded_file($_FILES["imagem"]["tmp_name"], $dirImagens.$imagem);
         }
         if($thumb != ""){
-            echo "kk";
             $refImg = substr(md5(uniqid()), 0, 4);
             $ext = pathinfo($thumb, PATHINFO_EXTENSION);
             $thumb = $nomeImagem."-dicathumb-ref$refImg.".$ext;
             move_uploaded_file($_FILES["thumbnail"]["tmp_name"], $dirImagens.$thumb);
         }
 
-        mysqli_query($conexao, "insert into $tabela_dica (titulo, subtitulo, ref, descricao_curta, descricao_longa, imagem, thumb, video, data_controle, status) values ('$titulo', '$subtitulo', '$refDicas', '$descricaoCurta', '$descricaoLonga','$nomeImagem', '$thumb', '$video','$data', '$status')");
+        mysqli_query($conexao, "insert into $tabela_dica (titulo, subtitulo, ref, descricao_curta, descricao_longa, imagem, thumb, video, data_controle, status) values ('$titulo', '$subtitulo', '$refDicas', '$descricaoCurta', '$descricaoLonga','$imagem', '$thumb', '$video','$data', '$status')");
         
         header("location: pew-dicas.php");
         echo "true";
-        print_r($post_fields);
     }else{
         echo "false";
     }

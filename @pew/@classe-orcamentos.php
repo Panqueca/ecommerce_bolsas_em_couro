@@ -1,5 +1,4 @@
 <?php
-    
     require_once "@include-global-vars.php";
     require_once "@classe-system-functions.php";
     require_once "../@classe-minha-conta.php";
@@ -8,22 +7,19 @@
 
     class Orcamentos{
         private $id; 
-        private $ref_orcamento; 
         private $nome_cliente; 
         private $telefone_cliente; 
         private $email_cliente; 
         private $cpf_cliente; 
-        private $endereco_envio; 
-        private $produtos = array(); 
-        private $porcentagem_desconto; 
-        private $preco_total; 
-        private $tempo_entrega; 
+        private $token_carrinho; 
+        private $porcentagem_desconto;
         private $id_vendedor; 
-        private $data_pedido; 
+        private $data_pedido;
         private $data_vencimento; 
         private $data_controle; 
         private $modify_controle; 
         private $status;
+        private $produtos = array();
         public $global_vars;
         public $pew_functions;
         
@@ -35,6 +31,20 @@
         
         function conexao(){
             return $this->global_vars["conexao"];
+        }
+        
+        function montar($idOrcamento){
+            $tabela_orcamentos = $this->global_vars["tabela_orcamentos"];
+            $tabela_carrinhos = $this->global_vars["tabela_carrinhos"];
+            
+            $total = $this->pew_functions->contar_resultados($tabela_orcamentos, "id = '$idOrcamento'");
+            if($total > 0){
+                $query = mysqli_query($this->conexao(), "select * from $tabela_carrinhos where id = '$idOrcamento'");
+                $info = mysqli_fetch_array($query);
+                return true;
+            }else{
+                return false;
+            }
         }
         
         function montar_carrinho($arrayProdutos = array(), $desconto = 0){
@@ -60,6 +70,8 @@
                     $infoProduto = $cls_produtos->montar_array();
                     
                     $quantidade = $infoProduto["estoque"] > $quantidade ? $quantidade : $infoProduto["estoque"];
+                    
+                    $preco = $infoProduto["preco_promocao"] > 0 && $infoProduto["preco_promocao"] < $infoProduto["preco"] && $infoProduto["promocao_ativa"] == 1 ? $infoProduto["preco_promocao"] : $infoProduto["preco"];
                     
                     $carrinho["itens"][$ctrlProdutos] = array();
                     $carrinho["itens"][$ctrlProdutos]["id"] = $infoProduto["id"];
@@ -111,11 +123,13 @@
         }
         
         function montar_email($nome, $produtos, $desconto, $tokenCarrinho){
-            $baseSite = "..";
+            $baseSite = "https://efectusdigital.com.br/reidasfechaduras";
             $dirImagens = "imagens/identidadeVisual/";
-            $logo = "logo-bolsa-em-couro.png";
+            $logo = "logo-rei-das-fechaduras.png";
             
             $body = "";
+            
+            $strDesconto = $desconto > 0 ? ", você <b>ganhou {$desconto}% de desconto</b> em seu orçamento. " : "";
             
             $body .= "<style type='text/css'>@import url('https://fonts.googleapis.com/css?family=Montserrat');</style>";
             $body .= "<body style='background-color: #eee; font-family: Montserrat, sans-serif;'>";
@@ -125,7 +139,7 @@
                     $body .= "<h1 style='margin: 0px 0px 0px 180px; font-size: 18px; width: 200px; white-space: nowrap; text-align: right;'>Pedido de orçamento</h1>";
                 $body .= "</div>";
                 $body .= "<div class='body'>";
-                    $body .= "<article>Olá $nome, é um fato conhecido de todos que um leitor se distrairá com o conteúdo de texto legível de uma página quando estiver examinando sua diagramação.</article>";
+                    $body .= "<article>Olá {$nome}{$strDesconto}. Veja abaixo os itens de que foram orçados e clique no botão de finalizar compra para acessar seu carrinho no site. Rei das Fechaduras agradece!</article>";
                     $body .= "<table style='margin: 30px 0px 20px 0px;'>";
                     $totalOrcamento = 0;
                     foreach($produtos as $infoProduto){
@@ -134,7 +148,6 @@
                         $totalOrcamento += $subtotalProduto;
                         
                         $subtotalProduto = number_format($subtotalProduto, 2, ".", ",");
-                        
                         
                         $body .= "<tr>";
                             $body .= "<td style='text-align: center; width: 80px; border-bottom: 1px solid #e2e2e2; padding: 10px 0px 10px 0px;'>{$infoProduto["quantidade"]}x</td>";

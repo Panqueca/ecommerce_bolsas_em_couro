@@ -9,7 +9,7 @@
         if(!isset($_POST[$post_name])) $validar = false; $invalid_fields[$i] = $post_name; $i++;
     }
 
-    if($validar){
+    if($validar == true){
         // SET VARS
         $nome = addslashes($_POST["nome"]);
         $email = addslashes($_POST["email"]);
@@ -33,6 +33,7 @@
         
         // REQUIRES
         require_once "@classe-minha-conta.php";
+        require_once "@classe-system-functions.php";
         // END REQUIRES
         
         $enderecos = array();
@@ -48,12 +49,20 @@
         $minhaConta = new MinhaConta();
         $cadastro = $minhaConta->cadastrar_conta($nome, $email, $senha, $celular, $telefone, $cpf, $sexo, $dataNascimento, $enderecos);
         if($cadastro == true){
+            $bodyEmail = $minhaConta->montar_email_confirmacao($email, $nome);
+                        
+            $destinatarios = array();
+            $destinatarios[0] = array();
+            $destinatarios[0]["nome"] = $nome;
+            $destinatarios[0]["email"] = $email;
+
+            $pew_functions->enviar_email("Confirme sua conta - Rei das Fechaduras", $bodyEmail, $destinatarios);
             echo "true";
         }else{
             echo "false";
         }
     }else{
-        //print_r($invalid_fields);
+        print_r($invalid_fields);
         echo "false";
     }
 

@@ -46,9 +46,8 @@
         $http = substr($link, 0, 5);
         if($http != "http:" && $http != "https" && $link != false){
             $link = "http://".$link;
-        }else{
-            $link = null;
         }
+        
 
         $nomeFoto = $pew_functions->url_format($titulo);
         if($imagemBanner != ""){

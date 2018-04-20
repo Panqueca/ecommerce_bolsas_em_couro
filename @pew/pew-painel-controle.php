@@ -40,7 +40,8 @@
         <!--PAGE CONTENT-->
         <h1 class="titulos"><?php echo $page_title; ?></h1>
         <section class="conteudo-painel">
-            <h3 align='center'>Em manutenção...</h3>
+            <h3 align='center'>Seja bem vindo!</h3>
+            <h3 align='center'>Caso esteja com alguma dúvida em relação às funcionalidades entre em contato com a Efectus Digital!</h3>
         </section>
     </body>
 </html>

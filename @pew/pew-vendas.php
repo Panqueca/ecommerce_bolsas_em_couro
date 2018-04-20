@@ -158,8 +158,6 @@
                 background-color: #fff;
                 transition: .3s;
                 visibility: hidden;
-                overflow: hidden;
-                overflow-y: auto;
                 opacity: 0;
             }
             .display-info-pedido::-webkit-scrollbar-button:hover{
@@ -209,6 +207,78 @@
             }*/
         </style>
         <!--FIM THIS PAGE CSS-->
+        <script>
+            $(document).ready(function(){
+                var botaoVerProdutos = $(".botao-ver-produtos");
+                var botaoVerInfo = $(".botao-ver-info");
+                var botaoVoltar = $(".display-produtos-pedido .btn-voltar-produtos");
+                var botaoVoltarInfo = $(".display-info-pedido .btn-voltar-info");
+
+                botaoVerProdutos.each(function(){
+
+                });
+
+                function toggleVerProdutos(id){
+                    var obj = $("#"+id);
+
+                    if(obj.css("opacity") == "0"){
+                        obj.css({
+                            visibility: "visible",
+                            opacity: "1",
+                            height: "100%"
+                        });
+                        obj.addClass("active");
+                    }else{
+                        obj.css({
+                            visibility: "hidden",
+                            opacity: "0",
+                            height: "0%"
+                        });
+                        obj.removeClass("active");
+                    }
+                }
+
+                function toggleInfoPedido(id){
+                    var obj = $("#"+id);
+
+                    if(obj.css("opacity") == "0"){
+                        obj.css({
+                            visibility: "visible",
+                            opacity: "1",
+                            height: "calc(100% - 30px)"
+                        });
+                        obj.addClass("active");
+                    }else{
+                        obj.css({
+                            visibility: "hidden",
+                            opacity: "0",
+                            height: "0%"
+                        });
+                        obj.removeClass("active");
+                    }
+                }
+
+                botaoVerProdutos.off().on("click", function(){
+                    var id = $(this).attr("id-pedido");
+                    toggleVerProdutos(id);
+                });
+
+                botaoVerInfo.off().on("click", function(){
+                    var id = $(this).attr("id-pedido");
+                    toggleInfoPedido(id);
+                });
+
+                botaoVoltar.off().on("click", function(){
+                    var id = $(this).attr("id-pedido");
+                    toggleVerProdutos(id);
+                });
+
+                botaoVoltarInfo.off().on("click", function(){
+                    var id = $(this).attr("id-pedido");
+                    toggleInfoPedido(id);
+                });
+            });
+        </script>
     </head>
     <body>
         <?php
@@ -284,72 +354,4 @@
             <br style="clear: both;">
         </section>
     </body>
-    <script>
-        $(document).ready(function(){
-            var botaoVerProdutos = $(".botao-ver-produtos");
-            var botaoVerInfo = $(".botao-ver-info");
-            var botaoVoltar = $(".display-produtos-pedido .btn-voltar-produtos");
-            var botaoVoltarInfo = $(".display-info-pedido .btn-voltar-info");
-            
-            function toggleVerProdutos(id){
-                var obj = $("#"+id);
-                
-                if(obj.css("opacity") == "0"){
-                    obj.css({
-                        visibility: "visible",
-                        opacity: "1",
-                        height: "100%"
-                    });
-                    obj.addClass("active");
-                }else{
-                    obj.css({
-                        visibility: "hidden",
-                        opacity: "0",
-                        height: "0%"
-                    });
-                    obj.removeClass("active");
-                }
-            }
-            
-            function toggleInfoPedido(id){
-                var obj = $("#"+id);
-                
-                if(obj.css("opacity") == "0"){
-                    obj.css({
-                        visibility: "visible",
-                        opacity: "1",
-                        height: "calc(100% - 30px)"
-                    });
-                    obj.addClass("active");
-                }else{
-                    obj.css({
-                        visibility: "hidden",
-                        opacity: "0",
-                        height: "0%"
-                    });
-                    obj.removeClass("active");
-                }
-            }
-            
-            botaoVerProdutos.off().on("click", function(){
-                var id = $(this).attr("id-pedido");
-                toggleVerProdutos(id);
-            });
-            
-            botaoVerInfo.off().on("click", function(){
-                var id = $(this).attr("id-pedido");
-                toggleInfoPedido(id);
-            });
-            
-            botaoVoltar.off().on("click", function(){
-                var id = $(this).attr("id-pedido");
-                toggleVerProdutos(id);
-            });
-            
-            botaoVoltarInfo.off().on("click", function(){
-                var id = $(this).attr("id-pedido");
-                toggleInfoPedido(id);
-            });
-        });
-    </script>
 </html>

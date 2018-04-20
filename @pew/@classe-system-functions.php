@@ -1,4 +1,15 @@
 <?php
+    require_once 'PHPMailer/vendor/autoload.php';
+    require_once 'PHPMailer/PHPMailer/src/Exception.php';
+    require_once 'PHPMailer/PHPMailer/src/PHPMailer.php';
+    require_once 'PHPMailer/PHPMailer/src/SMTP.php';
+
+
+    require_once "pew-system-config.php";
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+
     if(!class_exists("systemFunctions")){
         class systemFunctions{
             protected $global_vars;
@@ -9,7 +20,8 @@
             }
 
             private function conexao(){
-                return $this->global_vars["conexao"];
+                global $conexao;
+                return $conexao;
             }
 
             public function contar_resultados($table, $condicao = ""){
@@ -66,7 +78,17 @@
                                 }
                                 break;
                             case false:
-                                $formatedVal = $cleanedVal.$sep."00";
+                                
+                                // Verifica se é um decimal de mais de 3 números
+                                if($totalExplodes == 2 && strlen($explodedVal[1]) >= 3){ 
+                                    $valorMilhar = $explodedVal[0];
+                                    $valorDecimal = $explodedVal[1];
+                                    $decimalFinal = substr($valorDecimal, 0, 2);
+                                    $formatedVal = $valorMilhar.$sep.$decimalFinal;
+                                }else{
+                                    $formatedVal = $cleanedVal.$sep."00";
+                                }
+                                
                                 break;
                         }
                     }
@@ -132,8 +154,66 @@
 
                 return $maskared;
             }
+            
+            function enviar_email($assunto, $body, $destinatarios, $senderEmail = null, $senderPass = null, $anexos = null, $altBody = null){
+                $nomeLoja = "Rei das fechaduras";
+                
+                $senderEmail = $senderEmail == null ? "dev@efectusdigital.com.br" : $senderEmail;
+                $senderPass = $senderPass == null ? "3f3ctu5d1g1t4l" : $senderPass;
+                $altBody = $altBody == null ? "E-mail enviado por $nomeLoja" : $altBody;
+                
+                
+                $mail = new PHPMailer(true);                              // Passing `true` enables exceptions
+                try {
+                    //Server settings
+                    $mail->SMTPDebug = 2;
+                    /*$mail->isSMTP();*/
+                    $mail->Host = 'mail.efectusdigital.com.br';  // Specify main and backup SMTP servers
+                    $mail->SMTPAuth = true;
+                    $mail->Username = $senderEmail;
+                    $mail->Password = $senderPass;
+                    $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+                    $mail->Port = 587;
 
-        }   
+                    //Informações para envio
+                    $mail->setFrom($senderEmail, $nomeLoja);
+                    if(isset($destinatarios) && is_array($destinatarios) && count($destinatarios) > 0){
+                        foreach($destinatarios as $infoDestinatario){
+                            $receiverEmail = $infoDestinatario["email"];
+                            $receiverName = $infoDestinatario["nome"];
+                            $mail->addAddress($receiverEmail, $receiverName);
+                        }
+                    }
+
+                    //Anexos
+                    if(isset($anexos) && is_array($anexos) && count($anexos) > 0){
+                        foreach($anexos as $infoAnexo){
+                            $diretorio = $infoAnexo["dir"];
+                            $novoNome = $infoAnexo["nome"];
+                            $mail->addAttachment($diretorio, $novoNome);
+                        }
+                    }
+
+                    
+                    //Content
+                    $mail->isHTML(true);
+                    $mail->Subject = $assunto;
+                    $mail->Body    = $body;
+                    $mail->AltBody = $altBody;
+                    $mail->CharSet = "UTF-8";
+
+                    $mail->send();
+                    
+                    return true;
+                                      
+                } catch (Exception $e) {
+                    //$mail->ErrorInfo;
+                    return false;
+                }
+                
+            }
+
+        } 
     }
 
     $pew_functions = new systemFunctions();

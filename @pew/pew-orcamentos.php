@@ -46,7 +46,7 @@
                         </div>
                         <div class="group">
                             <div class="xlarge" style="margin-left: -5px; margin-right: 0px;">
-                                <input type="search" name="busca" placeholder="Nome, email, telefone, RG ou CPF" class="label-input" title="Buscar">
+                                <input type="search" name="busca" placeholder="Nome, email, telefone ou CPF" class="label-input" title="Buscar">
                             </div>
                             <div class="xsmall" style="margin-left: 0px;">
                                 <button type="submit" class="btn-submit label-input btn-flat" style="margin: 10px;">
@@ -70,7 +70,7 @@
                 $tabela_orcamentos = $pew_custom_db->tabela_orcamentos;
                 if(isset($_GET["busca"]) && $_GET["busca"] != ""){
                     $busca = $pew_functions->sqli_format($_GET["busca"]);
-                    $strBusca = "where nome_cliente like '%".$busca."%' or telefone_cliente like '%".$busca."%' or email_cliente like '%".$busca."%' or rg_cliente like '%".$busca."%' or cpf_cliente like '%".$busca."%'";
+                    $strBusca = "where nome_cliente like '%".$busca."%' or telefone_cliente like '%".$busca."%' or email_cliente like '%".$busca."%' like '%".$busca."%' or cpf_cliente like '%".$busca."%'";
                     echo "<div class='full clear'><h3>Exibindo resultados para: $busca</h3></div>";
                 }else{
                     $strBusca = "";
@@ -84,6 +84,7 @@
                 
                 if($totalOrcamentos > 0){
                     echo "<thead>";
+                        echo "<td>Data</td>";
                         echo "<td>Nome</td>";
                         echo "<td>E-mail</td>";
                         echo "<td>Telefone</td>";
@@ -101,14 +102,17 @@
                         $telefone = $orcamentos["telefone_cliente"];
                         $cpf = $pew_functions->mask($orcamentos["cpf_cliente"], "###.###.###-##");
                         $totalOrcamento = $cls_orcamentos->get_total_orcamento($id);
+                        $dataOrcamento = $orcamentos["data_controle"];
+                        $dataOrcamento = $pew_functions->inverter_data(substr($dataOrcamento, 0, 10));
                         if($totalOrcamento == 0){
                             $strOrcamento = "ORÇAR";
                         }else{
-                            $strOrcamento = "R$ $totalOrcamento";
+                            $strOrcamento = "R$ ". $pew_functions->custom_number_format($totalOrcamento);
                         }
                         $status = $cls_orcamentos->get_string_status($orcamentos["status_orcamento"]);
                         
-                        echo "<tr><td>$nome</td>";
+                        echo "<tr><td>$dataOrcamento</td>";
+                        echo "<td>$nome</td>";
                         echo "<td>$email</td>";
                         echo "<td>$telefone</td>";
                         echo "<td>$cpf</td>";
