@@ -593,7 +593,16 @@
             /*END HTML VIEW*/
                 
             $iconArrow = "<i class='fas fa-angle-right icon'></i>";
-            $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='loja.php?departamento=$breadCrumbRefDepartamento'>$breadCrumbDepartamento</a> $iconArrow <a href='loja.php?departamento=$breadCrumbRefDepartamento&categoria=$breadCrumbRefCategoria'>$breadCrumbCategoria</a> $iconArrow <a href='#'>$nomeProduto</a></div>";
+				
+            $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a>";
+			if(isset($breadCrumbDepartamento)){
+				$navigationTree .= "$iconArrow <a href='loja.php?departamento=$breadCrumbRefDepartamento'>$breadCrumbDepartamento</a>"; 
+			}
+			if(isset($breadCrumbCategoria)){
+				$navigationTree .= "$iconArrow <a href='loja.php?departamento=$breadCrumbRefDepartamento&categoria=$breadCrumbRefCategoria'>$breadCrumbCategoria</a>";
+			}
+			$navigationTree .= "$iconArrow <a href='#'>$nomeProduto</a></div>";
+				
             echo $navigationTree;
                 
             ?>

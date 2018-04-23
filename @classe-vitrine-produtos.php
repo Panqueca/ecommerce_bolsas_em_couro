@@ -63,7 +63,6 @@
                     $qtdParcelas = 6;
                     $txtParcelas = $qtdParcelas."x";
                     $preco = $infoProduto["preco"];
-                    $precoAtivo = $infoProduto["preco_ativo"] == 1 ? true : false; 
                     $precoPromocao = $infoProduto["preco_promocao"];
                     $promoAtiva = $precoPromocao > 0 && $precoPromocao < $preco ? true : false;
                     $precoParcela = $promoAtiva == true ? $precoPromocao / $qtdParcelas : $preco / $qtdParcelas;
@@ -75,9 +74,7 @@
                     echo "<div class='box-produto'>";
                         echo "<a href='$urlProduto'><img src='$dirImagensProdutos/$srcImagem' title='$nome' alt='$nome - $nomeLoja'></a>";
                         echo "<a href='$urlProduto' class='title-link'><h3 class='titulo-produto' title='$nome'>$nomeEllipses</h3></a>";
-                        if($precoAtivo){
-                            echo "<h4 class='preco-produto'>$priceField ou <span class='view-parcelas'>$txtParcelas R$". number_format($precoParcela, 2, ",", ".") ."   </span></h4>";
-                        }
+						echo "<h4 class='preco-produto'>$priceField ou <span class='view-parcelas'>$txtParcelas R$". number_format($precoParcela, 2, ",", ".") ."   </span></h4>";
                         echo "<a href='$urlProduto' class='call-to-action'>SOLICITAR ORÇAMENTO</a>";
                         echo "<div class='display-cores'>";
                             if(is_array($infoCoresRelacionadas) and count($infoCoresRelacionadas) > 0){
