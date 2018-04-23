@@ -2,7 +2,7 @@
     session_start();
     $nomeEmpresa = "Bolsas em Couro";
     $descricaoPagina = "DESCRIÇÃO MODELO ATUALIZAR...";
-    $tituloPagina = "Institucional - $nomeEmpresa";
+    $tituloPagina = "Confirmar conta - $nomeEmpresa";
 ?>
 <!DOCTYPE html>
 <html>

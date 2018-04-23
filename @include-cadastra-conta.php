@@ -337,7 +337,7 @@
                 <button class="top-buttons selected-button" id="botaoPasso1">INFORMAÇÕES DE CONTATO</button>
                 <button class="top-buttons" id="botaoPasso2">ENDEREÇO</button>
             </div>
-            <form class="formulario-cadastro" name="formulario_cadastro">
+            <form class="formulario-cadastro" name="formulario_cadastro" id="formularioCadastroConta">
                 <div class="background-loading">
                     <i class="fas fa-spinner fa-spin icone-loading"></i>
                 </div>
@@ -528,7 +528,7 @@
         /*DEFAULT VARS*/
         var displayFormularios = $(".display-formularios");
         var displayConfirmacao = $(".display-confirmacao");
-        var formularioCadastraConta = $(".formulario-cadastro");
+        var formularioCadastraConta = $("#formularioCadastroConta");
         var botaoCadastraConta = $("#botaoCadastraConta");
         var botaoVoltar = $(".section-cadastra .botao-voltar");
         var backgroundLoading = $(".section-cadastra .background-loading");
@@ -1067,7 +1067,7 @@
                                         finish();
                                     },
                                     success: function(resposta){
-                                        console.log(resposta);
+                                        console.log("Mensagem: " + resposta);
                                         if(resposta == "true"){
                                             mensagemAlerta(msgSucesso, false, "limegreen");
                                             mensagemConfirmaEmail(objEmail.val());
