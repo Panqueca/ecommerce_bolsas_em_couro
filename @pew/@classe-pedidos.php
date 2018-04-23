@@ -71,7 +71,7 @@
                 global $diretorioAPI;
                 require "{$diretorioAPI}pagseguro/ws-pagseguro-consulta-referencia.php"; // Retorna o $statusPagseguro
                 
-                if($statusPagseguro != $info["status"]){
+                if(isset($statusPagseguro) && $statusPagseguro != $info["status"]){
                     mysqli_query($conexao, "update $tabela_pedidos set status = '$statusPagseguro' where id = '{$info["id"]}'");
                     $this->status = $statusPagseguro;
                 }

@@ -51,7 +51,7 @@ if(isset($_POST["carrinho"]) && $_POST["carrinho"] != null){
     $data["itemId$i"] = 0;
     $data["itemQuantity$i"] = 1;
     $data["itemDescription$i"] = "Transporte: $tituloTransporte";
-    $valorFrete = "0.01";
+    /*$valorFrete = "0.01";*/
     $data["itemAmount$i"] = $valorFrete;
     
 }else{
