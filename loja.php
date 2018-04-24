@@ -1,8 +1,43 @@
 <?php
+
     session_start();
     $nomeEmpresa = "Rei das Fechaduras";
-    $descricaoPagina = "DESCRIÇÃO MODELO ATUALIZAR...";
-    $tituloPagina = "MUDAR TITULO - $nomeEmpresa";
+
+    $buscarDepartamento = isset($_GET["departamento"]) ? true : false;
+    $buscarCategoria = isset($_GET["categoria"]) ? true : false;
+    $buscarSubcategoria = isset($_GET["subcategoria"]) ? true : false;
+
+    $getDepartamento = $buscarDepartamento == true ? addslashes($_GET["departamento"]) : null;
+    $getCategoria = $buscarCategoria == true ? addslashes($_GET["categoria"]) : null;
+    $getSubcategoria = $buscarSubcategoria == true ? addslashes($_GET["subcategoria"]) : null;
+
+    require_once "@classe-produtos.php";
+
+    $cls_produtos = new Produtos();
+
+    $descricaoPagina = "";
+    $tituloPagina = "Loja - $nomeEmpresa";
+
+    if($getSubcategoria != null){
+        $headInfo = $cls_produtos->get_referencias("subcategoria", "ref = '$getSubcategoria'");
+        if($headInfo != false){
+            $tituloPagina = $headInfo["titulo"] . " - " . $nomeEmpresa;
+            $descricaoPagina = $headInfo["descricao"];
+        }
+    }else if($getCategoria != null){
+        $headInfo = $cls_produtos->get_referencias("categoria", "ref = '$getCategoria'");
+        if($headInfo != false){
+            $tituloPagina = $headInfo["titulo"] . " - " . $nomeEmpresa;
+            $descricaoPagina = $headInfo["descricao"];
+        }
+    }else if($getDepartamento != null){
+        $headInfo = $cls_produtos->get_referencias("departamento", "ref = '$getDepartamento'");
+        if($headInfo != false){
+            $tituloPagina = $headInfo["titulo"] . " - " . $nomeEmpresa;
+            $descricaoPagina = $headInfo["descricao"];
+        }
+    }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -81,7 +116,6 @@
             require_once "@include-header-principal.php";
             require_once "@include-interatividade.php";
             require_once "@classe-vitrine-produtos.php";
-            require_once "@classe-produtos.php";
         ?>
         <!--THIS PAGE CONTENT-->
         <div class="background-loja">
@@ -89,18 +123,9 @@
         </div>
         <div class="main-content">
         <?php
-            $buscarDepartamento = isset($_GET["departamento"]) ? true : false;
-            $buscarCategoria = isset($_GET["categoria"]) ? true : false;
-            $buscarSubcategoria = isset($_GET["subcategoria"]) ? true : false;
-            
-            $getDepartamento = $buscarDepartamento == true ? addslashes($_GET["departamento"]) : null;
-            $getCategoria = $buscarCategoria == true ? addslashes($_GET["categoria"]) : null;
-            $getSubcategoria = $buscarSubcategoria == true ? addslashes($_GET["subcategoria"]) : null;
             
             $selectedProdutos = array();
             $ctrlProdutos = 0;
-            
-            $cls_produtos = new Produtos();
             
             function valida_array($array){
                 $retorno = is_array($array) && count($array) > 0 ? true : false;
@@ -118,6 +143,22 @@
             $tituloVitrine = "Ocorreu um erro. Contate um administrador!";
             $descricaoVitrine = "Ocorreu um erro. Contate um administrador!";
             
+            $navigationTree = "";
+            $ctrlNavigation = 0;
+            
+            function add_navigation($titulo, $url){
+                global $navigationTree, $ctrlNavigation;
+                
+                $iconArrow = "<i class='fas fa-angle-right icon'></i>";
+                
+                $titulo = mb_convert_case($titulo, MB_CASE_TITLE, "UTF-8");
+                
+                $navigationTree .= $ctrlNavigation == 0 ? "<a href='$url'>$titulo</a>" : "$iconArrow <a href='$url'>$titulo</a>";
+                $ctrlNavigation++;
+            }
+            
+            add_navigation("Página inicial", "index.php");
+            
             if($buscarSubcategoria){
                 $selected = array();
                 $ctrlSelected = 0;
@@ -125,45 +166,73 @@
                 $ctrlSelectedFinal = 0;
                 
                 $infoVitrine = $cls_produtos->get_referencias("subcategoria", "ref = '$getSubcategoria'");
-                $tituloVitrine = $infoVitrine["titulo"];
-                $descricaoVitrine = $infoVitrine["descricao"];
-                
-                if($buscarDepartamento && $buscarCategoria){
-                    $selectedDepartamento = $cls_produtos->search_departamentos_produtos("ref = '$getDepartamento'");
-                    $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
-                    $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
-                    foreach($selectedCategoria as $idProduto){
-                        if(array_search($idProduto, $selectedDepartamento) >= 0 || array_search($idProduto, $selectedDepartamento) != null){
-                            $selected[$ctrlSelected] = $idProduto;
-                            $ctrlSelected++;
+                if($infoVitrine != false){
+                    
+                    $tituloVitrine = $infoVitrine["titulo"];
+                    $descricaoVitrine = $infoVitrine["descricao"];
+
+                    if($buscarDepartamento && $buscarCategoria){
+                        $selectedDepartamento = $cls_produtos->search_departamentos_produtos("ref = '$getDepartamento'");
+                        $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
+                        $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
+                        foreach($selectedCategoria as $idProduto){
+                            if(array_search($idProduto, $selectedDepartamento) >= 0 || array_search($idProduto, $selectedDepartamento) != null){
+                                $selected[$ctrlSelected] = $idProduto;
+                                $ctrlSelected++;
+                            }
                         }
-                    }
-                    foreach($selectedSubcategoria as $idProduto){
-                        if(array_search($idProduto, $selected) >= 0 || array_search($idProduto, $selected) != null){
+                        foreach($selectedSubcategoria as $idProduto){
+                            if(array_search($idProduto, $selected) >= 0 || array_search($idProduto, $selected) != null){
+                                $selectedFinal[$ctrlSelectedFinal] = $idProduto;
+                                $ctrlSelectedFinal++;
+                            }
+                        }
+
+                        $navInfoDepart = $cls_produtos->get_referencias("departamento", "ref = '$getDepartamento'");
+                        if($navInfoDepart != false){
+                            add_navigation($navInfoDepart["titulo"], "loja.php?departamento=$getDepartamento");
+                        }
+                        
+                        $navInfoCat = $cls_produtos->get_referencias("categoria", "ref = '$getCategoria'");
+                        if($navInfoCat != false){
+                            add_navigation($navInfoCat["titulo"], "loja.php?departamento=$getDepartamento&categoria=$getCategoria");
+                        }
+                        
+                        add_navigation($tituloVitrine, "loja.php?departamento=$getDepartamento&categoria=$getCategoria&subcategoria=$getSubcategoria");
+
+                    }else if($buscarCategoria){
+                        $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
+                        $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
+
+                        foreach($selectedSubcategoria as $idProduto){
+                            if(array_search($idProduto, $selectedCategoria) >= 0 || array_search($idProduto, $selectedCategoria) != null){
+                                $selectedFinal[$ctrlSelectedFinal] = $idProduto;
+                                $ctrlSelectedFinal++;
+                            }
+                        }
+                        
+                        $navInfoCat = $cls_produtos->get_referencias("categoria", "ref = '$getCategoria'");
+                        if($navInfoCat != false){
+                            add_navigation($navInfoCat["titulo"], "loja.php?departamento=$getDepartamento&categoria=$getCategoria");
+                        }
+                        
+                        add_navigation($tituloVitrine, "loja.php?categoria=$getCategoria&subcategoria=$getSubcategoria");
+                        
+                    }else{
+                        $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
+
+                        foreach($selectedSubcategoria as $idProduto){
                             $selectedFinal[$ctrlSelectedFinal] = $idProduto;
                             $ctrlSelectedFinal++;
                         }
+                        
+                        add_navigation($tituloVitrine, "loja.php?subcategoria=$getSubcategoria");
                     }
-                }else if($buscarCategoria){
-                    $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
-                    $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
                     
-                    foreach($selectedSubcategoria as $idProduto){
-                        if(array_search($idProduto, $selectedCategoria) >= 0 || array_search($idProduto, $selectedCategoria) != null){
-                            $selectedFinal[$ctrlSelectedFinal] = $idProduto;
-                            $ctrlSelectedFinal++;
-                        }
+                    foreach($selectedFinal as $id){
+                        add_produto($id);
                     }
-                }else{
-                    $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
                     
-                    foreach($selectedSubcategoria as $idProduto){
-                        $selectedFinal[$ctrlSelectedFinal] = $idProduto;
-                        $ctrlSelectedFinal++;
-                    }
-                }
-                foreach($selectedFinal as $id){
-                    add_produto($id);
                 }
             }else if($buscarCategoria){
                 $selectedFinal = array();
@@ -176,23 +245,29 @@
                 if($buscarDepartamento && $buscarCategoria){
                     $selectedDepartamento = $cls_produtos->search_departamentos_produtos("ref = '$getDepartamento'");
                     $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
-                    /*VERIFICAR LÓGICA DO ARRAY SEARCH*/
-/*                    echo "<pre>";
-                    print_r($selectedDepartamento);
-                    print_r($selectedCategoria);
-                    echo "</pre>";*/
+                    
                     foreach($selectedCategoria as $idProduto){
                         if(array_search($idProduto, $selectedDepartamento) >= 0 || array_search($idProduto, $selectedDepartamento) != null){
                             $selectedFinal[$ctrlSelectedFinal] = $idProduto;
                             $ctrlSelectedFinal++;
                         }
                     }
+                    
+                    $navInfoDepart = $cls_produtos->get_referencias("departamento", "ref = '$getDepartamento'");
+                    if($navInfoDepart != false){
+                        add_navigation($navInfoDepart["titulo"], "loja.php?departamento=$getDepartamento");
+                    }
+                    
+                    add_navigation($tituloVitrine, "loja.php?departamento=$getDepartamento&categoria=$getCategoria");
+                    
                 }else{
                     $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
                     foreach($selectedCategoria as $idProduto){
                         $selectedFinal[$ctrlSelectedFinal] = $idProduto;
                         $ctrlSelectedFinal++;
                     }
+                    
+                    add_navigation($tituloVitrine, "loja.php?categoria=$getCategoria");
                 }
                 foreach($selectedFinal as $id){
                     add_produto($id);
@@ -206,15 +281,16 @@
                 $infoVitrine = $cls_produtos->get_referencias("departamento", "ref = '$getDepartamento'");
                 $tituloVitrine = $infoVitrine["titulo"];
                 $descricaoVitrine = $infoVitrine["descricao"];
-                
-                if($buscarDepartamento){
-                    $selectedDepartamento = $cls_produtos->search_departamentos_produtos("ref = '$getDepartamento'");
-                    
-                    foreach($selectedDepartamento as $idProduto){
-                        $selectedFinal[$ctrlSelectedFinal] = $idProduto;
-                        $ctrlSelectedFinal++;
-                    }
+
+                $selectedDepartamento = $cls_produtos->search_departamentos_produtos("ref = '$getDepartamento'");
+
+                foreach($selectedDepartamento as $idProduto){
+                    $selectedFinal[$ctrlSelectedFinal] = $idProduto;
+                    $ctrlSelectedFinal++;
                 }
+                
+                add_navigation($tituloVitrine, "loja.php?departamento=$getDepartamento");
+                
                 foreach($selectedFinal as $id){
                     add_produto($id);
                 }
@@ -229,11 +305,9 @@
             
             //print_r($selectedProdutos); // Produtos que foram filtrados
             
+            echo "<div class='navigation-tree'>" . $navigationTree . "</div>";
             
-            $iconArrow = "<i class='fas fa-angle-right icon'></i>"; 
-            $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a> $iconArrow <a href='#'>Feminino</a></a></div>";
-            
-            $vitrineProdutos[0] = new VitrineProdutos("standard", 20, "<h1>$tituloVitrine</h1>", "$descricaoVitrine");
+            $vitrineProdutos[0] = new VitrineProdutos("standard", 20, "<h1>$tituloVitrine</h1>", $descricaoVitrine);
             $vitrineProdutos[0]->montar_vitrine($selectedProdutos);
         ?>
         </div>
