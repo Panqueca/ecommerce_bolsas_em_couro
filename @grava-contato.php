@@ -16,7 +16,7 @@
 		$telefone = addslashes($_POST["telefone"]);
 		$assunto = addslashes($_POST["assunto"]);
 		$mensagem = addslashes($_POST["mensagem"]);
-		$data = date("Y-m-d h:i:s");
+		$data = date("Y-m-d H:i:s");
 		$status = 0;
 		
 		$tabela_contatos = $pew_db->tabela_contatos;

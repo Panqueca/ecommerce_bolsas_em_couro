@@ -40,7 +40,7 @@
         $tabela_carrinhos = $pew_custom_db->tabela_carrinhos;
         $tabela_pedidos = $pew_custom_db->tabela_pedidos;
         
-        $dataAtual = date("Y-m-d h:i:s");
+        $dataAtual = date("Y-m-d H:i:s");
         $codigoPagamento = 0;
         
         $totalCarrinho = $pew_functions->contar_resultados($tabela_carrinhos, "token_carrinho = '{$_POST["token_carrinho"]}'");

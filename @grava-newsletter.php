@@ -4,7 +4,7 @@
         $tabela_newsletter = $pew_custom_db->tabela_newsletter;
         $nome = isset($_POST["nome"]) ? $_POST["nome"] : "";
         $email = $_POST["email"];
-        $data = date("Y-m-d h:i:s");
+        $data = date("Y-m-d H:i:s");
         if($email != ""){
             $contar = mysqli_query($conexao, "select count(id) as total_cadastro from $tabela_newsletter where email = '$email'");
             $contagem = mysqli_fetch_assoc($contar);

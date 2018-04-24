@@ -3,6 +3,11 @@
     $nomeEmpresa = "Bolsas em Couro";
     $descricaoPagina = "DESCRIÇÃO MODELO ATUALIZAR...";
     $tituloPagina = "Finalizar compra - $nomeEmpresa";
+
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 ?>
 <!DOCTYPE html>
 <html>
@@ -400,7 +405,7 @@
                                         displayResultadoFrete.html("Ocorreu um erro ao calcular o frete. Recarregue a página e tente novamente.");
                                     },
                                     success: function(resultado){
-                                        
+                                        //console.log(resultado)
                                         var tituloServico = get_titulo_servico(codigo);
                                         
                                         if(resultado != false){
@@ -502,7 +507,7 @@
                                     });
                                 },
                                 success: function(resposta){
-                                    console.log(resposta);
+                                    //console.log(resposta);
                                     if(resposta != "false" && resposta != "Unauthorized"){
                                         resposta = JSON.parse(resposta);
                                         var confirmationCode = resposta.code;
@@ -927,7 +932,7 @@
                                     $loginConta->montar_minha_conta($idCliente);
                                     $infoCliente = $loginConta->montar_array();
                                     echo "<span class='dados-compra'>";
-                                        echo "<input type='hidden' id='tokenCarrinho' value='{$_SESSION["carrinho"]["token"]}'>";
+                                        echo "<input type='hidden' id='tokenCarrinho' value='{$carrinho_finalizar["token"]}'>";
                                         echo "<input type='hidden' id='idCliente' value='{$infoCliente["id"]}'>";
                                         echo "<input type='hidden' id='nomeCliente' value='{$infoCliente["usuario"]}'>";
                                         echo "<input type='hidden' id='cpfCliente' value='{$infoCliente["cpf"]}'>";

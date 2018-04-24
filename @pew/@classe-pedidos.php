@@ -115,6 +115,7 @@
             $array["cidade"] = $this->cidade;
             $array["estado"] = $this->estado;
             $array["data_controle"] = $this->data_controle;
+            $array["valor_total"] = $this->valor_total;
             $array["status"] = $this->status;
             return $array;
         }
@@ -367,5 +368,28 @@
                     echo "teste";
                 }
             }
+        }
+        
+        function get_pedidos_conta($idCliente){
+            $tabela_minha_conta = $this->global_vars["tabela_minha_conta"];
+            
+            $pedidosCliente = $this->buscar_pedidos("id_cliente = '$idCliente'");
+            
+            $selected = array();
+            $count = 0;
+            
+            if($pedidosCliente != false){
+                foreach($pedidosCliente as $idPedido){
+                    if(in_array($idPedido, $selected) == false){
+                        $selected[$count] = $idPedido;
+                        $count++;
+                    }
+                }
+                
+                return $selected;
+            }else{
+                return false;
+            }
+            
         }
     }

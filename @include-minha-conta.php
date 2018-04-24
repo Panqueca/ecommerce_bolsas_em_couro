@@ -191,6 +191,52 @@
         opacity: 0;
         transition: .2s;
     }
+    .box-pedido{
+        width: calc(100% - 20px);
+        padding: 10px;
+        display: flex;
+        flex-flow: row wrap;
+        border-bottom: 2px solid #eee;
+    }
+    .box-pedido .right{
+        width: 40%;
+    }
+    .box-pedido .right .titulo{
+        font-size: 18px;
+        margin: 0px 0px 15px 0px;
+    }
+    .box-pedido .right .descricao{
+        font-size: 14px;
+        color: #666;
+        font-weight: normal;
+        text-align: left;
+        margin: 0px;
+    }
+    .box-pedido .middle{
+        width: 40%;
+    }
+    .box-pedido .middle .descricao{
+        font-weight: normal;
+        margin: 0px 0px 10px 0px;
+    }
+    .box-pedido .middle .btn-mais-info{
+        display: inline-block;
+        margin: 5px 0px 0px 0px;
+    }
+    .box-pedido .left{
+        width: 20%;
+    }
+    .box-pedido .left .descricao{
+        width: 100px;
+        float: left;
+        font-weight: normal;
+        margin: 0px 0px 10px 0px;
+    }
+    .box-pedido .left .status{
+        clear: both;
+        color: limegreen;
+        font-weight: normal;
+    }
 </style>
 
 <?php

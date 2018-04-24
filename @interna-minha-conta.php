@@ -1,4 +1,5 @@
 <?php
+
 require_once "@classe-minha-conta.php";
 
 $cls_conta = new MinhaConta();
@@ -33,7 +34,57 @@ if($listar){
     <button class="top-buttons" id="Painel3"><i class="fas fa-truck"></i> ENDEREÇO DE ENTREGA</button>
 </div>
 <div class="painel painel-active" id="displayPainel1">
-    Em manutenção ...
+    <?php
+    
+        $_POST["diretorio"] = "";
+        $_POST["diretorio_db"] = "@pew/";
+        require_once "@pew/@classe-pedidos.php";
+    
+    
+        $cls_pedidos = new Pedidos();
+        $getPedidos = $cls_pedidos->get_pedidos_conta($idConta);
+        $totalPedidos = is_array($getPedidos) ? count($getPedidos) : 0;
+    
+        if($totalPedidos > 0){
+            foreach($getPedidos as $idPedido){
+                $cls_pedidos->montar($idPedido);
+                $infoPedido = $cls_pedidos->montar_array();
+                $produtosPedido = $cls_pedidos->get_produtos_pedido($idPedido);
+
+                $referencia = $infoPedido["referencia"];
+                $token = $infoPedido["token_carrinho"];
+                $totalPedido = $pew_functions->custom_number_format($infoPedido["valor_total"]);
+                $codigoPagamento = $infoPedido["codigo_pagamento"];
+                $status = $infoPedido["status"];
+                $strStatus = $cls_pedidos->get_status_string($status);
+                $strPagamento = $cls_pedidos->get_pagamento_string($codigoPagamento);
+                $strComplemento = $infoPedido["complemento"] == "" ? "" : ", " . $infoPedido["complemento"];
+                $enderecoCompleto = $infoPedido["rua"] . ", " . $infoPedido["numero"] . $strComplemento . " - " . $infoPedido["cep"];
+                $dataPedido = $pew_functions->inverter_data(substr($infoPedido["data_controle"], 0, 10));
+                $horaPedido = substr($infoPedido["data_controle"], 10);
+
+                echo "<div class='box-pedido'>";
+                    echo "<div class='right'>";
+                        echo "<h3 class='titulo'>Pedido: $referencia</h3>";
+                        echo "<h5 class='descricao'>Endereço de envio: $enderecoCompleto</h5>";
+                    echo "</div>";
+                    echo "<div class='middle'>";
+                        echo "<h5 class='descricao'>Método de pagamento: $strPagamento</h3>";
+                        echo "<h5 class='descricao'>Total: <b>R$ $totalPedido</b></h3>";
+                        echo "<a class='link-padrao btn-mais-info'>Ver mais informações</a>";
+                    echo "</div>";
+                    echo "<div class='left'>";
+                        echo "<h5 class='descricao'><i class='far fa-calendar-alt'></i> $dataPedido</h3>";
+                        echo "<h5 class='descricao'><i class='far fa-clock'></i> $horaPedido</h3>";
+                        echo "<h5 class='status'>Status: $strStatus</h3>";
+                    echo "</div>";
+                echo "</div>";
+            }
+        }else{
+            echo "Você não finalizou nenhuma compra ainda.";
+        }
+    
+    ?>
 </div>
 <div class="painel" id="displayPainel2">
     <?php

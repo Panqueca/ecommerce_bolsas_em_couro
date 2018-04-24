@@ -123,9 +123,9 @@
         }
         
         function montar_email($nome, $produtos, $desconto, $tokenCarrinho){
-            $baseSite = "https://efectusdigital.com.br/reidasfechaduras";
+            $baseSite = "https://efectusdigital.com.br/bolsas";
             $dirImagens = "imagens/identidadeVisual/";
-            $logo = "logo-rei-das-fechaduras.png";
+            $logo = "logo-bolsa-em-couro.png";
             
             $body = "";
             

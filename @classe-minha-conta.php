@@ -186,9 +186,9 @@
         function montar_email_confirmacao($email, $nome){
             $codigo = md5(md5($email));
             
-            $baseSite = "https://efectusdigital.com.br/reidasfechaduras";
+            $baseSite = "https://efectusdigital.com.br/bolsas";
             $dirImagens = "imagens/identidadeVisual/";
-            $logo = "logo-rei-das-fechaduras.png";
+            $logo = "logo-bolsa-em-couro.png";
             
             $body = "";
             

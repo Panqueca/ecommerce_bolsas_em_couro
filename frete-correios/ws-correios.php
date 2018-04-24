@@ -64,6 +64,8 @@ if($calcular){
     
     curl_close($curl);
     
+    //echo $xml; exit;
+    
     $xml = simplexml_load_string($xml);
     
     foreach($xml -> cServico as $row){
