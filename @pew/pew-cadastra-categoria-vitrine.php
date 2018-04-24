@@ -17,10 +17,10 @@
         </select>
         <h4 style="color: red; display: none;" id="mensagemCadastro">Esta categoria já está ativa.</h4>
     </div>
-    <div class='label half'>
+    <!--<div class='label half'>
         <h3 class="label-title">Imagem da categoria (500px : 400px)</h3>
         <input type='file' class='label-input' name='imagem' id='imagemCategoria' accept="image/*" required>
-    </div>
+    </div>-->
     <div class='label half'>
         <h3 class="label-title">Selecionar esta categoria como ativa?</h3>
         <select name="status" class="label-input">

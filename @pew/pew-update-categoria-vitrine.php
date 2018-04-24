@@ -1,6 +1,6 @@
 <?php
     $post_fields = array("id_categoria_vitrine", "info_categoria", "imagem_antiga", "status");
-    $file_fields = array("imagem");
+    $file_fields = array();
     $invalid_fields = array();
     $gravar = true;
     $i = 0;
@@ -29,7 +29,7 @@
         
         $idCategoriaVitrine = $_POST["id_categoria_vitrine"];
         $imagemAntiga = $_POST["imagem_antiga"];
-        $imagem = $_FILES["imagem"]["name"];
+        $imagem = isset($_FILES["imagem"]) ? $_FILES["imagem"]["name"] : null;
         $status = $_POST["status"];
         $infoCategoria = $_POST["info_categoria"];
         $splitInfo = explode("||", $infoCategoria);
@@ -41,7 +41,7 @@
         $refCategoria = $pew_functions->url_format($tituloCategoria);
         
         $nomeImagem = $refCategoria;
-        if($imagem != ""){
+        if($imagem != null){
             $refImg = substr(md5(uniqid()), 0, 4);
             $ext = pathinfo($imagem, PATHINFO_EXTENSION);
             $nomeImagem = $nomeImagem."-categoria-vitrine-ref$refImg.".$ext;

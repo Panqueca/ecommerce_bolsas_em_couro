@@ -55,10 +55,10 @@
                     ?>
                     </select>
                 </div>
-                <div class='label large'>
+                <!--<div class='label large'>
                     <h3 class="label-title">Alterar Imagem da categoria (500px : 400px)</h3>
                     <input type='file' class='label-input' name='imagem' id='imagem' accept="image/*">
-                </div>
+                </div>-->
                 <div class='label medium'>
                     <h3 class="label-title">Status</h3>
                     <select name="status" class="label-input">
@@ -78,10 +78,10 @@
                         ?>
                     </select>
                 </div>
-                <div class='half'>
+                <!--<div class='half'>
                     <h3 class="label-title">Imagem atual</h3>
-                    <img src="<?php echo $dirImagens.$imagem;?>" class="full">
-                </div>
+                    <img src="" class="full">
+                </div>-->
                 <div class='group clear'>
                     <div class='label small'>
                         <input type='button' class='btn-excluir label-input' value='Excluir'>

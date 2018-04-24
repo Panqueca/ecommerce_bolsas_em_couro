@@ -192,6 +192,15 @@
     width: 100%;
     height: 100px;
 }
+.vitrine-categorias .box .titulo{
+    margin: 0px;   
+}
+.vitrine-categorias .box .descricao{
+    font-weight: normal;
+    color: #666;
+    margin: 10px 0px 10px 0px;
+    font-size: 14px;
+}
 .vitrine-categorias .box-categoria{
     width: 32%;
     margin: 0px .5% 0px .5%;

@@ -1,6 +1,6 @@
 <?php
     $post_fields = array("info_categoria", "status");
-    $file_fields = array("imagem");
+    $file_fields = array();
     $invalid_fileds = array();
     $gravar = true;
     $i = 0;
@@ -27,7 +27,7 @@
         
         $tabela_categorias_vitrine = $pew_custom_db->tabela_categorias_vitrine;
         
-        $imagem = $_FILES["imagem"]["name"];
+        $imagem = isset($_FILES["imagem"]) ? $_FILES["imagem"]["name"] : null;
         $status = $_POST["status"];
         $infoCategoria = $_POST["info_categoria"];
         $splitInfo = explode("||", $infoCategoria);
@@ -39,11 +39,13 @@
         $refCategoria = $pew_functions->url_format($tituloCategoria);
         
         $nomeImagem = $refCategoria;
-        if($imagem != ""){
+        if($imagem != null){
             $refImg = substr(md5(uniqid()), 0, 4);
             $ext = pathinfo($imagem, PATHINFO_EXTENSION);
             $nomeImagem = $nomeImagem."-categoria-vitrine-ref$refImg.".$ext;
             move_uploaded_file($_FILES["imagem"]["tmp_name"], $dirImagens.$nomeImagem);
+        }else{
+            $nomeImagem = "imagem-padrao.png";
         }
 
 
