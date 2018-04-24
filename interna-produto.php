@@ -188,6 +188,7 @@
             }
             .section-produto .display-info-produto .view-disponibilidade{
                 font-size: 16px;
+                margin-bottom: 15px;
             }
             .section-produto .display-info-produto .icone-disponibilidade{
                 font-size: 18px;
@@ -646,34 +647,37 @@
                         echo $viewPriceField;
                         echo $viewParcelasField;
                         echo $viewDisponibilidadadeField;
-                    ?>
-                    <h6 style="margin: 25px 0px -15px 0px; font-weight: normal;">Outras cores</h6>
-                    <div class="display-cores">
-                        <?php
-                            $infoCoresRelacionadas = $produto->get_cores_relacionadas();
-                            if(is_array($infoCoresRelacionadas) and count($infoCoresRelacionadas) > 0){
-                                foreach($infoCoresRelacionadas as $id => $info){
-                                    $idRelacao = $info["id_relacao"];
-                                    $produtoRelacao = new Produtos();
-                                    $produtoRelacao->montar_produto($idRelacao);
-                                    $infoProduto = $produtoRelacao->montar_array();
-                                    $idCor = $infoProduto["id_cor"];
-                                    $queryCor = mysqli_query($conexao, "SELECT * FROM pew_cores where id = '$idCor' and status = 1");
-                                    $functions = new systemFunctions();
-                                    $totalCores = $functions->contar_resultados("pew_cores", "id = '$idCor' and status = 1");
-                                    $urlProdutoRelacao = "interna-produto.php?id_produto=$idRelacao";
-                                    $dirImagens = "imagens/cores";
-                                    if($totalCores > 0){
-                                        while($infoCor = mysqli_fetch_assoc($queryCor)){
-                                            $nomeCor = $infoCor["cor"];
-                                            $imagemCor = $infoCor["imagem"];
-                                            echo "<div class='box-cor'><a href='$urlProdutoRelacao'><img title='$nomeCor' src='$dirImagens/$imagemCor'></a></div>";
+                
+                        $infoCoresRelacionadas = $produto->get_cores_relacionadas();
+                        $totalCores = is_array($infoCoresRelacionadas) ? count($infoCoresRelacionadas) : 0;
+                        if($totalCores > 0){
+                            echo "<h6 style='margin: 5px 0px -15px 0px; font-weight: normal;'>Outras cores</h6>";
+                            echo "<div class='display-cores'>";
+                            foreach($infoCoresRelacionadas as $id => $info){
+                                $idRelacao = $info["id_relacao"];
+                                $produtoRelacao = new Produtos();
+                                $produtoRelacao->montar_produto($idRelacao);
+                                $infoProduto = $produtoRelacao->montar_array();
+                                $idCor = $infoProduto["id_cor"];
+                                $queryCor = mysqli_query($conexao, "SELECT * FROM pew_cores where id = '$idCor' and status = 1");
+                                $functions = new systemFunctions();
+                                $totalCores = $functions->contar_resultados("pew_cores", "id = '$idCor' and status = 1");
+                                $urlProdutoRelacao = "interna-produto.php?id_produto=$idRelacao";
+                                $dirImagens = "imagens/cores";
+                                if($totalCores > 0){
+                                    while($infoCor = mysqli_fetch_assoc($queryCor)){
+                                        $nomeCor = $infoCor["cor"];
+                                        $imagemCor = $infoCor["imagem"];
+                                        if(!file_exists($dirImagens."/".$imagemCor) || $imagemCor == ""){
+                                            $imagemCor = "cor-padrao.png";
                                         }
+                                        echo "<div class='box-cor'><a href='$urlProdutoRelacao'><img title='$nomeCor' src='$dirImagens/$imagemCor'></a></div>";
                                     }
                                 }
                             }
-                        ?>
-                    </div>
+                            echo "</div>";
+                        }
+                    ?>
                     <div class="display-comprar">
                         <?php echo $viewBotaoComprar; ?>
                     </div>

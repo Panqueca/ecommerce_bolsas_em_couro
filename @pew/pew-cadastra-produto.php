@@ -963,7 +963,6 @@
                     $descontoRelacionado = $infoProduto["desconto_relacionado"];
                     $descontoRelacionado = $pew_functions->custom_number_format($descontoRelacionado);
                     $promocaoAtiva = $infoProduto["promocao_ativa"];
-                    $precoAtivo = $infoProduto["prec_ativo"];
                     $marcaProduto = $infoProduto["marca"];
                     $estoqueProduto = $infoProduto["estoque"];
                     $estoqueBaixoProduto = $infoProduto["estoque_baixo"];
@@ -1030,7 +1029,6 @@
                     $precoPromocaoProduto = null;
                     $descontoRelacionado = null;
                     $promocaoAtiva = null;
-                    $precoAtivo = null;
                     $marcaProduto = null;
                     $estoqueProduto = 1;
                     $estoqueBaixoProduto = 1;
@@ -1143,19 +1141,6 @@
                 <div class="label xsmall">
                     <h2 class='label-title'>Preço</h2>
                     <input type="number" step="any" name="preco" id="preco" placeholder="Preço" class="label-input" style="margin-top: 10px;" value="<?php echo $precoProduto;?>">
-                </div>
-                <div class="label xsmall">
-                    <h2 class='label-title'>Status Preco</h2>
-                    <select name="preco_ativo" class="label-input">
-                        <?php
-                            $possibleStatus = array(0, 1);
-                            foreach($possibleStatus as $selectStatusPromocao){
-                                $nameStatus = $selectStatusPromocao == 1 ? "Ativa" : "Inativa";
-                                $selected = $selectStatusPromocao == $precoAtivo ? "selected" : "";
-                                echo "<option value='$selectStatusPromocao' $selected>$nameStatus</option>";
-                            }
-                        ?>
-                    </select>
                 </div>
                 <div class="label xsmall">
                     <h2 class='label-title'>Preço promoção</h2>

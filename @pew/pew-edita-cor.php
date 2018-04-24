@@ -51,16 +51,16 @@
                             echo "<br><br><br>";
                         echo "</div>";
                     echo "</div>";
+                    echo "<div class='label half'>";
+                        echo "<h3 class='label-title'>Alterar imagem (40px : 40px)</h3>";
+                        echo "<input type='file' class='label-input' name='imagem' accept='image/*'>";
+                    echo "</div>";
                 }else{
                     echo "<div class='label full'>";
                         echo "<h3 class='label-title'>Imagem (40px : 40px)</h3>";
                         echo "<input type='file' class='label-input' name='imagem' accept='image/*'>";
                     echo "</div>";
                 }
-                echo "<div class='label half'>";
-                    echo "<h3 class='label-title'>Alterar imagem (40px : 40px)</h3>";
-                    echo "<input type='file' class='label-input' name='imagem' accept='image/*'>";
-                echo "</div>";
                 echo "<div class='label small'>";
                     echo "<h3 class='label-title'>Status</h3>";
                     echo "<select name='status' id='statusMarca' class='label-input'>";

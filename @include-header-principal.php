@@ -1143,6 +1143,7 @@
                                             
                                         }
                                     }
+                                    $ctrlSubsublinks++;
                                 }
                             }
                             $ctrlSub++;
@@ -1160,20 +1161,21 @@
             $sublinks = isset($link_departamento["sublinks"]) ? $link_departamento["sublinks"] : null;
             $totalSublinks = is_array($sublinks) && count($sublinks) > 0 ? count($sublinks) : 0;
             if($totalSublinks > 0){
+                $ctrl_sub = 0;
                 foreach($sublinks as $indice => $slink){
                     $titulo = $slink["titulo"];
                     $url = $slink["url"];
                     $subsublinks = isset($slink["subsublinks"]) ? $slink["subsublinks"] : null;
                     $totalSubsub = is_array($subsublinks) ? count($subsublinks) : 0;
-                    $link_nav[$countLinks]->add_sublink($countLinks, $titulo, $url);
+                    $link_nav[$countLinks]->add_sublink($ctrl_sub, $titulo, $url);
                     if($totalSubsub > 0){
                         foreach($subsublinks as $sublink){
                             $tituloSub = $sublink["titulo"];
                             $urlSub = $sublink["url"];
-                            $boxDestaque = isset($sublink["box_destaque"]) && $sublink["box_destaque"] != "" ? $sublink["box_destaque"] : false;
-                            $link_nav[$countLinks]->add_sub_sublink($countLinks, $tituloSub, $urlSub, $boxDestaque);
+                            $link_nav[$countLinks]->add_sub_sublink($ctrl_sub, $tituloSub, $urlSub, false);
                         }
                     }
+                    $ctrl_sub++;
                 }
             }
             $countLinks++;
@@ -1184,6 +1186,7 @@
         $link_nav[$countLinks] = new NavLinks("DICAS", "dicas.php");
         $countLinks++;
         $link_nav[$countLinks] = new NavLinks("CONTATO", "contato.php");
+        $countLinks++;
         
         /*END LINKS*/
         

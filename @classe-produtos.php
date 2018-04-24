@@ -425,19 +425,17 @@
                 $intPorcentoDesconto = 5;
                 $multiplicador = $intPorcentoDesconto * 0.01;
 
-                
                 if($this->promocao_ativa == 1 && $this->preco_promocao > 0 && $this->preco_promocao < $this->preco){
                     $desconto = $this->preco_promocao * $multiplicador;
                     $precoCompreJunto = $this->preco_promocao - $desconto;
-                    $retorno = array();
-                    $retorno = $precoCompreJunto;
                 }else{
                     $desconto = $this->preco * $multiplicador;
                     $precoCompreJunto = $this->preco - $desconto;
-                    $retorno = array();
-                    $retorno["valor"] = $precoCompreJunto;
-                    $retorno["desconto"] = $intPorcentoDesconto;
                 }
+                
+                $retorno = array();
+                $retorno["valor"] = $precoCompreJunto;
+                $retorno["desconto"] = $intPorcentoDesconto;
                 
                 return $retorno;
             }else{

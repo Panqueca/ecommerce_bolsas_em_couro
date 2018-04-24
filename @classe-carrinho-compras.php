@@ -18,7 +18,7 @@
             $this->verify_session();
             $this->valor_total = 0;
             $this->status = "vazio";
-            $this->ctrl_produtos = count($_SESSION["carrinho_orcamento"]["itens"]) > 0 ? count($_SESSION["carrinho_orcamento"]["itens"]) : 0;
+            $this->ctrl_produtos = count($_SESSION["carrinho"]["itens"]) > 0 ? count($_SESSION["carrinho"]["itens"]) : 0;
             
             global $pew_functions, $globalVars;
             $this->classe_produtos = new Produtos();
@@ -36,20 +36,20 @@
         }
         
         function set_token(){
-            if(!isset($_SESSION["carrinho_orcamento"]["token"]) || $_SESSION["carrinho_orcamento"]["token"] == null){
-                $_SESSION["carrinho_orcamento"]["token"] = $this->rand_token();
+            if(!isset($_SESSION["carrinho"]["token"]) || $_SESSION["carrinho"]["token"] == null){
+                $_SESSION["carrinho"]["token"] = $this->rand_token();
             }
         }
         
         function verify_session(){
             if(!isset($_SESSION)) session_start();
             
-            if(!isset($_SESSION["carrinho_orcamento"])){
-                $_SESSION["carrinho_orcamento"] = array();   
-                $_SESSION["carrinho_orcamento"]["itens"] = array();
+            if(!isset($_SESSION["carrinho"])){
+                $_SESSION["carrinho"] = array();   
+                $_SESSION["carrinho"]["itens"] = array();
             }
             
-            if(!isset($_SESSION["carrinho_orcamento"]["token"]) || $_SESSION["carrinho_orcamento"]["token"] == null){
+            if(!isset($_SESSION["carrinho"]["token"]) || $_SESSION["carrinho"]["token"] == null){
                 $this->set_token();
             }
         }
@@ -71,20 +71,20 @@
                 $this->verify_session();
                 
                 function set_produto($id, $nome, $preco, $estoque, $quantidade, $comprimento, $largura, $altura, $peso, $count){
-                    $_SESSION["carrinho_orcamento"]["itens"][$count]["id"] = $id;
-                    $_SESSION["carrinho_orcamento"]["itens"][$count]["nome"] = $nome;
-                    $_SESSION["carrinho_orcamento"]["itens"][$count]["preco"] = $preco;
-                    $_SESSION["carrinho_orcamento"]["itens"][$count]["estoque"] = $estoque;
-                    $_SESSION["carrinho_orcamento"]["itens"][$count]["quantidade"] = $quantidade;
-                    $_SESSION["carrinho_orcamento"]["itens"][$count]["comprimento"] = $comprimento;
-                    $_SESSION["carrinho_orcamento"]["itens"][$count]["largura"] = $largura;
-                    $_SESSION["carrinho_orcamento"]["itens"][$count]["altura"] = $altura;
-                    $_SESSION["carrinho_orcamento"]["itens"][$count]["peso"] = $peso;
+                    $_SESSION["carrinho"]["itens"][$count]["id"] = $id;
+                    $_SESSION["carrinho"]["itens"][$count]["nome"] = $nome;
+                    $_SESSION["carrinho"]["itens"][$count]["preco"] = $preco;
+                    $_SESSION["carrinho"]["itens"][$count]["estoque"] = $estoque;
+                    $_SESSION["carrinho"]["itens"][$count]["quantidade"] = $quantidade;
+                    $_SESSION["carrinho"]["itens"][$count]["comprimento"] = $comprimento;
+                    $_SESSION["carrinho"]["itens"][$count]["largura"] = $largura;
+                    $_SESSION["carrinho"]["itens"][$count]["altura"] = $altura;
+                    $_SESSION["carrinho"]["itens"][$count]["peso"] = $peso;
                 }
                 
                 $is_adicionado = false;
                 $indice_item = null;
-                foreach($_SESSION["carrinho_orcamento"]["itens"] as $indice => $item){
+                foreach($_SESSION["carrinho"]["itens"] as $indice => $item){
                     $idItem = $item["id"];
                     if($idItem == $idProduto){
                         $is_adicionado = true;
@@ -118,10 +118,10 @@
         function remover_produto($idRemover){
             $this->verify_session();
             
-            foreach($_SESSION["carrinho_orcamento"]["itens"] as $indice => $item){
+            foreach($_SESSION["carrinho"]["itens"] as $indice => $item){
                 $id = $item["id"];
                 if($idRemover == $id){
-                    unset($_SESSION["carrinho_orcamento"]["itens"][$indice]);
+                    unset($_SESSION["carrinho"]["itens"][$indice]);
                     $this->reordenar_carrinho();
                 }
             }
@@ -136,12 +136,12 @@
             $this->verify_session();
             $carrinho = array();
             $carrinho["itens"] = array();
-            $carrinho["token"] = $_SESSION["carrinho_orcamento"]["token"];
+            $carrinho["token"] = $_SESSION["carrinho"]["token"];
             
             
             $ctrl = 0;
             
-            foreach($_SESSION["carrinho_orcamento"]["itens"] as $itens){
+            foreach($_SESSION["carrinho"]["itens"] as $itens){
                 $idProduto = $itens["id"];
                 $selectedRelacionados = $this->classe_produtos->get_relacionados_produto($idProduto, "id_relacionado = '$idProduto'");
                 $is_compre_junto = false;
@@ -158,7 +158,7 @@
                         $ctrlInterno++;
                     }
                     
-                    foreach($_SESSION["carrinho_orcamento"]["itens"] as $index => $valor){
+                    foreach($_SESSION["carrinho"]["itens"] as $index => $valor){
                         foreach($selected as $index => $infoRel){
                             if($valor["id"] == $infoRel["id_produto"]){
                                 $is_compre_junto = true;
@@ -169,8 +169,8 @@
                 
                 if($is_compre_junto){
                     $infoPrecoRelacionado = $this->classe_produtos->get_preco_relacionado($idProduto);
-                    $carrinho["itens"][$ctrlInterno]["preco"] = $this->pew_functions->custom_number_format($infoPrecoRelacionado["valor"]);
-                    $carrinho["itens"][$ctrlInterno]["desconto"] = $infoPrecoRelacionado["desconto"];
+                    $carrinho["itens"][$ctrl]["preco"] = $this->pew_functions->custom_number_format($infoPrecoRelacionado["valor"]);
+                    $carrinho["itens"][$ctrl]["desconto"] = $infoPrecoRelacionado["desconto"];
                 }
                     
                 $ctrl++;
@@ -181,12 +181,12 @@
         
         function reset_carrinho(){
             $this->verify_session();
-            unset($_SESSION["carrinho_orcamento"]);
+            unset($_SESSION["carrinho"]);
         }
         
         function reordenar_carrinho(){
             $this->verify_session();
-            $carrinho = $_SESSION["carrinho_orcamento"]["itens"];
+            $carrinho = $_SESSION["carrinho"]["itens"];
             
             $reorderedCarrinho = array();
             $ctrl = 0;
@@ -196,7 +196,7 @@
                 $ctrl++;
             }
             
-            $_SESSION["carrinho_orcamento"]["itens"] = $reorderedCarrinho;
+            $_SESSION["carrinho"]["itens"] = $reorderedCarrinho;
             
             return true;
         }

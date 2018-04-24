@@ -3,6 +3,7 @@
     $nomeEmpresa = "Bolsas em Couro";
     $descricaoPagina = "DESCRIÇÃO MODELO ATUALIZAR...";
     $tituloPagina = "Página Inicial - $nomeEmpresa";
+
 ?>
 <!DOCTYPE html>
 <html>
