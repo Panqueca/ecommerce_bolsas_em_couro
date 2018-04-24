@@ -305,8 +305,6 @@
                         echo "<div class='promo-tag'>-$intPorcentoDesconto%</div>";
                         echo "<a href='$urlProduto'><img src='$dirImagensProdutos/$srcImagem' title='$nome' alt='$nome - $nomeLoja'></a>";
                         echo "<a href='$urlProduto' class='title-link'><h3 class='titulo-produto' title='$nome'>$nomeEllipses</h3></a>";
-                        if($precoAtivo){
-                        }
                             echo "<h4 class='preco-produto'>$priceField ou <span class='view-parcelas'>$txtParcelas R$". number_format($precoParcela, 2, ",", ".") ."   </span></h4>";
                         echo "<a class='call-to-action botao-add-compre-junto' carrinho-id-produto='$idProduto'>Adicionar</a>";
                         echo "<div class='display-cores'>";

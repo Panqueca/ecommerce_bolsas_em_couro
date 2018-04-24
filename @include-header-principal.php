@@ -942,7 +942,7 @@
                     </div>
                     <div class="cart-bottom">
                         <span class="total-price">TOTAL: <span class="price-view">R$ <?php echo $pew_functions->custom_number_format($totalCarrinho); ?></span></span><br>
-                        <a href="finalizar-orcamento.php" class="finalize-button">Finalizar</a>
+                        <a href="finalizar-compra.php" class="finalize-button">Finalizar compra</a>
                     </div>
                 </div>
                 <div class="cart-background"></div>

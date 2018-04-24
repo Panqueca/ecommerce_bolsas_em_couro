@@ -507,8 +507,8 @@ error_reporting(E_ALL);
                                     });
                                 },
                                 success: function(resposta){
-                                    //console.log(resposta);
-                                    if(resposta != "false" && resposta != "Unauthorized"){
+                                    console.log(resposta);
+                                    if(resposta != "false" && resposta != "Unauthorized" && isJson(resposta)){
                                         resposta = JSON.parse(resposta);
                                         var confirmationCode = resposta.code;
                                         var reference = resposta.reference;

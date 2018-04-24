@@ -9,8 +9,6 @@ define("MAX_ALTURA", 105);
 define("MIN_COMPRIMENTO", 16);
 define("MAX_COMPRIMENTO", 105);
 
-define("MIN_LARGURA", 11);
-
 define("MIN_SOMA_CLA", 29);
 define("MAX_SOMA_CLA", 300);
 

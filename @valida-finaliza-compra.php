@@ -63,7 +63,7 @@
         require_once "@classe-system-functions.php";
         require_once "frete-correios/calcular-frete.php";
         
-        $baseSite = "https://www.efectusdigital.com.br/bolsass/";
+        $baseSite = "https://www.efectusdigital.com.br/bolsas/";
         /*$baseSite = "localhost/xampp/github/ecommerce_bolsas_em_couro/";*/
         $pastaCorreios = "frete-correios/ws-correios.php";
         $pastaPagseguro = "pagseguro/ws-pagseguro.php";
