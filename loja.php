@@ -11,6 +11,7 @@
     $getCategoria = $buscarCategoria == true ? addslashes($_GET["categoria"]) : null;
     $getSubcategoria = $buscarSubcategoria == true ? addslashes($_GET["subcategoria"]) : null;
 
+    require_once "@pew/pew-system-config.php";
     require_once "@classe-produtos.php";
 
     $cls_produtos = new Produtos();
@@ -36,6 +37,26 @@
             $tituloPagina = $headInfo["titulo"] . " - " . $nomeEmpresa;
             $descricaoPagina = $headInfo["descricao"];
         }
+    }
+
+    $dirImagensDepartamento = "imagens/departamentos/";
+    $bgPadrao = "background-vitrine-padrao.png";
+
+    if($getDepartamento != null){
+        $tabela_departamentos = $pew_custom_db->tabela_departamentos;
+        $queryImagem = mysqli_query($conexao, "select imagem from $tabela_departamentos where ref = '$getDepartamento'");
+        $infoImagem = mysqli_fetch_array($queryImagem);
+        
+        $imagemDepartamento = $infoImagem["imagem"];
+        
+        if(!file_exists($dirImagensDepartamento.$imagemDepartamento) || $imagemDepartamento == ""){
+            $backgroundVitrine = $dirImagensDepartamento.$bgPadrao;
+        }else{
+            $backgroundVitrine = $dirImagensDepartamento.$imagemDepartamento;
+        }
+        
+    }else{
+        $backgroundVitrine = $dirImagensDepartamento.$bgPadrao;
     }
 
 ?>
@@ -119,7 +140,7 @@
         ?>
         <!--THIS PAGE CONTENT-->
         <div class="background-loja">
-            <img src="imagens/departamentos/linha-feminina.png">
+            <img src="<?php echo $backgroundVitrine; ?>">
         </div>
         <div class="main-content">
         <?php

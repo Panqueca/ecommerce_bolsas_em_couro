@@ -1,8 +1,12 @@
 <h2 class=titulo-edita>Cadastrar departamento</h2>
-<form id='formCadDepartamento'>
-    <div class='label full '>
+<form id='formCadDepartamento' method="post" action="pew-grava-departamento.php" enctype="multipart/form-data">
+    <div class='medium'>
         <h3 class='label-title'>Título</h3>
         <input type='text' class='label-input' placeholder='Título do departamento' name='titulo' id='tituloDepartamento' maxlength='35'>
+    </div>
+    <div class='half'>
+        <h3 class='label-title'>Imagem (1280px : 570px)</h3>
+        <input type="file" name="imagem" accept="image/*" class="label-input">
     </div>
     <div class='label xlarge'>
         <h3 class='label-title'>Descrição</h3>
@@ -32,36 +36,24 @@
     $(document).ready(function(){
         var formCadastra = $("#formCadDepartamento");
         $("#tituloDepartamento").focus();
+        var cadastrando = false;
         formCadastra.off().on("submit", function(){
             event.preventDefault();
-            var objTitulo = $("#tituloDepartamento");
-            var objDescricao = $("#descricaoDepartamento");
-            var objPosicao = $("#posicaoDepartamento");
-            var titulo = objTitulo.val();
-            var descricao = objDescricao.val();
-            var posicao = objPosicao.val();
-            if(titulo.length < 3){
-                mensagemAlerta("O campo Título deve conter no mínimo 3 caracteres.", objTitulo);
-                return false;
-            }
-            var msgErro = "Não foi possível cadastrar o departamento. Recarregue a página e tente novamente.";
-            var msgSucesso = "O Departamento foi cadastrado com sucesso!";
-            $.ajax({
-                type: "POST",
-                url: "pew-grava-departamento.php",
-                data: {titulo: titulo, descricao: descricao, posicao: posicao},
-                error: function(){
-                    mensagemAlerta(msgErro);
-                },
-                success: function(resposta){
-                    console.log(resposta)
-                    if(resposta == "true"){
-                        mensagemAlerta(msgSucesso, false, "#259e25", "pew-departamentos.php?focus="+titulo);
-                    }else{
-                        mensagemAlerta(msgErro);
-                    }
+            if(!cadastrando){
+                cadastrando = true;
+                var objTitulo = $("#tituloDepartamento");
+                var objDescricao = $("#descricaoDepartamento");
+                var objPosicao = $("#posicaoDepartamento");
+                var titulo = objTitulo.val();
+                var descricao = objDescricao.val();
+                var posicao = objPosicao.val();
+                if(titulo.length < 3){
+                    mensagemAlerta("O campo Título deve conter no mínimo 3 caracteres.", objTitulo);
+                    return false;
                 }
-            });
+
+                formCadastra.submit();
+            }
         });
     });
 </script>

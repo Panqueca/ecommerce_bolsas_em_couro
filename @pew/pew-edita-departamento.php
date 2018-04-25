@@ -32,6 +32,8 @@
         $contagem = mysqli_fetch_assoc($contarDepartamento);
         $totalDepartamento = $contagem["total_departamento"];
         
+        $dirImagens = "../imagens/departamentos";
+        
         $selectedCategorias = array();
         if($totalDepartamento > 0){
             $queryDepartamento = mysqli_query($conexao, "select * from $tabela_departamentos where id = '$idDepartamento'");
@@ -39,19 +41,20 @@
             $titulo = $departamento["departamento"];
             $descricao = $departamento["descricao"];
             $posicao = $departamento["posicao"];
+            $imagem = $departamento["imagem"];
             $dataControle = $pew_functions->inverter_data(substr($departamento["data_controle"], 0, 10));
             $status = $departamento["status"] == 1 ? "Ativo" : "Desativado";
             echo "<h2 class=titulo-edita>Informações do departamento</h2>";
-            echo "<form id='formUpdateDepartamento' method='post' action='pew-update-departamento.php'>";
+            echo "<form id='formUpdateDepartamento' method='post' action='pew-update-departamento.php' enctype='multipart/form-data'>";
                 echo "<input type='hidden' name='id_departamento' id='idDepartamento' value='$idDepartamento'>";
                 echo "<div class='label full'>";
                     echo "<h3 class='label-title'>Título</h3>";
                     echo "<input type='text' class='label-input' placeholder='Título do departamento' name='titulo' id='tituloDepartamento' value='$titulo' maxlength='35'>";
                 echo "</div>";
             ?>
-            <div class="medium">
+            <div class="medium" style="margin-left: 10px;">
                 <div class="select-categorias">
-                    <h3 class="titulo">Selecione as categorias para o menu</h3>
+                    <h3 class="titulo">Categorias do menu</h3>
                     <ul class="list-categorias">
                         <?php
                             $condicaoCategorias = "status  = 1";
@@ -73,9 +76,20 @@
                 </div>
             </div>
             <?php
-                echo "<div class='half'>";
+                echo "<div class='large'>";
                     echo "<h3 class='label-title'>Descrição (opcional)</h3>";
                     echo "<textarea class='label-textarea' placeholder='Descrição do departamento' name='descricao' id='descricaoDepartamento' rows=5>$descricao</textarea>";
+                echo "</div>";
+                echo "<br class='clear'>";
+                if($imagem != "" && file_exists($dirImagens."/".$imagem)){
+                    echo "<div class='medium'>";
+                        echo "<h3 class='label-title'>Imagem atual</h3>";
+                        echo "<img src='$dirImagens/$imagem' style='margin: 0px; width: 100%;'>";
+                    echo "</div>";
+                }
+                echo "<div class='large'>";
+                    echo "<h3 class='label-title'>Atualizar imagem (1280px : 570px)</h3>";
+                    echo "<input type='file' accept='image/*' name='imagem' class='label-input'>";
                 echo "</div>";
                 echo "<br class='clear'>";
                 echo "<div class='label medium'>";

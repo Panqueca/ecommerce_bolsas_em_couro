@@ -26,9 +26,53 @@
         $status = $_POST["status"];
         $data = date("Y-m-d h:i:s");
         
+        function valida_ref($str){
+            global $tabela_departamentos, $pew_functions, $idDepartamento, $conexao;
+            $total = $pew_functions->contar_resultados($tabela_departamentos, "ref = '$str'");
+            $return = $total == 0 ? true : false;
+            if($total == 1){
+                $queryID = mysqli_query($conexao, "select id from $tabela_departamentos where ref = '$str'");
+                $infoID = mysqli_fetch_array($queryID);
+                $getID = $infoID["id"];
+                $return = $getID == $idCategoria ? true : false;
+            }
+            return $return;
+        }
+        
         $ref = $pew_functions->url_format($titulo);
+        $finalRef = $ref;
+        
+        $i = 1;
+        while(valida_ref($finalRef) == false){
+            $finalRef = "$ref-$i";
+            $i++;
+        }
+        
+        $dirImagens = "../imagens/departamentos/";
+        
+        $imagem = isset($_FILES["imagem"]) ? $_FILES["imagem"]["name"] : "";
+        
+        
+        $query = mysqli_query($conexao, "select imagem from $tabela_departamentos where id = '$idDepartamento'");
+        $infoImagemAtual = mysqli_fetch_array($query);
+        $imagemAtual = $infoImagemAtual["imagem"];
+        
+        if($imagem != ""){
+            
+            if(file_exists($dirImagens.$imagemAtual) && $imagemAtual != ""){
+                unlink($dirImagens.$imagemAtual);
+            }
+            
+            $nomeImagem = $finalRef;
+            $ext = pathinfo($imagem, PATHINFO_EXTENSION);
+            $nomeImagem = $nomeImagem."-departamento.".$ext;
+            move_uploaded_file($_FILES["imagem"]["tmp_name"], $dirImagens.$nomeImagem);
+            
+        }else{
+            $nomeImagem = $imagemAtual;
+        }
 
-        mysqli_query($conexao, "update $tabela_departamentos set departamento = '$titulo', descricao = '$descricao', posicao = '$posicao', ref = '$ref', data_controle = '$data', status = '$status' where id = '$idDepartamento'");
+        mysqli_query($conexao, "update $tabela_departamentos set departamento = '$titulo', descricao = '$descricao', imagem = '$nomeImagem', posicao = '$posicao', ref = '$ref', data_controle = '$data', status = '$status' where id = '$idDepartamento'");
         
         
         mysqli_query($conexao, "delete from $tabela_links_menu where id_departamento = '$idDepartamento'");
