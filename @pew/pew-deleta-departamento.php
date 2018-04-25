@@ -4,6 +4,7 @@
         require_once "@classe-system-functions.php";
         
         $tabela_departamentos = $pew_custom_db->tabela_departamentos;
+        $tabela_links_menu = $pew_custom_db->tabela_links_menu;
         $idDepartamento = $_POST["id_departamento"];
         $acao = $_POST["acao"];
         
@@ -21,6 +22,9 @@
                 }
                 
                 mysqli_query($conexao, "delete from $tabela_departamentos where id = '$idDepartamento'");
+                
+                mysqli_query($conexao, "delete from $tabela_links_menu where id_departamento = '$idDepartamento'");
+                
                 echo "true";
             }else{
                 echo "false";

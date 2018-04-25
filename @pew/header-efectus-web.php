@@ -21,6 +21,7 @@
         color: #666;
         line-height: 30px;
         position: relative;
+        z-index: 80;
     }
     .header-efectus-web .top-info .date-field{
         position: absolute;
@@ -48,11 +49,6 @@
         border-radius: 5px;
         border-bottom-right-radius: 0px;
     }
-    .header-efectus-web .top-info .login-field:hover .menu-field{
-        opacity: 1;
-        top: 30px;
-        z-index: 10;
-    }
     .header-efectus-web .top-info .login-field .menu-field{
         position: absolute;
         top: 25px;
@@ -65,6 +61,13 @@
         opacity: 0;
         transition: .2s;
         background-color: #c02423;
+        visibility: hidden;
+    }
+    .header-efectus-web .top-info .login-field:hover .menu-field{
+        opacity: 1;
+        top: 30px;
+        z-index: 10;
+        visibility: visible;
     }
     .header-efectus-web .top-info .login-field .menu-field li{
         display: block;
