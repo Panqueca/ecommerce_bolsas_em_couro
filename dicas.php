@@ -140,7 +140,7 @@
         ?>
         <!--THIS PAGE CONTENT-->
         <div class="background-loja">
-            <img src="imagens/departamentos/background-dicas.png">
+            <img src="imagens/estrutura/background-dicas.png">
         </div>
         <div class="main-content">
         	<div class="display-cont">
@@ -182,7 +182,10 @@
 							echo "</div>";
 						echo "</div>";
 					}
-				}
+				}else{
+                    echo "<h3 style='text-align: center; color: #666; font-weigth: normal; width: 100%; margin: 20px 0px 20px 0px;'>Nenhuma postagem foi encontrada!</h3>";
+                    echo "<br class='clear'><a href='index.php' class='link-padrao' style='display: inline-block;'>Voltar a página inicial</a>";
+                }
 				
         		?>
         	</div>

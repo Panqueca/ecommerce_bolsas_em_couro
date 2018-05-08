@@ -36,19 +36,29 @@
         <!--PAGE CONTENT-->
         <h1 class="titulos"><?php echo $page_title; ?></h1>
         <section class="conteudo-painel">
-            <form class="form-busca" method="get" action="pew-contato.php">
-                <label class="label-full field-busca">
-                    <h3 class="titulo-busca">Buscar mensagens</h3>
-                    <input type="search" name="busca" placeholder="Busque por nome, email, assunto, telefone ou mensagens" class="barra-busca" title="Adicione novas categorias" id="inputAddCategoria" maxlength="35" autocomplete="off">
-                    <input type="submit" value="Buscar" class="btn-buscar">
+            <form action="pew-contatos.php" method="get" class="label half clear">
+                <label class="group">
+                    <div class="group">
+                        <h3 class="label-title">Busca de contatos</h3>
+                    </div>
+                    <div class="group">
+                        <div class="xlarge" style="margin-left: -5px; margin-right: 0px;">
+                            <input type="search" name="busca" placeholder="Busque por nome, email, assunto, telefone ou mensagens" class="label-input" title="Buscar">
+                        </div>
+                        <div class="xsmall" style="margin-left: 0px;">
+                            <button type="submit" class="btn-submit label-input btn-flat" style="margin: 10px;">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
                 </label>
             </form>
             <table class="table-padrao" cellspacing="0">
             <?php
                 $tabela_contatos = $pew_db->tabela_contatos;
                 if(isset($_GET["busca"]) && $_GET["busca"] != ""){
-                    $busca = pew_string_format($_GET["busca"]);
-                    $strBusca = "where nome like '%".$busca."%' or telefone like '%".$busca."%' or email like '%".$busca."%' or estado like '%".$busca."%' or cidade like '%".$busca."%' or endereco like '%".$busca."%' or mensagem like '%".$busca."%'";
+                    $busca = addslashes($_GET["busca"]);
+                    $strBusca = "where nome like '%".$busca."%' or telefone like '%".$busca."%' or email like '%".$busca."%' or mensagem like '%".$busca."%'";
                     echo "<h3>Exibindo resultados para: $busca</h3>";
                 }else{
                     $strBusca = "";

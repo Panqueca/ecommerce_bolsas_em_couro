@@ -30,14 +30,14 @@
     $infoDepartamentos = $produto->get_departamentos_produto();
     $totalDepartamentos = is_array($infoDepartamentos) ? count($infoDepartamentos) : 0;
     if($totalDepartamentos){
-        $breadCrumbDepartamento = ucwords(strtolower($infoDepartamentos[0]["titulo"]));
+        $breadCrumbDepartamento = mb_convert_case($infoDepartamentos[0]["titulo"], MB_CASE_TITLE, "UTF-8");
         $breadCrumbRefDepartamento = $infoDepartamentos[0]["ref"];
     }
 
     $infoCategorias = $produto->get_categorias_produto();
     $totalCategorias = is_array($infoCategorias) ? count($infoCategorias) : 0;
     if($totalCategorias){
-        $breadCrumbCategoria = ucwords(strtolower($infoCategorias[0]["titulo"]));
+        $breadCrumbCategoria = mb_convert_case($infoCategorias[0]["titulo"], MB_CASE_TITLE, "UTF-8");
         $breadCrumbRefCategoria = $infoCategorias[0]["ref"];
     }
 ?>

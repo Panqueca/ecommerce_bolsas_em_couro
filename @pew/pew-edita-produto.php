@@ -799,6 +799,7 @@
                 $produto->montar_produto($idProduto);
                 $infoProduto = $produto->montar_array();
                 $skuProduto = $infoProduto["sku"];
+                $codigoBarrasProduto = $infoProduto["codigo_barras"];
                 $nomeProduto = $infoProduto["nome"];
                 $precoProduto = $infoProduto["preco"];
                 $precoProduto = $pew_functions->custom_number_format($precoProduto);
@@ -951,15 +952,21 @@
                     </select>
                 </div>
                 <div class="label xsmall">
-                    <h2 class='label-title'>Preço</h2>
-                    <input type="number" step="any" name="preco" id="preco" placeholder="Preço" class="label-input" style="margin-top: 10px;" value="<?php echo $precoProduto;?>">
+                    <h2 class='label-title'>Código Barras</h2>
+                    <input type="text" name="codigo_barras" id="codigoBarras" value="<?php echo $codigoBarrasProduto;?>" placeholder="Código de barras" class="label-input">
                 </div>
                 <div class="label xsmall">
-                    <h2 class='label-title'>Preço promoção</h2>
-                    <input type="number" step="any" name="preco_promocao" id="precoPromocao" placeholder="Preço promocao" class="label-input" style="margin-top: 10px;" value="<?php echo $precoPromocaoProduto;?>">
+                    <div class="half">
+                        <h2 class='label-title'>Preço</h2>
+                        <input type="number" step="any" name="preco" id="preco" placeholder="0.00" class="label-input" style="margin-top: 10px;" value="<?php echo $precoProduto;?>">
+                    </div>
+                    <div class="half">
+                        <h2 class='label-title'>Promoção</h2>
+                        <input type="number" step="any" name="preco_promocao" id="precoPromocao" placeholder="0.00" class="label-input" style="margin-top: 10px;" value="<?php echo $precoPromocaoProduto;?>">
+                    </div>
                 </div>
                 <div class="label xsmall">
-                    <h2 class='label-title'>Promoção</h2>
+                    <h2 class='label-title'>Status Promoção</h2>
                     <select name="promocao_ativa" class="label-input">
                         <?php
                             $possibleStatus = array(0, 1);

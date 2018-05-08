@@ -115,7 +115,7 @@
                         $destinatarios[0]["nome"] = $infoConta["usuario"];
                         $destinatarios[0]["email"] = $infoConta["email"];
                         
-                        $pew_functions->enviar_email("Confirme sua conta - Rei das Fechaduras", $bodyEmail, $destinatarios);
+                        $pew_functions->enviar_email("Confirme sua conta - Bolsas em Couro", $bodyEmail, $destinatarios);
                         
                     }else{
                         block();

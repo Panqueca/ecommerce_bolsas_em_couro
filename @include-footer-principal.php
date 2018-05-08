@@ -222,7 +222,7 @@
 </script>
 <footer class="footer-principal">
     <div class="newsletter">
-        <h3 class="titulo">RECEBA AS NOVIDADES DA MAIDI GREY</h3>
+        <h3 class="titulo">RECEBA AS NOVIDADES DA LAR E OBRA</h3>
         <h4 class="subtitulo">Lançamentos e promoções em primeira mão</h4>
         <form class="form-newsletter">
             <input type="text" placeholder="Digite seu nome" name="nome" class="input-nome">
@@ -299,19 +299,98 @@
                 echo "</li>";
             }
         }
+        
+        $countLinks = 0;
 
         $link_footer = null;
-        $link_footer[0] = new FooterLinks("PÁGINA INICIAL", "index.php");
-        $link_footer[1] = new FooterLinks("FEMENINO", "loja.php?departamento=feminino");
-        $link_footer[1]->add_sublink(1, "CATEGORIA 1", "loja.php?departamento=feminino&categoria=categoria_1");
-        $link_footer[1]->add_sublink(2, "CATEGORIA 2", "loja.php?departamento=feminino&categoria=categoria_2");
-        $link_footer[1]->add_sub_sublink(1, "SUBCATEGORIA 1", "loja.php?departamento=feminino&categoria=categoria_1&subcategoria=subcategoria_1");
-        $link_footer[1]->add_sub_sublink(1, "SUBCATEGORIA 2", "loja.php?departamento=feminino&categoria=categoria_1&subcategoria=subcategoria_2");
-        $link_footer[2] = new FooterLinks("MASCULINO", "loja.php?departamento=masculino");
-        $link_footer[3] = new FooterLinks("MOCHILAS", "loja.php?departamento=mochilas");
-        $link_footer[4] = new FooterLinks("ACESSÓRIOS", "loja.php?departamento=acessorios");
-        $link_footer[5] = new FooterLinks("BAZAR", "loja.php?departamento=bazar");
-        $link_footer[6] = new FooterLinks("DICAS", "dicas.php");
+        $link_footer[$countLinks] = new FooterLinks("PÁGINA INICIAL", "index.php");
+        $countLinks++;
+        
+        /*SET TABLES*/
+        require_once "@pew/pew-system-config.php";
+        require_once "@classe-system-functions.php";
+        $tabela_categorias = $pew_db->tabela_categorias;
+        $tabela_subcategorias = $pew_db->tabela_subcategorias;
+        $tabela_categorias_produtos = $pew_custom_db->tabela_categorias_produtos;
+        $tabela_subcategorias_produtos = $pew_custom_db->tabela_subcategorias_produtos;
+        $tabela_produtos = $pew_custom_db->tabela_produtos;
+        $tabela_imagens_produtos = $pew_custom_db->tabela_imagens_produtos;
+        $tabela_departamentos = $pew_custom_db->tabela_departamentos;
+        $tabela_links_menu = $pew_custom_db->tabela_links_menu;
+        /*END SET TABLES*/
+        
+        
+        global $departamentoLinks, $ctrlDepartamentoLinks;
+        $departamentoLinks = array();
+        $ctrlDepartamentoLinks = 0;
+            
+        $totalDepartamentos = (int)$pew_functions->contar_resultados($tabela_departamentos, "status = 1");
+
+        if($totalDepartamentos > 0){
+            $queryDepartamentos = mysqli_query($conexao, "select * from $tabela_departamentos where status = 1 order by posicao asc");
+            while($infoDepartamentos = mysqli_fetch_array($queryDepartamentos)){
+                $idDepartamento = $infoDepartamentos["id"];
+                $tituloDepartamento = $infoDepartamentos["departamento"];
+                $refDepartamento = $infoDepartamentos["ref"];
+                $urlDepartamento = "loja.php?departamento=$refDepartamento";
+                $departamentoLinks[$ctrlDepartamentoLinks] = array();
+                $departamentoLinks[$ctrlDepartamentoLinks]["titulo"] = $tituloDepartamento;
+                $departamentoLinks[$ctrlDepartamentoLinks]["url"] = $urlDepartamento;
+                $qtdSub = $pew_functions->contar_resultados($tabela_links_menu, "id_departamento = '$idDepartamento'");
+                if($qtdSub > 0){
+                    $querySub = mysqli_query($conexao, "select * from $tabela_links_menu where id_departamento = '$idDepartamento'");
+                    $ctrlSub = 0;
+                    $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"] = array();
+                    while($infoSub = mysqli_fetch_array($querySub)){
+                        $idCategoria = $infoSub["id_categoria"];
+                        $totalCategoria = $pew_functions->contar_resultados($tabela_categorias, "id = '$idCategoria' and status = 1");
+                        if($totalCategoria > 0){
+                            $queryCategoria = mysqli_query($conexao, "select * from $tabela_categorias where id = '$idCategoria' and status = 1");
+                            $infoCategoria = mysqli_fetch_array($queryCategoria);
+                            $tituloCategoria = $infoCategoria["categoria"];
+                            $refCategoria = $infoCategoria["ref"];
+                            $urlCategoria = "loja.php?departamento=$refDepartamento&categoria=$refCategoria";
+                            $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub] = array();
+                            $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["titulo"] = $tituloCategoria;
+                            $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["url"] = $urlCategoria;
+                            $totalSubcategorias = $pew_functions->contar_resultados($tabela_subcategorias, "id_categoria = '$idCategoria'");
+                            $ctrlSub++;
+                        }
+                    }
+                }
+                $ctrlDepartamentoLinks++;
+            }   
+        }
+        
+        foreach($departamentoLinks as $link_departamento){
+            $tituloLink = $link_departamento["titulo"];
+            $urlLink = $link_departamento["url"];
+            $link_footer[$countLinks] = new NavLinks($tituloLink, $urlLink);
+            $sublinks = isset($link_departamento["sublinks"]) ? $link_departamento["sublinks"] : null;
+            $totalSublinks = is_array($sublinks) && count($sublinks) > 0 ? count($sublinks) : 0;
+            if($totalSublinks > 0){
+                $ctrl_sub = 0;
+                foreach($sublinks as $indice => $slink){
+                    $titulo = $slink["titulo"];
+                    $url = $slink["url"];
+                    $subsublinks = isset($slink["subsublinks"]) ? $slink["subsublinks"] : null;
+                    $totalSubsub = is_array($subsublinks) ? count($subsublinks) : 0;
+                    $link_footer[$countLinks]->add_sublink($ctrl_sub, $titulo, $url);
+                    if($totalSubsub > 0){
+                        foreach($subsublinks as $sublink){
+                            $tituloSub = $sublink["titulo"];
+                            $urlSub = $sublink["url"];
+                            $link_footer[$countLinks]->add_sub_sublink($ctrl_sub, $tituloSub, $urlSub, false);
+                        }
+                    }
+                    $ctrl_sub++;
+                }
+            }
+            $countLinks++;
+        }
+        
+        $link_footer[$countLinks] = new FooterLinks("DICAS", "dicas.php");
+        $countLinks++;
 
         $quantidadeLinks = count($link_footer);
         if($quantidadeLinks > 0){

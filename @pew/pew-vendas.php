@@ -10,6 +10,9 @@
 
     $navigation_title = "Vendas - " . $pew_session->empresa;
     $page_title = "Vendas";
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 ?>
 <!DOCTYPE html>
 <html>
@@ -289,6 +292,7 @@
             }
         
             require_once "@classe-pedidos.php";
+        
         
         ?>
         <!--PAGE CONTENT-->

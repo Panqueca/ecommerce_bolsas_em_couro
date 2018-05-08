@@ -4,10 +4,9 @@
     $descricaoPagina = "DESCRIÇÃO MODELO ATUALIZAR...";
     $tituloPagina = "Finalizar compra - $nomeEmpresa";
 
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+    if(isset($_GET["clear"]) && $_GET["clear"] == true || $_GET["clear"] == "true"){
+        unset($_SESSION["carrinho"]);
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -323,7 +322,7 @@ error_reporting(E_ALL);
                 
                 
                 /*MAIN FUNCTIONS*/
-                function guardar_compra(cd_validacao, cd_transacao, cd_transporte, referencia){
+                function guardar_compra(cd_validacao, cd_transacao, cd_transporte, vlr_frete, referencia){
                     var dados_compra = {
                         token_carrinho: tokenCarrinho,
                         itens_carrinho: jsonProduto,
@@ -342,6 +341,7 @@ error_reporting(E_ALL);
                         bairro: $("#bairroDestino").val(),
                         cidade: $("#cidadeDestino").val(),
                         estado: $("#estadoDestino").val(),
+                        vlr_frete: vlr_frete
                     }
                     
                     $.ajax({
@@ -512,15 +512,16 @@ error_reporting(E_ALL);
                                         resposta = JSON.parse(resposta);
                                         var confirmationCode = resposta.code;
                                         var reference = resposta.reference;
+                                        var vlrFrete = resposta.vlr_frete;
                                         var transactionCode = "0";
                                         
-                                        guardar_compra(confirmationCode, transactionCode, transportCode, reference);
+                                        guardar_compra(confirmationCode, transactionCode, transportCode, vlrFrete, reference);
                                         
                                         PagSeguroLightbox({
                                             code: confirmationCode
                                             }, {
                                             success: function(transactionCode){
-                                                mensagemAlerta("Sua compra foi finalizada com sucesso", false, "limegreen", "finalizar-compra.php");
+                                                mensagemAlerta("Sua compra foi finalizada com sucesso", false, "limegreen", "finalizar-compra.php?clear=true");
                                             },
                                             abort: function() {
                                                 mensagemAlerta("Ocorreu um erro ao finalizar a compra. Tente novamente.", false, false);

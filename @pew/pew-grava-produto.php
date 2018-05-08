@@ -1,5 +1,5 @@
 <?php
-    $post_fields = array("sku", "nome", "marca", "id_cor", "preco", "preco_ativo", "preco_promocao", "promocao_ativa", "desconto_relacionado", "estoque", "estoque_baixo", "tempo_fabricacao", "descricao_curta", "descricao_longa", "url_video", "peso", "comprimento", "largura", "altura", "status");
+    $post_fields = array("sku", "codigo_barras", "nome", "marca", "id_cor", "preco", "preco_promocao", "promocao_ativa", "desconto_relacionado", "estoque", "estoque_baixo", "tempo_fabricacao", "descricao_curta", "descricao_longa", "url_video", "peso", "comprimento", "largura", "altura", "status");
     $file_fields = array();
     $invalid_fields = array();
     $gravar = true;
@@ -27,13 +27,13 @@
         $dataAtual = date("Y-m-d h:i:s");
         /*POST DATA*/
         $skuProduto = addslashes($_POST["sku"]);
+        $codigoBarrasProduto = addslashes($_POST["codigo_barras"]);
         $nomeProduto = addslashes($_POST["nome"]);
         $marcaProduto = addslashes($_POST["marca"]);
         $idCor = (int)$_POST["id_cor"];
         $precoProduto = $_POST["preco"];
         $precoProduto = $pew_functions->custom_number_format($precoProduto);
         $precoPromocaoProduto = $_POST["preco_promocao"];
-        $precoAtivo = intval($_POST["preco_ativo"]) == 1 ? 1 : 0;
         $precoPromocaoProduto = $pew_functions->custom_number_format($precoPromocaoProduto);
         $promocaoAtiva = intval($_POST["promocao_ativa"]) == 1 ? 1 : 0;
         $descontoRelacionado = isset($_POST["desconto_relacionado"]) && $_POST["desconto_relacionado"] ? $_POST["desconto_relacionado"] : 0;
@@ -88,7 +88,7 @@
             $idCor = $pew_functions->contar_resultados($tabela_cores, $condicaoCor) > 0 ? $idCor : null;
             
             /*INSERE DADOS PRODUTO*/
-            mysqli_query($conexao, "insert into $tabela_produtos (sku, nome, marca, id_cor, preco, preco_ativo, preco_promocao, promocao_ativa, desconto_relacionado, estoque, estoque_baixo, tempo_fabricacao, descricao_curta, descricao_longa, url_video, peso, comprimento, largura, altura, data, status) values ('$skuProduto', '$nomeProduto', '$marcaProduto', '$idCor', '$precoProduto', '$precoAtivo','$precoPromocaoProduto', '$promocaoAtiva', '$descontoRelacionado', '$estoqueProduto', '$estoqueBaixoProduto', '$tempoFabricacaoProduto', '$descricaoCurtaProduto', '$descricaoLongaProduto', '$urlVideoProduto', '$pesoProduto', '$comprimentoProduto', '$larguraProduto', '$alturaProduto', '$dataAtual', '$statusProduto')");
+            mysqli_query($conexao, "insert into $tabela_produtos (sku, codigo_barras, nome, marca, id_cor, preco, preco_promocao, promocao_ativa, desconto_relacionado, estoque, estoque_baixo, tempo_fabricacao, descricao_curta, descricao_longa, url_video, peso, comprimento, largura, altura, data, status) values ('$skuProduto', '$codigoBarrasProduto', '$nomeProduto', '$marcaProduto', '$idCor', '$precoProduto','$precoPromocaoProduto', '$promocaoAtiva', '$descontoRelacionado', '$estoqueProduto', '$estoqueBaixoProduto', '$tempoFabricacaoProduto', '$descricaoCurtaProduto', '$descricaoLongaProduto', '$urlVideoProduto', '$pesoProduto', '$comprimentoProduto', '$larguraProduto', '$alturaProduto', '$dataAtual', '$statusProduto')");
 
             /*PEGA ID PRODUTO INSERIDO*/
             $queryID = mysqli_query($conexao, "select last_insert_id()");
@@ -144,6 +144,8 @@
             }
             
             /*INSERE IMAGENS*/
+            $selectedImagens = array();
+            $ctrlImagens = 0;
             $maxImagens = isset($_POST["maximo_imagens"]) && (int)$_POST["maximo_imagens"] ? (int)$_POST["maximo_imagens"] : 4;
             for($i = 1; $i <= $maxImagens; $i++){
                 $posicaoAnterior = $i - 1;                
@@ -167,10 +169,75 @@
                         move_uploaded_file($_FILES["imagem$i"]["tmp_name"], $dirImagensProdutos.$nomeFinalImagem);
                         
                         mysqli_query($conexao, "insert into $tabela_imagens (id_produto, imagem, posicao, status) values ('$idProduto', '$nomeFinalImagem', '$posicao', 1)");
+                        
+                        $selectedImagens[$ctrlImagens] = $nomeFinalImagem;
+                        $ctrlImagens++;
                     }
                 }
             }
-            echo "<script>window.location.href='pew-produtos.php?msg=Produto cadastrado com sucesso&msgType=success';</script>";
+            
+            // GRAVAR NO BLING
+            
+            $url = 'https://bling.com.br/Api/v2/produto/json/';
+            
+            function executeInsertProduct($url, $data){
+                
+                $curl_handle = curl_init();
+                
+                curl_setopt($curl_handle, CURLOPT_HTTPHEADER, 0);
+                curl_setopt($curl_handle, CURLOPT_ENCODING, '');
+                curl_setopt($curl_handle, CURLOPT_URL, $url);
+                curl_setopt($curl_handle, CURLOPT_POST, count($data));
+                curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, TRUE);
+                            
+                $response = curl_exec($curl_handle);
+                curl_close($curl_handle);
+                            
+                return $response;
+            }
+            
+            $precoFinal = $promocaoAtiva == 1 && $precoPromocaoProduto < $precoProduto && $precoPromocaoProduto > 0 ? $precoPromocaoProduto : $precoProduto;
+            
+            $infoProduto = "
+            <codigo>$skuProduto</codigo>
+            <gtin>$codigoBarrasProduto</gtin>
+            <peso_bruto>$pesoProduto</peso_bruto>
+            <peso_liq>$pesoProduto</peso_liq>
+            <descricao><![CDATA[$nomeProduto]]></descricao>
+            <descricaoCurta><![CDATA[" . html_entity_decode($descricaoCurtaProduto) . "]]></descricaoCurta>
+            <descricaoComplementar><![CDATA[" . html_entity_decode($descricaoLongaProduto) . "]]></descricaoComplementar>
+            <vlr_unit>$precoFinal</vlr_unit>
+            <estoque>$estoqueProduto</estoque>
+            <largura>$larguraProduto</largura>
+            <altura>$alturaProduto</altura>
+            <un>un</un>
+            <profundidade>$comprimentoProduto</profundidade>";
+            
+            if(count($selectedImagens) > 0){
+                $infoProduto .= "<imagens>";
+                $base = "https://www.efectusdigital.com.br/bolsas/imagens";
+                foreach($selectedImagens as $nomeIMG){
+                    $infoProduto .= "<url>$base/$nomeIMG</url>";
+                }
+                $infoProduto .= "</imagens>";
+            }
+            
+            $xmlProduto = "<produto>$infoProduto</produto>";
+            
+            if($xmlProduto != null){
+                
+                $posts = array (
+                    "apikey" => "a0d67ab3925a9df897d78510a6ccf847dfdfb78dfd78641cb1504e8de0a311eab831c42b",
+                    "xml" => rawurlencode($xmlProduto)
+                );
+                
+                $retorno = executeInsertProduct($url, $posts);
+                echo $retorno;
+                // END GRAVAR NO BLING
+            }
+            
+            //echo "<script>window.location.href='pew-produtos.php?msg=Produto cadastrado com sucesso&msgType=success';</script>";
         }else{
             //Erro de validação = Nome do produto vazio
             echo "<script>window.location.href='pew-produtos.php?erro=validação_do_produto&msg=Ocorreu um erro ao cadastrar o produto&msgType=error';</script>";

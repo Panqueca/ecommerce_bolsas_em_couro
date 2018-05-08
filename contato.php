@@ -134,7 +134,7 @@
         ?>
         <!--THIS PAGE CONTENT-->
         <div class="banner">
-        	<img src="imagens/departamentos/banner-contato.png">
+        	<img src="imagens/estrutura/banner-contato.png">
         </div>
         <div class="main-content">
       		<div class="box-title">

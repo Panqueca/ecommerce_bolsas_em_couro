@@ -156,7 +156,7 @@
             }
             
             function enviar_email($assunto, $body, $destinatarios, $senderEmail = null, $senderPass = null, $anexos = null, $altBody = null){
-                $nomeLoja = "Rei das fechaduras";
+                $nomeLoja = "Bolsas em Couro";
                 
                 $senderEmail = $senderEmail == null ? "dev@efectusdigital.com.br" : $senderEmail;
                 $senderPass = $senderPass == null ? "3f3ctu5d1g1t4l" : $senderPass;

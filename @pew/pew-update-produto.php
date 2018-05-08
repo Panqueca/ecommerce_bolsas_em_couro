@@ -1,6 +1,6 @@
 <?php
 
-    $post_fields = array("id_produto", "sku", "nome", "marca", "id_cor", "preco", "preco_promocao", "promocao_ativa", "desconto_relacionado","estoque", "estoque_baixo", "tempo_fabricacao", "descricao_curta", "descricao_longa", "url_video", "peso", "comprimento", "largura", "altura", "status");
+    $post_fields = array("id_produto", "sku", "codigo_barras", "nome", "marca", "id_cor", "preco", "preco_promocao", "promocao_ativa", "desconto_relacionado","estoque", "estoque_baixo", "tempo_fabricacao", "descricao_curta", "descricao_longa", "url_video", "peso", "comprimento", "largura", "altura", "status");
     $file_fields = array();
     $invalid_fields = array();
     $gravar = true;
@@ -29,6 +29,7 @@
         /*POST DATA*/
         $idProduto = addslashes($_POST["id_produto"]);
         $skuProduto = addslashes($_POST["sku"]);
+        $codigoBarrasProduto = addslashes($_POST["codigo_barras"]);
         $nomeProduto = addslashes($_POST["nome"]);
         $marcaProduto = addslashes($_POST["marca"]);
         $idCor = (int)$_POST["id_cor"];
@@ -57,14 +58,13 @@
         $statusProduto = intval($_POST["status"]) == 1 ? 1 : 0;
         $urlVideoProduto = addslashes($_POST["url_video"]);
         
+        
         $http = substr($urlVideoProduto, 0, 5);
         if($http != "http:" && $http != "https" && $urlVideoProduto != ""){
             $urlVideoProduto = "http://".$urlVideoProduto;
         }
-        
         /*END POST DATA*/
         
-
         /*DIR VARS*/
         $dirImagensProdutos = "../imagens/produtos/";
         /*END DIR VARS*/
@@ -84,13 +84,17 @@
         $tabela_especificacoes_produtos = $pew_custom_db->tabela_especificacoes_produtos;
         /*END SET TABLES*/
 
+        $querySku = mysqli_query($conexao, "select sku from $tabela_produtos where id = '$idProduto'");
+        $infoSku = mysqli_fetch_array($querySku);
+        $skuAntigo = $infoSku["sku"];
+        
         if($nomeProduto != ""){
             echo "<h3 align=center>Gravando dados...</h3>";
             
             $condicaoCor = "id = '$idCor'";
             $idCor = $pew_functions->contar_resultados($tabela_cores, $condicaoCor) > 0 ? $idCor : null;
             
-            mysqli_query($conexao, "update $tabela_produtos set sku = '$skuProduto', nome = '$nomeProduto', marca = '$marcaProduto', id_cor = '$idCor', preco = '$precoProduto', preco_promocao = '$precoPromocaoProduto', promocao_ativa = '$promocaoAtiva', desconto_relacionado = '$descontoRelacionado', estoque = '$estoqueProduto', estoque_baixo = '$estoqueBaixoProduto', tempo_fabricacao = '$tempoFabricacaoProduto', descricao_curta = '$descricaoCurtaProduto', descricao_longa = '$descricaoLongaProduto', url_video = '$urlVideoProduto', peso = '$pesoProduto', comprimento = '$comprimentoProduto', largura = '$larguraProduto', altura = '$alturaProduto', data = '$dataAtual', status = '$statusProduto' where id = '$idProduto'");
+            mysqli_query($conexao, "update $tabela_produtos set sku = '$skuProduto', codigo_barras = '$codigoBarrasProduto', nome = '$nomeProduto', marca = '$marcaProduto', id_cor = '$idCor', preco = '$precoProduto', preco_promocao = '$precoPromocaoProduto', promocao_ativa = '$promocaoAtiva', desconto_relacionado = '$descontoRelacionado', estoque = '$estoqueProduto', estoque_baixo = '$estoqueBaixoProduto', tempo_fabricacao = '$tempoFabricacaoProduto', descricao_curta = '$descricaoCurtaProduto', descricao_longa = '$descricaoLongaProduto', url_video = '$urlVideoProduto', peso = '$pesoProduto', comprimento = '$comprimentoProduto', largura = '$larguraProduto', altura = '$alturaProduto', data = '$dataAtual', status = '$statusProduto' where id = '$idProduto'");
 
             /*ATUALIZA DEPARTAMENTOS*/
             if($departamentosProduto != ""){
@@ -156,6 +160,8 @@
             /*FIM ATUALIZA SUBCATEGORIAS DO PRODUTO*/
 
             /*ATUALIZA IMAGENS DO PRODUTO*/
+            $selectedImagens = array();
+            $ctrlImagens = 0;
             $maxImagens = isset($_POST["maximo_imagens"]) && (int)$_POST["maximo_imagens"] ? (int)$_POST["maximo_imagens"] : 4;
             for($i = 1; $i <= $maxImagens; $i++){
                 $posicao = $i;
@@ -182,6 +188,9 @@
                             }
                             
                             mysqli_query($conexao, "update $tabela_imagens set imagem = '$nomeFinalImagem', status = 1 where id_produto = '$idProduto' and posicao = '$posicao'");
+                            
+                            $selectedImagens[$ctrlImagens] = $nomeFinalImagem;
+                            $ctrlImagens++;
                         }else{
                             mysqli_query($conexao, "insert into $tabela_imagens (id_produto, imagem, posicao, status) values ('$idProduto', '$nomeFinalImagem', '$posicao', 1)");
                         }
@@ -256,7 +265,92 @@
             
             /*END ATUALIZA CORES DE PRODUTOS RELACIONADOS*/
             
-            echo "<script>window.location.href='pew-edita-produto.php?msg=Produto atualizado com sucesso&msgType=success&id_produto=$idProduto';</script>";
+            // ATUALIZAR NO BLING
+            $urlUpdate = "https://bling.com.br/Api/v2/produto/$skuAntigo/";
+            
+            $apikey = "a0d67ab3925a9df897d78510a6ccf847dfdfb78dfd78641cb1504e8de0a311eab831c42b";
+            
+            function executeUpdateProduct($url, $data){
+                
+                $curl_handle = curl_init();
+                
+                curl_setopt($curl_handle, CURLOPT_ENCODING, '');
+                curl_setopt($curl_handle, CURLOPT_URL, $url);
+                curl_setopt($curl_handle, CURLOPT_POST, count($data));
+                curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, TRUE);
+                
+                $response = curl_exec($curl_handle);
+                curl_close($curl_handle);
+                
+                return $response;
+            }
+            
+            function contar_result_bling($sku, $apikey){
+                $url = 'https://bling.com.br/Api/v2/produto/' . $sku . '/xml';
+                
+                $curl_handle = curl_init();
+                curl_setopt($curl_handle, CURLOPT_URL, $url . '&apikey=' . $apikey);
+                curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, TRUE);
+                $retorno = curl_exec($curl_handle);
+
+                curl_close($curl_handle);
+                
+                $xmlRetorno = simplexml_load_string($retorno);
+                
+                $total = isset($xmlRetorno->produtos) && count($xmlRetorno->produtos) > 0 ? count($xmlRetorno->produtos) : 0;
+                
+                return $total;
+            }
+            
+            $precoFinal = $promocaoAtiva == 1 && $precoPromocaoProduto < $precoProduto && $precoPromocaoProduto > 0 ? $precoPromocaoProduto : $precoProduto;
+            
+            $infoProduto = "
+            <codigo>$skuProduto</codigo>
+            <gtin>$codigoBarrasProduto</gtin>
+            <peso_bruto>$pesoProduto</peso_bruto>
+            <peso_liq>$pesoProduto</peso_liq>
+            <descricao><![CDATA[" . html_entity_decode($nomeProduto) . "]]></descricao>
+            <descricaoCurta><![CDATA[" . html_entity_decode($descricaoCurtaProduto) . "]]></descricaoCurta>
+            <descricaoComplementar><![CDATA[" . html_entity_decode($descricaoLongaProduto) . "]]></descricaoComplementar>
+            <vlr_unit>$precoFinal</vlr_unit>
+            <estoque>$estoqueProduto</estoque>
+            <largura>$larguraProduto</largura>
+            <altura>$alturaProduto</altura>
+            <un>un</un>
+            <profundidade>$comprimentoProduto</profundidade>";
+            
+            if(count($selectedImagens) > 0){
+                $infoProduto .= "<imagens>";
+                $base = "https://www.efectusdigital.com.br/bolsas/imagens";
+                foreach($selectedImagens as $nomeIMG){
+                    $infoProduto .= "<url>$base/$nomeIMG</url>";
+                }
+                $infoProduto .= "</imagens>";
+            }
+            
+            $xmlProduto = "<produto>$infoProduto</produto>";
+            
+            if($xmlProduto != null){
+                
+                
+                $posts = array (
+                    "apikey" => $apikey,
+                    "xml" => rawurlencode($xmlProduto)
+                );
+                
+                
+                if(contar_result_bling($skuAntigo, $apikey) == 0){
+                    $urlUpdate = 'https://bling.com.br/Api/v2/produto/json/';
+                }
+                
+                $retorno = executeUpdateProduct($urlUpdate, $posts);
+                echo $retorno;
+                // END GRAVAR NO BLING
+            }
+            // END ATUALIZAR NO BLING
+            
+            //echo "<script>window.location.href='pew-edita-produto.php?msg=Produto atualizado com sucesso&msgType=success&id_produto=$idProduto';</script>";
         }else{
             echo "<script>window.location.href='pew-edita-produto.php?erro=validacao_do_produto&msg=Não foi possível atualizar o produto&msgType=error&id_produto=$idProduto';</script>";
         }

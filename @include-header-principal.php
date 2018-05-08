@@ -950,8 +950,8 @@
         </div>
         <div class="top-nav">
             <div class="search-field">
-                <form name="busca" method="get" action="busca-produtos.php">
-                    <input type="search" class="search-bar" placeholder="O QUE VOCÊ PROCURA?">
+                <form name="busca" method="get" action="loja.php">
+                    <input type="search" class="search-bar" placeholder="O QUE VOCÊ PROCURA?" name="busca">
                     <button type="submit" class="search-submit"><i class="fas fa-search"></i></button>
                 </form>
             </div>

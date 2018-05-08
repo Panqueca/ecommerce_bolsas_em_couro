@@ -186,9 +186,10 @@
         function montar_email_confirmacao($email, $nome){
             $codigo = md5(md5($email));
             
-            $baseSite = "https://efectusdigital.com.br/bolsas";
+            $baseSite = "https://www.efectusdigital.com.br/bolsas";
             $dirImagens = "imagens/identidadeVisual/";
-            $logo = "logo-bolsa-em-couro.png";
+            $logo = "logo-bolsas-em-couro.png";
+            $nomeLoja = "Bolsas em Couro";
             
             $body = "";
             
@@ -200,7 +201,7 @@
                     $body .= "<h1 style='margin: 0px 0px 0px 180px; font-size: 18px; width: 200px; white-space: nowrap; text-align: right;'>Confirme sua conta</h1>";
                 $body .= "</div>";
                 $body .= "<div class='body'>";
-                    $body .= "<article>Olá {$nome}. Você se cadastrou na loja do Rei das Fechaduras.<br><br>Seu login é: <b>$email</b>.<br><br>Clique no botão para confirmar sua conta</article>";
+                    $body .= "<article>Olá {$nome}. Você se cadastrou na loja $nomeLoja.<br><br>Seu login é: <b>$email</b>.<br><br>Clique no botão para confirmar sua conta</article>";
                     $body .= "<a href='$baseSite/@envia-link-confirmacao.php?confirm=$codigo' style='background-color: limegreen; color: #fff; padding: 5px 15px 5px 15px; display: inline-block; text-decoration: none; margin-top: 15px; font-size: 14px;' target='_blank'>CONFIRMAR CONTA</a>";
                 $body .= "</div>";
             $body .= "</div>";

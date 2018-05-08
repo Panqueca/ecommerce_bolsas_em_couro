@@ -21,7 +21,6 @@
         color: #666;
         line-height: 30px;
         position: relative;
-        z-index: 80;
     }
     .header-efectus-web .top-info .date-field{
         position: absolute;
@@ -41,6 +40,7 @@
         font-size: 14px;
         transition: .2s;
         cursor: pointer;
+        z-index: 80;
     }
     .header-efectus-web .top-info .login-field:hover{
         background-color: #df2321;
@@ -48,6 +48,11 @@
         border-color: #df2321;
         border-radius: 5px;
         border-bottom-right-radius: 0px;
+    }
+    .header-efectus-web .top-info .login-field:hover .menu-field{
+        opacity: 1;
+        top: 30px;
+        z-index: 10;
     }
     .header-efectus-web .top-info .login-field .menu-field{
         position: absolute;
@@ -61,13 +66,6 @@
         opacity: 0;
         transition: .2s;
         background-color: #c02423;
-        visibility: hidden;
-    }
-    .header-efectus-web .top-info .login-field:hover .menu-field{
-        opacity: 1;
-        top: 30px;
-        z-index: 10;
-        visibility: visible;
     }
     .header-efectus-web .top-info .login-field .menu-field li{
         display: block;
@@ -308,8 +306,10 @@
                 /*Sexto Link*/
                 $linksPrincipais[6]["titulo_link"] = "Mensagens";
                 $linksPrincipais[6]["url_link"] = "pew-newsletter.php";
-                $linksPrincipais[6]["sub_link"][0]["titulo_sub_link"] = "<i class='far fa-envelope'></i> E-mails newsletter";
-                $linksPrincipais[6]["sub_link"][0]["url_sub_link"] = "pew-newsletter.php";
+                $linksPrincipais[6]["sub_link"][0]["titulo_sub_link"] = "<i class='far fa-envelope'></i> Contatos";
+                $linksPrincipais[6]["sub_link"][0]["url_sub_link"] = "pew-contatos.php";
+                $linksPrincipais[6]["sub_link"][1]["titulo_sub_link"] = "<i class='far fa-envelope'></i> E-mails newsletter";
+                $linksPrincipais[6]["sub_link"][1]["url_sub_link"] = "pew-newsletter.php";
                 /*Setimo Link*/
                 $linksPrincipais[7]["titulo_link"] = "Categorias";
                 $linksPrincipais[7]["url_link"] = "pew-categorias.php";

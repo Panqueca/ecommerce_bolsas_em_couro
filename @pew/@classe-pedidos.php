@@ -23,6 +23,7 @@
         private $cidade = "Curitiba";
         private $estado = "PR";
         private $valor_total = 0;
+        private $valor_frete = 0;
         private $data_controle;
         private $status_transporte = 0;
         private $status = 0;
@@ -61,6 +62,7 @@
                 $this->bairro = $info["bairro"];
                 $this->cidade = $info["cidade"];
                 $this->estado = $info["estado"];
+                $this->valor_frete = $info["vlr_frete"];
                 $this->data_controle = $info["data_controle"];
                 $this->status_transporte = $info["status_transporte"];
                 $this->status = $info["status"];
@@ -69,6 +71,7 @@
                 $_POST["codigo_referencia"] = $info["referencia"];
                 
                 global $diretorioAPI;
+                
                 require "{$diretorioAPI}pagseguro/ws-pagseguro-consulta-referencia.php"; // Retorna o $statusPagseguro
                 
                 if(isset($statusPagseguro) && $statusPagseguro != $info["status"]){
@@ -334,6 +337,11 @@
                                         echo "<div class='subtotal'>$subtotal</div>";
                                     echo "</div>";
                                 }
+                                echo "<div class='box'>";
+                                    echo "<div class='quantidade'>1 x</div>";
+                                    echo "<div class='nome'>" . $this->get_transporte_string() . "</div>";
+                                    echo "<div class='subtotal'>" . $this->valor_frete . "</div>";
+                                echo "</div>";
                                 echo "<button class='btn-voltar btn-voltar-produtos' id-pedido='idPedido$id'>Voltar</button>";
                             }
                         echo "</div>";

@@ -38,8 +38,37 @@ if(isset($_POST["id_produto"]) && isset($_POST["acao"])){
             mysqli_query($conexao, "delete from $tabela_subcategorias_produtos where id_produto = '$idProduto'");
             mysqli_query($conexao, "delete from $tabela_produtos_relacionados where id_produto = '$idProduto'");
             mysqli_query($conexao, "delete from $tabela_especificacoes_produtos where id_produto = '$idProduto'");
-            mysqli_query($conexao, "delete from $tabela_produtos where id = '$idProduto'"); /*TABELA PRINCIPAL PRODUTO*/
             /*END TABELAS RELACIONADAS PRODUTO*/
+            // DELETAR NO BLING
+            
+            function executeDeleteProduct($url, $data) {
+                $curl_handle = curl_init();
+                curl_setopt($curl_handle, CURLOPT_URL, $url);
+                curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, 'DELETE');
+                curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, TRUE);
+                $response = curl_exec($curl_handle);
+                curl_close($curl_handle);
+                return $response;
+            }
+            
+            $querySku = mysqli_query($conexao, "select sku from $tabela_produtos where id = '$idProduto'");
+            $infoSku = mysqli_fetch_array($querySku);
+            $skuAntigo = $infoSku["sku"];
+            
+            $url = 'https://bling.com.br/Api/v2/produto/' . $skuAntigo . '/json';
+            $data = array (
+                "apikey" => "a0d67ab3925a9df897d78510a6ccf847dfdfb78dfd78641cb1504e8de0a311eab831c42b"
+            );
+            
+            $retorno = executeDeleteProduct($url, $data);
+            
+            //echo $retorno;
+            
+            // END DELETAR NO BLING
+            
+            mysqli_query($conexao, "delete from $tabela_produtos where id = '$idProduto'"); /*TABELA PRINCIPAL PRODUTO*/
+            
         }else{
             $status = $acao == "ativar" ? 1 : 0;
             mysqli_query($conexao, "update $tabela_produtos set status = $status where id = '$idProduto'");

@@ -1,7 +1,7 @@
 <?php
 
     session_start();
-    $nomeEmpresa = "Rei das Fechaduras";
+    $nomeEmpresa = "Bolsas em couro";
 
     $buscarDepartamento = isset($_GET["departamento"]) ? true : false;
     $buscarCategoria = isset($_GET["categoria"]) ? true : false;
@@ -81,6 +81,8 @@
         <style>
             .background-loja{
                 width: 100%;
+                min-height: 300px;
+                background-color: #eee;
             }
             .background-loja img{
                 width: 100%;
