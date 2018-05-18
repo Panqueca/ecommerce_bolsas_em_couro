@@ -50,6 +50,8 @@
                 $pew_session->block_level();
             }
         
+            $dirImagens = "../imagens/dicas/";
+        
             $id = isset($_GET["id_dica"]) ? $_GET["id_dica"] : false;
             if($id != "" && $id != false){
                 $totalDicas = $pew_functions->contar_resultados($tabela_dicas, "id = '$id'");
@@ -103,13 +105,23 @@
                 <br class="clear">
                 <br class="clear">
                 
-                <div class="label medium">
+                <div class="medium">
                     <h2 class="label-title">Imagens da dica: (1300px : 400px) OBRIGATÓRIO</h2>
                     <input class="label-input" type="file" name="imagem">
+                    <?php
+                        if(file_exists($dirImagens.$imagem) && $imagem != ""){
+                            echo "<img src='$dirImagens$imagem' class='full'>";
+                        }
+                    ?>
                 </div>
-                <div class="label medium">
+                <div class="medium">
                     <h2 class="label-title">Thumbnail da dica: (500px : 500px) OBRIGATÓRIO</h2>
                     <input class="label-input" type="file" name="thumbnail">
+                    <?php
+                        if(file_exists($dirImagens.$thumb) && $thumb != ""){
+                            echo "<img src='$dirImagens$thumb' class='full'>";
+                        }
+                    ?>
                 </div>
                 <div class="label medium" align="left">
                     <h3 class="label-title">Iframe Vídeo</h3>

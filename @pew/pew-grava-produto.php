@@ -138,8 +138,8 @@
             /*INSERE CORES DE PRODUTOS RELACIONADOS*/
             if($coresRelacionadas != ""){
                 foreach($coresRelacionadas as $idProdutoRelacionado){
-                    mysqli_query($conexao, "insert into $tabela_cores_relacionadas (id_produto, id_relacionado, data_controle, status) values ('$idProduto', '$idProdutoRelacionado', '$dataAtual', 1");
-                    mysqli_query($conexao, "insert into $tabela_cores_relacionadas (id_produto, id_relacionado, data_controle, status) values ('$idProdutoRelacionado', '$idProduto', '$dataAtual', 1");
+                    mysqli_query($conexao, "insert into $tabela_cores_relacionadas (id_produto, id_relacao, data_controle, status) values ('$idProduto', '$idProdutoRelacionado', '$dataAtual', 1)");
+                    mysqli_query($conexao, "insert into $tabela_cores_relacionadas (id_produto, id_relacao, data_controle, status) values ('$idProdutoRelacionado', '$idProduto', '$dataAtual', 1)");
                 }
             }
             
@@ -233,11 +233,11 @@
                 );
                 
                 $retorno = executeInsertProduct($url, $posts);
-                echo $retorno;
+                //echo $retorno;
                 // END GRAVAR NO BLING
             }
             
-            //echo "<script>window.location.href='pew-produtos.php?msg=Produto cadastrado com sucesso&msgType=success';</script>";
+            echo "<script>window.location.href='pew-produtos.php?msg=Produto cadastrado com sucesso&msgType=success';</script>";
         }else{
             //Erro de validação = Nome do produto vazio
             echo "<script>window.location.href='pew-produtos.php?erro=validação_do_produto&msg=Ocorreu um erro ao cadastrar o produto&msgType=error';</script>";

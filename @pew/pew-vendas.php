@@ -10,9 +10,6 @@
 
     $navigation_title = "Vendas - " . $pew_session->empresa;
     $page_title = "Vendas";
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 ?>
 <!DOCTYPE html>
 <html>
@@ -203,6 +200,35 @@ error_reporting(E_ALL);
             .btn-voltar:hover{
                 background-color: #dfdfdf;   
             }
+            .form-add-rastreamento{
+                position: fixed;
+                width: 280px;
+                padding: 10px;
+                top: 200px;
+                margin: 0 auto;
+                left: 0;
+                right: 0;
+                background-color: #fff;
+                z-index: 200;
+                visibility: hidden;
+                opacity: 0;
+            }
+            .form-add-rastreamento .titulo{
+                color: #222;
+                font-weight: normal;
+                margin: 0px;
+                font-size: 16px;
+            }
+            .form-add-rastreamento .btn-adicionar{
+                padding: 5px 15px 5px 15px;
+                font-size: 14px;
+                background-color: #333;
+                color: #fff;
+                cursor: pointer;
+            }
+            .form-add-rastreamento .btn-adicionar:hover{
+                background-color: #111;
+            }
             /*.display-info-pedido .btn-voltar{
                 position: relative;
                 top: 20px;
@@ -216,9 +242,83 @@ error_reporting(E_ALL);
                 var botaoVerInfo = $(".botao-ver-info");
                 var botaoVoltar = $(".display-produtos-pedido .btn-voltar-produtos");
                 var botaoVoltarInfo = $(".display-info-pedido .btn-voltar-info");
-
-                botaoVerProdutos.each(function(){
-
+                var displayPedidos = $(".display-pedido");
+                var rastreamentoOpen = false;
+                var backgroundBlack = $(".background-paineis");
+                var enviandoRastreamento = false;
+                
+                var formAddRastreamento = $(".form-add-rastreamento");
+                
+                formAddRastreamento.off().on("submit", function(){
+                    event.preventDefault(); 
+                    var objCodigo = $("#codigoRastreamento");
+                    var objIdPedido = $("#rastreamentoIdPedido");
+                    var codigo = objCodigo.val();
+                    var idPedido = objIdPedido.val();
+                    if(!enviandoRastreamento){
+                        enviandoRastreamento = true;
+                        
+                        function validar(){
+                            if(codigo.length < 13){
+                                mensagemAlerta("O código de rastreamento deve conter no mínimo 13 caracteres.", objCodigo);
+                                return false;
+                            }
+                            
+                            if(idPedido == 0){
+                                mensagemAlerta("Ocorreu um erro ao cadastrar o código. Recarregue a página e tente novamente.");
+                                return false;
+                            }
+                            
+                            return true;
+                        }
+                        
+                        if(validar() == true){
+                            formAddRastreamento.submit();
+                        }else{
+                            enviandoRastreamento = false;
+                        }
+                        
+                    }
+                });
+                
+                function toggle_add_rastreamento(){
+                    if(!rastreamentoOpen){
+                        rastreamentoOpen = true;
+                        backgroundBlack.css("display", "block");
+                        setTimeout(function(){
+                            backgroundBlack.css("opacity", ".4");
+                            formAddRastreamento.css({
+                                visibility: "visible",
+                                opacity: "1"
+                            });
+                            
+                        }, 100);
+                    }else{
+                        rastreamentoOpen = false;
+                        backgroundBlack.css("opacity", "0");
+                        formAddRastreamento.css({
+                            visibility: "hidden",
+                            opacity: "0"
+                        });
+                        setTimeout(function(){
+                            backgroundBlack.css("display", "none");
+                        }, 100);
+                    }
+                }
+                
+                displayPedidos.each(function(){
+                    var box = $(this);
+                    var idPedido = box.prop("id").substr(10);
+                    var botaoAddRastreamento = $("#addRastreamento"+idPedido);
+                    
+                    botaoAddRastreamento.off().on("click", function(){
+                        $("#rastreamentoIdPedido").val(idPedido);
+                        toggle_add_rastreamento(); 
+                    });
+                });
+                
+                $(".btn-cancelar-add-rastreamento").off().on("click", function(){
+                    toggle_add_rastreamento();
                 });
 
                 function toggleVerProdutos(id){
@@ -293,7 +393,6 @@ error_reporting(E_ALL);
         
             require_once "@classe-pedidos.php";
         
-        
         ?>
         <!--PAGE CONTENT-->
         <h1 class="titulos"><?php echo $page_title; ?></h1>
@@ -341,6 +440,14 @@ error_reporting(E_ALL);
                     $totalPedidos = $pew_functions->contar_resultados($tabela_pedidos, $condicaoPedidos);
                     
                     if($totalPedidos > 0){
+                        
+                        echo "<form class='form-add-rastreamento' method='post' action='pew-status-pedido.php'>";
+                            echo "<h3 class='titulo'>Atualizar código de rastreamento</h3>";
+                            echo "<input type='text' class='label-input' placeholder='Código' name='codigo_rastreamento' id='codigoRastreamento'>";
+                            echo "<input type='hidden' name='id_pedido' id='rastreamentoIdPedido' value=0>";
+                            echo "<input type='submit' value='Atualizar' class='btn-adicionar'>";
+                            echo "<a class='link-padrao btn-cancelar-add-rastreamento' style='margin: 0px 0px 0px 20px;'>Cancelar</a>";
+                        echo "</form>";
                         
                         $cls_pedido = new Pedidos();
                         $selectedPedidos = $cls_pedido->buscar_pedidos($condicaoPedidos);

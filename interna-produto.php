@@ -1,9 +1,9 @@
 <?php
     session_start();
-    $nomeEmpresa = "Bolsas em Couro";
     
     require_once "@classe-system-functions.php";
     require_once "@classe-produtos.php";
+    require_once "@classe-paginas.php";
 
     /*SET TABLES*/
     $tabela_produtos = $pew_custom_db->tabela_produtos;
@@ -21,9 +21,10 @@
     $infoProduto = $produto->montar_array();
 
     if($totalProduto > 0){
-        $tituloPagina = $infoProduto["nome"] . " - $nomeEmpresa";
-        $descricaoPagina = $infoProduto["descricao_curta"];
+        $cls_paginas->set_titulo($infoProduto["nome"]);
+        $cls_paginas->set_descricao($infoProduto["descricao_curta"]);
     }else{
+        $cls_paginas->set_titulo("Produto não encontrado");
         $infoProduto = null;
     }
     
@@ -48,9 +49,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
         <meta name="HandheldFriendly" content="true">
-        <meta name="description" content="<?php echo $descricaoPagina;?>">
+        <meta name="description" content="<?php echo $cls_paginas->descricao;?>">
         <meta name="author" content="Efectus Web">
-        <title><?php echo $tituloPagina;?></title>
+        <title><?php echo $cls_paginas->titulo;?></title>
+        <link type="image/png" rel="icon" href="imagens/identidadeVisual/logo-icon.png">
         <!--DEFAULT LINKS-->
         <?php
             require_once "@link-standard-styles.php";
@@ -363,14 +365,15 @@
                         justify-content: flex-start;
                     }
                     .section-produto .display-info-produto .display-comprar{
-                        width: 50%;
-                        float: left;
+                        width: 100%;
+                        float: none;
+                        justify-content: flex-start;
                     }
                     .section-produto .display-info-produto .calculo-frete{
                         position: relative;
-                        width: 50%;
+                        width: 100%;
                         margin: 0px;
-                        margin-left: auto;
+                        margin: 40px 0px 10px 0px;
                         top: -10px;
                     }
                     .section-produto .display-info-produto .calculo-frete .input-frete{
@@ -620,13 +623,13 @@
                                 if(!file_exists($dirImagensProduto."/".$srcImagem) || $srcImagem == ""){
                                     $imagemPrincipal = "produto-padrao.png";
                                 }
-                                echo "<div class='box-miniaturas'><img src='$dirImagensProduto/$srcImagem' alt='$nomeEmpresa - $nomeProduto - Imagem $ctrlImagens' class='miniatura'></div>";
+                                echo "<div class='box-miniaturas'><img src='$dirImagensProduto/$srcImagem' alt='{$cls_paginas->empresa} - $nomeProduto - Imagem $ctrlImagens' class='miniatura'></div>";
                             }
                         }else{
-                            echo "<div class='box-miniaturas'><img src='$dirImagensProduto/produto-padrao.png' alt='$nomeEmpresa - $nomeProduto - Imagem $ctrlImagens' class='miniatura'></div>";
+                            echo "<div class='box-miniaturas'><img src='$dirImagensProduto/produto-padrao.png' alt='{$cls_paginas->empresa} - $nomeProduto - Imagem $ctrlImagens' class='miniatura'></div>";
                         }
                 
-                        if($urlVideo != null){
+                        if($urlVideo != null && $urlVideo != 0){
                             echo "<div class='box-play'><i class='fas fa-play-circle icon-play'></i>Veja o vídeo</div>";
                             echo "<div class='display-video'>$urlVideo <button class='botao-voltar'><i class='fas fa-times'></i> VOLTAR</button></div>";
                         }
@@ -637,7 +640,7 @@
                         if($imagemPrincipal == ""){
                             $imagemPrincipal = "produto-padrao.png";
                         }
-                        echo "<img src='$dirImagensProduto/$imagemPrincipal' alt='$nomeEmpresa - $nomeProduto - Imagem principal' class='imagem-principal'>";
+                        echo "<img src='$dirImagensProduto/$imagemPrincipal' alt='{$cls_paginas->empresa} - $nomeProduto - Imagem principal' class='imagem-principal'>";
                         
                     ?>
                 </div>

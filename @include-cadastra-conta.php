@@ -1072,7 +1072,7 @@
                                             mensagemAlerta(msgSucesso, false, "limegreen");
                                             mensagemConfirmaEmail(objEmail.val());
                                         }else{
-                                            mensagemAlerta(msgErro, false, "limegreen");
+                                            //mensagemAlerta(msgErro, false, "limegreen");
                                         }
                                         finish();
                                     }

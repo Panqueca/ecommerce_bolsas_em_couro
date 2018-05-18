@@ -1,7 +1,8 @@
 <?php
+
     $post_fields = array("titulo", "subtitulo", "status", "descricao_curta", "descricao_longa", "url_video");
     $file_fields = array("imagem", "thumbnail");
-    $invalid_fileds = array();
+    $invalid_fields = array();
     $gravar = true;
     $i = 0;
 
@@ -10,7 +11,7 @@
         if(!isset($_POST[$post_name])){
             $gravar = false;
             $i++;
-            $invalid_fileds[$i] = $post_name;
+            $invalid_fields[$i] = $post_name;
         }
     }
     foreach($file_fields as $file_name){
@@ -18,7 +19,7 @@
         if(!isset($_FILES[$file_name])){
             $gravar = false;
             $i++;
-            $invalid_fileds[$i] = $file_name;
+            $invalid_fields[$i] = $file_name;
         }
     }
 
@@ -58,9 +59,9 @@
 
         mysqli_query($conexao, "insert into $tabela_dica (titulo, subtitulo, ref, descricao_curta, descricao_longa, imagem, thumb, video, data_controle, status) values ('$titulo', '$subtitulo', '$refDicas', '$descricaoCurta', '$descricaoLonga','$imagem', '$thumb', '$video','$data', '$status')");
         
-        header("location: pew-dicas.php");
-        echo "true";
+        echo "<script>window.location.href = 'pew-dicas.php?msg=Dica cadastrada com sucesso&msgType=success'; </script>";
     }else{
-        echo "false";
+        //print_r($invalid_fields);
+        echo "<script>window.location.href = 'pew-dicas.php?msg=Dica não foi cadastrada&msgType=error'; </script>";
     }
 ?>

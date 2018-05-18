@@ -1,8 +1,10 @@
 <?php
     session_start();
-    $nomeEmpresa = "Bolsas em Couro";
-    $descricaoPagina = "DESCRIÇÃO MODELO ATUALIZAR...";
-    $tituloPagina = "Entrega e devolução - $nomeEmpresa";
+    
+    require_once "@classe-paginas.php";
+
+    $cls_paginas->set_titulo("Entrega e Devolução");
+    $cls_paginas->set_descricao("DESCRIÇÃO MODELO ATUALIZAR...");
 ?>
 <!DOCTYPE html>
 <html>
@@ -11,9 +13,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
         <meta name="HandheldFriendly" content="true">
-        <meta name="description" content="<?php echo $descricaoPagina;?>">
+        <meta name="description" content="<?php echo $cls_paginas->descricao;?>">
         <meta name="author" content="Efectus Web">
-        <title><?php echo $tituloPagina;?></title>
+        <title><?php echo $cls_paginas->titulo;?></title>
         <!--DEFAULT LINKS-->
         <?php
             require_once "@link-standard-styles.php";

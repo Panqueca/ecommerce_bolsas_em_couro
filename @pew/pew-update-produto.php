@@ -345,12 +345,12 @@
                 }
                 
                 $retorno = executeUpdateProduct($urlUpdate, $posts);
-                echo $retorno;
+                //echo $retorno;
                 // END GRAVAR NO BLING
             }
             // END ATUALIZAR NO BLING
             
-            //echo "<script>window.location.href='pew-edita-produto.php?msg=Produto atualizado com sucesso&msgType=success&id_produto=$idProduto';</script>";
+            echo "<script>window.location.href='pew-edita-produto.php?msg=Produto atualizado com sucesso&msgType=success&id_produto=$idProduto';</script>";
         }else{
             echo "<script>window.location.href='pew-edita-produto.php?erro=validacao_do_produto&msg=Não foi possível atualizar o produto&msgType=error&id_produto=$idProduto';</script>";
         }

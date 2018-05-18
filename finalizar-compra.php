@@ -1,8 +1,10 @@
 <?php
     session_start();
-    $nomeEmpresa = "Bolsas em Couro";
-    $descricaoPagina = "DESCRIÇÃO MODELO ATUALIZAR...";
-    $tituloPagina = "Finalizar compra - $nomeEmpresa";
+    
+    require_once "@classe-paginas.php";
+
+    $cls_paginas->set_titulo("Finalizar compra");
+    $cls_paginas->set_descricao("DESCRIÇÃO MODELO ATUALIZAR...");
 
     if(isset($_GET["clear"]) && $_GET["clear"] == true || $_GET["clear"] == "true"){
         unset($_SESSION["carrinho"]);
@@ -15,9 +17,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
         <meta name="HandheldFriendly" content="true">
-        <meta name="description" content="<?php echo $descricaoPagina;?>">
+        <meta name="description" content="<?php echo $cls_paginas->descricao;?>">
         <meta name="author" content="Efectus Web">
-        <title><?php echo $tituloPagina;?></title>
+        <title><?php echo $cls_paginas->titulo;?></title>
+        <link type="image/png" rel="icon" href="imagens/identidadeVisual/logo-icon.png">
         <!--DEFAULT LINKS-->
         <?php
             require_once "@link-standard-styles.php";
@@ -228,6 +231,13 @@
                     width: calc(100% - 180px);  
                 }
                 @media only all and (max-width: 480px){
+                    .main-content{
+                        margin: 0px auto 0px auto;
+                        width: 90%;
+                    }
+                    .main-content article{
+                        margin: 15px;  
+                    }
                     .main-content .titulo{
                         font-size: 18px;
                     }
@@ -237,23 +247,62 @@
                     .main-content .display-carrinho .item-carrinho{
                         padding: 10px;
                         height: auto;
+                        flex-direction: row;
                     }
                     .main-content .display-carrinho .item-carrinho .box-imagem{
+                        width: 25%;
+                        height: auto;
+                    }
+                    .main-content .display-carrinho .item-carrinho .box-imagem .imagem{
                         width: 100%;
+                        height: auto;
                     }
                     .main-content .display-carrinho .item-carrinho .information{
-                        width: 100%;
+                        width: calc(75% - 20px);
+                        padding: 10px;
+                        height: auto;
                     }
                     .main-content .display-carrinho .item-carrinho .information .titulo{
-                        font-size: 2vw;
+                        font-size: 16px;
+                        margin: 0px;
+                        padding: 0px;
                     }
                     .main-content .display-carrinho .item-carrinho .price-field{
                         font-size: 100%;
                         width: 100%;
+                        margin: 0px;
+                        justify-content: center;
                     }
                     .main-content .display-carrinho .item-carrinho .price-field .controller-preco .quantidade-produto{
                         width: 25px;
                         height: 25px;
+                    }
+                    .main-content .display-carrinho .item-carrinho .price-field .botao-remover{
+                        position: relative;
+                        top: -22px;
+                    }
+                    .main-content .display-carrinho .display-resultados-frete{
+                        width: 100%;
+                        padding: 0px;
+                    }
+                    .main-content .display-carrinho .display-resultados-frete .titulo{
+                        margin: 0px;   
+                    }
+                    .main-content .display-carrinho .display-resultados-frete .label-edita-endereco{
+                        margin: 0px;   
+                    }
+                    .main-content .display-carrinho .display-resultados-frete .span-frete{
+                        margin: 0px;   
+                    }
+                    .main-content .display-carrinho .display-resultados-frete .msg-endereco{
+                        margin: 10px 0px 10px 0px;   
+                    }
+                    .main-content .display-carrinho .bottom-info{
+                        width: 100%;
+                        padding: 0px 0px 40px 0px;
+                    }
+                    .main-content .display-carrinho .bottom-info .botao-continuar{
+                        font-weight: normal;
                     }
                 }
             }
@@ -353,7 +402,7 @@
                             mensagemAlerta("Ocorreu um erro ao finalizar seu pedido. Recarregue a página e tente novamente.");
                         },
                         success: function(resposta){
-                            //console.log(resposta);
+                            console.log(resposta);
                         }
                     });
                 }
@@ -507,7 +556,7 @@
                                     });
                                 },
                                 success: function(resposta){
-                                    console.log(resposta);
+                                    //console.log(resposta);
                                     if(resposta != "false" && resposta != "Unauthorized" && isJson(resposta)){
                                         resposta = JSON.parse(resposta);
                                         var confirmationCode = resposta.code;
@@ -807,9 +856,10 @@
                             $largura = $item_carrinho["largura"];
                             $altura = $item_carrinho["altura"];
                             $peso = $item_carrinho["peso"];
+                            $porcentDesconto = ($item_carrinho["desconto"] * 100) / 100;
                             echo "<div class='item-carrinho'>";
                                 if(isset($item_carrinho["desconto"]) && $item_carrinho["desconto"] > 0){
-                                    echo "<div class='promo-tag'>-{$item_carrinho["desconto"]}%</div>";
+                                    echo "<div class='promo-tag'>-$porcentDesconto%</div>";
                                 }
                                 echo "<div class='box-imagem'><img class='imagem' src='$dirImagens/$imagem'></div>";
                                 echo "<div class='information'>";

@@ -110,18 +110,15 @@
             /*DISPLAY TODOS PRODUTO DA VITRINE*/
             echo "<section class='vitrine-standard'>";
                 $tituloVitrine = $this->titulo_vitrine;
-                $substrTitulo = substr($tituloVitrine, 0, 3);
+                $substrTitulo = substr($tituloVitrine, 0, 2);
                 $updatedTitulo = null;
                 switch($substrTitulo){
-                    case "<h1":
-                        $updatedTitulo = "<h1 class='titulo-vitrine'>".$this->titulo_vitrine."</h1>";
-                        break;
-                    case "<h3":
-                        $updatedTitulo = "<h3 class='titulo-vitrine'>".$this->titulo_vitrine."</h3>";
+                    case "<h": // Verifica se é H2, H3. H4 etc
+                        $updatedTitulo = true;
                         break;
                 }
                 if($updatedTitulo != null){
-                    echo $updatedTitulo;
+                    echo $tituloVitrine;
                 }else{
                     echo "<h2 class='titulo-vitrine'>".$this->titulo_vitrine."</h2>";
                 }
@@ -284,31 +281,40 @@
                     $qtdParcelas = 6;
                     $txtParcelas = $qtdParcelas."x";
                     
-                    $intPorcentoDesconto = 5;
+                    $infoCompreJunto = $produto->get_preco_relacionado($idProduto);
+                    $intPorcentoDesconto = ($infoCompreJunto["desconto"] * 100) / 100;
                     $multiplicador = $intPorcentoDesconto * 0.01;
                     $preco = $infoProduto["preco"];
                     $precoPromocao = $infoProduto["preco_promocao"];
                     $promocaoAtiva = $infoProduto["promocao_ativa"] == 1 ? true : false;
                     
                     $promoAtiva = $precoPromocao > 0 && $precoPromocao < $preco && $promocaoAtiva == true ? true : false;
-                    $precoParcela = $promoAtiva == true ? $precoPromocao / $qtdParcelas : $preco / $qtdParcelas;
                     
-                    if($promoAtiva){
-                        $preco = $precoPromocao;
+                    $precoFinal = $promocaoAtiva == true ? $precoPromocao : $preco;
+                    
+                    $precoParcela = $precoFinal / $qtdParcelas;
+                    
+                    $desconto = $precoFinal * $multiplicador;
+                    $precoCompreJunto = $precoFinal - $desconto;
                         
-                        $desconto = $precoPromocao * $multiplicador;
-                        $precoCompreJunto = $preco - $desconto;
-                    }else{
-                        $desconto = $preco * $multiplicador;
-                        $precoCompreJunto = $preco - $desconto;
-                    }
-                    $priceField = "<span class='view-preco'>De <span class='promo-price'>R$".number_format($preco, 2, ",", ".")."</span></span> por <span class='view-preco'><span class='price'>R$".number_format($precoCompreJunto, 2, ",", ".")."</span></span>";
                     $urlProduto = "interna-produto.php?id_produto=$idProduto";
                     /*END VARIAVEIS DO PRODUTO*/
                     
                     /*DISPLAY DO PRODUTO*/
                     echo "<div class='box-produto'>";
-                        echo "<div class='promo-tag'>-$intPorcentoDesconto%</div>";
+                        if($intPorcentoDesconto > 0){
+                            echo "<div class='promo-tag'>-$intPorcentoDesconto%</div>";
+                            $promoAtiva = true;
+                            $precoParcela = $precoCompreJunto / $qtdParcelas;
+                        }
+                    
+                        switch($promoAtiva){
+                            case true:
+                                $priceField = "<span class='view-preco'>De <span class='promo-price'>R$".number_format($preco, 2, ",", ".")."</span></span> por <span class='view-preco'><span class='price'>R$".number_format($precoCompreJunto, 2, ",", ".")."</span></span>";
+                                break;
+                            default:
+                                $priceField = "<span class='view-preco'><span class='price'>R$".number_format($precoCompreJunto, 2, ",", ".")."</span></span>";
+                        }
                         echo "<a href='$urlProduto'><img src='$dirImagensProdutos/$srcImagem' title='$nome' alt='$nome - $nomeLoja'></a>";
                         echo "<a href='$urlProduto' class='title-link'><h3 class='titulo-produto' title='$nome'>$nomeEllipses</h3></a>";
                             echo "<h4 class='preco-produto'>$priceField ou <span class='view-parcelas'>$txtParcelas R$". number_format($precoParcela, 2, ",", ".") ."   </span></h4>";

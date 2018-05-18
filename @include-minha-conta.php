@@ -192,11 +192,13 @@
         transition: .2s;
     }
     .box-pedido{
+        position: relative;
         width: calc(100% - 20px);
         padding: 10px;
         display: flex;
         flex-flow: row wrap;
         border-bottom: 2px solid #eee;
+        z-index: 50;
     }
     .box-pedido .right{
         width: 40%;
@@ -222,6 +224,7 @@
     .box-pedido .middle .btn-mais-info{
         display: inline-block;
         margin: 5px 0px 0px 0px;
+        cursor: pointer;
     }
     .box-pedido .left{
         width: 20%;
@@ -236,6 +239,133 @@
         clear: both;
         color: limegreen;
         font-weight: normal;
+    }
+    .box-pedido .display-info-pedido{
+        position: absolute;
+        top: -100%;
+        left: 0;
+        width: calc(100% - 20px);
+        min-height: 100%;
+        padding: 10px;
+        border-bottom: 2px solid #eee;
+        background-color: #fff;
+        display: flex;
+        flex-flow: row wrap;
+        visibility: hidden;
+        opacity: 0;
+        transition: .3s;
+        -webkit-box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, .4);
+        -moz-box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, .4);
+        box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, .4);
+    }
+    .box-pedido .display-info-pedido .titulo{
+        font-size: 18px;
+        margin: 0px 0px 15px 0px;
+        width: 100%;
+    }
+    .box-pedido .display-info-pedido .lista-produtos{
+        width: calc(50% - 41px);
+        margin: 0px 20px 0px 20px;
+        border-right: 1px solid #eee;
+    }
+    .box-pedido .display-info-pedido .info-frete{
+        width: calc(50% - 40px);
+        margin: 0px 20px 0px 20px;
+    }
+    .box-pedido .display-info-pedido .info-frete .titulo{
+        font-size: 18px;
+        margin: 0px 0px 5px 0px;
+        font-weight: bold;
+        color: #666;
+    }
+    .box-pedido .display-info-pedido .info-frete .info{
+        font-size: 16px;
+        font-weight: normal;
+        margin: 0px;
+    }
+    .box-pedido .display-info-pedido .bottom-info{
+        text-align: left;
+        width: 100%;
+        padding: 10px 0px 10px 0px;
+    }
+    .box-pedido .display-info-pedido .bottom-info .btn-voltar{
+        cursor: pointer;
+    }
+    @media screen and (max-width: 720px){
+        .section-minha-conta .descricao{
+            width: 90%; 
+        }
+        .section-minha-conta .xsmall{
+            width: calc((100%/2) - 30px);
+            margin: 5px 15px 5px 15px;
+            float: left;
+        }
+        .section-minha-conta .small{
+            width: calc((100%) - 30px);
+            margin: 5px 15px 5px 15px;
+            float: left;
+        }
+        .section-minha-conta .medium{
+            width: calc((100%) - 30px);
+            margin: 5px 15px 5px 15px;
+            float: left;
+        }
+        .section-minha-conta .half{
+            width: calc((100%) - 30px);
+            margin: 5px 15px 5px 15px;
+            float: left;
+        }
+        .section-minha-conta .large{
+            width: calc((100%) - 30px);
+            margin: 5px 15px 5px 15px;
+            float: left;
+        }
+        .section-minha-conta .xlarge{
+            width: calc((100%) - 30px);
+            margin: 5px 15px 5px 15px;
+            float: left;
+        }
+        .section-minha-conta .full{
+            width: calc(100% - 30px);
+            margin: 5px 15px 5px 15px;
+        }
+        .section-minha-conta .display-paineis{
+            width: 90%;
+            height: auto;
+        }
+        .section-minha-conta .display-paineis .top-buttons{
+            height: auto;
+            font-size: 10px;
+        }
+        .section-minha-conta .display-paineis .painel{
+            width: calc(100% - 40px);
+            padding: 20px;
+            height: auto;
+        }
+        .box-pedido{
+            width: 100%;
+            padding: 0px;
+            margin-bottom: 10px;   
+        }
+        .box-pedido .right{
+            width: 100%;
+        }
+        .box-pedido .middle{
+            width: 100%;
+        }
+        .box-pedido .left{
+            width: 100%;
+        }
+        .box-pedido .display-info-pedido .lista-produtos{
+            width: calc(100% - 20px);
+            margin: 0px 10px 0px 10px;
+            border: none;
+            font-size: 12px;
+        }
+        .box-pedido .display-info-pedido .info-frete{
+            width: calc(100% - 21px);
+            margin: 30px 10px 0px 10px;
+        }
     }
 </style>
 
@@ -281,6 +411,55 @@ if($listar){
 ?>
 <script>
     $(document).ready(function(){
+        
+        // PEDIDOS
+        var boxPedidos = $(".box-pedido");
+        
+        function toggle_info(objTarget){
+            var is_open = objTarget.css("visibility") == "visible" ? true : false;
+            
+            if(!is_open){
+                objTarget.css({
+                    visibility: "visible",
+                    opacity: "1",
+                    top: "0px"
+                });
+            }else{
+                objTarget.css({
+                    visibility: "hidden",
+                    opacity: "0",
+                    top: "-100%"
+                });
+            }
+        }
+        var ctrlIndexPedidos = 0;
+        setInterval(function(){
+            boxPedidos = $(".box-pedido");
+            boxPedidos.each(function(){
+                var box = $(this);
+                var btnInfo = box.children(".control-info").children(".btn-mais-info");
+                var refTarget = btnInfo.attr('data-target-pedido');
+                var objTarget = $("#"+refTarget);
+                var botaoVoltar = objTarget.children(".bottom-info").children(".btn-voltar");
+                
+                btnInfo.off().on("click", function(){
+                    var is_open = objTarget.css("visibility") == "visible" ? true : false;
+                    if(!is_open){
+                        var zIndex = 60 + ctrlIndexPedidos;
+                        box.css("z-index", zIndex);
+                        ctrlIndexPedidos++;
+                    }
+                    toggle_info(objTarget);
+                });
+                
+                botaoVoltar.off().on("click", function(){
+                    toggle_info(objTarget);
+                    box.css("z-index", "50");
+                });
+            });
+        }, 200);
+        // END PEDIDOS
+        
         var displayPaineis = $(".section-minha-conta .display-paineis");
         var botoes = $(".section-minha-conta .top-buttons");
         var paineis = displayPaineis.children(".painel");

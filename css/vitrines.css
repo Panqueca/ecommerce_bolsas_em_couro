@@ -493,10 +493,16 @@
 .promo-tag{
     position: absolute;
     top: 0px;
-    left: 0;
+    left: 0px;
     padding: 3px 5px 3px 5px;
     font-size: 12px;
     border-radius: 5px;
     color: #fff;
     background-color: limegreen;
+}
+@media screen and (max-width: 480px){
+    .promo-tag{
+        top: 20px;
+        left: 60px;
+    }
 }

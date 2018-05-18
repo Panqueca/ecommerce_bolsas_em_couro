@@ -1,7 +1,11 @@
 <?php
 
     session_start();
-    $nomeEmpresa = "Bolsas em couro";
+    
+    require_once "@classe-paginas.php";
+
+    $cls_paginas->set_titulo("Loja");
+    $cls_paginas->set_descricao("...");
 
     $buscarDepartamento = isset($_GET["departamento"]) ? true : false;
     $buscarCategoria = isset($_GET["categoria"]) ? true : false;
@@ -16,26 +20,23 @@
 
     $cls_produtos = new Produtos();
 
-    $descricaoPagina = "";
-    $tituloPagina = "Loja - $nomeEmpresa";
-
     if($getSubcategoria != null){
         $headInfo = $cls_produtos->get_referencias("subcategoria", "ref = '$getSubcategoria'");
         if($headInfo != false){
-            $tituloPagina = $headInfo["titulo"] . " - " . $nomeEmpresa;
-            $descricaoPagina = $headInfo["descricao"];
+            $cls_paginas->set_titulo($headInfo["titulo"]);
+            $cls_paginas->set_descricao($headInfo["descricao"]);
         }
     }else if($getCategoria != null){
         $headInfo = $cls_produtos->get_referencias("categoria", "ref = '$getCategoria'");
         if($headInfo != false){
-            $tituloPagina = $headInfo["titulo"] . " - " . $nomeEmpresa;
-            $descricaoPagina = $headInfo["descricao"];
+            $cls_paginas->set_titulo($headInfo["titulo"]);
+            $cls_paginas->set_descricao($headInfo["descricao"]);
         }
     }else if($getDepartamento != null){
         $headInfo = $cls_produtos->get_referencias("departamento", "ref = '$getDepartamento'");
         if($headInfo != false){
-            $tituloPagina = $headInfo["titulo"] . " - " . $nomeEmpresa;
-            $descricaoPagina = $headInfo["descricao"];
+            $cls_paginas->set_titulo($headInfo["titulo"]);
+            $cls_paginas->set_descricao($headInfo["descricao"]);
         }
     }
 
@@ -67,9 +68,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
         <meta name="HandheldFriendly" content="true">
-        <meta name="description" content="<?php echo $descricaoPagina;?>">
+        <meta name="description" content="<?php echo $cls_paginas->descricao;?>">
         <meta name="author" content="Efectus Web">
-        <title><?php echo $tituloPagina;?></title>
+        <title><?php echo $cls_paginas->titulo;?></title>
         <!--DEFAULT LINKS-->
         <?php
             require_once "@link-standard-styles.php";

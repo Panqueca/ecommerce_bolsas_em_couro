@@ -187,8 +187,8 @@
             $codigo = md5(md5($email));
             
             $baseSite = "https://www.efectusdigital.com.br/bolsas";
-            $dirImagens = "imagens/identidadeVisual/";
-            $logo = "logo-bolsas-em-couro.png";
+            $dirImagens = "imagens/identidadeVisual";
+            $logo = "logo-bolsa-em-couro.png";
             $nomeLoja = "Bolsas em Couro";
             
             $body = "";

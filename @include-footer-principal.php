@@ -427,14 +427,26 @@
                     <a class="link-principal">REDES SOCIAIS</a>
                     <ul class="sub-menu">
                         <li class="social-media">
-                            <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" class="instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.facebook.com/maidigrey" target="_blank" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/maidi.grey/" target="_blank" class="instagram"><i class="fab fa-instagram"></i></a>
                         </li>
                     </ul>
                 </span>
             </li>
-            <li class='first-li'><span><a href="formas-de-pagamento.php" class="link-principal">FORMAS DE PAGAMENTO</a></span></li>
+            <li class='first-li'>
+                <span>
+                    <a href="formas-de-pagamento.php" class="link-principal">FORMAS DE PAGAMENTO</a>
+                    <ul class="sub-menu">
+                        <li class="social-media"><img src="imagens/estrutura/icone-cartao-de-credito.png" style='width: 30px;' title="Cartão de crédito e Débito"><img src="imagens/estrutura/icone-transferencia-bancaria.png" style='width: 30px;' title="Transferência bancária"><img src="imagens/estrutura/icone-boleto.png" style='width: 30px;' title="Boleto"></li>
+                        <li class="social-media"></li>
+                    </ul>
+                </span>
+            </li>
             <li class='first-li'><span><a href="seguranca.php" class="link-principal">SEGURANÇA</a></span></li>
         </ul>
+        <center>
+            <h5 style='font-weight: normal;'>CNPJ: 99.999.999/0001-99 / I.E:9999999999</h5>
+            <h4 style='font-weight: normal;'>Copyright © Bolsas em Couro 2018 | Todos os direitos reservados.</h4>
+        </center>
     </div>
 </footer>

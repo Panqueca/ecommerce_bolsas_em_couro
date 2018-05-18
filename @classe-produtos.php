@@ -481,7 +481,7 @@
             if($total > 0){
                 $this->montar_produto($id);
                 
-                $intPorcentoDesconto = 5;
+                $intPorcentoDesconto = $this->get_desconto_relacionado();
                 $multiplicador = $intPorcentoDesconto * 0.01;
 
                 if($this->promocao_ativa == 1 && $this->preco_promocao > 0 && $this->preco_promocao < $this->preco){

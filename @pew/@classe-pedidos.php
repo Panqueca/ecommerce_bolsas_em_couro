@@ -23,10 +23,11 @@
         private $cidade = "Curitiba";
         private $estado = "PR";
         private $valor_total = 0;
-        private $valor_frete = 0;
         private $data_controle;
         private $status_transporte = 0;
         private $status = 0;
+        public $valor_frete = 0;
+        public $codigo_rastreamento = 0;
         public $global_vars;
         public $pew_functions;
         
@@ -62,10 +63,11 @@
                 $this->bairro = $info["bairro"];
                 $this->cidade = $info["cidade"];
                 $this->estado = $info["estado"];
-                $this->valor_frete = $info["vlr_frete"];
                 $this->data_controle = $info["data_controle"];
                 $this->status_transporte = $info["status_transporte"];
                 $this->status = $info["status"];
+                $this->valor_frete = $info["vlr_frete"];
+                $this->codigo_rastreamento = $info["codigo_rastreamento"];
                 
                 $_POST["console"] = false;
                 $_POST["codigo_referencia"] = $info["referencia"];
@@ -74,8 +76,37 @@
                 
                 require "{$diretorioAPI}pagseguro/ws-pagseguro-consulta-referencia.php"; // Retorna o $statusPagseguro
                 
+                
                 if(isset($statusPagseguro) && $statusPagseguro != $info["status"]){
-                    mysqli_query($conexao, "update $tabela_pedidos set status = '$statusPagseguro' where id = '{$info["id"]}'");
+                    switch($statusPagseguro){
+                        case 1:
+                            $statusTransporte = 0;
+                            break;
+                        case 2:
+                            $statusTransporte = 0;
+                            break;
+                        case 3:
+                            $statusTransporte = 1;
+                            break;
+                        case 4:
+                            $statusTransporte = 1;
+                            break;
+                        case 5:
+                            $statusTransporte = 4;
+                            break;
+                        case 6:
+                            $statusTransporte = 4;
+                            break;
+                        case 7:
+                            $statusTransporte = 4;
+                            break;
+                        default:
+                            $statusTransporte = 0;
+                    }
+                    
+                    $statusTransporte = $this->status_transporte == 0 ? $statusTransporte : $this->status_transporte;
+                    
+                    mysqli_query($conexao, "update $tabela_pedidos set status = '$statusPagseguro', status_transporte = '$statusTransporte' where id = '{$info["id"]}'");
                     $this->status = $statusPagseguro;
                 }
                 
@@ -89,7 +120,7 @@
                     $valorTotal += $info["preco_produto"] * $info["quantidade_produto"];
                 }
 
-                $this->valor_total = $valorTotal;
+                $this->valor_total = $valorTotal + $this->valor_frete;
                 
                 return true;
             }else{
@@ -120,6 +151,9 @@
             $array["data_controle"] = $this->data_controle;
             $array["valor_total"] = $this->valor_total;
             $array["status"] = $this->status;
+            $array["valor_frete"] = $this->valor_frete;
+            $array["codigo_rastreamento"] = $this->codigo_rastreamento;
+            $array["status_transporte"] = $this->status_transporte;
             return $array;
         }
         
@@ -201,10 +235,12 @@
         function get_status_transporte_string($status){
             switch($status){
                 case 1:
-                    $str = "Pronto para envio";
+                    //$str = "Pronto para envio";
+                    $str = "<a class='link-padrao btn-add-rastreamento' id='addRastreamento{$this->id}'>Adicionar código de rastreio</a>";
                     break;
                 case 2:
-                    $str = "Enviado";
+                    //$str = "Enviado";
+                    $str = "<a class='link-padrao btn-add-rastreamento' id='addRastreamento{$this->id}'>" . $this->codigo_rastreamento . "</a>";
                     break;
                 case 3:
                     $str = "Entregue";
@@ -284,7 +320,7 @@
                     
                     $enderecoFinal = $this->rua . ", ". $this->numero . $txtComplemento . " - " . $this->cep . " - " . $this->cidade . " | " . $this->estado;
                     
-                    echo "<div class='box-produto' id='boxProduto$id'>";
+                    echo "<div class='box-produto display-pedido' id='boxProduto$id'>";
                         echo "<div class='informacoes'>";
                             echo "<h3 class='nome-produto'><a>{$this->nome_cliente}</a></h3>";
                             echo "<div class='half box-info'>";

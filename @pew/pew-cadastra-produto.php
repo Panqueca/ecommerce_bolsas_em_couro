@@ -1028,7 +1028,7 @@
                     $precoProduto = null;
                     $precoProduto = null;
                     $precoPromocaoProduto = null;
-                    $descontoRelacionado = null;
+                    $descontoRelacionado = 5;
                     $promocaoAtiva = null;
                     $marcaProduto = null;
                     $estoqueProduto = 1;
@@ -1426,6 +1426,11 @@
                                     $idProdutoRelacionado = $infoRelacionados["id"];
                                     $nomeProdutoRelacionado = $infoRelacionados["nome"];
                                     $checked = "";
+                                    foreach($selectedCoresRelacionadas as $idRel => $info){
+                                        if($idProdutoRelacionado == $idRel){
+                                            $checked = "checked";
+                                        }
+                                    }
                                     echo "<label class='label-relacionados label-cores-relacionadas'><input type='checkbox' name='cores_relacionadas[]' value='$idProdutoRelacionado' $checked> $nomeProdutoRelacionado</label>";
                                 }
                             }else{
@@ -1434,7 +1439,7 @@
                         ?>
                         </div>
                         <div class="bottom-relacionados">
-                            <a id="btn-salvar-relacionados" class="btn-salvar-relacionados">Salvar</a>
+                            <a id="btnSalvarCoresRelacionadas" class="btn-salvar-relacionados">Salvar</a>
                         </div>
                     </div>
                     <!--END PRODUTOS RELACIONADOS-->

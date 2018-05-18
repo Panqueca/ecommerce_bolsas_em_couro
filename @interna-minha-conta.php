@@ -46,6 +46,7 @@ if($listar){
         $totalPedidos = is_array($getPedidos) ? count($getPedidos) : 0;
     
         if($totalPedidos > 0){
+            $ctrlPedidos = 0;
             foreach($getPedidos as $idPedido){
                 $cls_pedidos->montar($idPedido);
                 $infoPedido = $cls_pedidos->montar_array();
@@ -62,23 +63,77 @@ if($listar){
                 $enderecoCompleto = $infoPedido["rua"] . ", " . $infoPedido["numero"] . $strComplemento . " - " . $infoPedido["cep"];
                 $dataPedido = $pew_functions->inverter_data(substr($infoPedido["data_controle"], 0, 10));
                 $horaPedido = substr($infoPedido["data_controle"], 10);
+                
+                $targetPedido = "infoPedido$ctrlPedidos";
 
                 echo "<div class='box-pedido'>";
                     echo "<div class='right'>";
                         echo "<h3 class='titulo'>Pedido: $referencia</h3>";
                         echo "<h5 class='descricao'>Endereço de envio: $enderecoCompleto</h5>";
                     echo "</div>";
-                    echo "<div class='middle'>";
+                    echo "<div class='middle control-info'>";
                         echo "<h5 class='descricao'>Método de pagamento: $strPagamento</h3>";
                         echo "<h5 class='descricao'>Total: <b>R$ $totalPedido</b></h3>";
-                        echo "<a class='link-padrao btn-mais-info'>Ver mais informações</a>";
+                        echo "<a class='link-padrao btn-mais-info' data-target-pedido='$targetPedido'>Ver mais informações</a>";
                     echo "</div>";
                     echo "<div class='left'>";
                         echo "<h5 class='descricao'><i class='far fa-calendar-alt'></i> $dataPedido</h3>";
                         echo "<h5 class='descricao'><i class='far fa-clock'></i> $horaPedido</h3>";
                         echo "<h5 class='status'>Status: $strStatus</h3>";
                     echo "</div>";
+                    echo "<div class='display-info-pedido' id='$targetPedido'>";
+                        echo "<h4 class='titulo'>Informações do pedido: $referencia</h4>";
+                        echo "<table class='lista-produtos'>";
+                        echo "<tr><td colspan=3>Produtos</td></tr>";
+                        $selectedProdutos = $cls_pedidos->get_produtos_pedido();
+                        if(is_array($selectedProdutos)){
+                            foreach($selectedProdutos as $infoProduto){
+                                $nome = $infoProduto["nome"];
+                                $quantidade = $infoProduto["quantidade"];
+                                $preco = $infoProduto["preco"];
+                                $subtotal = $preco * $quantidade;
+                                $subtotal = $pew_functions->custom_number_format($subtotal);
+                                echo "<tr>";
+                                    echo "<td style='white-space: nowrap; padding: 5px;'>$quantidade x</td>";
+                                    echo "<td>$nome</td>";
+                                    echo "<td style='white-space: nowrap; padding: 5px;' align=right>R$ $subtotal</td>";
+                                echo "</tr>";
+                            }
+                            echo "<tr>";
+                                echo "<td style='white-space: nowrap; padding: 5px;'>1 x</td>";
+                                echo "<td>" . $cls_pedidos->get_transporte_string() . "</td>";
+                                echo "<td style='white-space: nowrap; padding: 5px;' align=right>R$ " . $cls_pedidos->valor_frete . "</td>";
+                            echo "</tr>";
+                        }
+                        echo "</table>";
+                        echo "<div class='info-frete'>";
+                            switch($infoPedido["status_transporte"]){
+                                case 1:
+                                    $strStatusTransporte = "Código de rastreio ainda não foi inserido";
+                                    break;
+                                case 2:
+                                    $strStatusTransporte = $cls_pedidos->codigo_rastreamento . "<a href='http://www2.correios.com.br/sistemas/rastreamento/' class='link-padrao' target='_blank'>Rastrear</a>";
+                                    break;
+                                case 3:
+                                    $strStatusTransporte = "Entregue";
+                                    break;
+                                case 4:
+                                    $strStatusTransporte = "Cancelado";
+                                    break;
+                                default:
+                                    $strStatusTransporte = "Confirmar pagamento";
+                            }
+                            echo "<h4 class='titulo'>Código de rastreamento</h4>";
+                            echo "<h4 class='info'>$strStatusTransporte</h4>";
+                            echo "";
+                        echo "</div>";
+                        echo "<div class='bottom-info'>";
+                            echo "<a class='link-padrao btn-voltar'>Voltar</a>";
+                        echo "</div>";
+                    echo "</div>";
                 echo "</div>";
+                
+                $ctrlPedidos++;
             }
         }else{
             echo "Você não finalizou nenhuma compra ainda.";
