@@ -1,7 +1,7 @@
 <?php
     $jsonData = json_decode(file_get_contents('php://input'), true);
     if($jsonData != null){
-        $codigoCorreios = isset($jsonData["codigo_correios"]) ? $jsonData["codigo_correios"] : null;
+        $codigoTransporte = isset($jsonData["codigo_transporte"]) ? $jsonData["codigo_transporte"] : null;
         
         $cepDestino = isset($jsonData["cep_destino"]) ? $jsonData["cep_destino"] : null;
         $ruaDestino = isset($jsonData["rua_destino"]) ? $jsonData["rua_destino"] : null;
@@ -44,7 +44,7 @@
         }
         
         
-        if($codigoCorreios != null) $_POST["codigo_correios"] = $codigoCorreios;
+        if($codigoTransporte != null) $_POST["codigo_transporte"] = $codigoTransporte;
     }
 
     $post_fields = array("cep_destino", "produtos");
@@ -63,12 +63,12 @@
         require_once "@classe-system-functions.php";
         require_once "frete-correios/calcular-frete.php";
         
-        $baseSite = "https://www.efectusdigital.com.br/bolsas/";
-        /*$baseSite = "localhost/xampp/github/ecommerce_bolsas_em_couro/";*/
+        $baseSite = "https://www.lareobra.com.br/dev/";
+        /*$baseSite = "localhost/xampp/github/projeto-lareobra/";*/
         $pastaCorreios = "frete-correios/ws-correios.php";
         $pastaPagseguro = "pagseguro/ws-pagseguro.php";
 
-        $codigoCorreios = isset($_POST["codigo_correios"]) ? $_POST["codigo_correios"] : "41106";
+        $codigoTransporte = isset($_POST["codigo_transporte"]) ? $_POST["codigo_transporte"] : "41106";
         
         $cepDestino = str_replace("-", "", $_POST["cep_destino"]);
         $ruaDestino = isset($_POST["rua_destino"]) ? $_POST["rua_destino"] : null;
@@ -85,7 +85,12 @@
         
         $url_correios_api = $baseSite.$pastaCorreios;
         
-        $infoFrete = frete($produtos, $codigoCorreios, $cepDestino, $declararValor, $url_correios_api);
+        //$infoFrete = frete($produtos, $codigoTransporte, $cepDestino, $declararValor, $url_correios_api);
+        
+        $_POST["no_console"] = true;
+        
+        require_once "@calcular-transporte.php";
+        
         if($infoFrete != false && $produtos != false){
             
             $valorFrete = null;
@@ -119,7 +124,7 @@
                         'bairro' => $bairroDestino,
                         'cidade' => $cidadeDestino,
                         'estado' => $estadoDestino,
-                        'codigo_correios' => $codigoCorreios,
+                        'codigo_transporte' => $codigoTransporte,
                         'valor_frete' => $valorFrete,
                         'carrinho' => http_build_query($produtos),
                     ];

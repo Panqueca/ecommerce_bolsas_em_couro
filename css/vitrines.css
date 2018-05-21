@@ -6,12 +6,14 @@
     justify-content: center;
     align-items: baseline;
     margin: 20px auto 20px auto;
+    padding-bottom: 50px;
 }
 .vitrine-standard .titulo-vitrine{
     width: 100%;
     text-align: center;
     font-size: 32px;
     margin: 0px 0px 10px 0px;
+    color: #111;
 }
 .vitrine-standard .descricao-vitrine{
     margin: 20px 0px 20px 0px;
@@ -186,7 +188,7 @@
     font-size: 24px;
     padding: 10px 0px 10px 0px;
     line-height: 24px;
-    color: #333;
+    color: #111;
 }
 .vitrine-categorias .alter-spacing{
     width: 100%;
@@ -320,6 +322,7 @@
     text-align: center;
     font-size: 32px;
     margin: 0px 0px 10px 0px;
+    color: #111;
 }
 .vitrine-carrossel .descricao-vitrine{
     margin: 20px 0px 20px 0px;
@@ -500,8 +503,27 @@
     color: #fff;
     background-color: limegreen;
 }
+.btn-show-more{
+    position: absolute;
+    bottom: 0px;
+    margin: 0 auto;
+    right: 0px;
+    width: 60px;
+    height: 60px;
+    background-color: #6abd45;
+    color: #fff;
+    left: 0px;
+    border-radius: 50%;
+    line-height: 60px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 24px;
+}
+.btn-show-more:hover{
+    background-color: #5da73c;  
+}
 @media screen and (max-width: 480px){
-    .promo-tag{
+    .vitrine-carrossel .promo-tag{
         top: 20px;
         left: 60px;
     }

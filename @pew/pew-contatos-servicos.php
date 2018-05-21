@@ -8,8 +8,8 @@
     require_once "@link-important-functions.php";
     require_once "@valida-sessao.php";
 
-    $navigation_title = "Mensagens contato - " . $pew_session->empresa;
-    $page_title = "Gerenciamento de mensagens contato";
+    $navigation_title = "Mensagens contato de serviço - " . $pew_session->empresa;
+    $page_title = "Gerenciamento de mensagens contato de serviço";
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,14 +36,14 @@
         <!--PAGE CONTENT-->
         <h1 class="titulos"><?php echo $page_title; ?></h1>
         <section class="conteudo-painel">
-            <form action="pew-contatos.php" method="get" class="label half clear">
+            <form action="pew-contatos-servicos.php" method="get" class="label half clear">
                 <label class="group">
                     <div class="group">
                         <h3 class="label-title">Busca de contatos</h3>
                     </div>
                     <div class="group">
                         <div class="xlarge" style="margin-left: -5px; margin-right: 0px;">
-                            <input type="search" name="busca" placeholder="Busque por nome, email, assunto, telefone ou mensagens" class="label-input" title="Buscar">
+                            <input type="search" name="busca" placeholder="Busque por nome, email, assunto, telefone, mensagens ou tipo" class="label-input" title="Buscar">
                         </div>
                         <div class="xsmall" style="margin-left: 0px;">
                             <button type="submit" class="btn-submit label-input btn-flat" style="margin: 10px;">
@@ -55,15 +55,15 @@
             </form>
             <table class="table-padrao" cellspacing="0">
             <?php
-                $tabela_contatos = $pew_db->tabela_contatos;
+                $tabela_contatos_servicos = $pew_custom_db->tabela_contatos_servicos;
                 if(isset($_GET["busca"]) && $_GET["busca"] != ""){
                     $busca = addslashes($_GET["busca"]);
-                    $strBusca = "where nome like '%".$busca."%' or telefone like '%".$busca."%' or email like '%".$busca."%' or mensagem like '%".$busca."%'";
+                    $strBusca = "where nome like '%".$busca."%' or telefone like '%".$busca."%' or email like '%".$busca."%' or mensagem like '%".$busca."%' or tipo like '%".$busca."%'";
                     echo "<h3>Exibindo resultados para: $busca</h3>";
                 }else{
                     $strBusca = "";
                 }
-                $contarContatos = mysqli_query($conexao, "select count(id) as total_contatos from $tabela_contatos $strBusca");
+                $contarContatos = mysqli_query($conexao, "select count(id) as total_contatos from $tabela_contatos_servicos $strBusca");
                 $contagemContatos = mysqli_fetch_assoc($contarContatos);
                 $totalContatos = $contagemContatos["total_contatos"];
                 if($totalContatos > 0){
@@ -71,18 +71,18 @@
                         echo "<td>Nome</td>";
                         echo "<td>E-mail</td>";
                         echo "<td>Telefone</td>";
-                        echo "<td>Assunto</td>";
+                        echo "<td>Tipo</td>";
                         echo "<td>Status</td>";
                         echo "<td>Informações</td>";
                     echo "</thead>";
                     echo "<tbody>";
-                    $queryContatos = mysqli_query($conexao, "select * from $tabela_contatos $strBusca order by data desc");
+                    $queryContatos = mysqli_query($conexao, "select * from $tabela_contatos_servicos $strBusca order by data desc");
                     while($contatos = mysqli_fetch_array($queryContatos)){
                         $id = $contatos["id"];
                         $nome = $contatos["nome"];
                         $email = $contatos["email"];
                         $telefone = $contatos["telefone"];
-                        $assunto = $contatos["assunto"];
+						$tipo = $contatos["tipo"];
                         $status = $contatos["status"];
                         switch($status){
                             case 1:
@@ -100,9 +100,9 @@
                         echo "<tr><td>$nome</td>";
                         echo "<td>$email</td>";
                         echo "<td>$telefone</td>";
-                        echo "<td>$assunto</td>";
+                        echo "<td>$tipo</td>";
                         echo "<td>$status</td>";
-                        echo "<td align=center><a href='pew-edita-contato.php?id_contato=$id' class='btn-editar'><i class='fa fa-eye' aria-hidden='true'></i></a></td></tr>";
+                        echo "<td align=center><a href='pew-edita-contato-servico.php?id_contato=$id' class='btn-editar'><i class='fa fa-eye' aria-hidden='true'></i></a></td></tr>";
                     }
                     echo "</tbody></table>";
                 }else{

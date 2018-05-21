@@ -7,7 +7,7 @@
     $tabela_categorias_produto = $pew_custom_db->tabela_categorias_produtos;
     $tabela_categorias_vitrine = $pew_custom_db->tabela_categorias_vitrine;
 
-    $vitrineProdutos[0] = new VitrineProdutos("standard", 5, "BOLSAS EM PROMOÇÃO");
+    $vitrineProdutos[0] = new VitrineProdutos("standard", 5, "Produtos em Promoção");
     $condicaoPromocao = "promocao_ativa = 1 and preco_promocao < preco";
     $total = $pew_functions->contar_resultados($tabela_produtos, $condicaoPromocao);
     if($total > 0){

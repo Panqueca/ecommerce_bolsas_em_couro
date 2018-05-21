@@ -1,17 +1,57 @@
-[07-May-2018 15:36:44 America/Sao_Paulo] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/e in /home/efectus/public_html/bolsas/@grava-pedido.php on line 150
-[07-May-2018 15:37:36 America/Sao_Paulo] PHP Warning:  require(@pew/pagseguro/ws-pagseguro-consulta-referencia.php): failed to open stream: No such file or in /home/efectus/public_html/bolsas/@pew/@classe-pedidos.php on line 72
-[07-May-2018 15:37:36 America/Sao_Paulo] PHP Fatal error:  require(): Failed opening required '@pew/pagseguro/ws-pagseguro-consulta-referencia.php' (include_pa in /home/efectus/public_html/bolsas/@pew/@classe-pedidos.php on line 72
-[07-May-2018 15:59:38 America/Sao_Paulo] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/efectus/public_html/bolsas/@grava-pedido.php on line 66
-[07-May-2018 15:59:38 America/Sao_Paulo] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/efectus/public_html/bolsas/@grava-pedido.php on line 66
-[07-May-2018 15:59:39 America/Sao_Paulo] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/e in /home/efectus/public_html/bolsas/@grava-pedido.php on line 161
-[07-May-2018 16:03:42 America/Sao_Paulo] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/efectus/public_html/bolsas/@grava-pedido.php on line 66
-[07-May-2018 16:03:42 America/Sao_Paulo] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/efectus/public_html/bolsas/@grava-pedido.php on line 66
-[07-May-2018 16:03:43 America/Sao_Paulo] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/e in /home/efectus/public_html/bolsas/@grava-pedido.php on line 161
-[07-May-2018 16:04:17 America/Sao_Paulo] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/efectus/public_html/bolsas/@grava-pedido.php on line 66
-[07-May-2018 16:04:17 America/Sao_Paulo] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/efectus/public_html/bolsas/@grava-pedido.php on line 66
-[07-May-2018 16:04:18 America/Sao_Paulo] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/e in /home/efectus/public_html/bolsas/@grava-pedido.php on line 161
-[07-May-2018 16:08:15 America/Sao_Paulo] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/efectus/public_html/bolsas/@grava-pedido.php on line 71
-[07-May-2018 16:08:15 America/Sao_Paulo] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/efectus/public_html/bolsas/@grava-pedido.php on line 71
-[07-May-2018 16:08:16 America/Sao_Paulo] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/e in /home/efectus/public_html/bolsas/@grava-pedido.php on line 166
-[07-May-2018 16:10:46 America/Sao_Paulo] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/e in /home/efectus/public_html/bolsas/@grava-pedido.php on line 166
-[07-May-2018 16:16:19 America/Sao_Paulo] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/e in /home/efectus/public_html/bolsas/@grava-pedido.php on line 166
+[21-May-2018 13:00:41 America/Sao_Paulo] PHP Warning:  mysqli_connect(): (HY000/2002): Connection refused in /home/efectus/public_html/bolsas2/@pew/pew-system-config.php on line 31
+[21-May-2018 13:00:42 America/Sao_Paulo] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/efectus/public_html/bolsas2/@pew/@classe-system-functions.php on line 29
+[21-May-2018 13:00:43 America/Sao_Paulo] PHP Warning:  mysqli_connect(): (HY000/2002): Connection refused in /home/efectus/public_html/bolsas2/@pew/pew-system-config.php on line 31
+[21-May-2018 14:24:07 America/Sao_Paulo] PHP Warning:  mysqli_connect(): (HY000/2002): Connection refused in /home/efectus/public_html/bolsas2/@pew/pew-system-config.php on line 31
+[21-May-2018 14:24:07 America/Sao_Paulo] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/efectus/public_html/bolsas2/@pew/@classe-system-functions.php on line 29
+[21-May-2018 14:24:09 America/Sao_Paulo] PHP Warning:  mysqli_connect(): (HY000/2002): Connection refused in /home/efectus/public_html/bolsas2/@pew/pew-system-config.php on line 31
+[21-May-2018 15:22:10 America/Sao_Paulo] PHP Warning:  mysqli_connect(): (HY000/2002): Connection refused in /home/efectus/public_html/bolsas2/@pew/pew-system-config.php on line 31
+[21-May-2018 15:22:10 America/Sao_Paulo] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/efectus/public_html/bolsas2/@pew/@classe-system-functions.php on line 29
+[21-May-2018 15:22:14 America/Sao_Paulo] PHP Warning:  mysqli_connect(): (HY000/2002): Connection refused in /home/efectus/public_html/bolsas2/@pew/pew-system-config.php on line 31
+[21-May-2018 15:22:57 America/Sao_Paulo] PHP Warning:  mysqli_connect(): (HY000/2002): Connection refused in /home/efectus/public_html/bolsas2/@pew/pew-system-config.php on line 31
+[21-May-2018 15:22:57 America/Sao_Paulo] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/efectus/public_html/bolsas2/@pew/@classe-system-functions.php on line 29
+[21-May-2018 15:23:00 America/Sao_Paulo] PHP Warning:  mysqli_connect(): (HY000/2002): Connection refused in /home/efectus/public_html/bolsas2/@pew/pew-system-config.php on line 31
+[21-May-2018 15:23:03 America/Sao_Paulo] PHP Warning:  mysqli_connect(): (HY000/2002): Connection refused in /home/efectus/public_html/bolsas2/@pew/pew-system-config.php on line 31
+[21-May-2018 15:23:03 America/Sao_Paulo] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/efectus/public_html/bolsas2/@pew/@classe-system-functions.php on line 29
+[21-May-2018 15:23:06 America/Sao_Paulo] PHP Warning:  mysqli_connect(): (HY000/2002): Connection refused in /home/efectus/public_html/bolsas2/@pew/pew-system-config.php on line 31
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_custo in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 223
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_sugerido in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 224
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_custo in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 223
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_sugerido in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 224
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_custo in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 223
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_sugerido in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 224
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_custo in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 223
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_sugerido in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 224
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_custo in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 223
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_sugerido in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 224
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_custo in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 223
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_sugerido in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 224
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_custo in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 223
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_sugerido in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 224
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_custo in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 223
+[21-May-2018 15:55:24 America/Sao_Paulo] PHP Notice:  Undefined index: preco_sugerido in /home/efectus/public_html/bolsas2/@classe-produtos.php on line 224
+[21-May-2018 16:54:14 America/Sao_Paulo] PHP Warning:  require_once(PHPMailer/vendor/autoload.php): failed to open stream: No such file or directory in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:14 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'PHPMailer/vendor/autoload.php' (include_path='.:/opt/cpanel in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:17 America/Sao_Paulo] PHP Warning:  require_once(PHPMailer/vendor/autoload.php): failed to open stream: No such file or directory in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:17 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'PHPMailer/vendor/autoload.php' (include_path='.:/opt/cpanel in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:18 America/Sao_Paulo] PHP Warning:  require_once(PHPMailer/vendor/autoload.php): failed to open stream: No such file or directory in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:18 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'PHPMailer/vendor/autoload.php' (include_path='.:/opt/cpanel in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:18 America/Sao_Paulo] PHP Warning:  require_once(PHPMailer/vendor/autoload.php): failed to open stream: No such file or directory in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:18 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'PHPMailer/vendor/autoload.php' (include_path='.:/opt/cpanel in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:19 America/Sao_Paulo] PHP Warning:  require_once(PHPMailer/vendor/autoload.php): failed to open stream: No such file or directory in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:19 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'PHPMailer/vendor/autoload.php' (include_path='.:/opt/cpanel in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:20 America/Sao_Paulo] PHP Warning:  require_once(PHPMailer/vendor/autoload.php): failed to open stream: No such file or directory in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:20 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'PHPMailer/vendor/autoload.php' (include_path='.:/opt/cpanel in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:20 America/Sao_Paulo] PHP Warning:  require_once(PHPMailer/vendor/autoload.php): failed to open stream: No such file or directory in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:20 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'PHPMailer/vendor/autoload.php' (include_path='.:/opt/cpanel in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:20 America/Sao_Paulo] PHP Warning:  require_once(PHPMailer/vendor/autoload.php): failed to open stream: No such file or directory in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:20 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'PHPMailer/vendor/autoload.php' (include_path='.:/opt/cpanel in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:20 America/Sao_Paulo] PHP Warning:  require_once(PHPMailer/vendor/autoload.php): failed to open stream: No such file or directory in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:20 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'PHPMailer/vendor/autoload.php' (include_path='.:/opt/cpanel in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:21 America/Sao_Paulo] PHP Warning:  require_once(PHPMailer/vendor/autoload.php): failed to open stream: No such file or directory in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:54:21 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'PHPMailer/vendor/autoload.php' (include_path='.:/opt/cpanel in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:55:31 America/Sao_Paulo] PHP Warning:  require_once(PHPMailer/vendor/autoload.php): failed to open stream: No such file or directory in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:55:31 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'PHPMailer/vendor/autoload.php' (include_path='.:/opt/cpanel in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:58:25 America/Sao_Paulo] PHP Warning:  require_once(PHPMailer/vendor/autoload.php): failed to open stream: No such file or directory in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 16:58:25 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'PHPMailer/vendor/autoload.php' (include_path='.:/opt/cpanel in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 17:10:00 America/Sao_Paulo] PHP Warning:  require_once(PHPMailer/vendor/autoload.php): failed to open stream: No such file or directory in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2
+[21-May-2018 17:10:00 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'PHPMailer/vendor/autoload.php' (include_path='.:/opt/cpanel in /home/efectus/public_html/bolsas2/@classe-system-functions.php on line 2

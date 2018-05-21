@@ -103,9 +103,7 @@ function frete($produtos = null, $codigo_correios = "41106", $cep_destino = null
             }
         }
         
-        $freteFinal = $functions->custom_number_format($freteFinal);
-        
-        $textPrazo = $prazoFinal == 1 ? "dia" : "dias";
+        $textPrazo = $prazoFinal == 1 ? "dia útil" : "dias úteis";
         
         $finalReturn = '{"valor": '.$freteFinal.', "prazo": "'.$prazoFinal.' '.$textPrazo.'"}';
 

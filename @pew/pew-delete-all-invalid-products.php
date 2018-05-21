@@ -1,5 +1,10 @@
 <pre>
 <?php
+
+    ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
     require_once "pew-system-config.php";
     $tabela_produtos = $pew_custom_db->tabela_produtos;
     $tabela_imagens_produtos = $pew_custom_db->tabela_imagens_produtos;

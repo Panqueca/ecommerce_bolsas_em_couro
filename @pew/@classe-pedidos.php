@@ -221,10 +221,10 @@
                     $str = "Em disputa";
                     break;
                 case 6:
-                    $str = "Devolvida";
+                    $str = "Devolvido";
                     break;
                 case 7:
-                    $str = "Cancelada";
+                    $str = "Cancelado";
                     break;
                 default:
                     $str = "Validando";
@@ -283,6 +283,12 @@
         
         function get_transporte_string(){
             switch($this->codigo_transporte){
+                case "7777":
+                    $str = "Retirada na Loja";
+                    break;
+                case "8888":
+                    $str = "Motoboy";
+                    break;
                 case "40010":
                     $str = "Correios - SEDEX";
                     break;
@@ -408,8 +414,6 @@
                             echo "<button class='btn-voltar btn-voltar-info' id-pedido='infoPedido$id'>Voltar</button>";
                         echo "</div>";
                     echo "</div>";
-                }else{
-                    echo "teste";
                 }
             }
         }
@@ -417,7 +421,7 @@
         function get_pedidos_conta($idCliente){
             $tabela_minha_conta = $this->global_vars["tabela_minha_conta"];
             
-            $pedidosCliente = $this->buscar_pedidos("id_cliente = '$idCliente'");
+            $pedidosCliente = $this->buscar_pedidos("id_cliente = '$idCliente' order by id desc");
             
             $selected = array();
             $count = 0;

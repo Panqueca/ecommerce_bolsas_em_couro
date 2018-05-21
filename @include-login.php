@@ -552,6 +552,10 @@
             }
             toggleCadastreConta();
         });
+        
+        $(".btn-trigger-entrar").off().on("click", function(){
+            toggleLogin();
+        });
         /*END DEFAULT TRIGGERS*/
     });
 </script>

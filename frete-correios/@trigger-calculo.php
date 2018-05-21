@@ -30,8 +30,8 @@
     if($calcular){
         require_once "calcular-frete.php";
         
-        $baseSite = "https://www.efectusdigital.com.br/bolsas/";
-        /*$baseSite = "localhost/xampp/github/ecommerce_bolsas_em_couro/";*/
+        $baseSite = "https://www.lareobra.com.br/dev/";
+        /*$baseSite = "localhost/xampp/github/projeto-lareobra/";*/
         $pastaCorreios = "frete-correios/ws-correios.php";
 
         $codigoCorreios = isset($_POST["codigo_correios"]) ? $_POST["codigo_correios"] : "41106";
@@ -57,7 +57,7 @@
         
         $infoFrete = frete($produtos, $codigoCorreios, $cepDestino, $declararValor, $url_correios_api);
         if($infoFrete != false && $produtos != false){
-            echo $infoFrete; // RETORNO EM JSON
+            //echo $infoFrete; // RETORNO EM JSON
         }else{
             echo "false";
         }

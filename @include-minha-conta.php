@@ -605,6 +605,10 @@ if($listar){
             toggleMinhaConta(); 
         });
         
+        $(".btn-trigger-minha-conta").off().on("click", function(){
+            toggleMinhaConta(); 
+        });
+        
         function mudarPainel(obj){
             paineis.each(function(){
                 $(this).removeClass("painel-active");

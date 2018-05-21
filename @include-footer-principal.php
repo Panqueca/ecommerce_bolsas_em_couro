@@ -16,8 +16,9 @@
     }
     .footer-principal .newsletter .titulo{
         margin: 0px 0px 5px 0px;
-        font-size: 16px;
+        font-size: 20px;
         text-align: center;
+        font-variant-caps: all-petite-caps;
     }
     .footer-principal .newsletter .subtitulo{
         margin: 0px 0px 10px 0px;
@@ -222,7 +223,7 @@
 </script>
 <footer class="footer-principal">
     <div class="newsletter">
-        <h3 class="titulo">RECEBA AS NOVIDADES DA LAR E OBRA</h3>
+        <h3 class="titulo">RECEBA AS NOVIDADES DA <?php echo $cls_paginas->empresa; ?></h3>
         <h4 class="subtitulo">Lançamentos e promoções em primeira mão</h4>
         <form class="form-newsletter">
             <input type="text" placeholder="Digite seu nome" name="nome" class="input-nome">
@@ -446,7 +447,7 @@
         </ul>
         <center>
             <h5 style='font-weight: normal;'>CNPJ: 99.999.999/0001-99 / I.E:9999999999</h5>
-            <h4 style='font-weight: normal;'>Copyright © Bolsas em Couro 2018 | Todos os direitos reservados.</h4>
+            <h4 style='font-weight: normal;'>Copyright © <?php echo $cls_paginas->empresa; echo "&nbsp;" . date("Y"); ?> | Todos os direitos reservados.</h4>
         </center>
     </div>
 </footer>

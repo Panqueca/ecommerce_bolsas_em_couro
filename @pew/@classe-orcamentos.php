@@ -123,11 +123,11 @@
         }
         
         function montar_email($nome, $produtos, $desconto, $tokenCarrinho){
-            $baseSite = "https://efectusdigital.com.br/bolsas";
-            $dirImagens = "imagens/identidadeVisual";
-            $logo = "logo-bolsa-em-couro.png";
+            $baseSite = "https://www.lareobra.com.br/dev";
+            $dirImagens = "imagens/identidadeVisual/";
+            $logo = "logo-lareobra.png";
             
-            $nomeEmpresa = "Bolsas em Couro";
+            $nomeEmpresa = "Lar e Obra";
             
             $body = "";
             

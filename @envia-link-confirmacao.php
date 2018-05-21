@@ -1,8 +1,11 @@
 <?php
     session_start();
-    $nomeEmpresa = "Bolsas em Couro";
-    $descricaoPagina = "DESCRIÇÃO MODELO ATUALIZAR...";
-    $tituloPagina = "Confirmar conta - $nomeEmpresa";
+    
+    require_once "@classe-paginas.php";
+
+    $cls_paginas->set_titulo("Confirmar conta");
+    $cls_paginas->set_descricao("DESCRIÇÃO MODELO ATUALIZAR...");
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -11,9 +14,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
         <meta name="HandheldFriendly" content="true">
-        <meta name="description" content="<?php echo $descricaoPagina;?>">
+        <meta name="description" content="<?php echo $cls_paginas->descricao;?>">
         <meta name="author" content="Efectus Web">
-        <title><?php echo $tituloPagina;?></title>
+        <title><?php echo $cls_paginas->titulo;?></title>
+        <link type="image/png" rel="icon" href="imagens/identidadeVisual/logo-icon.png">
         <!--DEFAULT LINKS-->
         <?php
             require_once "@link-standard-styles.php";
@@ -54,6 +58,8 @@
                 require_once "@classe-minha-conta.php";
                 $cls_conta = new MinhaConta();
                 $cls_conta->verify_session_start();
+            
+                $nomeEmpresa = $cls_paginas->empresa;
             
                 $is_logado = false;
             
@@ -115,7 +121,7 @@
                         $destinatarios[0]["nome"] = $infoConta["usuario"];
                         $destinatarios[0]["email"] = $infoConta["email"];
                         
-                        $pew_functions->enviar_email("Confirme sua conta - Bolsas em Couro", $bodyEmail, $destinatarios);
+                        $pew_functions->enviar_email("Confirme sua conta - $nomeEmpresa", $bodyEmail, $destinatarios);
                         
                     }else{
                         block();

@@ -1118,6 +1118,10 @@
             }
             toggleLogin();
         });
+        
+        $(".btn-trigger-cadastra-conta").off().on("click", function(){
+            toggleCadastreConta();
+        });
         /*END DEFAULT TRIGGERS*/
     });
 </script>

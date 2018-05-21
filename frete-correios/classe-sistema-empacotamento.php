@@ -56,22 +56,27 @@
                 $decimal = strlen($explodedVal[$indiceLastExplode]) <= 2 && strlen($explodedVal[$indiceLastExplode]) > 0 ? true : false;
                 $shortDecimal = strlen($explodedVal[$indiceLastExplode]) == 1 ? true : false;
                 $startingVal = $explodedVal[0];
-                
+
                 $caracteresStrCleaned = strlen($cleanedVal);
                 $totalCaractesMilhar = $caracteresStrCleaned - 2;
                 $milharVal = substr($cleanedVal, 0, $totalCaractesMilhar);
                 $decimalsVal = substr($cleanedVal, $totalCaractesMilhar, 2);
-                
+
                 $sepStartVal = preg_split("//", $startingVal, -1, PREG_SPLIT_NO_EMPTY);
                 $somaStart = 0;
                 foreach($sepStartVal as $number){
                     $somaStart += $number;
                 }
                 $is_under_one = $somaStart == 0 ? true : false;
-                
+
                 $sep = $sep == "." || $sep ==  "," ? $sep : ".";
                 if($is_under_one){
-                    $formatedVal = "0".$sep.$cleanedVal;
+                    if(strlen($cleanedVal) == 2){
+                        $formatedVal = "0".$sep.$cleanedVal;
+                    }else{
+                        $final = strlen($explodedVal[1]) == 2 ? $explodedVal[1] : $explodedVal[1]."0";
+                        $formatedVal = "0".$sep.$final;
+                    }
                 }else{
                     switch($decimal){
                         case true:
@@ -84,14 +89,24 @@
                             }
                             break;
                         case false:
-                            $formatedVal = $cleanedVal.$sep."00";
+
+                            // Verifica se é um decimal de mais de 3 números
+                            if($totalExplodes == 2 && strlen($explodedVal[1]) >= 3){ 
+                                $valorMilhar = $explodedVal[0];
+                                $valorDecimal = $explodedVal[1];
+                                $decimalFinal = substr($valorDecimal, 0, 2);
+                                $formatedVal = $valorMilhar.$sep.$decimalFinal;
+                            }else{
+                                $formatedVal = $cleanedVal.$sep."00";
+                            }
+
                             break;
                     }
                 }
-                
+
                 return $formatedVal;
             }else{
-                return $cleanedVal;
+                return $cleanedVal.".00";
             }
         }
     }

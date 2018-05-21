@@ -278,26 +278,21 @@ $(document).ready(function(){
     /*END MAIN SEARCH FUNCTION*/
 
     /*TRIGGERS*/
-    var triggerAtivado = false;
-    if(!triggerAtivado){
-        botaoCoresRelacionadas.off().on("click", function(){
-            if(!coresAbertas){
-                abrirCoresRelacionadas();
-            }
-            triggerAtivado = true;
-        });
-        botaoSalvarCoresRelacionadas.off().on("click", function(){
-            if(coresAbertas){
-                fecharCoresRelacionadas();
-            }
-            triggerAtivado = true;
-        });
-        backgroundCores.off().on("click", function(){
-            if(coresAbertas){
-                fecharCoresRelacionadas();
-            }
-            triggerAtivado = true;
-        });
-    }
+
+    botaoCoresRelacionadas.off().on("click", function(){
+        if(!coresAbertas){
+            abrirCoresRelacionadas();
+        }
+    });
+    botaoSalvarCoresRelacionadas.off().on("click", function(){
+        if(coresAbertas){
+            fecharCoresRelacionadas();
+        }
+    });
+    backgroundCores.off().on("click", function(){
+        if(coresAbertas){
+            fecharCoresRelacionadas();
+        }
+    });
     /*END TRIGGERS*/
 });

@@ -32,10 +32,12 @@
                 width: calc(100% - 30px);
                 margin: 40px 15px 40px 15px;
                 padding-top: 50px;
+                vertical-align: bottom;
             }
             .box-produto{
                 position: relative;
                 width: calc(25% - 22px);
+                height: 325px;
                 padding: 10px 0px 40px 0px;
                 margin: 0px 20px 30px 0px;
                 background-color: #fff;
@@ -436,9 +438,19 @@
                         $strBusca = "";
                     }
                 
-                    $condicaoPedidos = "codigo_confirmacao != '0' order by id desc";
-                    $totalPedidos = $pew_functions->contar_resultados($tabela_pedidos, $condicaoPedidos);
+                
+                    $condicaoTodosPedidos = "codigo_confirmacao != '0' order by id desc";
+                    $condicaoPagos = "codigo_confirmacao != '0' and status = 3 or status = 4";
+                    $condicaoAguardando = "codigo_confirmacao != '0' and status = 1 or status = 2 or status = 0";    
+                    $condicaoCancelados = "codigo_confirmacao != '0' and status = 5 or status = 6 or status = 7";    
+                
+                    $totalPedidos = $pew_functions->contar_resultados($tabela_pedidos, $condicaoTodosPedidos);
+                    $totalPagos = $pew_functions->contar_resultados($tabela_pedidos, $condicaoPagos);
+                    $totalAguardando = $pew_functions->contar_resultados($tabela_pedidos, $condicaoAguardando);
+                    $totalCancelados = $pew_functions->contar_resultados($tabela_pedidos, $condicaoCancelados);
                     
+                    $cls_pedidos = new Pedidos();
+                
                     if($totalPedidos > 0){
                         
                         echo "<form class='form-add-rastreamento' method='post' action='pew-status-pedido.php'>";
@@ -449,9 +461,39 @@
                             echo "<a class='link-padrao btn-cancelar-add-rastreamento' style='margin: 0px 0px 0px 20px;'>Cancelar</a>";
                         echo "</form>";
                         
-                        $cls_pedido = new Pedidos();
-                        $selectedPedidos = $cls_pedido->buscar_pedidos($condicaoPedidos);
-                        $cls_pedido->listar_pedidos($selectedPedidos);
+                        echo "<div class='multi-tables'>";
+                            echo "<div class='top-buttons'>";
+                                echo "<button class='trigger-button trigger-button-selected' mt-target='mtPainel1'>Pagos ($totalPagos)</button>";
+                                echo "<button class='trigger-button' mt-target='mtPainel2'>Aguardando Pagamento ($totalAguardando)</button>";
+                                echo "<button class='trigger-button' mt-target='mtPainel3'>Cancelados ($totalCancelados)</button>";
+                            echo "</div>";
+                            echo "<div class='display-paineis'>";
+                                echo "<div class='painel selected-painel' id='mtPainel1'>";
+                                    if($totalPagos > 0){
+                                        $selectedPagos = $cls_pedidos->buscar_pedidos($condicaoPagos);
+                                        $cls_pedidos->listar_pedidos($selectedPagos);
+                                    }else{
+                                        echo "<h3 align='center'>Nenhum resultado</h3>";
+                                    }
+                                echo "</div>";
+                                echo "<div class='painel' id='mtPainel2'>";
+                                    if($totalAguardando > 0){
+                                        $selectedAguardando = $cls_pedidos->buscar_pedidos($condicaoAguardando);
+                                        $cls_pedidos->listar_pedidos($selectedAguardando);
+                                    }else{
+                                        echo "<h3 align='center'>Nenhum resultado</h3>";
+                                    }
+                                echo "</div>";
+                                echo "<div class='painel' id='mtPainel3'>";
+                                    if($totalCancelados > 0){
+                                        $selectedCancelados = $cls_pedidos->buscar_pedidos($condicaoCancelados);
+                                        $cls_pedidos->listar_pedidos($selectedCancelados);
+                                    }else{
+                                        echo "<h3 align='center'>Nenhum resultado</h3>";
+                                    }
+                                echo "</div>";
+                            echo "</div>";
+                        echo "</div>";
                         
                     }else{
                         if($strBusca == ""){

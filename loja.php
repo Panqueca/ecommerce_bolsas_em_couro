@@ -1,5 +1,9 @@
 <?php
 
+    ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
     session_start();
     
     require_once "@classe-paginas.php";
@@ -71,6 +75,7 @@
         <meta name="description" content="<?php echo $cls_paginas->descricao;?>">
         <meta name="author" content="Efectus Web">
         <title><?php echo $cls_paginas->titulo;?></title>
+        <link type="image/png" rel="icon" href="imagens/identidadeVisual/logo-icon.png">
         <!--DEFAULT LINKS-->
         <?php
             require_once "@link-standard-styles.php";
@@ -128,6 +133,88 @@
         <script>
             $(document).ready(function(){
                 console.log("Página carregada");
+                
+                var urlClasseVitrine = "@classe-vitrine-produtos.php";
+                
+                var btnShowMore = $(".js-btn-show-more");
+                
+                var iconPlus = "<i class='fas fa-plus'></i>";
+                var iconLoading = "<i class='fas fa-spinner fa-spin'></i>";
+                
+                var arrayProdutos = $("#vitrineArrayProdutos").val();
+                var exceptionProdutos = $("#vitrineAddedProdutos").val();
+                
+                var arrayProdutosFila = [];
+                var arrayProdutosAdicionados = [];
+                
+                var adicionandoProdutos = false;
+                
+                JSON.parse(arrayProdutos).forEach(function(idProduto){
+                    arrayProdutosFila[arrayProdutosFila.length] = idProduto;
+                });
+                
+                JSON.parse(exceptionProdutos).forEach(function(idProduto){
+                    arrayProdutosAdicionados[arrayProdutosAdicionados.length] = idProduto;
+                });
+                
+                var maxAppend = $("#vitrineMaxAppend").val() > 0 ? $("#vitrineMaxAppend").val() : 20;
+                
+                function append_produtos(){
+                    if(!adicionandoProdutos){
+                        adicionandoProdutos = true;
+                        var add_queue = [];
+                        var ctrl_added = 0;
+                        btnShowMore.html(iconLoading);
+                        arrayProdutosFila.forEach(function(idProduto){
+                            var add = true;
+
+                            arrayProdutosAdicionados.forEach(function(idException){
+                                if(idProduto == idException){
+                                    add = false;
+                                }
+                            });
+
+                            if(add && ctrl_added < maxAppend){
+                                add_queue[ctrl_added] = idProduto;
+                                arrayProdutosAdicionados[arrayProdutosAdicionados.length] = idProduto;
+                                ctrl_added++;
+                            }
+                        });
+                        
+                        function finish(appendContent){
+                            btnShowMore.html(iconPlus);
+                            if(arrayProdutosFila.length == arrayProdutosAdicionados.length){
+                                btnShowMore.remove();
+                            }
+                            adicionandoProdutos = false;
+                            if(appendContent != false){
+                                $(".vitrine-standard .display-produtos").append(appendContent);
+                            }
+                        }
+
+                        $.ajax({
+                            type: "POST",
+                            url: urlClasseVitrine,
+                            data: {acao_vitrine: "get_box_produto", produtos: add_queue},
+                            error: function(){
+                                notificacaoPadrao("Ocorreu um erro ao buscar os produtos");
+                                finish(false);
+                            },
+                            success: function(resposta){
+                                if(resposta != "false"){
+                                    finish(resposta);   
+                                }else{
+                                    finish(false);   
+                                }
+                            }
+                        });
+                    }
+                }
+                
+                btnShowMore.off().on("click", function(){
+                    append_produtos();
+                });
+                
             });
         </script>
         <!--END PAGE JS-->
@@ -331,8 +418,21 @@
             
             echo "<div class='navigation-tree'>" . $navigationTree . "</div>";
             
-            $vitrineProdutos[0] = new VitrineProdutos("standard", 20, "<h1>$tituloVitrine</h1>", $descricaoVitrine);
+            
+            $maxAppend = 20;
+            
+            $vitrineProdutos[0] = new VitrineProdutos("standard", $maxAppend, "<h1 class='titulo-vitrine'>$tituloVitrine</h1>", $descricaoVitrine);
             $vitrineProdutos[0]->montar_vitrine($selectedProdutos);
+            $selectedExceptions = $vitrineProdutos[0]->get_exceptions();
+            
+            $jsonProdutos = json_encode($selectedProdutos);
+            $jsonExceptions = json_encode($selectedExceptions);
+            
+            echo "<input type='hidden' value='$jsonProdutos' id='vitrineArrayProdutos'>";
+            echo "<input type='hidden' value='$jsonExceptions' id='vitrineAddedProdutos'>";
+            echo "<input type='hidden' value='$maxAppend' id='vitrineMaxAppend'>";
+            
+            echo "<div class='btn-show-more js-btn-show-more'><i class='fas fa-plus'></i></div>";
         ?>
         </div>
         <!--END THIS PAGE CONTENT-->

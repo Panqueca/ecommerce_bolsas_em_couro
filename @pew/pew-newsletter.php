@@ -91,10 +91,10 @@
             <?php
                 $tabela_newsletter = $pew_custom_db->tabela_newsletter;
                 if(isset($_GET["busca"]) && $_GET["busca"] != ""){
-                    $busca = pew_string_format($_GET["busca"]);
+                    $busca = addslashes($_GET["busca"]);
                     $strBusca = "where nome like '%".$busca."%' or email like '%".$busca."%' or data like '%".$busca."%'";
                     $busca = $busca == "" ? "Todos e-mails" : $busca;
-                    echo "<h3>Exibindo resultados para: $busca</h3>";
+                    echo "<br class='clear'><h3>Exibindo resultados para: $busca</h3>";
                 }else{
                     $strBusca = "";
                 }
@@ -122,9 +122,8 @@
                     }
                     echo "</tbody>";
                 }else{
-                    $msg = $strBusca != "" ? "Nenhum resultado encontrado." : "Nenhum e-mail foi cadastrado.";
+                    $msg = $busca != "" ? "Nenhum resultado encontrado." : "Nenhum e-mail foi cadastrado.";
                     echo "<br><br><br><br><br><h3 align='center'>$msg</h3></td>";
-                    echo "<br><br><a href='pew-newsletter.php' class='link-padrao'>Voltar</a>";
                 }
             ?>
             </table>

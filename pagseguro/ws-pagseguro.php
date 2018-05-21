@@ -31,9 +31,16 @@ if(isset($_POST["carrinho"]) && $_POST["carrinho"] != null){
     }
 
     // FRETE
-    $codigoCorreios = isset($_POST["codigo_correios"]) ? $_POST["codigo_correios"] : "41106";
+    $codigoTransporte = isset($_POST["codigo_transporte"]) ? $_POST["codigo_transporte"] : "41106";
     $valorFrete = isset($_POST["valor_frete"]) ? $_POST["valor_frete"] : "0.01";
-    switch($codigoCorreios){
+    $valorFrete = $valorFrete > 0 ? $valorFrete : "0.01";
+    switch($codigoTransporte){
+        case "7777":
+            $tituloTransporte = "Retirada na Loja";
+            break;
+        case "8888":
+            $tituloTransporte = "Motoboy";
+            break;
         case "40010":
             $tituloTransporte = "SEDEX";
             break;

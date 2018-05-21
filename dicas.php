@@ -16,6 +16,7 @@
         <meta name="description" content="<?php echo $cls_paginas->descricao;?>">
         <meta name="author" content="Efectus Web">
         <title><?php echo $cls_paginas->titulo;?></title>
+        <link type="image/png" rel="icon" href="imagens/identidadeVisual/logo-icon.png">
         <!--DEFAULT LINKS-->
         <?php
             require_once "@link-standard-styles.php";

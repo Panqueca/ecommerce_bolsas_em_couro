@@ -573,3 +573,53 @@ input:focus, select:focus, textarea:focus{
     user-select: none;
 }
 /*END SELECT CATEGORIAS*/
+
+.multi-tables{
+    position: relative;
+    width: 100%;
+}
+.multi-tables .top-buttons{
+    width: 100%;
+    display: flex;
+}
+.multi-tables .top-buttons .trigger-button{
+    flex: 1 0 0;
+    font-size: 14px;
+    padding: 0px;
+    height: 30px;
+    line-height: 100%;
+    cursor: pointer;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+}
+.multi-tables .top-buttons .trigger-button:hover{
+    background-color: #f1f1f1;
+}
+.multi-tables .top-buttons .trigger-button-selected{
+    background-color: #d39800;
+    color: #fff;
+}
+.multi-tables .top-buttons .trigger-button-selected:hover{
+    background-color: #f78a14;   
+}
+.multi-tables .display-paineis{
+    position: relative;
+    overflow: hidden;
+}
+.multi-tables .display-paineis .painel{
+    position: absolute;
+    width: calc(100% - 40px);
+    margin: 20px;
+    visibility: hidden;
+    left: 0;
+    opacity: 0;
+    transition: .4s;
+    transform: rotateX(180deg);
+}
+.multi-tables .display-paineis .selected-painel{
+    position: relative;
+    visibility: visible;
+    transform: rotateX(0deg);
+    opacity: 1;
+}

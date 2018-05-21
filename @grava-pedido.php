@@ -71,22 +71,11 @@
             $totalPedido += $precoProduto;
             $totalBruto += $precoAtual;
             
-            $xmlItens .= "
-            <item>
-                <codigo>$skuProduto</codigo>
-                <descricao>$tituloProduto</descricao>
-                <un>un</un>
-                <qtde>$quantidadeProduto</qtde>
-                <vlr_unit>$precoAtual</vlr_unit>
-            </item>";
         }
         $descontoFinal = $totalBruto - $totalPedido;
         
         mysqli_query($conexao, "insert into $tabela_pedidos (codigo_confirmacao, codigo_transacao, codigo_transporte, vlr_frete, codigo_pagamento, codigo_rastreamento, referencia, token_carrinho, id_cliente, nome_cliente, cpf_cliente, email_cliente, cep, rua, numero, complemento, bairro, cidade, estado, data_controle, status) values ('{$_POST["codigo_confirmacao"]}', '{$_POST["codigo_transacao"]}', '{$_POST["codigo_transporte"]}', '{$_POST["vlr_frete"]}', '$codigoPagamento', 0, '{$_POST["referencia"]}', '{$_POST["token_carrinho"]}', '{$_POST["id_cliente"]}', '{$_POST["nome_cliente"]}', '{$_POST["cpf_cliente"]}', '{$_POST["email_cliente"]}', '{$_POST["cep"]}', '{$_POST["rua"]}', '{$_POST["numero"]}', '{$_POST["complemento"]}', '{$_POST["bairro"]}', '{$_POST["cidade"]}', '{$_POST["estado"]}', '$dataAtual', 0)");
-        
-        $queryID = mysqli_query($conexao, "select last_insert_id()");
-        $idPedido = mysqli_fetch_assoc($queryID);
-        $idPedido = $idPedido["last_insert_id()"];
+
         
         switch($_POST["codigo_transporte"]){
             case "40010":

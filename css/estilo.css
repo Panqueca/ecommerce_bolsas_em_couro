@@ -19,11 +19,21 @@ body{
 .link-padrao:hover{
     border-bottom: 1px solid #5583fe;
 }
+.titulo-principal{
+    color: #111;
+    font-size: 36px;
+}
+@media screen and (max-width: 720px){
+    .titulo-principal{
+        font-size: 24px;
+    }
+
+}
 .navigation-tree{
     width: 80%;
     margin: 0 auto;
     font-size: 16px;
-    line-height: 18px;
+    line-height: 20px;
     color: #666;
 }
 .navigation-tree a{

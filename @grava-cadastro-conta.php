@@ -55,8 +55,12 @@
             $destinatarios[0] = array();
             $destinatarios[0]["nome"] = $nome;
             $destinatarios[0]["email"] = $email;
+            
+            $cls_paginas = new Paginas();
+            
+            $nomeEmpresa = $cls_paginas->empresa;
 
-            $pew_functions->enviar_email("Confirme sua conta - Bolsas em Couro", $bodyEmail, $destinatarios);
+            $pew_functions->enviar_email("Confirme sua conta - $nomeEmpresa", $bodyEmail, $destinatarios);
             echo "true";
         }else{
             echo "false";

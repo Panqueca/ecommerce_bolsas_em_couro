@@ -10,6 +10,7 @@
         private $quantidade_produtos;
         private $global_vars;
         private $pew_functions;
+        private $exceptions = array();
 
         function __construct($tipo = "standard", $limiteProdutos = 4, $tituloVitrine = "", $descricaoVitrine = ""){
             $this->tipo = $tipo;
@@ -25,6 +26,88 @@
         private function conexao(){
             return $this->global_vars["conexao"];
         }
+        
+        public function create_box_produto($info = null){
+            $tabela_cores = $this->global_vars["tabela_cores"];
+            $cls_produto = new Produtos();
+            if(is_array($info) && count($info) > 0){
+                
+                /*STANDARD VARS*/
+                $nomeLoja = "Lar e Obra";
+                $dirImagensProdutos = "imagens/produtos";
+                /*END STANDARD VARS*/
+                
+                /*VARIAVEIS DO PRODUTO*/
+                $idProduto = $info["id_produto"];
+                $infoCoresRelacionadas = isset($info["info_cores"]) ? $info["info_cores"] : null;
+                $imagens = $info["imagens"];
+                $qtdImagens = count($imagens);
+                if($qtdImagens > 0){
+                    $imagemPrincipal = $imagens[0];
+                    $srcImagem = $imagemPrincipal["src"];
+                    if(!file_exists($dirImagensProdutos."/".$srcImagem) || $srcImagem == ""){
+                        $srcImagem = "produto-padrao.png";
+                    }
+                }else{
+                    $srcImagem = "produto-padrao.png";
+                }
+                $nome = $info["nome"];
+                $maxCaracteres = 31;
+                $nomeEllipses = strlen(str_replace(" ", "", $nome)) > $maxCaracteres ? trim(substr($nome, 0, $maxCaracteres))."..." : $nome;
+                $qtdParcelas = 6;
+                $txtParcelas = $qtdParcelas."x";
+                $preco = $info["preco"];
+                $precoPromocao = $info["preco_promocao"];
+                $promoAtiva = $precoPromocao > 0 && $precoPromocao < $preco ? true : false;
+                $precoParcela = $promoAtiva == true ? $precoPromocao / $qtdParcelas : $preco / $qtdParcelas;
+                $priceField = $promoAtiva == true ? "<span class='view-preco'>De <span class='promo-price'>R$".number_format($preco, 2, ",", ".")."</span></span> por <span class='view-preco'><span class='price'>R$".number_format($precoPromocao, 2, ",", ".")."</span></span>" : "<span class='view-preco'><span class='price'>R$ ". number_format($preco, 2, ",", ".")."</span></span>";
+                $urlProduto = "interna-produto.php?id_produto=$idProduto";
+                /*END VARIAVEIS DO PRODUTO*/
+
+                /*DISPLAY DO PRODUTO*/
+                $boxProduto = "";
+                $boxProduto .= "<div class='box-produto'>";
+                    $boxProduto .= "<a href='$urlProduto'><img src='$dirImagensProdutos/$srcImagem' title='$nome' alt='$nome - $nomeLoja'></a>";
+                    $boxProduto .= "<a href='$urlProduto' class='title-link'><h3 class='titulo-produto' title='$nome'>$nomeEllipses</h3></a>";
+                    $boxProduto .= "<h4 class='preco-produto'>$priceField ou <span class='view-parcelas'>$txtParcelas R$". number_format($precoParcela, 2, ",", ".") ."   </span></h4>";
+                    $boxProduto .= "<a href='$urlProduto' class='call-to-action'>COMPRAR</a>";
+                    $boxProduto .= "<div class='display-cores'>";
+                        if(is_array($infoCoresRelacionadas) and count($infoCoresRelacionadas) > 0){
+                            foreach($infoCoresRelacionadas as $id => $info){
+                                $idRelacao = $info["id_relacao"];
+                                $produtoRelacao = new Produtos();
+                                $produtoRelacao->montar_produto($idRelacao);
+                                $info = $produtoRelacao->montar_array();
+                                $idCor = $info["id_cor"];
+                                $queryCor = mysqli_query($this->conexao(), "SELECT * FROM $tabela_cores where id = '$idCor' and status = 1");
+                                $functions = new systemFunctions();
+                                $totalCores = $functions->contar_resultados($tabela_cores, "id = '$idCor' and status = 1");
+                                $urlProdutoRelacao = "interna-produto.php?id_produto=$idRelacao";
+                                $dirImagens = "imagens/cores";
+                                if($totalCores > 0){
+                                    while($infoCor = mysqli_fetch_assoc($queryCor)){
+                                        $nomeCor = $infoCor["cor"];
+                                        $imagemCor = $infoCor["imagem"];
+                                        if(!file_exists($dirImagens."/".$imagemCor) || $imagemCor == ""){
+                                            $imagemCor = "cor-padrao.png";
+                                        }
+                                        $boxProduto .= "<a href='$urlProdutoRelacao'><img class='cor' title='$nomeCor' src='$dirImagens/$imagemCor'></a>";
+                                    }
+                                }
+                            }
+                        }
+                    $boxProduto .= "</div>";
+                $boxProduto .= "</div>";
+                return $boxProduto;
+                /*END DISPLAY DO PRODUTO*/
+            }else{
+                return false;
+            }
+        }
+        
+        function get_exceptions(){
+            return $this->exceptions;
+        }
 
         private function vitrine_standard($arrayProdutos = null){
             $tabela_cores = $this->global_vars["tabela_cores"];
@@ -34,76 +117,17 @@
             if(!function_exists("listar_produto")){
                 function listar_produto($idProduto){
                     global $conexao, $tabela_cores, $functions;
-                    
-                    /*STANDARD VARS*/
-                    $nomeLoja = "BOLSAS EM COURO";
-                    $dirImagensProdutos = "imagens/produtos";
-                    /*END STANDARD VARS*/
 
                     $produto = new Produtos();
                     $produto->montar_produto($idProduto);
                     $infoProduto = $produto->montar_array();
                     $infoCoresRelacionadas = $produto->get_cores_relacionadas();
+                    $infoProduto["id_produto"] = $idProduto;
+                    $infoProduto["info_cores"] = $infoCoresRelacionadas;
                     
-                    /*VARIAVEIS DO PRODUTO*/
-                    $imagens = $infoProduto["imagens"];
-                    $qtdImagens = count($imagens);
-                    if($qtdImagens > 0){
-                        $imagemPrincipal = $imagens[0];
-                        $srcImagem = $imagemPrincipal["src"];
-                        if(!file_exists($dirImagensProdutos."/".$srcImagem) || $srcImagem == ""){
-                            $srcImagem = "produto-padrao.png";
-                        }
-                    }else{
-                        $srcImagem = "produto-padrao.png";
-                    }
-                    $nome = $infoProduto["nome"];
-                    $maxCaracteres = 31;
-                    $nomeEllipses = strlen(str_replace(" ", "", $nome)) > $maxCaracteres ? trim(substr($nome, 0, $maxCaracteres))."..." : $nome;
-                    $qtdParcelas = 6;
-                    $txtParcelas = $qtdParcelas."x";
-                    $preco = $infoProduto["preco"];
-                    $precoPromocao = $infoProduto["preco_promocao"];
-                    $promoAtiva = $precoPromocao > 0 && $precoPromocao < $preco ? true : false;
-                    $precoParcela = $promoAtiva == true ? $precoPromocao / $qtdParcelas : $preco / $qtdParcelas;
-                    $priceField = $promoAtiva == true ? "<span class='view-preco'>De <span class='promo-price'>R$".number_format($preco, 2, ",", ".")."</span></span> por <span class='view-preco'><span class='price'>R$".number_format($precoPromocao, 2, ",", ".")."</span></span>" : "<span class='view-preco'><span class='price'>R$ ". number_format($preco, 2, ",", ".")."</span></span>";
-                    $urlProduto = "interna-produto.php?id_produto=$idProduto";
-                    /*END VARIAVEIS DO PRODUTO*/
-
-                    /*DISPLAY DO PRODUTO*/
-                    echo "<div class='box-produto'>";
-                        echo "<a href='$urlProduto'><img src='$dirImagensProdutos/$srcImagem' title='$nome' alt='$nome - $nomeLoja'></a>";
-                        echo "<a href='$urlProduto' class='title-link'><h3 class='titulo-produto' title='$nome'>$nomeEllipses</h3></a>";
-						echo "<h4 class='preco-produto'>$priceField ou <span class='view-parcelas'>$txtParcelas R$". number_format($precoParcela, 2, ",", ".") ."   </span></h4>";
-                        echo "<a href='$urlProduto' class='call-to-action'>COMPRAR</a>";
-                        echo "<div class='display-cores'>";
-                            if(is_array($infoCoresRelacionadas) and count($infoCoresRelacionadas) > 0){
-                                foreach($infoCoresRelacionadas as $id => $info){
-                                    $idRelacao = $info["id_relacao"];
-                                    $produtoRelacao = new Produtos();
-                                    $produtoRelacao->montar_produto($idRelacao);
-                                    $infoProduto = $produtoRelacao->montar_array();
-                                    $idCor = $infoProduto["id_cor"];
-                                    $queryCor = mysqli_query($conexao, "SELECT * FROM pew_cores where id = '$idCor' and status = 1");
-                                    $functions = new systemFunctions();
-                                    $totalCores = $functions->contar_resultados("pew_cores", "id = '$idCor' and status = 1");
-                                    $urlProdutoRelacao = "interna-produto.php?id_produto=$idRelacao";
-                                    $dirImagens = "imagens/cores";
-                                    if($totalCores > 0){
-                                        while($infoCor = mysqli_fetch_assoc($queryCor)){
-                                            $nomeCor = $infoCor["cor"];
-                                            $imagemCor = $infoCor["imagem"];
-                                            if(!file_exists($dirImagens."/".$imagemCor) || $imagemCor == ""){
-                                                $imagemCor = "cor-padrao.png";
-                                            }
-                                            echo "<a href='$urlProdutoRelacao'><img class='cor' title='$nomeCor' src='$dirImagens/$imagemCor'></a>";
-                                        }
-                                    }
-                                }
-                            }
-                        echo "</div>";
-                    echo "</div>";
-                    /*END DISPLAY DO PRODUTO*/
+                    $cls_vitrine = new VitrineProdutos();
+                    
+                    echo $cls_vitrine->create_box_produto($infoProduto);
                 }
             }
             
@@ -131,6 +155,7 @@
                     foreach($arrayProdutos as $idProduto){
                         if($ctrlProdutos < $this->limite_produtos){
                             $produto = new Produtos();
+                            $this->exceptions[count($this->exceptions)] = $idProduto;
                             
                             $idProduto = $produto->query_produto("status = 1 and id = '$idProduto'");
                             if($idProduto != false){
@@ -327,9 +352,9 @@
                                     $produtoRelacao->montar_produto($idRelacao);
                                     $infoProduto = $produtoRelacao->montar_array();
                                     $idCor = $infoProduto["id_cor"];
-                                    $queryCor = mysqli_query($conexao, "SELECT * FROM pew_cores where id = '$idCor' and status = 1");
+                                    $queryCor = mysqli_query($conexao, "SELECT * FROM $tabela_cores where id = '$idCor' and status = 1");
                                     $functions = new systemFunctions();
-                                    $totalCores = $functions->contar_resultados("pew_cores", "id = '$idCor' and status = 1");
+                                    $totalCores = $functions->contar_resultados($tabela_cores, "id = '$idCor' and status = 1");
                                     $urlProdutoRelacao = "interna-produto.php?id_produto=$idRelacao";
                                     $dirImagens = "imagens/cores";
                                     if($totalCores > 0){
@@ -397,6 +422,32 @@
                     $this->tipo = "INDEFINIDO";
                     echo "Tipo de vitrine inválido";
             }
+        }
+    }
+
+    if(isset($_POST["acao_vitrine"])){
+        $acao = $_POST["acao_vitrine"];
+        
+        switch($acao){
+            case "get_box_produto":
+                $cls_produto_acao = new Produtos();
+                $cls_vitrine_acao = new VitrineProdutos();
+                
+                if(isset($_POST["produtos"])){
+                    $produtos = $_POST["produtos"];
+                    
+                    foreach($produtos as $idProduto){
+                        $cls_produto_acao->montar_produto($idProduto);
+                        $infoProduto = $cls_produto_acao->montar_array();
+                        $infoCoresRelacionadas = $cls_produto_acao->get_cores_relacionadas();
+                        $infoProduto["id_produto"] = $idProduto;
+                        $infoProduto["info_cores"] = $infoCoresRelacionadas;
+
+                        echo $cls_vitrine_acao->create_box_produto($infoProduto);
+                    }
+                    
+                }
+                
         }
     }
 ?>

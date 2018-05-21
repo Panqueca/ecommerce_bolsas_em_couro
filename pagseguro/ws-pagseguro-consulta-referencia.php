@@ -52,64 +52,6 @@
                 $tabela_pedidos = $globalVars{"tabela_pedidos"};
 
                 mysqli_query($conexao, "update $tabela_pedidos set codigo_transacao = '$codigoTransacao', codigo_pagamento = '$codigoPagamento', status = '$statusPagseguro' where referencia = '$referencia'");
-                
-                
-                // UPDATE BLING STATUS
-                function executeUpdateOrder($url, $data){
-                    $curl_handle = curl_init();
-                    
-                    curl_setopt($curl_handle, CURLOPT_URL, $url);
-                    curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, 'PUT');
-                    curl_setopt($curl_handle, CURLOPT_POST, count($data));
-                    curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $data);
-                    curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, TRUE);
-                    
-                    $response = curl_exec($curl_handle);
-                    curl_close($curl_handle);
-                    return $response;
-                }
-                
-                $tabela_pedidos = $pew_custom_db->tabela_pedidos;
-                
-                $queryId = mysqli_query($conexao, "select id from $tabela_pedidos where referencia = '$codigoReferencia'");
-                $infoP = mysqli_fetch_array($queryId);
-                $getIdPedido = $infoP["id"];
-                
-                switch($statusPagseguro){
-                    case 1:
-                        $statusBling = 0;
-                        break;
-                    case 2:
-                        $statusBling = 10;
-                        break;
-                    case 3:
-                        $statusBling = 4;
-                        break;
-                    case 4:
-                        $statusBling = 4;
-                        break;
-                    case 5:
-                        $statusBling = 2;
-                        break;
-                    case 6:
-                        $statusBling = 2;
-                        break;
-                    case 7:
-                        $statusBling = 2;
-                        break;
-                    default:
-                        $statusBling = 0;
-                }
-                
-                $urlUpdateStatus = "https://bling.com.br/Api/v2/pedido/$getIdPedido/json";
-                $xmlPedido = "<pedido><situacao>$statusBling</situacao></pedido>";
-                $dataPostPedido = array (
-                    'apikey' => 'a0d67ab3925a9df897d78510a6ccf847dfdfb78dfd78641cb1504e8de0a311eab831c42b',
-                    'xml' => rawurlencode($xmlPedido)
-                );
-                
-                $retorno = executeUpdateOrder($urlUpdateStatus, $dataPostPedido);
-                // END UPDATE BLING STATUS
             }
         }
         
