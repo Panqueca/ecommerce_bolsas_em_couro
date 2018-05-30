@@ -1,11 +1,12 @@
 <?php
     
-    $codigoTransporte = null;
+    $codigoTransporte = "asdas";
     
     $jsonData = json_decode(file_get_contents('php://input'), true);
     if($jsonData != null){
         $codigoTransporte = isset($jsonData["codigo_transporte"]) ? $jsonData["codigo_transporte"] : null;   
-        $cepDestino = isset($jsonData["cep_destino"]) ? $jsonData["cep_destino"] : null;   
+        $cepDestino = isset($jsonData["cep_destino"]) ? $jsonData["cep_destino"] : null;
+        $_POST["produtos"] = $jsonData["produtos"];
     }
 
     $infoFrete = false;
@@ -68,6 +69,7 @@
     }else{
         echo "false";
     }
+
 
     if(!isset($_POST["no_console"])){
         echo $infoFrete;

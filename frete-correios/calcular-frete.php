@@ -26,6 +26,13 @@ function frete($produtos = null, $codigo_correios = "41106", $cep_destino = null
     $carrinho = $empacotamento->configurar();
     
     $caixas = calcular_caixas($carrinho);
+    
+    if(!function_exists("is_json")){
+        function is_json($string){
+            json_decode($string);
+            return (json_last_error() == JSON_ERROR_NONE);
+        }
+    }
 
     function calcular_frete($servicoCorreios, $cepDestino, $declararValor, $url_api_transportadora){
         global $caixas, $functions;
@@ -61,28 +68,16 @@ function frete($produtos = null, $codigo_correios = "41106", $cep_destino = null
 
                 $response = curl_exec($ch);
                 
-                if($response != "false"){
+                if($response != "false" && is_json($response)){
+                    
+                    $json_response = json_decode($response);
+                    
                     $split_response = explode(",", $response);
-                    $ctrlItens = 0;
                     $frete_caixas[$ctrlFrete] = array();
+                    
+                    $frete_caixas[$ctrlFrete]["Valor"] = $json_response->Valor;
+                    $frete_caixas[$ctrlFrete]["PrazoEntrega"] = $json_response->PrazoEntrega;
 
-                    foreach($split_response as $info){
-                        $split_info  = explode(":", $info);
-                        $chave = str_replace('"', "", $split_info[0]);
-                        $chave = str_replace('{', "", $chave);
-                        $chave = str_replace('}', "", $chave);
-                        $valor = $split_info[1];
-                        $valor = str_replace('"', "", $split_info[1]);
-                        $valor = str_replace('{', "", $valor);
-                        $valor = str_replace('}', "", $valor);
-
-                        $array = array();
-                        $array[$chave] = $valor;
-                        
-                        $frete_caixas[$ctrlFrete][$chave] = $valor;
-
-                        $ctrlItens++;
-                    }
                     $ctrlFrete++;
                 }else{
                     return false;
@@ -103,7 +98,8 @@ function frete($produtos = null, $codigo_correios = "41106", $cep_destino = null
             }
         }
         
-        $textPrazo = $prazoFinal == 1 ? "dia útil" : "dias úteis";
+        
+        $textPrazo = $prazoFinal == 1 ? "dia" : "dias";
         
         $finalReturn = '{"valor": '.$freteFinal.', "prazo": "'.$prazoFinal.' '.$textPrazo.'"}';
 

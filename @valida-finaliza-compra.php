@@ -61,10 +61,12 @@
 
     if($finalizar){
         require_once "@classe-system-functions.php";
+        require_once "@classe-paginas.php";
         require_once "frete-correios/calcular-frete.php";
         
-        $baseSite = "https://www.lareobra.com.br/dev/";
-        /*$baseSite = "localhost/xampp/github/projeto-lareobra/";*/
+        $cls_paginas = new Paginas();
+        
+        $baseSite = "https://".$cls_paginas->base_path;
         $pastaCorreios = "frete-correios/ws-correios.php";
         $pastaPagseguro = "pagseguro/ws-pagseguro.php";
 
@@ -83,7 +85,7 @@
 
         $produtos = is_array($_POST["produtos"]) ? $_POST["produtos"] : array();
         
-        $url_correios_api = $baseSite.$pastaCorreios;
+        $url_correios_api = $baseSite."/".$pastaCorreios;
         
         //$infoFrete = frete($produtos, $codigoTransporte, $cepDestino, $declararValor, $url_correios_api);
         
@@ -129,7 +131,7 @@
                         'carrinho' => http_build_query($produtos),
                     ];
                     
-                    $url_api_pagseguro = $baseSite.$pastaPagseguro;
+                    $url_api_pagseguro = $baseSite."/".$pastaPagseguro;
 
                     $charset = "UTF-8";
                     

@@ -18,7 +18,7 @@
                 
                 $this->logo        = "logo-bolsa-em-couro.png";
                 
-                $this->base_path   = "www.efectusdigital.com.br/bolsas2";
+                $this->base_path   = "www.efectusdigital.com.br/bolsas";
                 
                 $this->email_user  = "dev@efectusdigital.com.br";
                 

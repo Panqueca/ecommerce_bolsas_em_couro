@@ -1275,6 +1275,8 @@
             var alturaDisplayLinks = parseFloat(scrollDisplayLinks) - parseFloat(whiteSpace);
             var tamanhoDisplayLinks = displayLinks.height();
             
+            var is_over_menu = $(".display-links:hover").length > 0 ? true : false;
+            
             if(screen.width > 720){
                 if(scrollAtual >= alturaDisplayLinks && is_over_menu == false){
                     if(!botaoNavMobile.hasClass("active-botao")){

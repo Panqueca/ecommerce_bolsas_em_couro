@@ -449,7 +449,7 @@
                     if(!calculandoFrete){
                         var urlFrete = "@calcular-transporte.php";
                         var cepDestino = inputFrete.val();
-                        var codigosServico = ["7777", "8888", "41106", "40010", "40215", "40290"];
+                        var codigosServico = ["41106", "40010", "40215", "40290"];
                         if(cepDestino.length == 9){
                             
                             botaoCalculoFrete.html(iconLoading);

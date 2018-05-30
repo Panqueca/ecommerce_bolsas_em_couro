@@ -412,7 +412,7 @@
                         set_view_preco(totalCarrinho, "0.00");
                         var urlFrete = "@calcular-transporte.php";
                         var cepDestino = typeof $("#cepDestino").val() != "undefined" ? $("#cepDestino").val() : 0;
-                        var codigosServico = ["7777", "8888", "41106", "40010", "40215", "40290"];
+                        var codigosServico = ["41106", "40010", "40215", "40290"];
                         displayResultadoFrete.html(iconLoading + " Calculando frete");
                         
                         cepDestino = cepDestino.length == 9 ? cepDestino.replace("-", "") : cepDestino;

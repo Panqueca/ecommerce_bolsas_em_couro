@@ -29,11 +29,12 @@
         
         public function create_box_produto($info = null){
             $tabela_cores = $this->global_vars["tabela_cores"];
+            $cls_paginas = new Paginas();
             $cls_produto = new Produtos();
             if(is_array($info) && count($info) > 0){
                 
                 /*STANDARD VARS*/
-                $nomeLoja = "Lar e Obra";
+                $nomeLoja = $cls_paginas->empresa;
                 $dirImagensProdutos = "imagens/produtos";
                 /*END STANDARD VARS*/
                 
@@ -273,14 +274,16 @@
             $tabela_cores = $this->global_vars["tabela_cores"];
             $conexao = $this->global_vars["conexao"];
             $functions = $this->pew_functions;
+            $cls_paginas = new Paginas();
+            
             
             $ctrlProdutos = 0;
             
             if(!function_exists("listar_produto")){
-                function listar_produto($idProduto){
-                    global $conexao, $tabela_cores, $functions, $ctrlProdutos;
+                function listar_produto($idProduto, $tb_cores = "pew_cores"){
+                    global $conexao, $functions, $ctrlProdutos, $cls_paginas;
                     /*STANDARD VARS*/
-                    $nomeLoja = "BOLSAS EM COURO";
+                    $nomeLoja = $cls_paginas->empresa;
                     $dirImagensProdutos = "imagens/produtos";
                     /*END STANDARD VARS*/
 
@@ -352,12 +355,12 @@
                                     $produtoRelacao->montar_produto($idRelacao);
                                     $infoProduto = $produtoRelacao->montar_array();
                                     $idCor = $infoProduto["id_cor"];
-                                    $queryCor = mysqli_query($conexao, "SELECT * FROM $tabela_cores where id = '$idCor' and status = 1");
                                     $functions = new systemFunctions();
-                                    $totalCores = $functions->contar_resultados($tabela_cores, "id = '$idCor' and status = 1");
+                                    $totalCores = $functions->contar_resultados($tb_cores, "id = '$idCor' and status = 1");
                                     $urlProdutoRelacao = "interna-produto.php?id_produto=$idRelacao";
                                     $dirImagens = "imagens/cores";
                                     if($totalCores > 0){
+                                        $queryCor = mysqli_query($conexao, "SELECT * FROM $tb_cores where id = '$idCor' and status = 1");
                                         while($infoCor = mysqli_fetch_assoc($queryCor)){
                                             $nomeCor = $infoCor["cor"];
                                             $imagemCor = $infoCor["imagem"];
@@ -386,7 +389,7 @@
                 
                 if(count($arrayProdutos) > 0){
                     foreach($arrayProdutos as $idProduto){
-                        listar_produto($idProduto);
+                        listar_produto($idProduto, $tabela_cores);
                     }
                 }
                     
@@ -450,4 +453,3 @@
                 
         }
     }
-?>
