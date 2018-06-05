@@ -1,6 +1,6 @@
 <?php
     
-    $codigoTransporte = "asdas";
+    $codigoTransporte = null;
     
     $jsonData = json_decode(file_get_contents('php://input'), true);
     if($jsonData != null){

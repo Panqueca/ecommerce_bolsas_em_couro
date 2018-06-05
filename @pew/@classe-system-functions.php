@@ -5,7 +5,7 @@
     require_once 'PHPMailer/PHPMailer/src/SMTP.php';
 
 
-    require_once "@classe-paginas.php";
+    require_once __DIR__ . "/../@classe-paginas.php";
     require_once "pew-system-config.php";
 
     use PHPMailer\PHPMailer\PHPMailer;
@@ -159,25 +159,26 @@
             function enviar_email($assunto, $body, $destinatarios, $senderEmail = null, $senderPass = null, $anexos = null, $altBody = null){
                 $cls_paginas = new Paginas();
                 $nomeLoja = $cls_paginas->empresa;
-                
+
                 $senderEmail = $senderEmail == null ? $cls_paginas->get_email_user() : $senderEmail;
                 $senderPass = $senderPass == null ? $cls_paginas->get_smtp_pass() : $senderPass;
                 $altBody = $altBody == null ? "E-mail enviado por $nomeLoja" : $altBody;
-                
-                $mail = new PHPMailer(true);                              // Passing `true` enables exceptions
+
+                $mail = new PHPMailer\PHPMailer\PHPMailer();
+
                 try {
-                    //Server settings
-                    /*$mail->SMTPDebug = 2;*/
+                    // Server settings
+                    $mail->SMTPDebug = 2;
                     $mail->isSMTP();
-                    $mail->Host = $cls_paginas->get_smtp_host();  // Specify main and backup SMTP servers
+                    $mail->Host = $cls_paginas->get_smtp_host();
                     $mail->SMTPAuth = true;
-                      
-                    $mail->Username = $senderEmail;
-                    $mail->Password = $senderPass;
-                    $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+
+                    $mail->Username = $cls_paginas->get_smtp_user();
+                    $mail->Password = $cls_paginas->get_smtp_pass();
+                    $mail->SMTPSecure = 'tls';
                     $mail->Port = $cls_paginas->get_smtp_port();
 
-                    //Informações para envio
+                    // Informações para envio
                     $mail->setFrom($senderEmail, $nomeLoja);
                     if(isset($destinatarios) && is_array($destinatarios) && count($destinatarios) > 0){
                         foreach($destinatarios as $infoDestinatario){
@@ -187,7 +188,7 @@
                         }
                     }
 
-                    //Anexos
+                    // Anexos
                     if(isset($anexos) && is_array($anexos) && count($anexos) > 0){
                         foreach($anexos as $infoAnexo){
                             $diretorio = $infoAnexo["dir"];
@@ -196,7 +197,7 @@
                         }
                     }
 
-                    
+
                     //Content
                     $mail->isHTML(true);
                     $mail->Subject = $assunto;
@@ -205,14 +206,14 @@
                     $mail->CharSet = "UTF-8";
 
                     $mail->send();
-                    
+
                     return true;
-                                      
+
                 } catch (Exception $e) {
                     echo $mail->ErrorInfo;
                     return false;
                 }
-                
+
             }
 
         } 
