@@ -164,11 +164,11 @@
                 $senderPass = $senderPass == null ? $cls_paginas->get_smtp_pass() : $senderPass;
                 $altBody = $altBody == null ? "E-mail enviado por $nomeLoja" : $altBody;
 
-                $mail = new PHPMailer\PHPMailer\PHPMailer();
+                $mail = new PHPMailer();
 
                 try {
                     // Server settings
-                    $mail->SMTPDebug = 2;
+                    /*$mail->SMTPDebug = 2;*/
                     $mail->isSMTP();
                     $mail->Host = $cls_paginas->get_smtp_host();
                     $mail->SMTPAuth = true;
