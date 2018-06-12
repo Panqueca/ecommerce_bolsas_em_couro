@@ -828,6 +828,7 @@
                 $especificacoesProduto = $produto->get_especificacoes_produto();
                 $relacionadosProdutos = $produto->get_relacionados_produto();
                 $relacionadosCores = $produto->get_cores_relacionadas();
+                $selectedCoresRelacionadas = $produto->get_cores_relacionadas();
                 
                 $selectedDepartamentos = array();
                 if($departamentosProduto != false){

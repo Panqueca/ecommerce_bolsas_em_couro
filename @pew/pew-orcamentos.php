@@ -94,7 +94,7 @@
                         echo "<td>Informações</td>";
                     echo "</thead>";
                     echo "<tbody>";
-                    $queryOrcamentos = mysqli_query($conexao, "select * from $tabela_orcamentos $strBusca order by data_pedido desc");
+                    $queryOrcamentos = mysqli_query($conexao, "select * from $tabela_orcamentos $strBusca order by id desc");
                     while($orcamentos = mysqli_fetch_array($queryOrcamentos)){
                         $id = $orcamentos["id"];
                         $nome = $orcamentos["nome_cliente"];

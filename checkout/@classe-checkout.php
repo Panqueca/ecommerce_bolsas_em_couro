@@ -79,7 +79,7 @@
                                     echo "<h6 class='complement-label brand-name-display'></h6>";
                                 echo "</div>";
                                 echo "<div class='xsmall'>";
-                                    echo "<input type='text' class='form-input' id='ccCvv' placeholder='CVV' maxlength='3'>";
+                                    echo "<input type='text' class='form-input' id='ccCvv' placeholder='CVV' maxlength='4'>";
                                 echo "</div>";
                                 echo "<div class='medium'>";
                                     echo "<select class='form-input' id='ccExpireMonth'>";
