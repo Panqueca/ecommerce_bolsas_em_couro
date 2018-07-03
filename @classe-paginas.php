@@ -20,6 +20,8 @@
                 
                 $this->base_path   = "www.efectusdigital.com.br/bolsas";
                 
+                $this->http        = "https://";
+                
                 $this->email_user  = "dev@efectusdigital.com.br";
                 
                 $this->smtp_host   = "mail.efectusdigital.com.br";
@@ -61,6 +63,10 @@
             
             function get_smtp_port(){
                 return $this->smtp_port;
+            }
+            
+            function get_full_path(){
+                return $this->http . $this->base_path;
             }
         }
     }

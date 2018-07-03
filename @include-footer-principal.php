@@ -175,7 +175,7 @@
         var inputEmail = formNewsletter.children(".input-email");
         var cadastrando = false;
         var gravaNewsletterUrl = "@grava-newsletter.php";
-        formNewsletter.off().on("submit", function(){
+        formNewsletter.off().on("submit", function(event){
             event.preventDefault();
             if(!cadastrando){
                 cadastrando = true;
@@ -304,7 +304,7 @@
         $countLinks = 0;
 
         $link_footer = null;
-        $link_footer[$countLinks] = new FooterLinks("PÁGINA INICIAL", "index.php");
+        $link_footer[$countLinks] = new FooterLinks("PÁGINA INICIAL", "inicio/");
         $countLinks++;
         
         /*SET TABLES*/
@@ -333,7 +333,7 @@
                 $idDepartamento = $infoDepartamentos["id"];
                 $tituloDepartamento = $infoDepartamentos["departamento"];
                 $refDepartamento = $infoDepartamentos["ref"];
-                $urlDepartamento = "loja.php?departamento=$refDepartamento";
+                $urlDepartamento = "loja/$refDepartamento/";
                 $departamentoLinks[$ctrlDepartamentoLinks] = array();
                 $departamentoLinks[$ctrlDepartamentoLinks]["titulo"] = $tituloDepartamento;
                 $departamentoLinks[$ctrlDepartamentoLinks]["url"] = $urlDepartamento;
@@ -350,7 +350,7 @@
                             $infoCategoria = mysqli_fetch_array($queryCategoria);
                             $tituloCategoria = $infoCategoria["categoria"];
                             $refCategoria = $infoCategoria["ref"];
-                            $urlCategoria = "loja.php?departamento=$refDepartamento&categoria=$refCategoria";
+                            $urlCategoria = "loja/$refDepartamento/$refCategoria/";
                             $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub] = array();
                             $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["titulo"] = $tituloCategoria;
                             $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["url"] = $urlCategoria;
@@ -390,7 +390,7 @@
             $countLinks++;
         }
         
-        $link_footer[$countLinks] = new FooterLinks("DICAS", "dicas.php");
+        $link_footer[$countLinks] = new FooterLinks("DICAS", "dicas/");
         $countLinks++;
 
         $quantidadeLinks = count($link_footer);

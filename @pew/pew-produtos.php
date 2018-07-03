@@ -171,7 +171,7 @@
                         <a href="pew-cadastra-produto.php" class="btn-flat" title="Cadastre um novo produto"><i class="fas fa-plus"></i> Cadastrar produto</a>
                         <a href="pew-marcas.php" class="btn-flat" title="Gerenciamento de marcas"><i class="fas fa-plus"></i> Marcas</a>
                         <a href="pew-cores.php" class="btn-flat" title="Gerenciamento de cores"><i class="fas fa-plus"></i> Cores</a>
-                        <a href="pew-produtos-relatorios.php" class="btn-flat" title="Ver Relatórios"><i class="fas fa-chart-pie"></i> Relatórios</a>
+                        <a href="pew-relatorios.php" class="btn-flat" title="Ver Relatórios"><i class="fas fa-chart-pie"></i> Relatórios</a>
                     </div>
                 </div>
             </div>

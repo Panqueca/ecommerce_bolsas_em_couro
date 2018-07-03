@@ -22,6 +22,7 @@
         private $bairro = null;
         private $cidade = "Curitiba";
         private $estado = "PR";
+        private $valor_sfrete = 0;
         private $valor_total = 0;
         private $data_controle;
         private $status_transporte = 0;
@@ -106,7 +107,6 @@
                     
                     $statusTransporte = $this->status_transporte == 0 ? $statusTransporte : $this->status_transporte;
                     
-                    mysqli_query($conexao, "update $tabela_pedidos set status = '$statusPagseguro', status_transporte = '$statusTransporte' where id = '{$info["id"]}'");
                     $this->status = $statusPagseguro;
                 }
                 
@@ -120,6 +120,7 @@
                     $valorTotal += $info["preco_produto"] * $info["quantidade_produto"];
                 }
 
+                $this->valor_sfrete = $valorTotal;
                 $this->valor_total = $valorTotal + $this->valor_frete;
                 
                 return true;
@@ -149,6 +150,7 @@
             $array["cidade"] = $this->cidade;
             $array["estado"] = $this->estado;
             $array["data_controle"] = $this->data_controle;
+            $array["valor_sfrete"] = $this->valor_sfrete;
             $array["valor_total"] = $this->valor_total;
             $array["status"] = $this->status;
             $array["valor_frete"] = $this->valor_frete;
@@ -178,10 +180,10 @@
             }
         }
         
-        function get_produtos_pedido(){
+        function get_produtos_pedido($tokenCarrinho = null){
             $conexao = $this->global_vars["conexao"];
             $tabela_carrinhos = $this->global_vars["tabela_carrinhos"];
-            $tokenCarrinho = $this->token_carrinho;
+            $tokenCarrinho = $tokenCarrinho == null ? $this->token_carrinho : $tokenCarrinho;
             $total = $this->pew_functions->contar_resultados($tabela_carrinhos, "token_carrinho = '$tokenCarrinho'");
             
             $produtos = array();
@@ -439,5 +441,38 @@
                 return false;
             }
             
+        }
+        
+        function get_pedidos_by_produtos($produtos){
+            $tabela_carrinhos = $this->global_vars["tabela_carrinhos"];
+            $conexao = $this->global_vars["conexao"];
+            $selectedPedidos = array();
+            $condicao = "";
+            if(is_array($produtos)){
+                $i = 0;
+                foreach($produtos as $idProduto){
+                    $condicao .= $i == 0 ? "id_produto = '$idProduto'" : " or id_produto = '$idProduto'";
+                    $i++;
+                }
+            }else{
+                $idProduto = (int)$produtos;
+                $condicao = "id_produto = '$idProduto'";
+            }
+            
+            $totalCarrinhos = $this->pew_functions->contar_resultados($tabela_carrinhos, $condicao);
+            $queryCarrinhos = mysqli_query($conexao, "select token_carrinho from $tabela_carrinhos where $condicao group by token_carrinho");
+            while($info = mysqli_fetch_array($queryCarrinhos)){
+                $tokenCarrinho = $info["token_carrinho"];
+                $arrayPedido = $this->buscar_pedidos("token_carrinho = '$tokenCarrinho'");
+                if($arrayPedido != false){
+                    foreach($arrayPedido as $idPedido){
+                        if(!in_array($idPedido, $selectedPedidos)){
+                            array_push($selectedPedidos, $idPedido);
+                        }
+                    }
+                }
+            }
+            
+            return $selectedPedidos;
         }
     }

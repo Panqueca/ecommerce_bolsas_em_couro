@@ -312,8 +312,9 @@
         public function get_imagens_produto(){
             return $this->imagens;
         }
-        public function get_especificacoes_produto(){
-            $condicao = "id_produto = '".$this->id."'";
+        public function get_especificacoes_produto($idProduto = null){
+            $idProduto = $idProduto == null ? $this->id : $idProduto;
+            $condicao = "id_produto = '$idProduto'";
             $tabela_especificacoes = $this->global_vars["tabela_especificacoes"];
             $tabela_especificacoes_produtos = $this->global_vars["tabela_especificacoes_produtos"];
             $totalEspecificacoes = $this->pew_functions->contar_resultados($tabela_especificacoes_produtos, $condicao);
@@ -341,8 +342,9 @@
         public function get_data_produto(){
             return $this->data;
         }
-        public function get_departamentos_produto(){
-            $condicao = "id_produto = '".$this->id."'";
+        public function get_departamentos_produto($idProduto = null){
+            $idProduto = $idProduto == null ? $this->id : $idProduto;
+            $condicao = "id_produto = '$idProduto'";
             $tabela_departamentos = $this->global_vars["tabela_departamentos"];
             $tabela_departamentos_produtos = $this->global_vars["tabela_departamentos_produtos"];
             $totalDepartamentos = $this->pew_functions->contar_resultados($tabela_departamentos_produtos, $condicao);
@@ -367,8 +369,9 @@
             }
             return $return;
         }
-        public function get_categorias_produto(){
-            $condicao = "id_produto = '".$this->id."'";
+        public function get_categorias_produto($idProduto = null){
+            $idProduto = $idProduto == null ? $this->id : $idProduto;
+            $condicao = "id_produto = '$idProduto'";
             $tabela_categorias = $this->global_vars["tabela_categorias"];
             $tabela_categorias_produtos = $this->global_vars["tabela_categorias_produtos"];
             $totalCategorias = $this->pew_functions->contar_resultados($tabela_categorias_produtos, $condicao);
@@ -393,8 +396,9 @@
             }
             return $return;
         }
-        public function get_subcategorias_produto(){
-            $condicao = "id_produto = '".$this->id."'";
+        public function get_subcategorias_produto($idProduto = null){
+            $idProduto = $idProduto == null ? $this->id : $idProduto;
+            $condicao = "id_produto = '$idProduto'";
             $tabela_subcategorias = $this->global_vars["tabela_subcategorias"];
             $tabela_subcategorias_produtos = $this->global_vars["tabela_subcategorias_produtos"];
             $totalSubcategorias = $this->pew_functions->contar_resultados($tabela_subcategorias_produtos, $condicao);

@@ -202,12 +202,14 @@
                 cursor: pointer;
                 bottom: 0px;
                 right: 0px;
+                line-height: 30px;
             }
             .main-content .display-carrinho .bottom-info .botao-continuar .icon-button{
                 position: absolute;
                 right: 15px;
                 top: 0px;
                 height: 30px;
+                line-height: 30px;
                 transition: .2s;
             }
             .main-content .display-carrinho .bottom-info .botao-continuar:hover{
@@ -429,7 +431,7 @@
                         set_view_preco(totalCarrinho, "0.00");
                         var urlFrete = "@calcular-transporte.php";
                         var cepDestino = typeof $("#cepDestino").val() != "undefined" ? $("#cepDestino").val() : 0;
-                        var codigosServico = ["7777", "8888", "41106", "40010", "40215", "40290"];
+                        var codigosServico = ["8888", "41106", "40010", "40215", "40290"];
                         displayResultadoFrete.html(iconLoading + " Calculando frete");
                         
                         cepDestino = cepDestino.length == 9 ? cepDestino.replace("-", "") : cepDestino;

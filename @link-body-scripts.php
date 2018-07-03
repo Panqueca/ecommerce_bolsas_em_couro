@@ -14,6 +14,4 @@
 <?php require_once "@include-carrinho.php"; ?>
 <!--END CARRINHO-->
 
-<script type="text/javascript"
-src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js" async>
-</script>
+<script type="text/javascript" src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js"></script>

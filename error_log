@@ -1,0 +1,40 @@
+[29-Jun-2018 19:31:41 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[29-Jun-2018 19:31:41 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[29-Jun-2018 19:31:41 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[29-Jun-2018 19:31:41 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[02-Jul-2018 20:56:37 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Paginas::get_full_path() in /home/efectus/public_html/bolsas/ticket.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/efectus/public_html/bolsas/ticket.php on line 14
+[02-Jul-2018 20:56:41 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Paginas::get_full_path() in /home/efectus/public_html/bolsas/ticket.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/efectus/public_html/bolsas/ticket.php on line 14
+[02-Jul-2018 20:56:41 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Paginas::get_full_path() in /home/efectus/public_html/bolsas/ticket.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/efectus/public_html/bolsas/ticket.php on line 14
+[02-Jul-2018 20:56:42 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Paginas::get_full_path() in /home/efectus/public_html/bolsas/ticket.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/efectus/public_html/bolsas/ticket.php on line 14
+[02-Jul-2018 20:56:42 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Paginas::get_full_path() in /home/efectus/public_html/bolsas/ticket.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/efectus/public_html/bolsas/ticket.php on line 14
+[02-Jul-2018 20:57:38 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Paginas::get_full_path() in /home/efectus/public_html/bolsas/ticket.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/efectus/public_html/bolsas/ticket.php on line 14
+[02-Jul-2018 21:07:09 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[02-Jul-2018 21:07:09 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[02-Jul-2018 21:07:09 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[02-Jul-2018 21:07:10 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[02-Jul-2018 21:07:59 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[02-Jul-2018 21:07:59 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[02-Jul-2018 21:07:59 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[02-Jul-2018 21:07:59 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[02-Jul-2018 21:13:39 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[02-Jul-2018 21:13:40 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[02-Jul-2018 21:13:40 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38
+[02-Jul-2018 21:13:40 UTC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /home/efectus/public_html/bolsas/frete-correios/@trigger-calculo.php on line 38

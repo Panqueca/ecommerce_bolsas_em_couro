@@ -1,16 +1,17 @@
 <?php
+
     session_start();
     
     require_once "@classe-paginas.php";
 
-    $cls_paginas->set_titulo("Página inicial");
+    $cls_paginas->set_titulo("Central de Atendimento");
     $cls_paginas->set_descricao("DESCRIÇÃO MODELO ATUALIZAR...");
 
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-        <base href="<?= $cls_paginas->http.$cls_paginas->base_path."/"; ?>">
+        <base href="<?= $cls_paginas->get_full_path(); ?>/">
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -44,6 +45,7 @@
         <!--END PAGE JS-->
     </head>
     <body>
+        <script type="text/javascript" src="@pew/custom-textarea/ckeditor.js"></script>
         <!--REQUIRES PADRAO-->
         <?php
             require_once "@link-body-scripts.php";
@@ -51,10 +53,24 @@
             require_once "@include-header-principal.php";
             require_once "@include-interatividade.php";
             /*PAGE CUSTONS*/
+            $ticketsDIR = "ticket/";
             echo "<div class='main-content'>";
-            require_once "@include-banner-principal.php";
-            require_once "@include-vitrine-categorias.php";
-            require_once "@include-vitrine-produtos-index.php";
+            if(!isset($_GET["action"])){
+                require_once $ticketsDIR."index.php";
+            }else{
+                $action = $_GET["action"];
+                if($action == "adicionar"){
+                    require_once $ticketsDIR."create-ticket.php";
+                }else if($action == "salvar"){
+                    require_once $ticketsDIR."ticket-register.php";
+                }else if($action == "interna"){
+                    require_once $ticketsDIR."ticket.php";
+                }else if($action == "enviar"){
+                    require_once $ticketsDIR."ticket-send.php";
+                }else if($action == "status"){
+                    require_once $ticketsDIR."ticket-status.php";
+                }
+            }
             echo "</div>";
             /*END PAGE CUSTONS*/
             require_once "@include-footer-principal.php";

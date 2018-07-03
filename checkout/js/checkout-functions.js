@@ -334,6 +334,7 @@ $(document).ready(function(){
                 mensagemAlerta("Ocorreu um erro ao processar a compra. O Pagamento NÃO foi efetuado. Recarregue a página e tente novamente.");
             },
             success: function(response){
+                //console.log(response);
                 switch(sendDataForm.paymentMethod){
                     case "creditCard":
                         var buttonCheckout = btnCheckoutCreditCard;
@@ -510,12 +511,14 @@ $(document).ready(function(){
     }
 
     setInterval(function(){
-        btnCheckoutCreditCard.off().on("click", function(){
+        btnCheckoutCreditCard.off().on("click", function(event){
+            event.preventDefault();
             if(!validandoCheckout){
                 execute_checkout("creditCard");
             }
         });
-        btnCheckoutBoleto.off().on("click", function(){
+        btnCheckoutBoleto.off().on("click", function(event){
+            event.preventDefault();
             if(!validandoCheckout){
                 execute_checkout("boleto");
             }

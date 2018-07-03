@@ -1,0 +1,27 @@
+# STRING: ([0-9a-zA-Z_-]+)
+# NUMBER: ([0-9]+)
+
+RewriteEngine On
+RewriteCond %{HTTPS} !on
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond $1 !\.(css|js|gif|jpe?g|png) [NC]
+
+RewriteRule ^inicio/?$ index.php [NC]
+RewriteRule ^contato/?$ contato.php [NC]
+RewriteRule ^clube-de-descontos/?$ clube-de-descontos.php [NC]
+RewriteRule ^finalizar-compra/?$ finalizar-compra.php [NC]
+RewriteRule ^carrinho/?$ finalizar-compra.php [NC]
+RewriteRule ^dicas/?$ dicas.php [NC]
+RewriteRule ^dicas/([0-9a-zA-Z_-]+)/([0-9]+)/?$ interna-dicas.php?titulo=$1&id_dica=$2 [NC]
+RewriteRule ^ticket/?$ ticket.php [NC]
+RewriteRule ^ticket/([0-9a-zA-Z_-]+)/?$ ticket.php?action=$1 [NC]
+RewriteRule ^ticket/([0-9a-zA-Z_-]+)/([0-9a-zA-Z_-]+)/?$ ticket.php?action=$1&ref=$2 [NC]
+
+RewriteRule ^loja/([0-9a-zA-Z_-]+)/?$ loja.php?departamento=$1 [NC]
+RewriteRule ^loja/([0-9a-zA-Z_-]+)/([0-9a-zA-Z_-]+)/?$ loja.php?departamento=$1&categoria=$2 [NC]
+RewriteRule ^loja/([0-9a-zA-Z_-]+)/([0-9a-zA-Z_-]+)/([0-9a-zA-Z_-]+)/?$ loja.php?departamento=$1&categoria=$2&subcategoria=$3 [NC]
+RewriteRule ^categoria/([0-9a-zA-Z_-]+)/?$ loja.php?categoria=$1 [NC]
+RewriteRule ^categoria/([0-9a-zA-Z_-]+)/([0-9a-zA-Z_-]+)/?$ loja.php?categoria=$1&subcategoria=$2 [NC]
+RewriteRule ^subcategoria/([0-9a-zA-Z_-]+)/?$ loja.php?subcategoria=$1 [NC]
+RewriteRule ^([0-9a-zA-Z_-]+)/([0-9]+)/?$ interna-produto.php?produto=$1&id_produto=$2 [NC]

@@ -64,15 +64,12 @@ input[type=number]{
     appearance: textfield;
 }
 input, select, textarea, button{
-    padding: 10px;
+    position: relative;
     font-size: 18px;
-    border: 1px solid #df2321;
     outline: none;
     background-color: #fff;
     resize: none;
     border-radius: 3px;
-    color: #df2321;
-    position: relative;
     font-family: 'Montserrat', sans-serif;
 }
 input[type=file]{
@@ -459,6 +456,18 @@ input:focus, select:focus, textarea:focus{
 .table-padrao tbody td:hover{
     background-color: #f6f6f6;   
 }
+.table-padrao tfoot td{
+    background-color: #ddd;
+    padding: 10px;
+    border-left: 1px solid #eee;
+}
+.table-padrao tfoot td:hover{
+    background-color: #ccc;
+}
+.table-padrao .prices{
+    text-align: right;
+    white-space: nowrap;
+}
 /*FIM TABELAS PADRAO*/
 /*SELECT CATEGORIAS*/
 .select-categorias{
@@ -573,6 +582,152 @@ input:focus, select:focus, textarea:focus{
     user-select: none;
 }
 /*END SELECT CATEGORIAS*/
+
+.modal-multi-select{
+    position: fixed;
+    width: 60%;
+    height: 70vh;
+    margin: 0 auto;
+    top: 15vh;
+    left: 0;
+    right: 0;
+    z-index: 300;
+    visibility: hidden;
+    opacity: 0;
+    transition: .3s;
+}
+.modal-multi-select .header{
+    position: relative;
+    width: 100%;
+    height: 10vh;
+    background-color: #f78a14;
+    color: #fff;
+    border-radius: 6px 6px 0px 0px;
+    text-align: center;
+    line-height: 10vh;
+    text-align: center;
+    z-index: 50;
+}
+.modal-multi-select .header .main-title{
+    width: 26%;
+    height: 10vh;
+    margin: 0px;
+    padding: 0px 2% 0px 2%;
+    float: left;
+}
+.modal-multi-select .header .search-bar{
+    width: 38%;
+    height: 5vh;
+    font-size: 14px;
+    margin: 2.5vh 1% 0px 1%;
+    padding: 0px 1% 0px 1%;
+    float: left;
+    border: none;
+}
+.modal-multi-select .header label{
+    width: 26%;
+    height: 10vh;
+    margin: 0px 2% 0px 0px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.modal-multi-select .header label input{
+    position: relative;
+    vertical-align: middle;
+    top: -1px;
+    cursor: pointer;
+}
+.modal-multi-select .bottom{
+    position: relative;
+    width: 100%;
+    height: 10vh;
+    background-color: #eee;
+    line-height: 10vh;
+    text-align: center;
+    border-radius: 0px 0px 6px 6px;
+    border-top: 2px solid #dedede;
+}
+.modal-multi-select .bottom .btn-save-options{
+    background-color: limegreen;
+    color: #fff;
+    padding: 10px 30px 10px 30px;
+    cursor: pointer;
+}
+.modal-multi-select .bottom .btn-save-options:hover{
+    background-color: green;
+}
+.modal-multi-select .options-list{
+    position: relative;
+    height: 50vh;
+    overflow-x: auto;
+    padding: 0px 0px 40px 0px;
+    background-color: #eee;
+    transition: .2s;
+    clear: both;
+    z-index: 40;
+}
+.modal-multi-select .options-list .loading-background{
+    position: fixed;
+    width: 60%;
+    height: 53vh;
+    line-height: 53vh;
+    margin: 0 auto;
+    top: 30vh;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, .4);
+    z-index: 50;
+    visibility: hidden;
+    transition: .3s;
+    opacity: 0;
+}
+.modal-multi-select .options-list .loading-background .loading-message{
+    font-size: 18px;
+    text-align: center;
+    color: #f78a14;
+    margin: 0px;
+}
+.modal-multi-select .options-list .options-list-msg{
+    position: fixed;
+    width: 60%;
+    height: 5px;
+    line-height: 5px;
+    margin: -30px 0px 0px 0px;
+    visibility: hidden;
+    opacity: 0;
+    transition: .3s;
+    background-color: #eee;
+    border-bottom: 1px solid #dedede;
+    z-index: 40;
+}
+.modal-multi-select .options-list .options-list-msg h4{
+    margin: 0px;
+    padding: 0px 1% 5px 1%;
+}
+.modal-multi-select .options-list .options-list-msg .clear-options{
+    position: absolute;
+    height: 30px;
+    top: 0px;
+    right: 12.5%;
+    width: 12%;
+    font-size: 14px;
+    white-space: nowrap;
+    text-align: center;
+    visibility: hidden;
+}
+.modal-multi-select .options-list .option-label{
+    position: relative;
+    cursor: pointer;
+    width: 98%;
+    height: 40px;
+    line-height: 40px;
+    padding: 5px 1% 5px 1%;
+    float: none;
+    display: inline-block;
+}
+.modal-multi-select .options-list .option-label:hover{
+    background-color: #fff;
+}
 
 .multi-tables{
     position: relative;

@@ -1,9 +1,5 @@
 <?php
 
-    ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
     session_start();
     
     require_once "@classe-paginas.php";
@@ -68,6 +64,7 @@ error_reporting(E_ALL);
 <!DOCTYPE html>
 <html>
     <head>
+        <base href="<?= $cls_paginas->http.$cls_paginas->base_path."/"; ?>">
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -301,15 +298,15 @@ error_reporting(E_ALL);
 
                         $navInfoDepart = $cls_produtos->get_referencias("departamento", "ref = '$getDepartamento'");
                         if($navInfoDepart != false){
-                            add_navigation($navInfoDepart["titulo"], "loja.php?departamento=$getDepartamento");
+                            add_navigation($navInfoDepart["titulo"], "loja/$getDepartamento/");
                         }
                         
                         $navInfoCat = $cls_produtos->get_referencias("categoria", "ref = '$getCategoria'");
                         if($navInfoCat != false){
-                            add_navigation($navInfoCat["titulo"], "loja.php?departamento=$getDepartamento&categoria=$getCategoria");
+                            add_navigation($navInfoCat["titulo"], "loja/$getDepartamento/$getCategoria/");
                         }
                         
-                        add_navigation($tituloVitrine, "loja.php?departamento=$getDepartamento&categoria=$getCategoria&subcategoria=$getSubcategoria");
+                        add_navigation($tituloVitrine, "loja/$getDepartamento/$getCategoria/$getSubcategoria/");
 
                     }else if($buscarCategoria){
                         $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
@@ -324,10 +321,10 @@ error_reporting(E_ALL);
                         
                         $navInfoCat = $cls_produtos->get_referencias("categoria", "ref = '$getCategoria'");
                         if($navInfoCat != false){
-                            add_navigation($navInfoCat["titulo"], "loja.php?departamento=$getDepartamento&categoria=$getCategoria");
+                            add_navigation($navInfoCat["titulo"], "loja/$getDepartamento/$getCategoria/");
                         }
                         
-                        add_navigation($tituloVitrine, "loja.php?categoria=$getCategoria&subcategoria=$getSubcategoria");
+                        add_navigation($tituloVitrine, "loja/$getCategoria/$getSubcategoria/");
                         
                     }else{
                         $selectedSubcategoria = $cls_produtos->search_subcategorias_produtos("ref = '$getSubcategoria'");
@@ -337,7 +334,7 @@ error_reporting(E_ALL);
                             $ctrlSelectedFinal++;
                         }
                         
-                        add_navigation($tituloVitrine, "loja.php?subcategoria=$getSubcategoria");
+                        add_navigation($tituloVitrine, "loja/$getSubcategoria/");
                     }
                     
                     foreach($selectedFinal as $id){
@@ -366,10 +363,10 @@ error_reporting(E_ALL);
                     
                     $navInfoDepart = $cls_produtos->get_referencias("departamento", "ref = '$getDepartamento'");
                     if($navInfoDepart != false){
-                        add_navigation($navInfoDepart["titulo"], "loja.php?departamento=$getDepartamento");
+                        add_navigation($navInfoDepart["titulo"], "loja/$getDepartamento/");
                     }
                     
-                    add_navigation($tituloVitrine, "loja.php?departamento=$getDepartamento&categoria=$getCategoria");
+                    add_navigation($tituloVitrine, "loja/$getDepartamento/$getCategoria/");
                     
                 }else{
                     $selectedCategoria = $cls_produtos->search_categorias_produtos("ref = '$getCategoria'");
@@ -378,7 +375,7 @@ error_reporting(E_ALL);
                         $ctrlSelectedFinal++;
                     }
                     
-                    add_navigation($tituloVitrine, "loja.php?categoria=$getCategoria");
+                    add_navigation($tituloVitrine, "categoria/$getCategoria/");
                 }
                 foreach($selectedFinal as $id){
                     add_produto($id);
@@ -400,7 +397,7 @@ error_reporting(E_ALL);
                     $ctrlSelectedFinal++;
                 }
                 
-                add_navigation($tituloVitrine, "loja.php?departamento=$getDepartamento");
+                add_navigation($tituloVitrine, "loja/$getDepartamento/");
                 
                 foreach($selectedFinal as $id){
                     add_produto($id);

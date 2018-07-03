@@ -185,6 +185,7 @@
         position: absolute;
         top: 0px;
         height: 30px;
+        line-height: 30px;
         right: 10px;
         transition: .2s;
     }
@@ -528,7 +529,7 @@
         }
         
         /*TRIGGER VALIDAR*/
-        formularioLogin.off().on("submit", function(){
+        formularioLogin.off().on("submit", function(event){
             event.preventDefault();
             if(!logando){
                 logando = true;

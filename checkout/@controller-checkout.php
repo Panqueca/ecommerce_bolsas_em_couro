@@ -1,4 +1,8 @@
 <?php
+
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
     
     session_start();
 
@@ -205,6 +209,8 @@
                     $tabela_pedidos = $pew_custom_db->tabela_pedidos;
                     $tabela_produtos = $pew_custom_db->tabela_produtos;
                     
+                    $xmlProdutos = "";
+                    
                     foreach($sendDataForm["jsonProdutos"] as $infoProduto){
                         $idProduto = $infoProduto["id"];
                         $tituloProduto = $infoProduto["titulo"];
@@ -212,6 +218,8 @@
                         $precoProduto = $infoProduto["preco"];
                         
                         mysqli_query($conexao, "insert into $tabela_carrinhos (token_carrinho, id_produto, nome_produto, quantidade_produto, preco_produto, data_controle, status) values ('$tokenCarrinho', '$idProduto', '$tituloProduto', '$quantidadeProduto', '$precoProduto', '$dataAtual', 1)");
+                        
+                        $xmlProdutos .= "<item><codigo>$idProduto</codigo><descricao>$tituloProduto</descricao><un>Un</un><qtde>$quantidadeProduto</qtde><vlr_unit>$precoProduto</vlr_unit></item>";
                     }
                     
                     $codigoTransacao = $xml->code;
@@ -222,6 +230,10 @@
                     $paymentLink = isset($xml->paymentLink) ? $xml->paymentLink : null;
                     
                     mysqli_query($conexao, "insert into $tabela_pedidos (codigo_confirmacao, codigo_transacao, codigo_transporte, vlr_frete, codigo_pagamento, codigo_rastreamento, payment_link, referencia, token_carrinho, id_cliente, nome_cliente, cpf_cliente, email_cliente, cep, rua, numero, complemento, bairro, cidade, estado, data_controle, status) values ('$codigoTransacao', '$codigoTransacao', '{$sendDataForm["shippingCode"]}', '{$pagseguro["shippingCost"]}', '$codigoPagamento', 0, '$paymentLink', '$referencia', '$tokenCarrinho', '$idConta', '{$pagseguro["senderName"]}', '{$pagseguro["senderCPF"]}', '{$pagseguro["senderEmail"]}', '{$pagseguro["billingAddressPostalCode"]}', '{$pagseguro["billingAddressStreet"]}', '{$pagseguro["billingAddressNumber"]}', '{$pagseguro["billingAddressComplement"]}', '{$pagseguro["billingAddressDistrict"]}', '{$pagseguro["billingAddressCity"]}', '{$pagseguro["billingAddressState"]}', '$dataAtual', '$statusPagamento')");
+                    
+                    $queryID = mysqli_query($conexao, "select last_insert_id()");
+                    $infoData = mysqli_fetch_array($queryID);
+                    $idPedido = $infoData["last_insert_id()"];
                     
                     switch($statusPagamento){
                         case 3:
@@ -246,6 +258,89 @@
                     
                     //print_r($xml); exit;
                     echo $resposta;
+                    
+                    // GRAVAR NO BLING
+                    
+                    switch($sendDataForm["shippingCode"]){
+                        case "7777":
+                            $strTransporte = "Retirada na Loja";
+                            break;
+                        case "8888":
+                            $strTransporte = "Motoboy";
+                            break;
+                        case "40010":
+                            $strTransporte = "SEDEX";
+                            break;
+                        case "40215":
+                            $strTransporte = "SEDEX 10";
+                            break;
+                        case "40290":
+                            $strTransporte = "SEDEX Hoje";
+                            break;
+                        default:
+                            $strTransporte = "PAC";
+                    }
+                    
+                    $url = 'https://bling.com.br/Api/v2/pedido/json/';
+        
+                    function executeSendOrder($url, $data){
+                        $curl_handle = curl_init();
+                        curl_setopt($curl_handle, CURLOPT_URL, $url);
+                        curl_setopt($curl_handle, CURLOPT_POST, count($data));
+                        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $data);
+                        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, TRUE);
+                        $response = curl_exec($curl_handle);
+                        curl_close($curl_handle);
+                        return $response;
+                    }
+
+                    $infoPedido = "
+                    <numero>$idPedido</numero>
+                    <cliente>
+                        <nome>{$pagseguro['senderName']}</nome>
+                        <cpf_cnpj>{$pagseguro['senderCPF']}</cpf_cnpj>
+                        <email>{$pagseguro['senderEmail']}</email>
+                        <tipoPessoa>J</tipoPessoa>
+                        <endereco>{$pagseguro['shippingAddressStreet']}</endereco>
+                        <numero>{$pagseguro['shippingAddressNumber']}</numero>
+                        <complemento>{$pagseguro['shippingAddressComplement']}</complemento>
+                        <bairro>{$pagseguro['shippingAddressDistrict']}</bairro>
+                        <cep>{$pagseguro['shippingAddressPostalCode']}</cep>
+                        <cidade>{$pagseguro['shippingAddressCity']}</cidade>
+                        <uf>{$pagseguro['shippingAddressState']}</uf>
+                    </cliente>
+                    <transporte>
+                        <transportadora>$strTransporte</transportadora>
+                        <tipo_frete>R</tipo_frete>
+                        <servico_correios>$strTransporte</servico_correios>
+                        <dados_etiqueta>
+                            <nome>Endereço de entrega</nome>
+                            <endereco>{$pagseguro['shippingAddressStreet']}</endereco>
+                            <numero>{$pagseguro['shippingAddressNumber']}</numero>
+                            <complemento>{$pagseguro['shippingAddressComplement']}</complemento>
+                            <municipio>{$pagseguro['shippingAddressCity']}</municipio>
+                            <uf>{$pagseguro['shippingAddressState']}</uf>
+                            <cep>{$pagseguro['shippingAddressPostalCode']}</cep>
+                            <bairro>{$pagseguro['shippingAddressDistrict']}</bairro>
+                        </dados_etiqueta>
+                    </transporte>
+                    <vlr_frete>{$pagseguro["shippingCost"]}</vlr_frete>
+                    <vendedor>Site - Bolsas em Couro</vendedor>
+                    <itens>
+                        $xmlProdutos
+                    </itens>";
+
+                    $xmlPedido = "<pedido>$infoPedido</pedido>";
+
+                    $posts = array (
+                        "apikey" => "a0d67ab3925a9df897d78510a6ccf847dfdfb78dfd78641cb1504e8de0a311eab831c42b",
+                        "xml" => rawurlencode($xmlPedido)
+                    );
+
+                    $retorno = executeSendOrder($url, $posts);
+
+                    //echo $retorno;
+                    // END GRAVAR NO BLING
                 }
 
             }else{

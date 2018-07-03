@@ -207,7 +207,7 @@
 					return true;
 				}
 				
-				objFormulario.off().on("submit", function(){
+				objFormulario.off().on("submit", function(event){
 					event.preventDefault();
 					
 					if(!enviandoContato){

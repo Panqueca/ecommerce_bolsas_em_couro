@@ -277,13 +277,13 @@
                 $linksPrincipais[1]["sub_link"][3]["url_sub_link"] = "pew-cores.php";
                 $linksPrincipais[1]["sub_link"][4]["titulo_sub_link"] = "<i class='fa fa-cogs' aria-hidden='true'></i> Especificações técnicas";
                 $linksPrincipais[1]["sub_link"][4]["url_sub_link"] = "pew-especificacoes.php";
-                $linksPrincipais[1]["sub_link"][5]["titulo_sub_link"] = "<i class='fas fa-chart-pie'></i> Relatórios";
-                $linksPrincipais[1]["sub_link"][5]["url_sub_link"] = "pew-produtos-relatorios.php";
                 
                 $linksPrincipais[2]["titulo_link"] = "Vendas";
                 $linksPrincipais[2]["url_link"] = "pew-vendas.php";
                 $linksPrincipais[2]["sub_link"][0]["titulo_sub_link"] = "<i class='fas fa-dollar-sign'></i> Listar Pedidos";
                 $linksPrincipais[2]["sub_link"][0]["url_sub_link"] = "pew-vendas.php";
+                $linksPrincipais[2]["sub_link"][1]["titulo_sub_link"] = "<i class='fas fa-chart-pie'></i> Relatórios";
+                $linksPrincipais[2]["sub_link"][1]["url_sub_link"] = "pew-relatorios.php";
                 /*Terceiro Link*/
                 $linksPrincipais[3]["titulo_link"] = "Dicas";
                 $linksPrincipais[3]["url_link"] = "pew-dicas.php";
@@ -312,8 +312,8 @@
                 $linksPrincipais[6]["url_link"] = "pew-contatos.php";
                 $linksPrincipais[6]["sub_link"][0]["titulo_sub_link"] = "<i class='far fa-comment'></i> Contatos";
                 $linksPrincipais[6]["sub_link"][0]["url_sub_link"] = "pew-contatos.php";
-				$linksPrincipais[6]["sub_link"][1]["titulo_sub_link"] = "<i class='fas fa-briefcase'></i> Contatos Serviços";
-                $linksPrincipais[6]["sub_link"][1]["url_sub_link"] = "pew-contatos-servicos.php";
+                $linksPrincipais[6]["sub_link"][1]["titulo_sub_link"] = "<i class='fas fa-question'></i> Atendimento";
+                $linksPrincipais[6]["sub_link"][1]["url_sub_link"] = "pew-tickets.php";
                 $linksPrincipais[6]["sub_link"][2]["titulo_sub_link"] = "<i class='far fa-envelope'></i> E-mails newsletter";
                 $linksPrincipais[6]["sub_link"][2]["url_sub_link"] = "pew-newsletter.php";
                 /*Setimo Link*/

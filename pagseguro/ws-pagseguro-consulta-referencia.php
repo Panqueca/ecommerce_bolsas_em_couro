@@ -1,9 +1,11 @@
 <?php
+    set_time_limit(120);
 
     $diretorio_api = isset($_POST["diretorio_db"]) ? str_replace(" ", "", $_POST["diretorio_db"]) : "../@pew/";
 
     $console = isset($_POST["console"]) && $_POST["console"] == true ? true : false;
     $codigoReferencia = isset($_POST["codigo_referencia"]) ? $_POST["codigo_referencia"] : null;
+
     if($codigoReferencia != null){
         require "ws-pagseguro-config.php";
         

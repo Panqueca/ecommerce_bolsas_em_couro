@@ -1,4 +1,9 @@
 <?php
+
+    ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
     session_start();
     
     require_once "@classe-system-functions.php";
@@ -45,6 +50,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <base href="<?= $cls_paginas->http.$cls_paginas->base_path."/"; ?>">
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -610,10 +616,10 @@
 				
             $navigationTree = "<div class='navigation-tree'><a href='index.php'>Página inicial</a>";
 			if(isset($breadCrumbDepartamento)){
-				$navigationTree .= "$iconArrow <a href='loja.php?departamento=$breadCrumbRefDepartamento'>$breadCrumbDepartamento</a>"; 
+				$navigationTree .= "$iconArrow <a href='loja/$breadCrumbRefDepartamento/'>$breadCrumbDepartamento</a>"; 
 			}
 			if(isset($breadCrumbCategoria)){
-				$navigationTree .= "$iconArrow <a href='loja.php?departamento=$breadCrumbRefDepartamento&categoria=$breadCrumbRefCategoria'>$breadCrumbCategoria</a>";
+				$navigationTree .= "$iconArrow <a href='loja/$breadCrumbRefDepartamento/$breadCrumbRefCategoria/'>$breadCrumbCategoria</a>";
 			}
 			$navigationTree .= "$iconArrow <a href='#'>$nomeProduto</a></div>";
 				
@@ -671,11 +677,13 @@
                                 $produtoRelacao = new Produtos();
                                 $produtoRelacao->montar_produto($idRelacao);
                                 $infoProduto = $produtoRelacao->montar_array();
+                                $tituloProduto = $infoProduto["nome"];
+                                $tituloURL = $pew_functions->url_format($tituloProduto);
                                 $idCor = $infoProduto["id_cor"];
                                 $queryCor = mysqli_query($conexao, "SELECT * FROM pew_cores where id = '$idCor' and status = 1");
                                 $functions = new systemFunctions();
                                 $totalCores = $functions->contar_resultados("pew_cores", "id = '$idCor' and status = 1");
-                                $urlProdutoRelacao = "interna-produto.php?id_produto=$idRelacao";
+                                $urlProdutoRelacao = "$tituloURL/$idRelacao/";
                                 $dirImagens = "imagens/cores";
                                 if($totalCores > 0){
                                     while($infoCor = mysqli_fetch_assoc($queryCor)){

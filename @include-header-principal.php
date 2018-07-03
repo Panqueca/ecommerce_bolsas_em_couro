@@ -896,6 +896,7 @@
                             echo "<a class='link-padrao botao-minha-conta'><i class='far fa-user'></i> Olá, $splitNome[0]</a>";
                             echo "<ul class='box-header-conta'>";
                                 echo "<li class='link-conta'><a class='btn-open-minha-conta'>Minha conta</a></li>";
+                                echo "<li class='link-conta'><a href='ticket/'>Central de atendimento</a></li>";
                                 echo "<li class='link-conta'><a href='deslogar-conta.php'>Sair</a></li>";
                             echo "</ul>";
                         echo "</div>";
@@ -915,6 +916,7 @@
                     <div class="display-itens">
                         <?php
                             require_once "@classe-carrinho-compras.php";
+                            require_once "@classe-system-functions.php";
                             $cls_carrinho = new Carrinho();
                             $carrinho = $cls_carrinho->get_carrinho();
                             $totalCarrinho = 0;
@@ -922,12 +924,13 @@
                                 foreach($carrinho["itens"] as $item){
                                     $id = $item["id"];
                                     $titulo = $item["nome"];
+                                    $tituloURL = $pew_functions->url_format($titulo);
                                     $preco = $item["preco"];
                                     $quantidade = $item["quantidade"];
                                     $total = $preco * $quantidade;
                                     $total = $pew_functions->custom_number_format($total);
                                     $totalCarrinho += $total;
-                                    $url = "interna-produto.php?id_produto=$id";
+                                    $url = "$tituloURL/$id/";
                                     echo "<div class='cart-item'>";
                                         echo "<span class='item-quantity'>{$quantidade}x</span>";
                                         echo "<a href='$url' class='item-name'>$titulo</a>";
@@ -955,10 +958,10 @@
                     <button type="submit" class="search-submit"><i class="fas fa-search"></i></button>
                 </form>
             </div>
-            <div class="logo-header"><a href="index.php"><img src="<?php echo $dirLogoPrincipal;?>" alt="Logo - Bolsas em Couro by Maidi Grey" title="Página Inicial - Bolsas em Couro"></a></div>
+            <div class="logo-header"><a href="index.php"><img src="<?php echo $dirLogoPrincipal;?>" alt="Logo - <?= $cls_paginas->empresa; ?>" title="Página Inicial - <?= $cls_paginas->empresa; ?>"></a></div>
             <div class="social-media-field">
-                <a href="https://www.facebook.com/maidigrey" target="_blank" class="facebook"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://www.instagram.com/maidi.grey/" target="_blank" class="instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.facebook.com/" target="_blank" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/" target="_blank" class="instagram"><i class="fab fa-instagram"></i></a>
             </div>
         </div>
         <?php
@@ -1062,7 +1065,7 @@
         
         $link_nav = null;
         $countLinks = 0;
-        $link_nav[$countLinks] = new NavLinks("PÁGINA INICIAL", "index.php");
+        $link_nav[$countLinks] = new NavLinks("PÁGINA INICIAL", "inicio/");
         $countLinks++;
         
         /*INICIO LINKS ALTERAVEIS*/
@@ -1093,7 +1096,7 @@
                 $idDepartamento = $infoDepartamentos["id"];
                 $tituloDepartamento = $infoDepartamentos["departamento"];
                 $refDepartamento = $infoDepartamentos["ref"];
-                $urlDepartamento = "loja.php?departamento=$refDepartamento";
+                $urlDepartamento = "loja/$refDepartamento/";
                 $departamentoLinks[$ctrlDepartamentoLinks] = array();
                 $departamentoLinks[$ctrlDepartamentoLinks]["titulo"] = $tituloDepartamento;
                 $departamentoLinks[$ctrlDepartamentoLinks]["url"] = $urlDepartamento;
@@ -1110,7 +1113,7 @@
                             $infoCategoria = mysqli_fetch_array($queryCategoria);
                             $tituloCategoria = $infoCategoria["categoria"];
                             $refCategoria = $infoCategoria["ref"];
-                            $urlCategoria = "loja.php?departamento=$refDepartamento&categoria=$refCategoria";
+                            $urlCategoria = "loja/$refDepartamento/$refCategoria/";
                             $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub] = array();
                             $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["titulo"] = $tituloCategoria;
                             $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["url"] = $urlCategoria;
@@ -1122,7 +1125,7 @@
                                     $idSubcategoria = $infoSubcategoriras["id"];
                                     $tituloSubcategoria = $infoSubcategoriras["subcategoria"];
                                     $refSubcategoria = $infoSubcategoriras["ref"];
-                                    $urlSubcategoria = "loja.php?departamento=$refDepartamento&categoria=$refCategoria&subcategoria=$refSubcategoria";
+                                    $urlSubcategoria = "loja/$refDepartamento/$refCategoria/$refSubcategoria/";
                                     $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["subsublinks"][$ctrlSubsublinks] = array();
                                     $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["subsublinks"][$ctrlSubsublinks]["titulo"] = $tituloSubcategoria;
                                     $departamentoLinks[$ctrlDepartamentoLinks]["sublinks"][$ctrlSub]["subsublinks"][$ctrlSubsublinks]["url"] = $urlSubcategoria;

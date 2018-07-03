@@ -398,7 +398,7 @@
         ?>
         <!--PAGE CONTENT-->
         <h1 class="titulos"><?php echo $page_title; ?></h1>
-            <section class="conteudo-painel">
+        <section class="conteudo-painel">
             <div class="group clear">
                 <form action="pew-vendas.php" method="get" class="label half clear">
                     <label class="group">
@@ -422,7 +422,7 @@
                         <h4 class="subtitulos" align=left>Mais funções</h4>
                     </div>
                     <div class="label full">
-                        <a href="pew-produtos-relatorios.php" class="btn-flat" title="Ver Relatórios"><i class="fas fa-chart-pie"></i> Relatórios</a>
+                        <a href="pew-relatorios.php" class="btn-flat" title="Ver Relatórios"><i class="fas fa-chart-pie"></i> Relatórios</a>
                     </div>
                 </div>
             </div>
@@ -440,9 +440,9 @@
                 
                 
                     $condicaoTodosPedidos = "codigo_confirmacao != '0' order by id desc";
-                    $condicaoPagos = "codigo_confirmacao != '0' and status = 3 or status = 4";
-                    $condicaoAguardando = "codigo_confirmacao != '0' and status = 1 or status = 2 or status = 0";    
-                    $condicaoCancelados = "codigo_confirmacao != '0' and status = 5 or status = 6 or status = 7";    
+                    $condicaoPagos = "codigo_confirmacao != '0' and status = 3 or status = 4 order by id desc";
+                    $condicaoAguardando = "codigo_confirmacao != '0' and status = 1 or status = 2 or status = 0 order by id desc";    
+                    $condicaoCancelados = "codigo_confirmacao != '0' and status = 5 or status = 6 or status = 7 order by id desc";    
                 
                     $totalPedidos = $pew_functions->contar_resultados($tabela_pedidos, $condicaoTodosPedidos);
                     $totalPagos = $pew_functions->contar_resultados($tabela_pedidos, $condicaoPagos);

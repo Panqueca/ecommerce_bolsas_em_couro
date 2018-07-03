@@ -231,6 +231,7 @@
         position: absolute;
         top: 0px;
         height: 30px;
+		line-height: 30px;
         right: 10px;
         transition: .2s;
     }
